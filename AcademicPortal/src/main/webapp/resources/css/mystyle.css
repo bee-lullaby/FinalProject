@@ -1,0 +1,16 @@
+form {
+	padding: 15px 15px
+}
+
+input[type="file"] {
+	margin-top: 15px
+}
+
+.myfont {
+	font: 500 1.125rem/1.1 "Segoe UI", "Open Sans", serif;
+	margin-right:10px;
+}
+
+.list_classes {
+	margin-top:25px;
+}
