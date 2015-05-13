@@ -14,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fpt.academic.dao.ClassCourseDAO;
+import com.fpt.academic.dao.ClassCourseTeacherDAO;
+import com.fpt.academic.dao.ClassCourseTeacherDAOImpl;
 import com.fpt.academic.dao.ClassDAO;
 import com.fpt.academic.dao.CourseDAO;
 import com.fpt.academic.dao.SemesterDAO;
@@ -42,6 +44,9 @@ public class CCTSManagerController {
 	@Autowired
 	private ClassCourseDAO class_courseDAO;
 	
+	@Autowired
+	private ClassCourseTeacherDAO class_course_teacherDAO;
+	
 	@RequestMapping(value="/add_data", method=RequestMethod.GET)
 	public void addData(Model model) {
 		List<Semester> semesters = semesterDAO.list();
@@ -67,6 +72,12 @@ public class CCTSManagerController {
 			e.printStackTrace();
 		}
 		
+		return new ModelAndView("redirect:/add_data");
+	}
+	
+	@RequestMapping(value="/add_data/addAll", method=RequestMethod.POST)
+	public ModelAndView addAll(@RequestParam("semester_id") int semester_id) {
+		class_course_teacherDAO.createClassCourseTeacher(semester_id);
 		return new ModelAndView("redirect:/add_data");
 	}
 	

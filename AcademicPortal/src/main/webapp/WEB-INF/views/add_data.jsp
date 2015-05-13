@@ -70,8 +70,12 @@
             	</form>
 			</div>
 			<div id="addFinalDialog" data-role="dialog"  data-overlay="true" data-close-button="true" data-overlay-color="op-dark">
-				<form action="/academic/add_data/addClassCourse" method="post" enctype="multipart/form-data" style=" padding: 15px 15px">
-					<input type="submit" name="Add" value="Add Final Data" class="button primary" style="margin:25px" />
+				<form action="/academic/add_data/addAll" method="post" enctype="multipart/form-data" style=" padding: 15px 15px; margin-top:20px" >
+					Semester
+                     <select name="semester_id">
+                         ${semester}
+                     </select><br>
+					<input type="submit" name="Add" value="Add Final Data" class="button primary" style="margin:15px 15px;" />
             	</form>
 			</div>
 			

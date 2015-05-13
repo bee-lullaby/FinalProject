@@ -1,6 +1,5 @@
 package com.fpt.academic.dao;
 
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,7 +15,6 @@ import com.fpt.academic.model.ClassFPT;
 import com.fpt.academic.model.ClassSemester;
 import com.fpt.academic.model.Course;
 import com.fpt.academic.model.CourseSemester;
-import com.fpt.academic.model.Room;
 import com.fpt.academic.model.Semester;
 import com.fpt.academic.model.Teacher;
 import com.fpt.academic.model.TeacherSemester;

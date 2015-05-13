@@ -15,6 +15,8 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.fpt.academic.dao.ClassCourseDAO;
 import com.fpt.academic.dao.ClassCourseDAOImpl;
+import com.fpt.academic.dao.ClassCourseTeacherDAO;
+import com.fpt.academic.dao.ClassCourseTeacherDAOImpl;
 import com.fpt.academic.dao.ClassDAO;
 import com.fpt.academic.dao.ClassDAOImpl;
 import com.fpt.academic.dao.CourseDAO;
@@ -100,6 +102,11 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter{
     @Bean
     public ClassCourseDAO getClassCourseDAO() {
         return new ClassCourseDAOImpl(getDataSource());
+    }
+    
+    @Bean
+    public ClassCourseTeacherDAO getClassCourseTeacherDAO() {
+        return new ClassCourseTeacherDAOImpl(getDataSource());
     }
 }
 
