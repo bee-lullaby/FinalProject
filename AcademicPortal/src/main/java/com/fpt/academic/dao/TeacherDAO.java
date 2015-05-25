@@ -16,4 +16,5 @@ public interface TeacherDAO {
 	public List<Teacher> listTeachersOfCourse(String code);
 	public String display();
 	public String displayTeachersOfCourse(String code);
+	public Teacher getTeacher(int teacher_id);
 }

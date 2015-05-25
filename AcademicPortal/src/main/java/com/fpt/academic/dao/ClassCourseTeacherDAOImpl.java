@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.fpt.academic.model.ClassCourse;
+import com.fpt.academic.model.ClassCourseTeacher;
 import com.fpt.academic.model.ClassSemester;
+import com.fpt.academic.model.Course;
 import com.fpt.academic.model.Teacher;
 import com.fpt.academic.model.TeacherCourse;
 import com.fpt.academic.model.TeacherSemester;
@@ -53,25 +55,28 @@ public class ClassCourseTeacherDAOImpl implements ClassCourseTeacherDAO {
 			if (teacher_course_list.containsKey(course_semester_id)) {
 				List<Integer> list = teacher_course_list
 						.get(course_semester_id);
-				list.add(teacher_course.get(count++)
-						.getTeacher_semester_id());
+				list.add(teacher_course.get(count++).getTeacher_semester_id());
 				teacher_course_list.remove("course_semester_id");
-				teacher_course_list.put(String.valueOf(course_semester_id), list);
-				
+				teacher_course_list.put(String.valueOf(course_semester_id),
+						list);
+
 			} else {
 				List<Integer> list = new ArrayList<Integer>();
-				list.add(teacher_course.get(count++)
-						.getTeacher_semester_id());
-				teacher_course_list.put(String.valueOf(course_semester_id), list);
+				list.add(teacher_course.get(count++).getTeacher_semester_id());
+				teacher_course_list.put(String.valueOf(course_semester_id),
+						list);
 			}
 		}
-		
+
 		String sql = "INSERT INTO class_course_teacher_semester(class_semester_id, course_semester_id, teacher_semester_id) VALUES (?, ?, ?)";
-		
-		for(ClassCourse cc: class_course) {
-			List<Integer> teacher_semester_id = teacher_course_list.get(String.valueOf(cc.getCourse_semester_id()));
+
+		for (ClassCourse cc : class_course) {
+			List<Integer> teacher_semester_id = teacher_course_list.get(String
+					.valueOf(cc.getCourse_semester_id()));
 			Random rd = new Random();
-			jdbc.update(sql, cc.getClass_semester_id(), cc.getCourse_semester_id(), teacher_semester_id.get(rd.nextInt(teacher_semester_id.size())));		
+			jdbc.update(sql, cc.getClass_semester_id(), cc
+					.getCourse_semester_id(), teacher_semester_id.get(rd
+					.nextInt(teacher_semester_id.size())));
 		}
 	}
 
@@ -101,7 +106,8 @@ public class ClassCourseTeacherDAOImpl implements ClassCourseTeacherDAO {
 
 		for (Map row : rows) {
 			TeacherCourse tc = new TeacherCourse();
-			tc.setTeacher_course_id((Integer) row.get("course_teacher_semester_id"));
+			tc.setTeacher_course_id((Integer) row
+					.get("course_teacher_semester_id"));
 			tc.setTeacher_semester_id((Integer) row.get("teacher_semester_id"));
 			tc.setCourse_semester_id((Integer) row.get("course_semester_id"));
 			teacher_course.add(tc);
@@ -109,4 +115,26 @@ public class ClassCourseTeacherDAOImpl implements ClassCourseTeacherDAO {
 		return teacher_course;
 	}
 
+	@Override
+	public List<ClassCourseTeacher> getClassCourseTeacherByClassSemester(int class_semester_id) {
+		// TODO Auto-generated method stub
+		String sql = "select * from class_course_teacher_semester where class_semester_id=?";
+		List<ClassCourseTeacher> list = new ArrayList<ClassCourseTeacher>();
+		List<Map<String, Object>> rows = jdbc.queryForList(sql, class_semester_id);
+
+		for (Map row : rows) {
+			ClassCourseTeacher cct = new ClassCourseTeacher();
+			cct.setClass_course_teacher_id((Integer) row
+					.get("class_course_teacher_semester_id"));
+			cct.setClass_semester_id((Integer) row.get("class_semester_id"));
+			cct.setTeacher_semester_id((Integer) row.get("teacher_semester_id"));
+			cct.setCourse_semester_id((Integer) row.get("course_semester_id"));
+			list.add(cct);
+		}
+
+		return list;
+	}
+	
+	
+	
 }

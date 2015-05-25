@@ -120,7 +120,7 @@ public class CourseDAOImpl implements CourseDAO {
 	@Override
 	public List<Course> listCourseOfClass(String code) {
 		// TODO Auto-generated method stub
-		String sql = "select t1.course_id as course_id, t1.code as code, t1.name as name "
+		String sql = "select t1.course_id as course_id, t1.code as code, t1.name as name,  "
 								+  "from courses as t1, "
 								+       "course_semester as t2, "
 								+       "semesters as t3 "
@@ -135,6 +135,7 @@ public class CourseDAOImpl implements CourseDAO {
 			course.setCourse_id((Integer)row.get("course_id"));
 			course.setCode((String)row.get("code"));
 			course.setName((String)row.get("name"));
+			course.setSlots(30);
 			list.add(course);
 		}
 		
@@ -151,5 +152,27 @@ public class CourseDAOImpl implements CourseDAO {
 		}
 		
 		return show.toString();
+	}
+
+
+	@Override
+	public Course getCourse(int course_id) {
+		// TODO Auto-generated method stub
+		
+		String sql = "SELECT * FROM courses WHERE course_id=?";
+		List<Course> list = new ArrayList<Course>();
+		List<Map<String,Object>> rows = jdbc.queryForList(sql, course_id);
+		
+		for(Map row: rows) {
+			Course course = new Course();
+			course.setCourse_id((Integer) row.get("course_id"));
+			course.setCode((String) row.get("code"));
+			course.setName((String) row.get("name"));
+			course.setSlots((Integer) row.get("slots"));
+			list.add(course);
+		}
+		
+		
+		return list.get(0);
 	}
 }

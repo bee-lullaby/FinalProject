@@ -162,4 +162,24 @@ public class TeacherDAOImpl implements TeacherDAO {
 		
 		return show.toString();
 	}
+
+	@Override
+	public Teacher getTeacher(int teacher_id) {
+		// TODO Auto-generated method stub
+		String sql = "SELECT * FROM teachers WHERE teacher_id=?";
+		List<Teacher> list = new ArrayList<Teacher>();
+		List<Map<String,Object>> rows = jdbc.queryForList(sql, teacher_id);
+		
+		for(Map row: rows) {
+			Teacher teacher = new Teacher();
+			teacher.setTeacher_id((Integer)row.get("teacher_id"));
+			teacher.setAccount((String)row.get("account"));
+			teacher.setName((String)row.get("name"));
+			teacher.setEmail((String)row.get("email"));
+			teacher.setAccount_type((String)row.get("account_type"));
+			list.add(teacher);
+		}
+		
+		return list.get(0);
+	}
 }

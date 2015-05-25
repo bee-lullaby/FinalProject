@@ -1,0 +1,125 @@
+.container {
+	width: 960px;
+	margin: 0 auto;
+	background-color: #FFF;
+}
+
+.button-course {
+	padding: 0 2px;
+	max-width: 200px;
+	float: right;
+}
+
+.button-course button {
+	width: 100%;
+	text-align: center;
+	vertical-align: middle !important;
+	color: #262626;
+	display: inline-block;
+	outline: none;
+	line-height: 1;
+	margin: 3px;
+	position: relative;
+	height: auto;
+	text-align: left;
+	font-size: 1rem;
+	padding: 10px;
+}
+
+.button-not-clicked {
+	background-color: #ffffff;
+	border: 1px #d9d9d9 solid;
+}
+
+.button-not-clicked:hover {
+	border-color: #787878;
+	background: #eeeeee;
+}
+
+.button-clicked {
+	background-color: #eeeeee;
+	border: 1px #787878 solid;
+}
+
+.button-course .class-name {
+	font: 500 1.3rem/1.1 "Segoe UI", "Open Sans", serif;
+	padding: 10px;
+	margin-bottom: 5px;
+}
+
+.button-course small {
+	display: block;
+	font-size: 0.8rem;
+	line-height: 1.625rem;
+	margin-top: -0.3125rem;
+}
+
+.button-previous, 
+.button-next {
+	cursor: pointer;	
+}
+
+.button-previous:hover, 
+.button-next:hover {
+	color: #eeeeee;
+}
+
+.timetable-course table th {
+	text-align: center;
+}
+
+.timetable-course table td {
+	text-align: left;
+}
+
+.timetable-course table td.active {
+	background-color: #9BC4FF;
+	cursor: pointer;
+}
+
+.timetable-course table td.active:hover {
+	background-color: #30C4FF;
+}
+
+.timetable-course table td.checked-1 {
+	background-color: #FFB119;
+}
+
+.timetable-course table td.checked-2 {
+	background-color: #1AFF41;
+}
+
+.timetable-course table td.checked-3 {
+	background-color: #4309B2;
+}
+
+.timetable-course table td.checked-4 {
+	background-color: #FF0031;
+}
+
+.timetable-course table td.checked-5 {
+	background-color: #3E3422;
+}
+
+.timetable-course table th, td {
+	width: 16.7%;
+}
+
+.timetable-course .timetable-buttons-group {
+	display: inline-block;
+}
+
+.timetable-course .timetable-buttons-group .timetable-buttons {
+	padding: 5px;
+	cursor: pointer;
+}
+
+.timetable-course .timetable-buttons-group .timetable-buttons:hover {
+	color: #ffffff;
+	background-color: #000000;
+}
+
+.timetable-course .week {
+	font: 500 1rem/1.1 "Segoe UI", "Open Sans", serif;
+	float: right;
+}

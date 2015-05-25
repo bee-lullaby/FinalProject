@@ -23,4 +23,11 @@ public interface SemesterDAO {
 	 public List<ClassSemester> getClassSemester(int semester_id);
 	 public List<CourseSemester> getCourseSemester(int semester_id);
 	 public List<TeacherSemester> getTeacherSemester(int semester_id);
+	 
+	 public int getClassID(int class_semester_id);
+	 public int getCourseID(int course_semester_id);
+	 public int getTeacherID(int teacher_semester_id);
+	 
+	 public ClassSemester getClassSemesterID (int semester_id, int class_code);
+	 
 }

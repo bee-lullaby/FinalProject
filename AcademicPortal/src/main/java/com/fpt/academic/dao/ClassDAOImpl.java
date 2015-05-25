@@ -150,6 +150,26 @@ public class ClassDAOImpl implements ClassDAO{
 		
 		return show.toString();
 	}
+
+
+	@Override
+	public ClassFPT getClassID(String class_code) {
+		// TODO Auto-generated method stub
+		
+		String sql = "SELECT * FROM classes WHERE code=?";
+		List<ClassFPT> list = new ArrayList<ClassFPT>();
+		List<Map<String,Object>> rows = jdbc.queryForList(sql, class_code);
+		
+		for(Map row: rows) {
+			ClassFPT classfpt = new ClassFPT();
+			classfpt.setClass_id((Integer)row.get("class_id"));
+			classfpt.setCode((String)row.get("code"));
+			list.add(classfpt);
+		}
+		
+		
+		return list.get(0);
+	}
 	
 	
 	

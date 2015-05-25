@@ -14,4 +14,5 @@ public interface CourseDAO {
 	public List<Course> listCourseOfClass(String code);
 	public String display();
 	public String displayCourseOfClass(String code);
+	public Course getCourse(int course_id);
 }

@@ -207,4 +207,85 @@ public class SemesterDAOImpl implements SemesterDAO {
 		return list;
 	}
 
+	@Override
+	public int getClassID(int class_semester_id) {
+		// TODO Auto-generated method stub
+//		List<ClassSemester> list = new ArrayList<CourseSemester>();
+//
+//		String sql = "SELECT * FROM course_semester WHERE course_semester_id=?";
+//
+//		List<Map<String, Object>> rows = jdbc.queryForList(sql, course_semester_id);
+//		for (Map row : rows) {
+//			CourseSemester course_semester = new CourseSemester();
+//			course_semester.setCourse_semester_id((Integer) row.get("course_semester_id"));
+//			course_semester.setCourse_id((Integer) row.get("course_id"));
+//			course_semester.setSemester_id((Integer) row.get("semester_id"));
+//			list.add(course_semester);
+//		}
+//
+//		return list.get(0).get();
+		return 0;
+	}
+
+	@Override
+	public int getCourseID(int course_semester_id) {
+		// TODO Auto-generated method stub
+		List<CourseSemester> list = new ArrayList<CourseSemester>();
+
+		String sql = "SELECT * FROM course_semester WHERE course_semester_id=?";
+
+		List<Map<String, Object>> rows = jdbc.queryForList(sql, course_semester_id);
+		for (Map row : rows) {
+			CourseSemester course_semester = new CourseSemester();
+			course_semester.setCourse_semester_id((Integer) row.get("course_semester_id"));
+			course_semester.setCourse_id((Integer) row.get("course_id"));
+			course_semester.setSemester_id((Integer) row.get("semester_id"));
+			list.add(course_semester);
+		}
+
+		return list.get(0).getCourse_id();
+	}
+
+	@Override
+	public int getTeacherID(int teacher_semester_id) {
+		// TODO Auto-generated method stub
+		List<TeacherSemester> list = new ArrayList<TeacherSemester>();
+
+		String sql = "SELECT * FROM teacher_semester WHERE teacher_semester_id=?";
+
+		List<Map<String, Object>> rows = jdbc.queryForList(sql, teacher_semester_id);
+		for (Map row : rows) {
+			TeacherSemester teacher_semester = new TeacherSemester();
+			teacher_semester.setTeacher_semester_id((Integer) row.get("teacher_semester_id"));
+			teacher_semester.setTeacher_id((Integer) row.get("teacher_id"));
+			teacher_semester.setSemester_id((Integer) row.get("semester_id"));
+			list.add(teacher_semester);
+		}
+
+		return list.get(0).getTeacher_id();
+	}
+
+	@Override
+	public ClassSemester getClassSemesterID(int semester_id, int class_id) {
+		// TODO Auto-generated method stub
+		
+		
+		List<ClassSemester> list = new ArrayList<ClassSemester>();
+
+		String sql = "SELECT * FROM class_semester WHERE semester_id=? AND class_id=?";
+
+		List<Map<String, Object>> rows = jdbc.queryForList(sql, semester_id, class_id);
+		for (Map row : rows) {
+			ClassSemester class_semester = new ClassSemester();
+			class_semester.setClass_semester_id((Integer) row.get("class_semester_id"));
+			class_semester.setClass_id((Integer) row.get("class_id"));
+			class_semester.setSemester_id((Integer) row.get("semester_id"));
+			list.add(class_semester);
+		}
+
+		return list.get(0);
+	}
+	
+	
+	
 }

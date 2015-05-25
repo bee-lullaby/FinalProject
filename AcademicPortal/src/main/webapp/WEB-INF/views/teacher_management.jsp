@@ -144,9 +144,9 @@
 				 var email = $('td:eq(3)', this).html();
 				 showDialog('updateDialog');
 	
-				 document.getElementById("eName").value=name;
-				 document.getElementById("eAccount").value=account;
-				 document.getElementById("eEmail").value=email;
+				 $("#eName").value=name;
+				 $("#eAccount").value=account;
+				 $("#eEmail").value=email;
 			       
 			});
 			</script>

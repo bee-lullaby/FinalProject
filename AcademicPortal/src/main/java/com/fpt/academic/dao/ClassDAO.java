@@ -15,4 +15,6 @@ public interface ClassDAO {
 	public List<ClassFPT> listClassSemester(int semester_id);
 	public String display();
 	public String displaySemester(int semester_id);
+	
+	public ClassFPT getClassID(String class_code);
 }
