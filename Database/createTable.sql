@@ -31,7 +31,6 @@ CREATE TABLE courses (
 	course_id INT NOT NULL AUTO_INCREMENT,
 	code VARCHAR(10) NOT NULL,
 	name VARCHAR(100) NOT NULL,
-	slots INT NOT NULL,	
 	PRIMARY KEY (course_id),
 	UNIQUE KEY (code)
 );
@@ -67,6 +66,7 @@ CREATE TABLE course_semester (
 	course_semester_id INT NOT NULL AUTO_INCREMENT,
 	course_id INT NOT NULL,
 	semester_id INT NOT NULL,
+	slots INT NOT NULL,
 	PRIMARY KEY (course_semester_id),
 	UNIQUE KEY (course_id, semester_id),
 	FOREIGN KEY (course_id) REFERENCES courses(course_id),
