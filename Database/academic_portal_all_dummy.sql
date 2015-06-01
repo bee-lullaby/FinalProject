@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 13, 2015 at 04:11 AM
+-- Generation Time: Jun 01, 2015 at 05:47 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -19,6 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `academic_portal`
 --
+CREATE DATABASE IF NOT EXISTS `academic_portal` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `academic_portal`;
 
 -- --------------------------------------------------------
 
@@ -26,9 +28,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `classes`
 --
 
-CREATE DATABASE academic_portal;
-USE academic_portal;
-
+DROP TABLE IF EXISTS `classes`;
 CREATE TABLE IF NOT EXISTS `classes` (
 `class_id` int(11) NOT NULL,
   `code` varchar(10) NOT NULL
@@ -220,6 +220,7 @@ INSERT INTO `classes` (`class_id`, `code`) VALUES
 -- Table structure for table `class_course_semester`
 --
 
+DROP TABLE IF EXISTS `class_course_semester`;
 CREATE TABLE IF NOT EXISTS `class_course_semester` (
 `class_course_semester_id` int(11) NOT NULL,
   `class_semester_id` int(11) NOT NULL,
@@ -631,11 +632,25 @@ INSERT INTO `class_course_semester` (`class_course_semester_id`, `class_semester
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `class_course_student_semester`
+--
+
+DROP TABLE IF EXISTS `class_course_student_semester`;
+CREATE TABLE IF NOT EXISTS `class_course_student_semester` (
+`class_course_student_semester_id` int(11) NOT NULL,
+  `class_course_semester_id` int(11) NOT NULL,
+  `student_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `class_course_teacher_semester`
 --
 
+DROP TABLE IF EXISTS `class_course_teacher_semester`;
 CREATE TABLE IF NOT EXISTS `class_course_teacher_semester` (
-`class_course_semester_id` int(11) NOT NULL,
+`class_course_teacher_semester_id` int(11) NOT NULL,
   `class_semester_id` int(11) NOT NULL,
   `course_semester_id` int(11) NOT NULL,
   `teacher_semester_id` int(11) NOT NULL
@@ -645,7 +660,7 @@ CREATE TABLE IF NOT EXISTS `class_course_teacher_semester` (
 -- Dumping data for table `class_course_teacher_semester`
 --
 
-INSERT INTO `class_course_teacher_semester` (`class_course_semester_id`, `class_semester_id`, `course_semester_id`, `teacher_semester_id`) VALUES
+INSERT INTO `class_course_teacher_semester` (`class_course_teacher_semester_id`, `class_semester_id`, `course_semester_id`, `teacher_semester_id`) VALUES
 (2, 3, 1, 112),
 (3, 49, 1, 112),
 (4, 66, 1, 112),
@@ -1049,6 +1064,7 @@ INSERT INTO `class_course_teacher_semester` (`class_course_semester_id`, `class_
 -- Table structure for table `class_semester`
 --
 
+DROP TABLE IF EXISTS `class_semester`;
 CREATE TABLE IF NOT EXISTS `class_semester` (
 `class_semester_id` int(11) NOT NULL,
   `class_id` int(11) NOT NULL,
@@ -1242,147 +1258,149 @@ INSERT INTO `class_semester` (`class_semester_id`, `class_id`, `semester_id`, `s
 -- Table structure for table `courses`
 --
 
+DROP TABLE IF EXISTS `courses`;
 CREATE TABLE IF NOT EXISTS `courses` (
 `course_id` int(11) NOT NULL,
   `code` varchar(10) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `slots` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=130 DEFAULT CHARSET=latin1;
+  `course_condition` int(11) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=131 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `courses`
 --
 
-INSERT INTO `courses` (`course_id`, `code`, `name`, `slots`) VALUES
-(1, 'ACC101', 'Accounting Principles', 30),
-(2, 'ACC302', 'Managerial Accouting', 30),
-(3, 'ACC305', 'Financial Statement Analysis', 30),
-(4, 'BKG304', 'Bank Lending', 30),
-(5, 'CHN111', 'Chinese Elementary 1', 30),
-(6, 'CHN122', 'Chinees Elementary 2', 30),
-(7, 'CHN132', 'Chinese Elementary 3', 30),
-(8, 'ECO111', 'Basic Micro Economics', 30),
-(9, 'ECO121', 'Basic Macro Economics', 30),
-(10, 'ETR401', 'Entrepreneurship', 30),
-(11, 'FIM301', 'Valuation and Financial Modeling', 30),
-(12, 'FIN201', 'Monetary Economics and Global Economy', 30),
-(13, 'FIN202', 'Corporate Finance', 30),
-(14, 'FIN301', 'Finanical Market & Institutions', 30),
-(15, 'FIN303', 'Advanced Corporate Finance', 30),
-(16, 'FIN402', 'Derivatives', 30),
-(17, 'LAW101', 'Business Law Fundamentals', 30),
-(18, 'MGT101', 'Introduction to Management', 30),
-(19, 'MKT101', 'Marketing Principles', 30),
-(20, 'MKT201', 'Consumer Behavior', 30),
-(21, 'MKT202', 'Service Marketing Management', 30),
-(22, 'MKT301', 'Marketing Research', 30),
-(23, 'MKT304', 'Integrated Marketing Communications', 30),
-(24, 'OBE101', 'Organization Behavior', 30),
-(25, 'SSC101', 'Business Communication for BA', 30),
-(26, 'SSG101', 'Working in Group for BA', 30),
-(27, 'SSM201', 'Management Skills', 30),
-(28, 'CSD201', 'Data Structures and Algorithms', 30),
-(29, 'CSD202', 'Data structures and Algorithms (C++)', 30),
-(30, 'CSD301', 'Advanced Algorithms', 30),
-(31, 'CSI101', 'Introduction to Computing', 30),
-(32, 'CSI102', 'Introduction to Computing for Business', 30),
-(33, 'DBD301', 'Advanced Database', 30),
-(34, 'DBI202', 'Introduction to Database', 30),
-(35, 'NWC202', 'Networking', 30),
-(36, 'OSG202', 'Operating Systems', 30),
-(37, 'PRE201', 'Excel Programming', 30),
-(38, 'PRF192', 'Programming fundamentals using C', 30),
-(39, 'PRJ101', 'Core Java', 30),
-(40, 'PRJ201', 'Advanced Java', 30),
-(41, 'PRN292', 'C# and .NET', 30),
-(42, 'PRO001', 'Learning to Program with Alice', 13),
-(43, 'PRO191', 'Object Oriented Programming', 30),
-(44, 'ENI201', 'Business English - Pre-Intermediate', 30),
-(45, 'ENI301', 'Business English - Intermediate', 30),
-(46, 'ENI401', 'Business English - Upper-Intermediate', 30),
-(47, 'ENL111', 'Academic English 1', 30),
-(48, 'ENL112', 'Advanced Academic English', 30),
-(49, 'ENM201', 'Pre-Intermediate Business English', 30),
-(50, 'ENM301', 'Intermediate Business English', 30),
-(51, 'ENM401', 'Upper intermediate Business English', 30),
-(52, 'ENT102', 'Top Notch 1', 70),
-(53, 'ENT103', 'Top Notch 1 + Fundamentals', 100),
-(54, 'ENT202', 'Top Notch 2', 70),
-(55, 'ENT302', 'Top Notch 3', 70),
-(56, 'ENT401', 'English 5 - Summit 1 from 2012', 70),
-(57, 'ENT501', 'Summit 2 from Block 3-4 Fall 2011', 70),
-(58, 'AET101', 'Aesthetic', 15),
-(59, 'AFA201', 'Human Anatory for Artis', 30),
-(60, 'DRF201', 'Drawing - Figure drawing', 30),
-(61, 'DRP101', 'Drawing - Plaster Statue, Portrait', 30),
-(62, 'DRS101', 'Drawing - Form, Still-life', 30),
-(63, 'GDF101', 'Fundamental of Graphic Design', 30),
-(64, 'HOA101', 'Art History', 30),
-(65, 'HOD101', 'Design History', 15),
-(66, 'VCM201', 'Visual Communication', 30),
-(67, 'AIL301', 'Machine Learning', 30),
-(68, 'CEA201', 'Computer Organization and Architecture', 30),
-(69, 'CEC201', 'Circuits and Signals', 30),
-(70, 'CGG201', 'Computer Graphics', 30),
-(71, 'DGT201', 'Digital Fundamentals', 30),
-(72, 'DGT301', 'Digital Signal Processing', 30),
-(73, 'ECM391', 'Wireless Mobile Communications', 30),
-(74, 'ECS211', 'Communications Systems 1', 30),
-(75, 'EEA221', 'Electronics 2', 30),
-(76, 'ESH201', 'Embedded System Hardware', 30),
-(77, 'ESS301', 'Embedded Software Development', 30),
-(78, 'ISC301', 'E-Commerce', 30),
-(79, 'ISM301', 'ERP Fundamentals', 30),
-(80, 'OFC311', 'Optical Communications', 30),
-(81, 'PRM391', 'Mobile Programming', 30),
-(82, 'PRX301', 'Advanced XML', 30),
-(83, 'SCI201', 'Information Security', 30),
-(84, 'SYB301', 'Start your business', 27),
-(85, 'JIT301', 'Information Technology Japanese', 30),
-(86, 'JPS112', 'Japanese Elementery 1', 30),
-(87, 'JPS122', 'Japanese 2', 30),
-(88, 'JPS132', 'Japanese 3', 30),
-(89, 'JPS142', 'Japanese 4', 30),
-(90, 'JPS152', 'Japanese 5', 30),
-(91, 'JPS212', 'Japanese Intermediate 1', 60),
-(92, 'MAA101', 'Advanced Mathematics 2', 30),
-(93, 'MAC101', 'Advanced Mathematics 1', 30),
-(94, 'MAC102', 'Advanced Mathematics for Business', 30),
-(95, 'MAD111', 'Discrete Mathematics 1', 30),
-(96, 'MAD121', 'Discrete Mathematics 2', 30),
-(97, 'MAN201', 'Numerical Methods', 30),
-(98, 'MAS201', 'Statistics & data processing', 30),
-(99, 'MAS291', 'Probability and Applied Statistics', 30),
-(100, 'PHY101', 'Physics', 30),
-(101, 'COV111', 'Chess 1', 24),
-(102, 'COV121', 'Chess 2', 24),
-(103, 'COV131', 'Chess 3', 24),
-(104, 'VOV112', 'Vovinam 1', 20),
-(105, 'VOV113', 'Vovinam 2', 20),
-(106, 'VOV122', 'Vovinam 3', 20),
-(107, 'VOV123', 'Vovinam 4', 20),
-(108, 'VOV132', 'Vovinam 5', 20),
-(109, 'VOV133', 'Vovinam 6', 20),
-(110, 'AVC101', 'Asia Culture', 13),
-(111, 'HCM201', 'Ho Chi Minh Ideology', 12),
-(112, 'MLN101', 'Principles of Marxism - Leninism', 30),
-(113, 'SA', 'Self awareness', 6),
-(114, 'SSC102', 'Business Communication', 30),
-(115, 'VNR201', 'Revolutionary Lines of CPV', 18),
-(116, 'HCI201', 'Human Computer Interaction', 30),
-(117, 'ITE302', 'Ethics in Information Technology', 30),
-(118, 'SWD391', 'Software Architecture and Design', 30),
-(119, 'SWE102', 'Introduction to Software Engineering', 30),
-(120, 'SWM301', 'IT Project Management', 30),
-(121, 'SWQ391', 'Software Quality Assurance and Testing', 30),
-(122, 'SWR301', 'Software Requirements', 30),
-(123, 'ÐNG101', '?àn Nguy?t', 30),
-(124, 'ÐNH101', '?àn Nh?', 30),
-(125, 'ÐSA101', 'Sáo trúc', 30),
-(126, 'ÐTR101', '?àn Tranh', 30),
-(127, 'VNL111', 'Vietnamese - Fundamentals 1', 30),
-(128, 'VNL121', 'Vietnamese Language 2', 30),
-(129, 'VNL131', 'Vietnamese 3', 30);
+INSERT INTO `courses` (`course_id`, `code`, `name`, `course_condition`) VALUES
+(1, 'ACC101', 'Accounting Principles', NULL),
+(2, 'ACC302', 'Managerial Accouting', NULL),
+(3, 'ACC305', 'Financial Statement Analysis', NULL),
+(4, 'BKG304', 'Bank Lending', NULL),
+(5, 'CHN111', 'Chinese Elementary 1', NULL),
+(6, 'CHN122', 'Chinees Elementary 2', NULL),
+(7, 'CHN132', 'Chinese Elementary 3', NULL),
+(8, 'ECO111', 'Basic Micro Economics', NULL),
+(9, 'ECO121', 'Basic Macro Economics', NULL),
+(10, 'ETR401', 'Entrepreneurship', NULL),
+(11, 'FIM301', 'Valuation and Financial Modeling', NULL),
+(12, 'FIN201', 'Monetary Economics and Global Economy', NULL),
+(13, 'FIN202', 'Corporate Finance', NULL),
+(14, 'FIN301', 'Finanical Market & Institutions', NULL),
+(15, 'FIN303', 'Advanced Corporate Finance', NULL),
+(16, 'FIN402', 'Derivatives', NULL),
+(17, 'LAW101', 'Business Law Fundamentals', NULL),
+(18, 'MGT101', 'Introduction to Management', NULL),
+(19, 'MKT101', 'Marketing Principles', NULL),
+(20, 'MKT201', 'Consumer Behavior', NULL),
+(21, 'MKT202', 'Service Marketing Management', NULL),
+(22, 'MKT301', 'Marketing Research', NULL),
+(23, 'MKT304', 'Integrated Marketing Communications', NULL),
+(24, 'OBE101', 'Organization Behavior', NULL),
+(25, 'SSC101', 'Business Communication for BA', NULL),
+(26, 'SSG101', 'Working in Group for BA', NULL),
+(27, 'SSM201', 'Management Skills', NULL),
+(28, 'CSD201', 'Data Structures and Algorithms', NULL),
+(29, 'CSD202', 'Data structures and Algorithms (C++)', NULL),
+(30, 'CSD301', 'Advanced Algorithms', NULL),
+(31, 'CSI101', 'Introduction to Computing', NULL),
+(32, 'CSI102', 'Introduction to Computing for Business', NULL),
+(33, 'DBD301', 'Advanced Database', NULL),
+(34, 'DBI202', 'Introduction to Database', NULL),
+(35, 'NWC202', 'Networking', NULL),
+(36, 'OSG202', 'Operating Systems', NULL),
+(37, 'PRE201', 'Excel Programming', NULL),
+(38, 'PRF192', 'Programming fundamentals using C', NULL),
+(39, 'PRJ101', 'Core Java', NULL),
+(40, 'PRJ201', 'Advanced Java', NULL),
+(41, 'PRN292', 'C# and .NET', NULL),
+(42, 'PRO001', 'Learning to Program with Alice', NULL),
+(43, 'PRO191', 'Object Oriented Programming', NULL),
+(44, 'ENI201', 'Business English - Pre-Intermediate', NULL),
+(45, 'ENI301', 'Business English - Intermediate', NULL),
+(46, 'ENI401', 'Business English - Upper-Intermediate', NULL),
+(47, 'ENL111', 'Academic English 1', NULL),
+(48, 'ENL112', 'Advanced Academic English', NULL),
+(49, 'ENM201', 'Pre-Intermediate Business English', NULL),
+(50, 'ENM301', 'Intermediate Business English', NULL),
+(51, 'ENM401', 'Upper intermediate Business English', NULL),
+(52, 'ENT102', 'Top Notch 1', NULL),
+(53, 'ENT103', 'Top Notch 1 + Fundamentals', NULL),
+(54, 'ENT202', 'Top Notch 2', NULL),
+(55, 'ENT302', 'Top Notch 3', NULL),
+(56, 'ENT401', 'English 5 - Summit 1 from 2012', NULL),
+(57, 'ENT501', 'Summit 2 from Block 3-4 Fall 2011', NULL),
+(58, 'AET101', 'Aesthetic', NULL),
+(59, 'AFA201', 'Human Anatory for Artis', NULL),
+(60, 'DRF201', 'Drawing - Figure drawing', NULL),
+(61, 'DRP101', 'Drawing - Plaster Statue, Portrait', NULL),
+(62, 'DRS101', 'Drawing - Form, Still-life', NULL),
+(63, 'GDF101', 'Fundamental of Graphic Design', NULL),
+(64, 'HOA101', 'Art History', NULL),
+(65, 'HOD101', 'Design History', NULL),
+(66, 'VCM201', 'Visual Communication', NULL),
+(67, 'AIL301', 'Machine Learning', NULL),
+(68, 'CEA201', 'Computer Organization and Architecture', NULL),
+(69, 'CEC201', 'Circuits and Signals', NULL),
+(70, 'CGG201', 'Computer Graphics', NULL),
+(71, 'DGT201', 'Digital Fundamentals', NULL),
+(72, 'DGT301', 'Digital Signal Processing', NULL),
+(73, 'ECM391', 'Wireless Mobile Communications', NULL),
+(74, 'ECS211', 'Communications Systems 1', NULL),
+(75, 'EEA221', 'Electronics 2', NULL),
+(76, 'ESH201', 'Embedded System Hardware', NULL),
+(77, 'ESS301', 'Embedded Software Development', NULL),
+(78, 'ISC301', 'E-Commerce', NULL),
+(79, 'ISM301', 'ERP Fundamentals', NULL),
+(80, 'OFC311', 'Optical Communications', NULL),
+(81, 'PRM391', 'Mobile Programming', NULL),
+(82, 'PRX301', 'Advanced XML', NULL),
+(83, 'SCI201', 'Information Security', NULL),
+(84, 'SYB301', 'Start your business', NULL),
+(85, 'JIT301', 'Information Technology Japanese', NULL),
+(86, 'JPS112', 'Japanese Elementery 1', NULL),
+(87, 'JPS122', 'Japanese 2', NULL),
+(88, 'JPS132', 'Japanese 3', NULL),
+(89, 'JPS142', 'Japanese 4', NULL),
+(90, 'JPS152', 'Japanese 5', NULL),
+(91, 'JPS212', 'Japanese Intermediate 1', NULL),
+(92, 'MAA101', 'Advanced Mathematics 2', NULL),
+(93, 'MAC101', 'Advanced Mathematics 1', NULL),
+(94, 'MAC102', 'Advanced Mathematics for Business', NULL),
+(95, 'MAD111', 'Discrete Mathematics 1', NULL),
+(96, 'MAD121', 'Discrete Mathematics 2', NULL),
+(97, 'MAN201', 'Numerical Methods', NULL),
+(98, 'MAS201', 'Statistics & data processing', NULL),
+(99, 'MAS291', 'Probability and Applied Statistics', NULL),
+(100, 'PHY101', 'Physics', NULL),
+(101, 'COV111', 'Chess 1', NULL),
+(102, 'COV121', 'Chess 2', NULL),
+(103, 'COV131', 'Chess 3', NULL),
+(104, 'VOV112', 'Vovinam 1', NULL),
+(105, 'VOV113', 'Vovinam 2', NULL),
+(106, 'VOV122', 'Vovinam 3', NULL),
+(107, 'VOV123', 'Vovinam 4', NULL),
+(108, 'VOV132', 'Vovinam 5', NULL),
+(109, 'VOV133', 'Vovinam 6', NULL),
+(110, 'AVC101', 'Asia Culture', NULL),
+(111, 'HCM201', 'Ho Chi Minh Ideology', NULL),
+(112, 'MLN101', 'Principles of Marxism - Leninism', NULL),
+(113, 'SA', 'Self awareness', NULL),
+(114, 'SSC102', 'Business Communication', NULL),
+(115, 'VNR201', 'Revolutionary Lines of CPV', NULL),
+(116, 'HCI201', 'Human Computer Interaction', NULL),
+(117, 'ITE302', 'Ethics in Information Technology', NULL),
+(118, 'SWD391', 'Software Architecture and Design', NULL),
+(119, 'SWE102', 'Introduction to Software Engineering', NULL),
+(120, 'SWM301', 'IT Project Management', NULL),
+(121, 'SWQ391', 'Software Quality Assurance and Testing', NULL),
+(122, 'SWR301', 'Software Requirements', NULL),
+(123, 'ÐNG101', '?àn Nguy?t', NULL),
+(124, 'ÐNH101', '?àn Nh?', NULL),
+(125, 'ÐSA101', 'Sáo trúc', NULL),
+(126, 'ÐTR101', '?àn Tranh', NULL),
+(127, 'VNL111', 'Vietnamese - Fundamentals 1', NULL),
+(128, 'VNL121', 'Vietnamese Language 2', NULL),
+(129, 'VNL131', 'Vietnamese 3', NULL),
+(130, 'AAAAAAA', 'Mon B', NULL);
 
 -- --------------------------------------------------------
 
@@ -1390,146 +1408,148 @@ INSERT INTO `courses` (`course_id`, `code`, `name`, `slots`) VALUES
 -- Table structure for table `course_semester`
 --
 
+DROP TABLE IF EXISTS `course_semester`;
 CREATE TABLE IF NOT EXISTS `course_semester` (
 `course_semester_id` int(11) NOT NULL,
   `course_id` int(11) NOT NULL,
-  `semester_id` int(11) NOT NULL
+  `semester_id` int(11) NOT NULL,
+  `slots` int(11) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=130 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `course_semester`
 --
 
-INSERT INTO `course_semester` (`course_semester_id`, `course_id`, `semester_id`) VALUES
-(1, 1, 1),
-(2, 2, 1),
-(3, 3, 1),
-(4, 4, 1),
-(5, 5, 1),
-(6, 6, 1),
-(7, 7, 1),
-(8, 8, 1),
-(9, 9, 1),
-(10, 10, 1),
-(11, 11, 1),
-(12, 12, 1),
-(13, 13, 1),
-(14, 14, 1),
-(15, 15, 1),
-(16, 16, 1),
-(17, 17, 1),
-(18, 18, 1),
-(19, 19, 1),
-(20, 20, 1),
-(21, 21, 1),
-(22, 22, 1),
-(23, 23, 1),
-(24, 24, 1),
-(25, 25, 1),
-(26, 26, 1),
-(27, 27, 1),
-(28, 28, 1),
-(29, 29, 1),
-(30, 30, 1),
-(31, 31, 1),
-(32, 32, 1),
-(33, 33, 1),
-(34, 34, 1),
-(35, 35, 1),
-(36, 36, 1),
-(37, 37, 1),
-(38, 38, 1),
-(39, 39, 1),
-(40, 40, 1),
-(41, 41, 1),
-(42, 42, 1),
-(43, 43, 1),
-(44, 44, 1),
-(45, 45, 1),
-(46, 46, 1),
-(47, 47, 1),
-(48, 48, 1),
-(49, 49, 1),
-(50, 50, 1),
-(51, 51, 1),
-(52, 52, 1),
-(53, 53, 1),
-(54, 54, 1),
-(55, 55, 1),
-(56, 56, 1),
-(57, 57, 1),
-(58, 58, 1),
-(59, 59, 1),
-(60, 60, 1),
-(61, 61, 1),
-(62, 62, 1),
-(63, 63, 1),
-(64, 64, 1),
-(65, 65, 1),
-(66, 66, 1),
-(67, 67, 1),
-(68, 68, 1),
-(69, 69, 1),
-(70, 70, 1),
-(71, 71, 1),
-(72, 72, 1),
-(73, 73, 1),
-(74, 74, 1),
-(75, 75, 1),
-(76, 76, 1),
-(77, 77, 1),
-(78, 78, 1),
-(79, 79, 1),
-(80, 80, 1),
-(81, 81, 1),
-(82, 82, 1),
-(83, 83, 1),
-(84, 84, 1),
-(85, 85, 1),
-(86, 86, 1),
-(87, 87, 1),
-(88, 88, 1),
-(89, 89, 1),
-(90, 90, 1),
-(91, 91, 1),
-(92, 92, 1),
-(93, 93, 1),
-(94, 94, 1),
-(95, 95, 1),
-(96, 96, 1),
-(97, 97, 1),
-(98, 98, 1),
-(99, 99, 1),
-(100, 100, 1),
-(101, 101, 1),
-(102, 102, 1),
-(103, 103, 1),
-(104, 104, 1),
-(105, 105, 1),
-(106, 106, 1),
-(107, 107, 1),
-(108, 108, 1),
-(109, 109, 1),
-(110, 110, 1),
-(111, 111, 1),
-(112, 112, 1),
-(113, 113, 1),
-(114, 114, 1),
-(115, 115, 1),
-(116, 116, 1),
-(117, 117, 1),
-(118, 118, 1),
-(119, 119, 1),
-(120, 120, 1),
-(121, 121, 1),
-(122, 122, 1),
-(123, 123, 1),
-(124, 124, 1),
-(125, 125, 1),
-(126, 126, 1),
-(127, 127, 1),
-(128, 128, 1),
-(129, 129, 1);
+INSERT INTO `course_semester` (`course_semester_id`, `course_id`, `semester_id`, `slots`) VALUES
+(1, 1, 1, 30),
+(2, 2, 1, 30),
+(3, 3, 1, 30),
+(4, 4, 1, 30),
+(5, 5, 1, 30),
+(6, 6, 1, 30),
+(7, 7, 1, 30),
+(8, 8, 1, 30),
+(9, 9, 1, 30),
+(10, 10, 1, 30),
+(11, 11, 1, 30),
+(12, 12, 1, 30),
+(13, 13, 1, 30),
+(14, 14, 1, 30),
+(15, 15, 1, 30),
+(16, 16, 1, 30),
+(17, 17, 1, 30),
+(18, 18, 1, 30),
+(19, 19, 1, 30),
+(20, 20, 1, 30),
+(21, 21, 1, 30),
+(22, 22, 1, 30),
+(23, 23, 1, 30),
+(24, 24, 1, 30),
+(25, 25, 1, 30),
+(26, 26, 1, 30),
+(27, 27, 1, 30),
+(28, 28, 1, 30),
+(29, 29, 1, 30),
+(30, 30, 1, 30),
+(31, 31, 1, 30),
+(32, 32, 1, 30),
+(33, 33, 1, 30),
+(34, 34, 1, 30),
+(35, 35, 1, 30),
+(36, 36, 1, 30),
+(37, 37, 1, 30),
+(38, 38, 1, 30),
+(39, 39, 1, 30),
+(40, 40, 1, 30),
+(41, 41, 1, 30),
+(42, 42, 1, 30),
+(43, 43, 1, 30),
+(44, 44, 1, 30),
+(45, 45, 1, 30),
+(46, 46, 1, 30),
+(47, 47, 1, 30),
+(48, 48, 1, 30),
+(49, 49, 1, 30),
+(50, 50, 1, 30),
+(51, 51, 1, 30),
+(52, 52, 1, 30),
+(53, 53, 1, 30),
+(54, 54, 1, 30),
+(55, 55, 1, 30),
+(56, 56, 1, 30),
+(57, 57, 1, 30),
+(58, 58, 1, 30),
+(59, 59, 1, 30),
+(60, 60, 1, 30),
+(61, 61, 1, 30),
+(62, 62, 1, 30),
+(63, 63, 1, 30),
+(64, 64, 1, 30),
+(65, 65, 1, 30),
+(66, 66, 1, 30),
+(67, 67, 1, 30),
+(68, 68, 1, 30),
+(69, 69, 1, 30),
+(70, 70, 1, 30),
+(71, 71, 1, 30),
+(72, 72, 1, 30),
+(73, 73, 1, 30),
+(74, 74, 1, 30),
+(75, 75, 1, 30),
+(76, 76, 1, 30),
+(77, 77, 1, 30),
+(78, 78, 1, 30),
+(79, 79, 1, 30),
+(80, 80, 1, 30),
+(81, 81, 1, 30),
+(82, 82, 1, 30),
+(83, 83, 1, 30),
+(84, 84, 1, 30),
+(85, 85, 1, 30),
+(86, 86, 1, 30),
+(87, 87, 1, 30),
+(88, 88, 1, 30),
+(89, 89, 1, 30),
+(90, 90, 1, 30),
+(91, 91, 1, 30),
+(92, 92, 1, 30),
+(93, 93, 1, 30),
+(94, 94, 1, 30),
+(95, 95, 1, 30),
+(96, 96, 1, 30),
+(97, 97, 1, 30),
+(98, 98, 1, 30),
+(99, 99, 1, 30),
+(100, 100, 1, 30),
+(101, 101, 1, 30),
+(102, 102, 1, 30),
+(103, 103, 1, 30),
+(104, 104, 1, 30),
+(105, 105, 1, 30),
+(106, 106, 1, 30),
+(107, 107, 1, 30),
+(108, 108, 1, 30),
+(109, 109, 1, 30),
+(110, 110, 1, 30),
+(111, 111, 1, 30),
+(112, 112, 1, 30),
+(113, 113, 1, 30),
+(114, 114, 1, 30),
+(115, 115, 1, 30),
+(116, 116, 1, 30),
+(117, 117, 1, 30),
+(118, 118, 1, 30),
+(119, 119, 1, 30),
+(120, 120, 1, 30),
+(121, 121, 1, 30),
+(122, 122, 1, 30),
+(123, 123, 1, 30),
+(124, 124, 1, 30),
+(125, 125, 1, 30),
+(126, 126, 1, 30),
+(127, 127, 1, 30),
+(128, 128, 1, 30),
+(129, 129, 1, 30);
 
 -- --------------------------------------------------------
 
@@ -1537,6 +1557,7 @@ INSERT INTO `course_semester` (`course_semester_id`, `course_id`, `semester_id`)
 -- Table structure for table `rooms`
 --
 
+DROP TABLE IF EXISTS `rooms`;
 CREATE TABLE IF NOT EXISTS `rooms` (
 `room_id` int(11) NOT NULL,
   `code` varchar(10) NOT NULL,
@@ -1610,6 +1631,7 @@ INSERT INTO `rooms` (`room_id`, `code`, `room_type`, `capacity`) VALUES
 -- Table structure for table `semesters`
 --
 
+DROP TABLE IF EXISTS `semesters`;
 CREATE TABLE IF NOT EXISTS `semesters` (
 `semester_id` int(11) NOT NULL,
   `code` varchar(10) NOT NULL,
@@ -1629,9 +1651,58 @@ INSERT INTO `semesters` (`semester_id`, `code`, `name`, `semester_year`, `start_
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `staff`
+--
+
+DROP TABLE IF EXISTS `staff`;
+CREATE TABLE IF NOT EXISTS `staff` (
+`staff_id` int(11) NOT NULL,
+  `account` varchar(20) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `account_type` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `students`
+--
+
+DROP TABLE IF EXISTS `students`;
+CREATE TABLE IF NOT EXISTS `students` (
+`student_id` int(11) NOT NULL,
+  `account` varchar(20) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `student_code` varchar(10) NOT NULL,
+  `semester` int(11) NOT NULL,
+  `class_semester_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `student_course`
+--
+
+DROP TABLE IF EXISTS `student_course`;
+CREATE TABLE IF NOT EXISTS `student_course` (
+`student_course_id` int(11) NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `course_id` int(11) NOT NULL,
+  `class_semester_id` int(11) NOT NULL,
+  `grade` int(11) NOT NULL,
+  `passed` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `teachers`
 --
 
+DROP TABLE IF EXISTS `teachers`;
 CREATE TABLE IF NOT EXISTS `teachers` (
 `teacher_id` int(11) NOT NULL,
   `account` varchar(20) NOT NULL,
@@ -1780,22 +1851,10 @@ INSERT INTO `teachers` (`teacher_id`, `account`, `name`, `email`, `account_type`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `teacher_busy_semester`
---
-
-CREATE TABLE IF NOT EXISTS `teacher_busy_semester` (
-`teacher_busy_semester_id` int(11) NOT NULL,
-  `teacher_semester_id` int(11) NOT NULL,
-  `date_busy` date NOT NULL,
-  `slot_busy` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `teacher_course_semester`
 --
 
+DROP TABLE IF EXISTS `teacher_course_semester`;
 CREATE TABLE IF NOT EXISTS `teacher_course_semester` (
 `course_teacher_semester_id` int(11) NOT NULL,
   `teacher_semester_id` int(11) NOT NULL,
@@ -2452,6 +2511,7 @@ INSERT INTO `teacher_course_semester` (`course_teacher_semester_id`, `teacher_se
 -- Table structure for table `teacher_semester`
 --
 
+DROP TABLE IF EXISTS `teacher_semester`;
 CREATE TABLE IF NOT EXISTS `teacher_semester` (
 `teacher_semester_id` int(11) NOT NULL,
   `teacher_id` int(11) NOT NULL,
@@ -2601,12 +2661,14 @@ INSERT INTO `teacher_semester` (`teacher_semester_id`, `teacher_id`, `semester_i
 -- Table structure for table `time_table`
 --
 
+DROP TABLE IF EXISTS `time_table`;
 CREATE TABLE IF NOT EXISTS `time_table` (
 `time_table_id` int(11) NOT NULL,
   `class_course_semester_id` int(11) NOT NULL,
   `date` date NOT NULL,
   `slot` int(11) NOT NULL,
-  `room_id` int(11) NOT NULL
+  `room_id` int(11) NOT NULL,
+  `teacher_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -2626,10 +2688,16 @@ ALTER TABLE `class_course_semester`
  ADD PRIMARY KEY (`class_course_semester_id`), ADD KEY `class_semester_id` (`class_semester_id`), ADD KEY `course_semester_id` (`course_semester_id`);
 
 --
+-- Indexes for table `class_course_student_semester`
+--
+ALTER TABLE `class_course_student_semester`
+ ADD PRIMARY KEY (`class_course_student_semester_id`), ADD KEY `class_course_semester_id` (`class_course_semester_id`), ADD KEY `student_id` (`student_id`);
+
+--
 -- Indexes for table `class_course_teacher_semester`
 --
 ALTER TABLE `class_course_teacher_semester`
- ADD PRIMARY KEY (`class_course_semester_id`), ADD KEY `class_semester_id` (`class_semester_id`), ADD KEY `course_semester_id` (`course_semester_id`), ADD KEY `teacher_semester_id` (`teacher_semester_id`);
+ ADD PRIMARY KEY (`class_course_teacher_semester_id`), ADD KEY `class_semester_id` (`class_semester_id`), ADD KEY `course_semester_id` (`course_semester_id`), ADD KEY `teacher_semester_id` (`teacher_semester_id`);
 
 --
 -- Indexes for table `class_semester`
@@ -2641,7 +2709,7 @@ ALTER TABLE `class_semester`
 -- Indexes for table `courses`
 --
 ALTER TABLE `courses`
- ADD PRIMARY KEY (`course_id`), ADD UNIQUE KEY `code` (`code`);
+ ADD PRIMARY KEY (`course_id`), ADD UNIQUE KEY `code` (`code`), ADD KEY `course_condition` (`course_condition`);
 
 --
 -- Indexes for table `course_semester`
@@ -2662,16 +2730,28 @@ ALTER TABLE `semesters`
  ADD PRIMARY KEY (`semester_id`), ADD UNIQUE KEY `code` (`code`);
 
 --
+-- Indexes for table `staff`
+--
+ALTER TABLE `staff`
+ ADD PRIMARY KEY (`staff_id`), ADD UNIQUE KEY `account` (`account`,`email`);
+
+--
+-- Indexes for table `students`
+--
+ALTER TABLE `students`
+ ADD PRIMARY KEY (`student_id`), ADD UNIQUE KEY `account` (`account`,`email`,`student_code`), ADD KEY `class_semester_id` (`class_semester_id`);
+
+--
+-- Indexes for table `student_course`
+--
+ALTER TABLE `student_course`
+ ADD PRIMARY KEY (`student_course_id`), ADD KEY `student_id` (`student_id`,`course_id`,`class_semester_id`), ADD KEY `course_id` (`course_id`), ADD KEY `class_semester_id` (`class_semester_id`);
+
+--
 -- Indexes for table `teachers`
 --
 ALTER TABLE `teachers`
  ADD PRIMARY KEY (`teacher_id`), ADD UNIQUE KEY `account` (`account`), ADD UNIQUE KEY `email` (`email`);
-
---
--- Indexes for table `teacher_busy_semester`
---
-ALTER TABLE `teacher_busy_semester`
- ADD PRIMARY KEY (`teacher_busy_semester_id`), ADD UNIQUE KEY `teacher_semester_id` (`teacher_semester_id`);
 
 --
 -- Indexes for table `teacher_course_semester`
@@ -2689,7 +2769,7 @@ ALTER TABLE `teacher_semester`
 -- Indexes for table `time_table`
 --
 ALTER TABLE `time_table`
- ADD PRIMARY KEY (`time_table_id`), ADD UNIQUE KEY `date` (`date`,`slot`,`room_id`), ADD UNIQUE KEY `date_2` (`date`,`slot`,`class_course_semester_id`), ADD KEY `class_course_semester_id` (`class_course_semester_id`), ADD KEY `room_id` (`room_id`);
+ ADD PRIMARY KEY (`time_table_id`), ADD UNIQUE KEY `date` (`date`,`slot`,`room_id`), ADD UNIQUE KEY `date_2` (`date`,`slot`,`class_course_semester_id`), ADD KEY `class_course_semester_id` (`class_course_semester_id`), ADD KEY `room_id` (`room_id`), ADD KEY `teacher_id` (`teacher_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -2706,10 +2786,15 @@ MODIFY `class_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=175;
 ALTER TABLE `class_course_semester`
 MODIFY `class_course_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1011;
 --
+-- AUTO_INCREMENT for table `class_course_student_semester`
+--
+ALTER TABLE `class_course_student_semester`
+MODIFY `class_course_student_semester_id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `class_course_teacher_semester`
 --
 ALTER TABLE `class_course_teacher_semester`
-MODIFY `class_course_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=398;
+MODIFY `class_course_teacher_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=398;
 --
 -- AUTO_INCREMENT for table `class_semester`
 --
@@ -2719,7 +2804,7 @@ MODIFY `class_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=175;
 -- AUTO_INCREMENT for table `courses`
 --
 ALTER TABLE `courses`
-MODIFY `course_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=130;
+MODIFY `course_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=131;
 --
 -- AUTO_INCREMENT for table `course_semester`
 --
@@ -2736,15 +2821,25 @@ MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=55;
 ALTER TABLE `semesters`
 MODIFY `semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
+-- AUTO_INCREMENT for table `staff`
+--
+ALTER TABLE `staff`
+MODIFY `staff_id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `students`
+--
+ALTER TABLE `students`
+MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `student_course`
+--
+ALTER TABLE `student_course`
+MODIFY `student_course_id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `teachers`
 --
 ALTER TABLE `teachers`
 MODIFY `teacher_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=132;
---
--- AUTO_INCREMENT for table `teacher_busy_semester`
---
-ALTER TABLE `teacher_busy_semester`
-MODIFY `teacher_busy_semester_id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `teacher_course_semester`
 --
@@ -2772,6 +2867,13 @@ ADD CONSTRAINT `class_course_semester_ibfk_1` FOREIGN KEY (`class_semester_id`) 
 ADD CONSTRAINT `class_course_semester_ibfk_2` FOREIGN KEY (`course_semester_id`) REFERENCES `course_semester` (`course_semester_id`);
 
 --
+-- Constraints for table `class_course_student_semester`
+--
+ALTER TABLE `class_course_student_semester`
+ADD CONSTRAINT `class_course_student_semester_ibfk_1` FOREIGN KEY (`class_course_semester_id`) REFERENCES `class_course_semester` (`class_course_semester_id`),
+ADD CONSTRAINT `class_course_student_semester_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`);
+
+--
 -- Constraints for table `class_course_teacher_semester`
 --
 ALTER TABLE `class_course_teacher_semester`
@@ -2787,6 +2889,12 @@ ADD CONSTRAINT `class_semester_ibfk_1` FOREIGN KEY (`class_id`) REFERENCES `clas
 ADD CONSTRAINT `class_semester_ibfk_2` FOREIGN KEY (`semester_id`) REFERENCES `semesters` (`semester_id`);
 
 --
+-- Constraints for table `courses`
+--
+ALTER TABLE `courses`
+ADD CONSTRAINT `courses_ibfk_1` FOREIGN KEY (`course_condition`) REFERENCES `courses` (`course_id`);
+
+--
 -- Constraints for table `course_semester`
 --
 ALTER TABLE `course_semester`
@@ -2794,10 +2902,18 @@ ADD CONSTRAINT `course_semester_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `co
 ADD CONSTRAINT `course_semester_ibfk_2` FOREIGN KEY (`semester_id`) REFERENCES `semesters` (`semester_id`);
 
 --
--- Constraints for table `teacher_busy_semester`
+-- Constraints for table `students`
 --
-ALTER TABLE `teacher_busy_semester`
-ADD CONSTRAINT `teacher_busy_semester_ibfk_1` FOREIGN KEY (`teacher_semester_id`) REFERENCES `teacher_semester` (`teacher_semester_id`);
+ALTER TABLE `students`
+ADD CONSTRAINT `students_ibfk_1` FOREIGN KEY (`class_semester_id`) REFERENCES `class_semester` (`class_semester_id`);
+
+--
+-- Constraints for table `student_course`
+--
+ALTER TABLE `student_course`
+ADD CONSTRAINT `student_course_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`),
+ADD CONSTRAINT `student_course_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
+ADD CONSTRAINT `student_course_ibfk_3` FOREIGN KEY (`class_semester_id`) REFERENCES `class_semester` (`class_semester_id`);
 
 --
 -- Constraints for table `teacher_course_semester`
@@ -2818,7 +2934,8 @@ ADD CONSTRAINT `teacher_semester_ibfk_2` FOREIGN KEY (`semester_id`) REFERENCES 
 --
 ALTER TABLE `time_table`
 ADD CONSTRAINT `time_table_ibfk_1` FOREIGN KEY (`class_course_semester_id`) REFERENCES `class_course_semester` (`class_course_semester_id`),
-ADD CONSTRAINT `time_table_ibfk_2` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`room_id`);
+ADD CONSTRAINT `time_table_ibfk_2` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`room_id`),
+ADD CONSTRAINT `time_table_ibfk_3` FOREIGN KEY (`teacher_id`) REFERENCES `teachers` (`teacher_id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
