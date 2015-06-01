@@ -31,6 +31,7 @@ CREATE TABLE courses (
 	course_id INT NOT NULL AUTO_INCREMENT,
 	code VARCHAR(10) NOT NULL,
 	name VARCHAR(100) NOT NULL,
+	slots INT NOT NULL,
 	PRIMARY KEY (course_id),
 	UNIQUE KEY (code)
 );
@@ -66,7 +67,6 @@ CREATE TABLE course_semester (
 	course_semester_id INT NOT NULL AUTO_INCREMENT,
 	course_id INT NOT NULL,
 	semester_id INT NOT NULL,
-	slots INT NOT NULL,
 	PRIMARY KEY (course_semester_id),
 	UNIQUE KEY (course_id, semester_id),
 	FOREIGN KEY (course_id) REFERENCES courses(course_id),
@@ -112,25 +112,14 @@ CREATE TABLE class_course_semester (			/* hoc ky K, lop L co mon hoc A */
 );
 
 CREATE TABLE class_course_teacher_semester (			/* hoc ky K, lop L co mon hoc A */
-	class_course_semester_id INT NOT NULL AUTO_INCREMENT,
+	class_course_teacher_semester_id INT NOT NULL AUTO_INCREMENT,
 	class_semester_id INT NOT NULL,
 	course_semester_id INT NOT NULL,
 	teacher_semester_id INT NOT NULL,
-	PRIMARY KEY (class_course_semester_id),
+	PRIMARY KEY (class_course_teacher_semester_id),
 	
 	FOREIGN KEY (class_semester_id) REFERENCES class_semester(class_semester_id),
 	FOREIGN KEY (course_semester_id) REFERENCES course_semester(course_semester_id),
-	FOREIGN KEY (teacher_semester_id) REFERENCES teacher_semester(teacher_semester_id)
-);
-
-
-CREATE TABLE teacher_busy_semester (
-	teacher_busy_semester_id INT NOT NULL AUTO_INCREMENT,
-	teacher_semester_id INT NOT NULL,
-	date_busy DATE NOT NULL,
-	slot_busy INT NOT NULL,
-	PRIMARY KEY (teacher_busy_semester_id),
-	UNIQUE KEY (teacher_semester_id),
 	FOREIGN KEY (teacher_semester_id) REFERENCES teacher_semester(teacher_semester_id)
 );
 
