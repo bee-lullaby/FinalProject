@@ -19,6 +19,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `academic_portal`
 --
+DROP DATABASE IF EXISTS academic_portal;
 CREATE DATABASE IF NOT EXISTS `academic_portal` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `academic_portal`;
 
