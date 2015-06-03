@@ -13,5 +13,7 @@ public interface StaffService {
 
 	public Staff getStaffById(int staffId);
 
+	public Staff getStaffByEmail(String email);
+
 	public void deleteStaff(int staffId);
 }

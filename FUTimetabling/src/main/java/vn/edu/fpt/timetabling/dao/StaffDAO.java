@@ -12,6 +12,8 @@ public interface StaffDAO {
 	public List<Staff> listStaff();
 
 	public Staff getStaffById(int staffId);
+	
+	public Staff getStaffByEmail(String email);
 
 	public void deleteStaff(int staffId);
 }

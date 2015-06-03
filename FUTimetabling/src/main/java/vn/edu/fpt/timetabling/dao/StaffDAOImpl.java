@@ -2,6 +2,7 @@ package vn.edu.fpt.timetabling.dao;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -14,7 +15,7 @@ import vn.edu.fpt.timetabling.model.Staff;
 public class StaffDAOImpl implements StaffDAO {
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(CourseDAOImpl.class);
+			.getLogger(StaffDAOImpl.class);
 
 	private SessionFactory sessionFactory;
 
@@ -42,7 +43,7 @@ public class StaffDAOImpl implements StaffDAO {
 	@Override
 	public List<Staff> listStaff() {
 		List<Staff> staff = (List<Staff>) getCurrentSession().createQuery(
-				"from vn.edu.fpt.timetabling.model.Staff").list();
+				"FROM vn.edu.fpt.timetabling.model.Staff").list();
 		for (Staff staffTemp : staff) {
 			logger.info("Staff list::" + staffTemp);
 		}
@@ -57,6 +58,20 @@ public class StaffDAOImpl implements StaffDAO {
 		return staff;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public Staff getStaffByEmail(String email) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Staff S WHERE S.email = :email";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("email", email);
+		List<Staff> staff = (List<Staff>) query.list();
+		if (staff != null && !staff.isEmpty()) {
+			return staff.get(0);
+		} else {
+			return null;
+		}
+	}
+
 	@Override
 	public void deleteStaff(int staffId) {
 		Staff staff = getStaffById(staffId);
@@ -65,5 +80,4 @@ public class StaffDAOImpl implements StaffDAO {
 		}
 		logger.info("Staff deleted successfully, staff details=" + staff);
 	}
-
 }

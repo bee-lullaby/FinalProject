@@ -42,6 +42,7 @@
 		<beans:property name="annotatedClasses">
 			<beans:list>
 				<beans:value>vn.edu.fpt.timetabling.model.Course</beans:value>
+				<beans:value>vn.edu.fpt.timetabling.model.Staff</beans:value>
 			</beans:list>
 		</beans:property>
 		<beans:property name="hibernateProperties">
@@ -58,9 +59,17 @@
 		<beans:property name="sessionFactory"
 			ref="hibernate4AnnotatedSessionFactory" />
 	</beans:bean>
+	<beans:bean id="staffDAO" class="vn.edu.fpt.timetabling.dao.StaffDAOImpl">
+		<beans:property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
 	<beans:bean id="courseService"
 		class="vn.edu.fpt.timetabling.service.CourseServiceImpl">
 		<beans:property name="courseDAO" ref="courseDAO"></beans:property>
+	</beans:bean>
+	<beans:bean id="staffService"
+		class="vn.edu.fpt.timetabling.service.StaffServiceImpl">
+		<beans:property name="staffDAO" ref="staffDAO"></beans:property>
 	</beans:bean>
 	<context:component-scan base-package="vn.edu.fpt.timetabling" />
 

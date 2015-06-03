@@ -3,18 +3,22 @@ package vn.edu.fpt.timetabling;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
+
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+
+import vn.edu.fpt.timetabling.model.Staff;
+import vn.edu.fpt.timetabling.service.StaffService;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
@@ -24,7 +28,6 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.oauth2.Oauth2;
 import com.google.api.services.oauth2.model.Userinfoplus;
-import com.google.gson.Gson;
 
 /**
  * Handles requests for the application home page.
@@ -38,6 +41,14 @@ public class HomeController {
 	private static final String CLIENT_SECRET = "dj70o3tz4Qeu42qL0oDhV7Nm";
 	private static final String REDIRECT_URI = "postmessage";
 	private static final String FPT_DOMAIN = "fpt.edu.vn";
+
+	private StaffService staffService;
+
+	@Autowired(required = true)
+	@Qualifier(value = "staffService")
+	public void setStaffService(StaffService staffService) {
+		this.staffService = staffService;
+	}
 
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -57,8 +68,8 @@ public class HomeController {
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	@ResponseBody
-	public String login(@RequestBody String code) throws IOException {
+	public String login(HttpSession session, @RequestBody String code)
+			throws IOException {
 		logger.info("code: " + code);
 		HttpTransport netTransport = new NetHttpTransport();
 		JacksonFactory jsonFactory = new JacksonFactory();
@@ -78,12 +89,16 @@ public class HomeController {
 		if (hd != null && hd.equalsIgnoreCase(FPT_DOMAIN)) {
 			// email fpt
 			logger.info(email);
-			Map<String, String> data = new HashMap<String, String>();
-			data.put("idToken", token.getIdToken());
-			data.put("accessToken", token.getAccessToken());
-			data.put("email", email);
-			Gson gson = new Gson();
-			return gson.toJson(data);
+			Staff staff = staffService.getStaffByEmail(email);
+			if (staff != null) {
+				logger.info("staff");
+				session.setAttribute("idToken", token.getIdToken());
+				session.setAttribute("accessToken", token.getAccessToken());
+				session.setAttribute("email", email);
+				return "redirect:/staff";
+			} else {
+				return "";
+			}
 		} else {
 			return "";
 		}

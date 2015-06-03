@@ -43,8 +43,13 @@ public class StaffServiceImpl implements StaffService {
 
 	@Override
 	@Transactional
+	public Staff getStaffByEmail(String email) {
+		return staffDAO.getStaffByEmail(email);
+	}
+
+	@Override
+	@Transactional
 	public void deleteStaff(int staffId) {
 		staffDAO.deleteStaff(staffId);
 	}
-
 }

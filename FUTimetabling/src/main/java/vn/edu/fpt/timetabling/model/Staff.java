@@ -12,12 +12,13 @@ import javax.persistence.Table;
 public class Staff {
 
 	@Id
-	@Column(name = "course_id")
+	@Column(name = "staff_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int staffId;
 	private String account;
 	private String name;
 	private String email;
+	@Column(name = "account_type")
 	private String accountType;
 
 	/**
