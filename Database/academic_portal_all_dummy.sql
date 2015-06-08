@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 01, 2015 at 05:47 PM
+-- Generation Time: Jun 08, 2015 at 04:57 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -1264,144 +1264,147 @@ CREATE TABLE IF NOT EXISTS `courses` (
 `course_id` int(11) NOT NULL,
   `code` varchar(10) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `course_condition` int(11) DEFAULT NULL
+  `department_id` int(11) DEFAULT NULL,
+  `course_condition` int(11) DEFAULT NULL,
+  `block_condition` int(11) DEFAULT NULL,
+  `semester_long` tinyint(1) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=131 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `courses`
 --
 
-INSERT INTO `courses` (`course_id`, `code`, `name`, `course_condition`) VALUES
-(1, 'ACC101', 'Accounting Principles', NULL),
-(2, 'ACC302', 'Managerial Accouting', NULL),
-(3, 'ACC305', 'Financial Statement Analysis', NULL),
-(4, 'BKG304', 'Bank Lending', NULL),
-(5, 'CHN111', 'Chinese Elementary 1', NULL),
-(6, 'CHN122', 'Chinees Elementary 2', NULL),
-(7, 'CHN132', 'Chinese Elementary 3', NULL),
-(8, 'ECO111', 'Basic Micro Economics', NULL),
-(9, 'ECO121', 'Basic Macro Economics', NULL),
-(10, 'ETR401', 'Entrepreneurship', NULL),
-(11, 'FIM301', 'Valuation and Financial Modeling', NULL),
-(12, 'FIN201', 'Monetary Economics and Global Economy', NULL),
-(13, 'FIN202', 'Corporate Finance', NULL),
-(14, 'FIN301', 'Finanical Market & Institutions', NULL),
-(15, 'FIN303', 'Advanced Corporate Finance', NULL),
-(16, 'FIN402', 'Derivatives', NULL),
-(17, 'LAW101', 'Business Law Fundamentals', NULL),
-(18, 'MGT101', 'Introduction to Management', NULL),
-(19, 'MKT101', 'Marketing Principles', NULL),
-(20, 'MKT201', 'Consumer Behavior', NULL),
-(21, 'MKT202', 'Service Marketing Management', NULL),
-(22, 'MKT301', 'Marketing Research', NULL),
-(23, 'MKT304', 'Integrated Marketing Communications', NULL),
-(24, 'OBE101', 'Organization Behavior', NULL),
-(25, 'SSC101', 'Business Communication for BA', NULL),
-(26, 'SSG101', 'Working in Group for BA', NULL),
-(27, 'SSM201', 'Management Skills', NULL),
-(28, 'CSD201', 'Data Structures and Algorithms', NULL),
-(29, 'CSD202', 'Data structures and Algorithms (C++)', NULL),
-(30, 'CSD301', 'Advanced Algorithms', NULL),
-(31, 'CSI101', 'Introduction to Computing', NULL),
-(32, 'CSI102', 'Introduction to Computing for Business', NULL),
-(33, 'DBD301', 'Advanced Database', NULL),
-(34, 'DBI202', 'Introduction to Database', NULL),
-(35, 'NWC202', 'Networking', NULL),
-(36, 'OSG202', 'Operating Systems', NULL),
-(37, 'PRE201', 'Excel Programming', NULL),
-(38, 'PRF192', 'Programming fundamentals using C', NULL),
-(39, 'PRJ101', 'Core Java', NULL),
-(40, 'PRJ201', 'Advanced Java', NULL),
-(41, 'PRN292', 'C# and .NET', NULL),
-(42, 'PRO001', 'Learning to Program with Alice', NULL),
-(43, 'PRO191', 'Object Oriented Programming', NULL),
-(44, 'ENI201', 'Business English - Pre-Intermediate', NULL),
-(45, 'ENI301', 'Business English - Intermediate', NULL),
-(46, 'ENI401', 'Business English - Upper-Intermediate', NULL),
-(47, 'ENL111', 'Academic English 1', NULL),
-(48, 'ENL112', 'Advanced Academic English', NULL),
-(49, 'ENM201', 'Pre-Intermediate Business English', NULL),
-(50, 'ENM301', 'Intermediate Business English', NULL),
-(51, 'ENM401', 'Upper intermediate Business English', NULL),
-(52, 'ENT102', 'Top Notch 1', NULL),
-(53, 'ENT103', 'Top Notch 1 + Fundamentals', NULL),
-(54, 'ENT202', 'Top Notch 2', NULL),
-(55, 'ENT302', 'Top Notch 3', NULL),
-(56, 'ENT401', 'English 5 - Summit 1 from 2012', NULL),
-(57, 'ENT501', 'Summit 2 from Block 3-4 Fall 2011', NULL),
-(58, 'AET101', 'Aesthetic', NULL),
-(59, 'AFA201', 'Human Anatory for Artis', NULL),
-(60, 'DRF201', 'Drawing - Figure drawing', NULL),
-(61, 'DRP101', 'Drawing - Plaster Statue, Portrait', NULL),
-(62, 'DRS101', 'Drawing - Form, Still-life', NULL),
-(63, 'GDF101', 'Fundamental of Graphic Design', NULL),
-(64, 'HOA101', 'Art History', NULL),
-(65, 'HOD101', 'Design History', NULL),
-(66, 'VCM201', 'Visual Communication', NULL),
-(67, 'AIL301', 'Machine Learning', NULL),
-(68, 'CEA201', 'Computer Organization and Architecture', NULL),
-(69, 'CEC201', 'Circuits and Signals', NULL),
-(70, 'CGG201', 'Computer Graphics', NULL),
-(71, 'DGT201', 'Digital Fundamentals', NULL),
-(72, 'DGT301', 'Digital Signal Processing', NULL),
-(73, 'ECM391', 'Wireless Mobile Communications', NULL),
-(74, 'ECS211', 'Communications Systems 1', NULL),
-(75, 'EEA221', 'Electronics 2', NULL),
-(76, 'ESH201', 'Embedded System Hardware', NULL),
-(77, 'ESS301', 'Embedded Software Development', NULL),
-(78, 'ISC301', 'E-Commerce', NULL),
-(79, 'ISM301', 'ERP Fundamentals', NULL),
-(80, 'OFC311', 'Optical Communications', NULL),
-(81, 'PRM391', 'Mobile Programming', NULL),
-(82, 'PRX301', 'Advanced XML', NULL),
-(83, 'SCI201', 'Information Security', NULL),
-(84, 'SYB301', 'Start your business', NULL),
-(85, 'JIT301', 'Information Technology Japanese', NULL),
-(86, 'JPS112', 'Japanese Elementery 1', NULL),
-(87, 'JPS122', 'Japanese 2', NULL),
-(88, 'JPS132', 'Japanese 3', NULL),
-(89, 'JPS142', 'Japanese 4', NULL),
-(90, 'JPS152', 'Japanese 5', NULL),
-(91, 'JPS212', 'Japanese Intermediate 1', NULL),
-(92, 'MAA101', 'Advanced Mathematics 2', NULL),
-(93, 'MAC101', 'Advanced Mathematics 1', NULL),
-(94, 'MAC102', 'Advanced Mathematics for Business', NULL),
-(95, 'MAD111', 'Discrete Mathematics 1', NULL),
-(96, 'MAD121', 'Discrete Mathematics 2', NULL),
-(97, 'MAN201', 'Numerical Methods', NULL),
-(98, 'MAS201', 'Statistics & data processing', NULL),
-(99, 'MAS291', 'Probability and Applied Statistics', NULL),
-(100, 'PHY101', 'Physics', NULL),
-(101, 'COV111', 'Chess 1', NULL),
-(102, 'COV121', 'Chess 2', NULL),
-(103, 'COV131', 'Chess 3', NULL),
-(104, 'VOV112', 'Vovinam 1', NULL),
-(105, 'VOV113', 'Vovinam 2', NULL),
-(106, 'VOV122', 'Vovinam 3', NULL),
-(107, 'VOV123', 'Vovinam 4', NULL),
-(108, 'VOV132', 'Vovinam 5', NULL),
-(109, 'VOV133', 'Vovinam 6', NULL),
-(110, 'AVC101', 'Asia Culture', NULL),
-(111, 'HCM201', 'Ho Chi Minh Ideology', NULL),
-(112, 'MLN101', 'Principles of Marxism - Leninism', NULL),
-(113, 'SA', 'Self awareness', NULL),
-(114, 'SSC102', 'Business Communication', NULL),
-(115, 'VNR201', 'Revolutionary Lines of CPV', NULL),
-(116, 'HCI201', 'Human Computer Interaction', NULL),
-(117, 'ITE302', 'Ethics in Information Technology', NULL),
-(118, 'SWD391', 'Software Architecture and Design', NULL),
-(119, 'SWE102', 'Introduction to Software Engineering', NULL),
-(120, 'SWM301', 'IT Project Management', NULL),
-(121, 'SWQ391', 'Software Quality Assurance and Testing', NULL),
-(122, 'SWR301', 'Software Requirements', NULL),
-(123, 'ÐNG101', '?àn Nguy?t', NULL),
-(124, 'ÐNH101', '?àn Nh?', NULL),
-(125, 'ÐSA101', 'Sáo trúc', NULL),
-(126, 'ÐTR101', '?àn Tranh', NULL),
-(127, 'VNL111', 'Vietnamese - Fundamentals 1', NULL),
-(128, 'VNL121', 'Vietnamese Language 2', NULL),
-(129, 'VNL131', 'Vietnamese 3', NULL),
-(130, 'AAAAAAA', 'Mon B', NULL);
+INSERT INTO `courses` (`course_id`, `code`, `name`, `department_id`, `course_condition`, `block_condition`, `semester_long`) VALUES
+(1, 'ACC101', 'Accounting Principles', NULL, NULL, NULL, 0),
+(2, 'ACC302', 'Managerial Accouting', NULL, NULL, NULL, 0),
+(3, 'ACC305', 'Financial Statement Analysis', NULL, NULL, NULL, 0),
+(4, 'BKG304', 'Bank Lending', NULL, NULL, NULL, 0),
+(5, 'CHN111', 'Chinese Elementary 1', NULL, NULL, NULL, 0),
+(6, 'CHN122', 'Chinees Elementary 2', NULL, NULL, NULL, 0),
+(7, 'CHN132', 'Chinese Elementary 3', NULL, NULL, NULL, 0),
+(8, 'ECO111', 'Basic Micro Economics', NULL, NULL, NULL, 0),
+(9, 'ECO121', 'Basic Macro Economics', NULL, NULL, NULL, 0),
+(10, 'ETR401', 'Entrepreneurship', NULL, NULL, NULL, 0),
+(11, 'FIM301', 'Valuation and Financial Modeling', NULL, NULL, NULL, 0),
+(12, 'FIN201', 'Monetary Economics and Global Economy', NULL, NULL, NULL, 0),
+(13, 'FIN202', 'Corporate Finance', NULL, NULL, NULL, 0),
+(14, 'FIN301', 'Finanical Market & Institutions', NULL, NULL, NULL, 0),
+(15, 'FIN303', 'Advanced Corporate Finance', NULL, NULL, NULL, 0),
+(16, 'FIN402', 'Derivatives', NULL, NULL, NULL, 0),
+(17, 'LAW101', 'Business Law Fundamentals', NULL, NULL, NULL, 0),
+(18, 'MGT101', 'Introduction to Management', NULL, NULL, NULL, 0),
+(19, 'MKT101', 'Marketing Principles', NULL, NULL, NULL, 0),
+(20, 'MKT201', 'Consumer Behavior', NULL, NULL, NULL, 0),
+(21, 'MKT202', 'Service Marketing Management', NULL, NULL, NULL, 0),
+(22, 'MKT301', 'Marketing Research', NULL, NULL, NULL, 0),
+(23, 'MKT304', 'Integrated Marketing Communications', NULL, NULL, NULL, 0),
+(24, 'OBE101', 'Organization Behavior', NULL, NULL, NULL, 0),
+(25, 'SSC101', 'Business Communication for BA', NULL, NULL, NULL, 0),
+(26, 'SSG101', 'Working in Group for BA', NULL, NULL, NULL, 0),
+(27, 'SSM201', 'Management Skills', NULL, NULL, NULL, 0),
+(28, 'CSD201', 'Data Structures and Algorithms', NULL, NULL, NULL, 0),
+(29, 'CSD202', 'Data structures and Algorithms (C++)', NULL, NULL, NULL, 0),
+(30, 'CSD301', 'Advanced Algorithms', NULL, NULL, NULL, 0),
+(31, 'CSI101', 'Introduction to Computing', NULL, NULL, NULL, 0),
+(32, 'CSI102', 'Introduction to Computing for Business', NULL, NULL, NULL, 0),
+(33, 'DBD301', 'Advanced Database', NULL, NULL, NULL, 0),
+(34, 'DBI202', 'Introduction to Database', NULL, NULL, NULL, 0),
+(35, 'NWC202', 'Networking', NULL, NULL, NULL, 0),
+(36, 'OSG202', 'Operating Systems', NULL, NULL, NULL, 0),
+(37, 'PRE201', 'Excel Programming', NULL, NULL, NULL, 0),
+(38, 'PRF192', 'Programming fundamentals using C', NULL, NULL, NULL, 0),
+(39, 'PRJ101', 'Core Java', NULL, NULL, NULL, 0),
+(40, 'PRJ201', 'Advanced Java', NULL, NULL, NULL, 0),
+(41, 'PRN292', 'C# and .NET', NULL, NULL, NULL, 0),
+(42, 'PRO001', 'Learning to Program with Alice', NULL, NULL, NULL, 0),
+(43, 'PRO191', 'Object Oriented Programming', NULL, NULL, NULL, 0),
+(44, 'ENI201', 'Business English - Pre-Intermediate', NULL, NULL, NULL, 0),
+(45, 'ENI301', 'Business English - Intermediate', NULL, NULL, NULL, 0),
+(46, 'ENI401', 'Business English - Upper-Intermediate', NULL, NULL, NULL, 0),
+(47, 'ENL111', 'Academic English 1', NULL, NULL, NULL, 0),
+(48, 'ENL112', 'Advanced Academic English', NULL, NULL, NULL, 0),
+(49, 'ENM201', 'Pre-Intermediate Business English', NULL, NULL, NULL, 0),
+(50, 'ENM301', 'Intermediate Business English', NULL, NULL, NULL, 0),
+(51, 'ENM401', 'Upper intermediate Business English', NULL, NULL, NULL, 0),
+(52, 'ENT102', 'Top Notch 1', NULL, NULL, NULL, 0),
+(53, 'ENT103', 'Top Notch 1 + Fundamentals', NULL, NULL, NULL, 0),
+(54, 'ENT202', 'Top Notch 2', NULL, NULL, NULL, 0),
+(55, 'ENT302', 'Top Notch 3', NULL, NULL, NULL, 0),
+(56, 'ENT401', 'English 5 - Summit 1 from 2012', NULL, NULL, NULL, 0),
+(57, 'ENT501', 'Summit 2 from Block 3-4 Fall 2011', NULL, NULL, NULL, 0),
+(58, 'AET101', 'Aesthetic', NULL, NULL, NULL, 0),
+(59, 'AFA201', 'Human Anatory for Artis', NULL, NULL, NULL, 0),
+(60, 'DRF201', 'Drawing - Figure drawing', NULL, NULL, NULL, 0),
+(61, 'DRP101', 'Drawing - Plaster Statue, Portrait', NULL, NULL, NULL, 0),
+(62, 'DRS101', 'Drawing - Form, Still-life', NULL, NULL, NULL, 0),
+(63, 'GDF101', 'Fundamental of Graphic Design', NULL, NULL, NULL, 0),
+(64, 'HOA101', 'Art History', NULL, NULL, NULL, 0),
+(65, 'HOD101', 'Design History', NULL, NULL, NULL, 0),
+(66, 'VCM201', 'Visual Communication', NULL, NULL, NULL, 0),
+(67, 'AIL301', 'Machine Learning', NULL, NULL, NULL, 0),
+(68, 'CEA201', 'Computer Organization and Architecture', NULL, NULL, NULL, 0),
+(69, 'CEC201', 'Circuits and Signals', NULL, NULL, NULL, 0),
+(70, 'CGG201', 'Computer Graphics', NULL, NULL, NULL, 0),
+(71, 'DGT201', 'Digital Fundamentals', NULL, NULL, NULL, 0),
+(72, 'DGT301', 'Digital Signal Processing', NULL, NULL, NULL, 0),
+(73, 'ECM391', 'Wireless Mobile Communications', NULL, NULL, NULL, 0),
+(74, 'ECS211', 'Communications Systems 1', NULL, NULL, NULL, 0),
+(75, 'EEA221', 'Electronics 2', NULL, NULL, NULL, 0),
+(76, 'ESH201', 'Embedded System Hardware', NULL, NULL, NULL, 0),
+(77, 'ESS301', 'Embedded Software Development', NULL, NULL, NULL, 0),
+(78, 'ISC301', 'E-Commerce', NULL, NULL, NULL, 0),
+(79, 'ISM301', 'ERP Fundamentals', NULL, NULL, NULL, 0),
+(80, 'OFC311', 'Optical Communications', NULL, NULL, NULL, 0),
+(81, 'PRM391', 'Mobile Programming', NULL, NULL, NULL, 0),
+(82, 'PRX301', 'Advanced XML', NULL, NULL, NULL, 0),
+(83, 'SCI201', 'Information Security', NULL, NULL, NULL, 0),
+(84, 'SYB301', 'Start your business', NULL, NULL, NULL, 0),
+(85, 'JIT301', 'Information Technology Japanese', NULL, NULL, NULL, 0),
+(86, 'JPS112', 'Japanese Elementery 1', NULL, NULL, NULL, 0),
+(87, 'JPS122', 'Japanese 2', NULL, NULL, NULL, 0),
+(88, 'JPS132', 'Japanese 3', NULL, NULL, NULL, 0),
+(89, 'JPS142', 'Japanese 4', NULL, NULL, NULL, 0),
+(90, 'JPS152', 'Japanese 5', NULL, NULL, NULL, 0),
+(91, 'JPS212', 'Japanese Intermediate 1', NULL, NULL, NULL, 0),
+(92, 'MAA101', 'Advanced Mathematics 2', NULL, NULL, NULL, 0),
+(93, 'MAC101', 'Advanced Mathematics 1', NULL, NULL, NULL, 0),
+(94, 'MAC102', 'Advanced Mathematics for Business', NULL, NULL, NULL, 0),
+(95, 'MAD111', 'Discrete Mathematics 1', NULL, NULL, NULL, 0),
+(96, 'MAD121', 'Discrete Mathematics 2', NULL, NULL, NULL, 0),
+(97, 'MAN201', 'Numerical Methods', NULL, NULL, NULL, 0),
+(98, 'MAS201', 'Statistics & data processing', NULL, NULL, NULL, 0),
+(99, 'MAS291', 'Probability and Applied Statistics', NULL, NULL, NULL, 0),
+(100, 'PHY101', 'Physics', NULL, NULL, NULL, 0),
+(101, 'COV111', 'Chess 1', NULL, NULL, NULL, 0),
+(102, 'COV121', 'Chess 2', NULL, NULL, NULL, 0),
+(103, 'COV131', 'Chess 3', NULL, NULL, NULL, 0),
+(104, 'VOV112', 'Vovinam 1', NULL, NULL, NULL, 0),
+(105, 'VOV113', 'Vovinam 2', NULL, NULL, NULL, 0),
+(106, 'VOV122', 'Vovinam 3', NULL, NULL, NULL, 0),
+(107, 'VOV123', 'Vovinam 4', NULL, NULL, NULL, 0),
+(108, 'VOV132', 'Vovinam 5', NULL, NULL, NULL, 0),
+(109, 'VOV133', 'Vovinam 6', NULL, NULL, NULL, 0),
+(110, 'AVC101', 'Asia Culture', NULL, NULL, NULL, 0),
+(111, 'HCM201', 'Ho Chi Minh Ideology', NULL, NULL, NULL, 0),
+(112, 'MLN101', 'Principles of Marxism - Leninism', NULL, NULL, NULL, 0),
+(113, 'SA', 'Self awareness', NULL, NULL, NULL, 0),
+(114, 'SSC102', 'Business Communication', NULL, NULL, NULL, 0),
+(115, 'VNR201', 'Revolutionary Lines of CPV', NULL, NULL, NULL, 0),
+(116, 'HCI201', 'Human Computer Interaction', NULL, NULL, NULL, 0),
+(117, 'ITE302', 'Ethics in Information Technology', NULL, NULL, NULL, 0),
+(118, 'SWD391', 'Software Architecture and Design', NULL, NULL, NULL, 0),
+(119, 'SWE102', 'Introduction to Software Engineering', NULL, NULL, NULL, 0),
+(120, 'SWM301', 'IT Project Management', NULL, NULL, NULL, 0),
+(121, 'SWQ391', 'Software Quality Assurance and Testing', NULL, NULL, NULL, 0),
+(122, 'SWR301', 'Software Requirements', NULL, NULL, NULL, 0),
+(123, 'ÐNG101', '?àn Nguy?t', NULL, NULL, NULL, 0),
+(124, 'ÐNH101', '?àn Nh?', NULL, NULL, NULL, 0),
+(125, 'ÐSA101', 'Sáo trúc', NULL, NULL, NULL, 0),
+(126, 'ÐTR101', '?àn Tranh', NULL, NULL, NULL, 0),
+(127, 'VNL111', 'Vietnamese - Fundamentals 1', NULL, NULL, NULL, 0),
+(128, 'VNL121', 'Vietnamese Language 2', NULL, NULL, NULL, 0),
+(129, 'VNL131', 'Vietnamese 3', NULL, NULL, NULL, 0),
+(130, 'AAAAAAA', 'Mon B', NULL, NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -1555,6 +1558,46 @@ INSERT INTO `course_semester` (`course_semester_id`, `course_id`, `semester_id`,
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `department`
+--
+
+DROP TABLE IF EXISTS `department`;
+CREATE TABLE IF NOT EXISTS `department` (
+`department_id` int(11) NOT NULL,
+  `code` varchar(10) NOT NULL,
+  `name` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `program_semester`
+--
+
+DROP TABLE IF EXISTS `program_semester`;
+CREATE TABLE IF NOT EXISTS `program_semester` (
+`program_semester_id` int(11) NOT NULL,
+  `semester_id` int(11) NOT NULL,
+  `current_semester` int(11) NOT NULL,
+  `specialized_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `program_semester_detail`
+--
+
+DROP TABLE IF EXISTS `program_semester_detail`;
+CREATE TABLE IF NOT EXISTS `program_semester_detail` (
+`program_semester_detail_id` int(11) NOT NULL,
+  `program_semester_id` int(11) NOT NULL,
+  `course_semester_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `rooms`
 --
 
@@ -1652,6 +1695,19 @@ INSERT INTO `semesters` (`semester_id`, `code`, `name`, `semester_year`, `start_
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `specialized`
+--
+
+DROP TABLE IF EXISTS `specialized`;
+CREATE TABLE IF NOT EXISTS `specialized` (
+`specialized_id` int(11) NOT NULL,
+  `code` varchar(10) NOT NULL,
+  `name` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `staff`
 --
 
@@ -1662,7 +1718,14 @@ CREATE TABLE IF NOT EXISTS `staff` (
   `name` varchar(100) NOT NULL,
   `email` varchar(50) NOT NULL,
   `account_type` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `staff`
+--
+
+INSERT INTO `staff` (`staff_id`, `account`, `name`, `email`, `account_type`) VALUES
+(1, 'duchmse02551', 'Hoang Minh Duc', 'duchmse02551@fpt.edu.vn', '');
 
 -- --------------------------------------------------------
 
@@ -1677,6 +1740,8 @@ CREATE TABLE IF NOT EXISTS `students` (
   `name` varchar(100) NOT NULL,
   `email` varchar(50) NOT NULL,
   `student_code` varchar(10) NOT NULL,
+  `specialized_id` int(11) NOT NULL,
+  `batch` varchar(10) NOT NULL,
   `semester` int(11) NOT NULL,
   `class_semester_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -2710,13 +2775,31 @@ ALTER TABLE `class_semester`
 -- Indexes for table `courses`
 --
 ALTER TABLE `courses`
- ADD PRIMARY KEY (`course_id`), ADD UNIQUE KEY `code` (`code`), ADD KEY `course_condition` (`course_condition`);
+ ADD PRIMARY KEY (`course_id`), ADD UNIQUE KEY `code` (`code`), ADD KEY `course_condition` (`course_condition`), ADD KEY `department_id` (`department_id`);
 
 --
 -- Indexes for table `course_semester`
 --
 ALTER TABLE `course_semester`
  ADD PRIMARY KEY (`course_semester_id`), ADD UNIQUE KEY `course_id` (`course_id`,`semester_id`), ADD KEY `semester_id` (`semester_id`);
+
+--
+-- Indexes for table `department`
+--
+ALTER TABLE `department`
+ ADD PRIMARY KEY (`department_id`), ADD UNIQUE KEY `code` (`code`);
+
+--
+-- Indexes for table `program_semester`
+--
+ALTER TABLE `program_semester`
+ ADD PRIMARY KEY (`program_semester_id`), ADD UNIQUE KEY `semester_id` (`semester_id`,`current_semester`,`specialized_id`), ADD KEY `specialized_id` (`specialized_id`);
+
+--
+-- Indexes for table `program_semester_detail`
+--
+ALTER TABLE `program_semester_detail`
+ ADD PRIMARY KEY (`program_semester_detail_id`), ADD UNIQUE KEY `program_semester_id_2` (`program_semester_id`,`course_semester_id`), ADD KEY `program_semester_id` (`program_semester_id`), ADD KEY `course_semester_id` (`course_semester_id`);
 
 --
 -- Indexes for table `rooms`
@@ -2731,6 +2814,12 @@ ALTER TABLE `semesters`
  ADD PRIMARY KEY (`semester_id`), ADD UNIQUE KEY `code` (`code`);
 
 --
+-- Indexes for table `specialized`
+--
+ALTER TABLE `specialized`
+ ADD PRIMARY KEY (`specialized_id`), ADD UNIQUE KEY `code` (`code`);
+
+--
 -- Indexes for table `staff`
 --
 ALTER TABLE `staff`
@@ -2740,7 +2829,7 @@ ALTER TABLE `staff`
 -- Indexes for table `students`
 --
 ALTER TABLE `students`
- ADD PRIMARY KEY (`student_id`), ADD UNIQUE KEY `account` (`account`,`email`,`student_code`), ADD KEY `class_semester_id` (`class_semester_id`);
+ ADD PRIMARY KEY (`student_id`), ADD UNIQUE KEY `account` (`account`,`email`,`student_code`), ADD KEY `class_semester_id` (`class_semester_id`), ADD KEY `specialized_id` (`specialized_id`);
 
 --
 -- Indexes for table `student_course`
@@ -2812,6 +2901,21 @@ MODIFY `course_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=131;
 ALTER TABLE `course_semester`
 MODIFY `course_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=130;
 --
+-- AUTO_INCREMENT for table `department`
+--
+ALTER TABLE `department`
+MODIFY `department_id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `program_semester`
+--
+ALTER TABLE `program_semester`
+MODIFY `program_semester_id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `program_semester_detail`
+--
+ALTER TABLE `program_semester_detail`
+MODIFY `program_semester_detail_id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
@@ -2822,10 +2926,15 @@ MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=55;
 ALTER TABLE `semesters`
 MODIFY `semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
+-- AUTO_INCREMENT for table `specialized`
+--
+ALTER TABLE `specialized`
+MODIFY `specialized_id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `staff`
 --
 ALTER TABLE `staff`
-MODIFY `staff_id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `staff_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `students`
 --
@@ -2893,7 +3002,8 @@ ADD CONSTRAINT `class_semester_ibfk_2` FOREIGN KEY (`semester_id`) REFERENCES `s
 -- Constraints for table `courses`
 --
 ALTER TABLE `courses`
-ADD CONSTRAINT `courses_ibfk_1` FOREIGN KEY (`course_condition`) REFERENCES `courses` (`course_id`);
+ADD CONSTRAINT `courses_ibfk_1` FOREIGN KEY (`course_condition`) REFERENCES `courses` (`course_id`),
+ADD CONSTRAINT `courses_ibfk_2` FOREIGN KEY (`department_id`) REFERENCES `department` (`department_id`);
 
 --
 -- Constraints for table `course_semester`
@@ -2903,10 +3013,25 @@ ADD CONSTRAINT `course_semester_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `co
 ADD CONSTRAINT `course_semester_ibfk_2` FOREIGN KEY (`semester_id`) REFERENCES `semesters` (`semester_id`);
 
 --
+-- Constraints for table `program_semester`
+--
+ALTER TABLE `program_semester`
+ADD CONSTRAINT `program_semester_ibfk_1` FOREIGN KEY (`specialized_id`) REFERENCES `specialized` (`specialized_id`),
+ADD CONSTRAINT `program_semester_ibfk_2` FOREIGN KEY (`semester_id`) REFERENCES `semesters` (`semester_id`);
+
+--
+-- Constraints for table `program_semester_detail`
+--
+ALTER TABLE `program_semester_detail`
+ADD CONSTRAINT `program_semester_detail_ibfk_1` FOREIGN KEY (`program_semester_id`) REFERENCES `program_semester` (`program_semester_id`),
+ADD CONSTRAINT `program_semester_detail_ibfk_2` FOREIGN KEY (`course_semester_id`) REFERENCES `course_semester` (`course_semester_id`);
+
+--
 -- Constraints for table `students`
 --
 ALTER TABLE `students`
-ADD CONSTRAINT `students_ibfk_1` FOREIGN KEY (`class_semester_id`) REFERENCES `class_semester` (`class_semester_id`);
+ADD CONSTRAINT `students_ibfk_1` FOREIGN KEY (`class_semester_id`) REFERENCES `class_semester` (`class_semester_id`),
+ADD CONSTRAINT `students_ibfk_2` FOREIGN KEY (`specialized_id`) REFERENCES `specialized` (`specialized_id`);
 
 --
 -- Constraints for table `student_course`
