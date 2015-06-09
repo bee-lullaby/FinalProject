@@ -14,6 +14,8 @@ public interface DepartmentDAO {
 	public Department getDepartmentById(int departmentId);
 	
 	public Department getDepartmentByCode(String code);
+	
+//	public List<Course> getCoursesOfDepartment(int departmentId);
 
 	public void deleteDepartment(int departmentId);
 }

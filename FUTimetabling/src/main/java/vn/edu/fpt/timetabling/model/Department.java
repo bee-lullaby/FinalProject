@@ -1,10 +1,16 @@
 package vn.edu.fpt.timetabling.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -17,6 +23,9 @@ public class Department {
 
 	private String code;
 	private String name;
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "department")
+	List<Course> courses = new ArrayList<Course>();
 
 	/**
 	 * 
@@ -82,7 +91,9 @@ public class Department {
 		this.name = name;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -91,4 +102,32 @@ public class Department {
 				+ ", name=" + name + "]";
 	}
 
+	/**
+	 * @return the courses
+	 */
+	public List<Course> getCourses() {
+		return courses;
+	}
+
+	/**
+	 * @param courses
+	 *            the courses to set
+	 */
+	public void setCourses(List<Course> courses) {
+		this.courses = courses;
+	}
+
+	public String coursesToString() {
+		StringBuilder sb = new StringBuilder();
+
+		List<Course> courses = getCourses();
+
+		if (courses.size() > 0) {
+			sb.append(courses.get(0).getCode());
+			for (int i = 1; i < courses.size(); i++) {
+				sb.append(", " + courses.get(i).getCode());
+			}
+		}
+		return sb.toString();
+	}
 }

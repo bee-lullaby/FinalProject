@@ -94,6 +94,7 @@
 					<th width="80">Department ID</th>
 					<th width="120">Department Code</th>
 					<th width="120">Department Name</th>
+					<th width="120">Courses</th>
 					<th width="60">Edit</th>
 					<th width="60">Delete</th>
 				</tr>
@@ -102,6 +103,7 @@
 						<td>${department.departmentId}</td>
 						<td>${department.code}</td>
 						<td>${department.name}</td>
+						<td>${department.coursesToString()}</td>
 						<td><a href="<c:url value='/department/edit/${department.departmentId}' />">Edit</a></td>
 						<td><a href="<c:url value='/department/delete/${department.departmentId}' />">Delete</a></td>
 					</tr>
