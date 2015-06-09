@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -17,6 +19,13 @@ public class Course {
 	private String code;
 	private String name;
 
+	@ManyToOne
+	@JoinColumn(name = "department_id")
+	private Department department;
+
+	/**
+	 * 
+	 */
 	public Course() {
 		super();
 	}
@@ -25,12 +34,14 @@ public class Course {
 	 * @param courseId
 	 * @param code
 	 * @param name
+	 * @param department
 	 */
-	public Course(int courseId, String code, String name) {
+	public Course(int courseId, String code, String name, Department department) {
 		super();
 		this.courseId = courseId;
 		this.code = code;
 		this.name = name;
+		this.department = department;
 	}
 
 	/**
@@ -78,9 +89,28 @@ public class Course {
 		this.name = name;
 	}
 
+	/**
+	 * @return the department
+	 */
+	public Department getDepartment() {
+		return department;
+	}
+
+	/**
+	 * @param department
+	 *            the department to set
+	 */
+	public void setDepartment(Department department) {
+		this.department = department;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
-		return "{courseId = " + courseId + ", code = " + code + ", name = "
-				+ name + "}";
+		return "Course [courseId=" + courseId + ", code=" + code + ", name="
+				+ name + ", department=" + department + "]";
 	}
+
 }

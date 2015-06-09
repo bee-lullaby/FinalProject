@@ -32,7 +32,7 @@ public class StaffServiceImpl implements StaffService {
 	@Override
 	@Transactional
 	public List<Staff> listStaff() {
-		return staffDAO.listStaff();
+		return staffDAO.listStaffs();
 	}
 
 	@Override

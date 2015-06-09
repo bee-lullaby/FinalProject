@@ -2,6 +2,7 @@ package vn.edu.fpt.timetabling.dao;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -29,13 +30,13 @@ public class CourseDAOImpl implements CourseDAO {
 	@Override
 	public void addCourse(Course course) {
 		getCurrentSession().persist(course);
-		logger.info("Course saved successfully, course details=" + course);
+		logger.info("Course was saved successfully, course details=" + course);
 	}
 
 	@Override
 	public void updateCourse(Course course) {
 		getCurrentSession().update(course);
-		logger.info("Course updated successfully, course details=" + course);
+		logger.info("Course was updated successfully, course details=" + course);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -44,7 +45,7 @@ public class CourseDAOImpl implements CourseDAO {
 		List<Course> courses = (List<Course>) getCurrentSession().createQuery(
 				"from vn.edu.fpt.timetabling.model.Course").list();
 		for (Course course : courses) {
-			logger.info("Course list::" + course);
+			logger.info("Course list:" + course);
 		}
 		return courses;
 	}
@@ -53,8 +54,21 @@ public class CourseDAOImpl implements CourseDAO {
 	public Course getCourseById(int courseId) {
 		Course course = (Course) getCurrentSession().load(Course.class,
 				new Integer(courseId));
-		logger.info("Course loaded successfully, course details=" + course);
+		logger.info("Course was loaded successfully, course details=" + course);
 		return course;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Course getCourseByCode(String code) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Course C WHERE C.code = :code";
+
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("code", code);
+		List<Course> course = (List<Course>) query.list();
+		logger.info("Course was loaded successfully, course details="
+				+ course.get(0));
+		return course.get(0);
 	}
 
 	@Override
@@ -63,6 +77,7 @@ public class CourseDAOImpl implements CourseDAO {
 		if (course != null) {
 			getCurrentSession().delete(course);
 		}
-		logger.info("Course deleted successfully, course details=" + course);
+		logger.info("Course was deleted successfully, course details=" + course);
 	}
+
 }

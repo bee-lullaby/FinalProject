@@ -39,7 +39,8 @@
 			if (authResult['code']) {
 				// Send the code to the server
 				$
-						.ajax({
+
+		.ajax({
 							type : 'POST',
 							url : 'http://localhost:8080/Timetabling/',
 							contentType : 'application/octet-stream; charset=utf-8',

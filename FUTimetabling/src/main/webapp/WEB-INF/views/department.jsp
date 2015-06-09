@@ -6,7 +6,7 @@
 <html>
 <head>
 
-<title>Course Page</title>
+<title>Department Page</title>
 <style type="text/css">
 .tg {
 	border-collapse: collapse;
@@ -47,19 +47,19 @@
 </style>
 </head>
 <body>
-	<h1>Add a Course</h1>
+	<h1>Add a Department</h1>
 
-	<c:url var="addAction" value="/course/add"></c:url>
+	<c:url var="addAction" value="/department/add"></c:url>
 
-	<form:form action="${addAction}" commandName="course">
+	<form:form action="${addAction}" commandName="department">
 		<table>
-			<c:if test="${!empty course.name}">
+			<c:if test="${!empty department.name}">
 				<tr>
-					<td><form:label path="courseId">
-							<spring:message text="Course ID" />
+					<td><form:label path="departmentId">
+							<spring:message text="Department ID" />
 						</form:label></td>
-					<td><form:input path="courseId" readonly="true" size="8"
-							disabled="true" /> <form:hidden path="courseId" /></td>
+					<td><form:input path="departmentId" readonly="true" size="8"
+							disabled="true" /> <form:hidden path="departmentId" /></td>
 				</tr>
 			</c:if>
 			<tr>
@@ -75,37 +75,35 @@
 				<td><form:input path="name" /></td>
 			</tr>
 			<tr>
-				<td colspan="2"><c:if test="${!empty course.name}">
-						<input type="submit" value="<spring:message text="Edit Course"/>" />
-					</c:if> <c:if test="${empty course.name}">
-						<input type="submit" value="<spring:message text="Add Course"/>" />
+				<td colspan="2"><c:if test="${!empty department.name}">
+						<input type="submit" value="<spring:message text="Edit Department"/>" />
+					</c:if> <c:if test="${empty department.name}">
+						<input type="submit" value="<spring:message text="Add Department"/>" />
 					</c:if></td>
 			</tr>
 		</table>
 	</form:form>
-	<form:form action="courses/addFromFile" method="post" enctype="multipart/form-data">
+	<form:form action="department/addFromFile" method="post" enctype="multipart/form-data">
 		<input accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" name="file" type="file" style="margin-bottom:20px" />
         <input type="submit" name="addFile" value="AddFile" class="button primary" style="margin-right:5px" />
 	</form:form>
 	<br>
-		<h3>Course List</h3> <c:if test="${!empty listCourses}">
+		<h3>Department List</h3> <c:if test="${!empty listDepartments}">
 			<table class="tg">
 				<tr>
-					<th width="80">Course ID</th>
-					<th width="120">Course Code</th>
-					<th width="120">Course Name</th>
-					<th width="120">Department</th>
+					<th width="80">Department ID</th>
+					<th width="120">Department Code</th>
+					<th width="120">Department Name</th>
 					<th width="60">Edit</th>
 					<th width="60">Delete</th>
 				</tr>
-				<c:forEach items="${listCourses}" var="course">
+				<c:forEach items="${listDepartments}" var="department">
 					<tr>
-						<td>${course.courseId}</td>
-						<td>${course.code}</td>
-						<td>${course.name}</td>
-						<td>${course.department.code}</td>
-						<td><a href="<c:url value='/course/edit/${course.courseId}' />">Edit</a></td>
-						<td><a href="<c:url value='/course/delete/${course.courseId}' />">Delete</a></td>
+						<td>${department.departmentId}</td>
+						<td>${department.code}</td>
+						<td>${department.name}</td>
+						<td><a href="<c:url value='/department/edit/${department.departmentId}' />">Edit</a></td>
+						<td><a href="<c:url value='/department/delete/${department.departmentId}' />">Delete</a></td>
 					</tr>
 				</c:forEach>
 			</table>

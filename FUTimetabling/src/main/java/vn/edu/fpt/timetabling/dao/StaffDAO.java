@@ -9,7 +9,7 @@ public interface StaffDAO {
 
 	public void updateStaff(Staff staff);
 
-	public List<Staff> listStaff();
+	public List<Staff> listStaffs();
 
 	public Staff getStaffById(int staffId);
 	

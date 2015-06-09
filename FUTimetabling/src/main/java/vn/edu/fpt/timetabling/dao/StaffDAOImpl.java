@@ -41,11 +41,11 @@ public class StaffDAOImpl implements StaffDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Staff> listStaff() {
+	public List<Staff> listStaffs() {
 		List<Staff> staff = (List<Staff>) getCurrentSession().createQuery(
 				"FROM vn.edu.fpt.timetabling.model.Staff").list();
 		for (Staff staffTemp : staff) {
-			logger.info("Staff list::" + staffTemp);
+			logger.info("Staff list:" + staffTemp);
 		}
 		return staff;
 	}
