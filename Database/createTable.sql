@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 08, 2015 at 04:57 PM
+-- Generation Time: Jun 09, 2015 at 12:12 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -44,7 +44,9 @@ DROP TABLE IF EXISTS `class_course_semester`;
 CREATE TABLE IF NOT EXISTS `class_course_semester` (
 `class_course_semester_id` int(11) NOT NULL,
   `class_semester_id` int(11) NOT NULL,
-  `course_semester_id` int(11) NOT NULL
+  `course_semester_id` int(11) NOT NULL,
+  `block_condition` int(11) DEFAULT NULL,
+  `semester_long` tinyint(1) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=1011 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -99,10 +101,7 @@ CREATE TABLE IF NOT EXISTS `courses` (
 `course_id` int(11) NOT NULL,
   `code` varchar(10) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `department_id` int(11) DEFAULT NULL,
-  `course_condition` int(11) DEFAULT NULL,
-  `block_condition` int(11) DEFAULT NULL,
-  `semester_long` tinyint(1) NOT NULL
+  `department_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=131 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -116,7 +115,8 @@ CREATE TABLE IF NOT EXISTS `course_semester` (
 `course_semester_id` int(11) NOT NULL,
   `course_id` int(11) NOT NULL,
   `semester_id` int(11) NOT NULL,
-  `slots` int(11) NOT NULL
+  `slots` int(11) NOT NULL,
+  `course_condition_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=130 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -347,13 +347,13 @@ ALTER TABLE `class_semester`
 -- Indexes for table `courses`
 --
 ALTER TABLE `courses`
- ADD PRIMARY KEY (`course_id`), ADD UNIQUE KEY `code` (`code`), ADD KEY `course_condition` (`course_condition`), ADD KEY `department_id` (`department_id`);
+ ADD PRIMARY KEY (`course_id`), ADD UNIQUE KEY `code` (`code`), ADD KEY `department_id` (`department_id`);
 
 --
 -- Indexes for table `course_semester`
 --
 ALTER TABLE `course_semester`
- ADD PRIMARY KEY (`course_semester_id`), ADD UNIQUE KEY `course_id` (`course_id`,`semester_id`), ADD KEY `semester_id` (`semester_id`);
+ ADD PRIMARY KEY (`course_semester_id`), ADD UNIQUE KEY `course_id` (`course_id`,`semester_id`), ADD KEY `semester_id` (`semester_id`), ADD KEY `course_condition_id` (`course_condition_id`);
 
 --
 -- Indexes for table `department`
@@ -574,7 +574,6 @@ ADD CONSTRAINT `class_semester_ibfk_2` FOREIGN KEY (`semester_id`) REFERENCES `s
 -- Constraints for table `courses`
 --
 ALTER TABLE `courses`
-ADD CONSTRAINT `courses_ibfk_1` FOREIGN KEY (`course_condition`) REFERENCES `courses` (`course_id`),
 ADD CONSTRAINT `courses_ibfk_2` FOREIGN KEY (`department_id`) REFERENCES `department` (`department_id`);
 
 --
@@ -582,7 +581,8 @@ ADD CONSTRAINT `courses_ibfk_2` FOREIGN KEY (`department_id`) REFERENCES `depart
 --
 ALTER TABLE `course_semester`
 ADD CONSTRAINT `course_semester_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
-ADD CONSTRAINT `course_semester_ibfk_2` FOREIGN KEY (`semester_id`) REFERENCES `semesters` (`semester_id`);
+ADD CONSTRAINT `course_semester_ibfk_2` FOREIGN KEY (`semester_id`) REFERENCES `semesters` (`semester_id`),
+ADD CONSTRAINT `course_semester_ibfk_3` FOREIGN KEY (`course_condition_id`) REFERENCES `courses` (`course_id`);
 
 --
 -- Constraints for table `program_semester`
