@@ -16,15 +16,14 @@ import vn.edu.fpt.timetabling.dao.DepartmentDAO;
 import vn.edu.fpt.timetabling.model.Department;
 
 @Service
-public class DeparmentServiceImpl implements DepartmentService {
-	
-	
+public class DepartmentServiceImpl implements DepartmentService {
+
 	private DepartmentDAO departmentDAO;
 
 	public void setDepartmentDAO(DepartmentDAO departmentDAO) {
 		this.departmentDAO = departmentDAO;
 	}
-	
+
 	@Override
 	@Transactional
 	public void addDepartment(Department department) {

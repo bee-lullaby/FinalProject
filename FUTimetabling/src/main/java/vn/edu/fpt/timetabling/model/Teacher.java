@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Teachers")
+@Table(name = "teachers")
 public class Teacher {
 	@Id
 	@Column(name = "teacher_id")
@@ -17,9 +17,7 @@ public class Teacher {
 	private String account;
 	private String name;
 	private String email;
-	
-	
-	
+
 	/**
 	 * 
 	 */
@@ -36,6 +34,18 @@ public class Teacher {
 	public Teacher(int teacherId, String account, String name, String email) {
 		super();
 		this.teacherId = teacherId;
+		this.account = account;
+		this.name = name;
+		this.email = email;
+	}
+
+	/**
+	 * @param account
+	 * @param name
+	 * @param email
+	 */
+	public Teacher(String account, String name, String email) {
+		super();
 		this.account = account;
 		this.name = name;
 		this.email = email;

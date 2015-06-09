@@ -6,16 +6,14 @@ import vn.edu.fpt.timetabling.model.Department;
 
 public interface DepartmentDAO {
 	public void addDepartment(Department department);
-	
+
 	public void updateDepartment(Department department);
 
 	public List<Department> listDepartments();
 
 	public Department getDepartmentById(int departmentId);
-	
+
 	public Department getDepartmentByCode(String code);
-	
-//	public List<Course> getCoursesOfDepartment(int departmentId);
 
 	public void deleteDepartment(int departmentId);
 }

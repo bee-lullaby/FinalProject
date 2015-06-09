@@ -34,18 +34,18 @@
 		<beans:property name="username" value="root" />
 		<beans:property name="password" value="" />
 	</beans:bean>
-	
+
 	<!-- Multipart Resolver Beans -->
 	<beans:bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 	</beans:bean>
-	
+
 	<!-- Hibernate 4 SessionFactory Bean definition -->
 	<beans:bean id="hibernate4AnnotatedSessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<beans:property name="dataSource" ref="dataSource" />
 		<beans:property name="annotatedClasses">
-		
+
 			<!-- Models -->
 			<beans:list>
 				<beans:value>vn.edu.fpt.timetabling.model.Course</beans:value>
@@ -53,6 +53,11 @@
 				<beans:value>vn.edu.fpt.timetabling.model.Semester</beans:value>
 				<beans:value>vn.edu.fpt.timetabling.model.Teacher</beans:value>
 				<beans:value>vn.edu.fpt.timetabling.model.Department</beans:value>
+				<beans:value>vn.edu.fpt.timetabling.model.ClassFPT</beans:value>
+				<beans:value>vn.edu.fpt.timetabling.model.Specialized</beans:value>
+				<beans:value>vn.edu.fpt.timetabling.model.ClassSemester
+				</beans:value>
+				<beans:value>vn.edu.fpt.timetabling.model.Student</beans:value>
 			</beans:list>
 		</beans:property>
 		<beans:property name="hibernateProperties">
@@ -64,7 +69,7 @@
 		</beans:property>
 		<beans:property name="packagesToScan" value="vn.edu.fpt.timetabling.model" />
 	</beans:bean>
-	
+
 	<!-- DAO Beans -->
 	<beans:bean id="courseDAO" class="vn.edu.fpt.timetabling.dao.CourseDAOImpl">
 		<beans:property name="sessionFactory"
@@ -82,7 +87,26 @@
 		<beans:property name="sessionFactory"
 			ref="hibernate4AnnotatedSessionFactory" />
 	</beans:bean>
-	<beans:bean id="departmentDAO" class="vn.edu.fpt.timetabling.dao.DepartmentDAOImpl">
+	<beans:bean id="departmentDAO"
+		class="vn.edu.fpt.timetabling.dao.DepartmentDAOImpl">
+		<beans:property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
+	<beans:bean id="classDAO" class="vn.edu.fpt.timetabling.dao.ClassDAOImpl">
+		<beans:property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
+	<beans:bean id="specializedDAO"
+		class="vn.edu.fpt.timetabling.dao.SpecializedDAOImpl">
+		<beans:property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
+	<beans:bean id="classSemesterDAO"
+		class="vn.edu.fpt.timetabling.dao.ClassSemesterDAOImpl">
+		<beans:property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
+	<beans:bean id="studentDAO" class="vn.edu.fpt.timetabling.dao.StudentDAOImpl">
 		<beans:property name="sessionFactory"
 			ref="hibernate4AnnotatedSessionFactory" />
 	</beans:bean>
@@ -105,8 +129,24 @@
 		<beans:property name="teacherDAO" ref="teacherDAO"></beans:property>
 	</beans:bean>
 	<beans:bean id="departmentService"
-		class="vn.edu.fpt.timetabling.service.DeparmentServiceImpl">
+		class="vn.edu.fpt.timetabling.service.DepartmentServiceImpl">
 		<beans:property name="departmentDAO" ref="departmentDAO"></beans:property>
+	</beans:bean>
+	<beans:bean id="classService"
+		class="vn.edu.fpt.timetabling.service.ClassServiceImpl">
+		<beans:property name="classDAO" ref="classDAO"></beans:property>
+	</beans:bean>
+	<beans:bean id="specializedService"
+		class="vn.edu.fpt.timetabling.service.SpecializedServiceImpl">
+		<beans:property name="specializedDAO" ref="specializedDAO"></beans:property>
+	</beans:bean>
+	<beans:bean id="classSemesterService"
+		class="vn.edu.fpt.timetabling.service.ClassSemesterServiceImpl">
+		<beans:property name="classSemesterDAO" ref="classSemesterDAO"></beans:property>
+	</beans:bean>
+	<beans:bean id="studentService"
+		class="vn.edu.fpt.timetabling.service.StudentServiceImpl">
+		<beans:property name="studentDAO" ref="studentDAO"></beans:property>
 	</beans:bean>
 	<context:component-scan base-package="vn.edu.fpt.timetabling" />
 

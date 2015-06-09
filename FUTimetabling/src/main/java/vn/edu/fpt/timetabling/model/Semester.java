@@ -1,16 +1,21 @@
 package vn.edu.fpt.timetabling.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Semesters")
+@Table(name = "semesters")
 public class Semester {
 
 	@Id
@@ -19,13 +24,30 @@ public class Semester {
 	private int semesterId;
 	private String code;
 	private String name;
-	
+
 	@Column(name = "semester_year")
 	private int semesterYear;
 	@Column(name = "start_date")
 	private Date startDate;
 	@Column(name = "end_date")
 	private Date endDate;
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "semester")
+	List<ClassSemester> classSemesters = new ArrayList<ClassSemester>();
+
+	/**
+	 * @return the classSemesters
+	 */
+	public List<ClassSemester> getClassSemesters() {
+		return classSemesters;
+	}
+
+	/**
+	 * @param classSemesters
+	 *            the classSemesters to set
+	 */
+	public void setClassSemesters(List<ClassSemester> classSemesters) {
+		this.classSemesters = classSemesters;
+	}
 
 	/**
 	 * 
@@ -46,6 +68,23 @@ public class Semester {
 			Date startDate, Date endDate) {
 		super();
 		this.semesterId = semesterId;
+		this.code = code;
+		this.name = name;
+		this.semesterYear = semesterYear;
+		this.startDate = startDate;
+		this.endDate = endDate;
+	}
+
+	/**
+	 * @param code
+	 * @param name
+	 * @param semesterYear
+	 * @param startDate
+	 * @param endDate
+	 */
+	public Semester(String code, String name, int semesterYear, Date startDate,
+			Date endDate) {
+		super();
 		this.code = code;
 		this.name = name;
 		this.semesterYear = semesterYear;
@@ -143,7 +182,9 @@ public class Semester {
 		this.endDate = endDate;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -152,7 +193,5 @@ public class Semester {
 				+ ", name=" + name + ", semesterYear=" + semesterYear
 				+ ", startDate=" + startDate + ", endDate=" + endDate + "]";
 	}
-	
-	
-	
+
 }

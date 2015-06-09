@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Staff")
+@Table(name = "staff")
 public class Staff {
 
 	@Id
@@ -39,6 +39,20 @@ public class Staff {
 			String accountType) {
 		super();
 		this.staffId = staffId;
+		this.account = account;
+		this.name = name;
+		this.email = email;
+		this.accountType = accountType;
+	}
+
+	/**
+	 * @param account
+	 * @param name
+	 * @param email
+	 * @param accountType
+	 */
+	public Staff(String account, String name, String email, String accountType) {
+		super();
 		this.account = account;
 		this.name = name;
 		this.email = email;

@@ -12,7 +12,7 @@ public interface StaffDAO {
 	public List<Staff> listStaffs();
 
 	public Staff getStaffById(int staffId);
-	
+
 	public Staff getStaffByEmail(String email);
 
 	public void deleteStaff(int staffId);

@@ -76,8 +76,9 @@ public class CourseDAOImpl implements CourseDAO {
 		Course course = getCourseById(courseId);
 		if (course != null) {
 			getCurrentSession().delete(course);
+			logger.info("Course was deleted successfully, course details="
+					+ course);
 		}
-		logger.info("Course was deleted successfully, course details=" + course);
 	}
 
 }

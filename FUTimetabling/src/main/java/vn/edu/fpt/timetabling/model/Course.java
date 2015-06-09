@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Courses")
+@Table(name = "courses")
 public class Course {
 	@Id
 	@Column(name = "course_id")
@@ -39,6 +39,18 @@ public class Course {
 	public Course(int courseId, String code, String name, Department department) {
 		super();
 		this.courseId = courseId;
+		this.code = code;
+		this.name = name;
+		this.department = department;
+	}
+
+	/**
+	 * @param code
+	 * @param name
+	 * @param department
+	 */
+	public Course(String code, String name, Department department) {
+		super();
 		this.code = code;
 		this.name = name;
 		this.department = department;
@@ -104,7 +116,9 @@ public class Course {
 		this.department = department;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -112,7 +126,5 @@ public class Course {
 		return "Course [courseId=" + courseId + ", code=" + code + ", name="
 				+ name + ", department=" + department + "]";
 	}
-	
-	
-	
+
 }

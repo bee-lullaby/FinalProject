@@ -14,34 +14,49 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "department")
-public class Department {
+@Table(name = "specialized")
+public class Specialized {
 	@Id
-	@Column(name = "department_id")
+	@Column(name = "specialized_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int departmentId;
-
+	private int specializedId;
+	@Column
 	private String code;
+	@Column
 	private String name;
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "specialized")
+	List<Student> students = new ArrayList<Student>();
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "department")
-	List<Course> courses = new ArrayList<Course>();
+	/**
+	 * @return the students
+	 */
+	public List<Student> getStudents() {
+		return students;
+	}
+
+	/**
+	 * @param students
+	 *            the students to set
+	 */
+	public void setStudents(List<Student> students) {
+		this.students = students;
+	}
 
 	/**
 	 * 
 	 */
-	public Department() {
+	public Specialized() {
 		super();
 	}
 
 	/**
-	 * @param departmentId
+	 * @param specializedId
 	 * @param code
 	 * @param name
 	 */
-	public Department(int departmentId, String code, String name) {
+	public Specialized(int specializedId, String code, String name) {
 		super();
-		this.departmentId = departmentId;
+		this.specializedId = specializedId;
 		this.code = code;
 		this.name = name;
 	}
@@ -50,25 +65,25 @@ public class Department {
 	 * @param code
 	 * @param name
 	 */
-	public Department(String code, String name) {
+	public Specialized(String code, String name) {
 		super();
 		this.code = code;
 		this.name = name;
 	}
 
 	/**
-	 * @return the departmentId
+	 * @return the specializedId
 	 */
-	public int getDepartmentId() {
-		return departmentId;
+	public int getSpecializedId() {
+		return specializedId;
 	}
 
 	/**
-	 * @param departmentId
-	 *            the departmentId to set
+	 * @param specializedId
+	 *            the specializedId to set
 	 */
-	public void setDepartmentId(int departmentId) {
-		this.departmentId = departmentId;
+	public void setSpecializedId(int specializedId) {
+		this.specializedId = specializedId;
 	}
 
 	/**
@@ -108,36 +123,8 @@ public class Department {
 	 */
 	@Override
 	public String toString() {
-		return "Department [departmentId=" + departmentId + ", code=" + code
+		return "Specialized [specializedId=" + specializedId + ", code=" + code
 				+ ", name=" + name + "]";
 	}
 
-	/**
-	 * @return the courses
-	 */
-	public List<Course> getCourses() {
-		return courses;
-	}
-
-	/**
-	 * @param courses
-	 *            the courses to set
-	 */
-	public void setCourses(List<Course> courses) {
-		this.courses = courses;
-	}
-
-	public String coursesToString() {
-		StringBuilder sb = new StringBuilder();
-
-		List<Course> courses = getCourses();
-
-		if (courses.size() > 0) {
-			sb.append(courses.get(0).getCode());
-			for (int i = 1; i < courses.size(); i++) {
-				sb.append(", " + courses.get(i).getCode());
-			}
-		}
-		return sb.toString();
-	}
 }

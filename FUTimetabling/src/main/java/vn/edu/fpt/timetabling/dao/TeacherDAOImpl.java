@@ -13,10 +13,10 @@ import vn.edu.fpt.timetabling.model.Teacher;
 
 @Repository
 public class TeacherDAOImpl implements TeacherDAO {
-	
+
 	private static final Logger logger = LoggerFactory
 			.getLogger(TeacherDAOImpl.class);
-	
+
 	private SessionFactory sessionFactory;
 
 	public void setSessionFactory(SessionFactory sessionFactory) {
@@ -42,8 +42,9 @@ public class TeacherDAOImpl implements TeacherDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Teacher> listTeachers() {
-		List<Teacher> teachers = (List<Teacher>) getCurrentSession().createQuery(
-				"FROM vn.edu.fpt.timetabling.model.Teacher").list();
+		List<Teacher> teachers = (List<Teacher>) getCurrentSession()
+				.createQuery("FROM vn.edu.fpt.timetabling.model.Teacher")
+				.list();
 		for (Teacher teacherTemp : teachers) {
 			logger.info("Teacher list:" + teacherTemp);
 		}

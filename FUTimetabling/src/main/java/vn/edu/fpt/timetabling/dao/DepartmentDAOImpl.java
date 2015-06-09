@@ -66,7 +66,6 @@ public class DepartmentDAOImpl implements DepartmentDAO {
 	@Override
 	public Department getDepartmentByCode(String code) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.Department D WHERE D.code = :code";
-
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("code", code);
 		List<Department> department = (List<Department>) query.list();
@@ -74,31 +73,15 @@ public class DepartmentDAOImpl implements DepartmentDAO {
 				+ department.get(0));
 		return department.get(0);
 	}
-//	
-//	@SuppressWarnings("unchecked")
-//	@Override
-//	public List<Course> getCoursesOfDepartment(int departmentId) {
-//		String hql = "FROM vn.edu.fpt.timetabling.model.Course S WHERE S.department_id = :departmentId";
-//		Query query = getCurrentSession().createQuery(hql);
-//		query.setParameter("departmentId", departmentId);
-//		List<Course> courses = (List<Course>) query.list();
-//		if (courses != null && !courses.isEmpty()) {
-//			return courses;
-//		} else {
-//			return null;
-//		}
-//	}
-	
+
 	@Override
 	public void deleteDepartment(int departmentId) {
 		Department department = getDepartmentById(departmentId);
 		if (department != null) {
 			getCurrentSession().delete(department);
+			logger.info("Department was deleted successfully, course departments="
+					+ department);
 		}
-		logger.info("Department was deleted successfully, course departments="
-				+ department);
 	}
-	
-	
-	
+
 }

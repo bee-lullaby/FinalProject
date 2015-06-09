@@ -22,25 +22,24 @@ public class CourseServiceImpl implements CourseService {
 
 	@Autowired
 	private CourseDAO courseDAO;
-	
+
 	@Autowired
 	private DepartmentDAO departmentDAO;
-	
 
 	public void setDepartmentDAO(DepartmentDAO departmentDAO) {
 		this.departmentDAO = departmentDAO;
 	}
-	
+
 	public void setCourseDAO(CourseDAO courseDAO) {
 		this.courseDAO = courseDAO;
 	}
-	
+
 	@Override
 	@Transactional
 	public void addCourse(Course course) {
 		courseDAO.addCourse(course);
 	}
-	
+
 	@Override
 	@Transactional
 	public void addCourseFromFile(File courses) {
@@ -71,7 +70,7 @@ public class CourseServiceImpl implements CourseService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	@Override
@@ -91,19 +90,17 @@ public class CourseServiceImpl implements CourseService {
 	public Course getCourseById(int courseId) {
 		return courseDAO.getCourseById(courseId);
 	}
-	
+
 	@Override
 	@Transactional
 	public Course getCourseByCode(String code) {
 		return courseDAO.getCourseByCode(code);
 	}
 
-	
 	@Override
 	@Transactional
 	public void deleteCourse(int courseId) {
 		courseDAO.deleteCourse(courseId);
 	}
-
 
 }
