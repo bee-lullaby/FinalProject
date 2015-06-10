@@ -1,12 +1,18 @@
 package vn.edu.fpt.timetabling.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -22,6 +28,23 @@ public class Course {
 	@ManyToOne
 	@JoinColumn(name = "department_id")
 	private Department department;
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "course")
+	List<ClassFPT> classes = new ArrayList<ClassFPT>();
+
+	/**
+	 * @return the classes
+	 */
+	public List<ClassFPT> getClasses() {
+		return classes;
+	}
+
+	/**
+	 * @param classes
+	 *            the classes to set
+	 */
+	public void setClasses(List<ClassFPT> classes) {
+		this.classes = classes;
+	}
 
 	/**
 	 * 

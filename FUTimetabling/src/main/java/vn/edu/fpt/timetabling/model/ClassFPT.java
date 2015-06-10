@@ -10,6 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -22,8 +24,43 @@ public class ClassFPT {
 	private int classId;
 	@Column
 	private String code;
+	@Column
+	private String type = "Specialized";
+	@ManyToOne
+	@JoinColumn(name = "specialized_id")
+	private Specialized specialized;
+	@ManyToOne
+	@JoinColumn(name = "course_id")
+	private Course course;
+	@Column
+	private Integer batch;
+	@Column
+	private int number;
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "classFPT")
 	List<ClassSemester> classSemesters = new ArrayList<ClassSemester>();
+
+	/**
+	 * @param batch
+	 *            the batch to set
+	 */
+	public void setBatch(Integer batch) {
+		this.batch = batch;
+	}
+
+	/**
+	 * @return the type
+	 */
+	public String getType() {
+		return type;
+	}
+
+	/**
+	 * @param type
+	 *            the type to set
+	 */
+	public void setType(String type) {
+		this.type = type;
+	}
 
 	/**
 	 * 
@@ -48,13 +85,74 @@ public class ClassFPT {
 	}
 
 	/**
+	 * @return the specialized
+	 */
+	public Specialized getSpecialized() {
+		return specialized;
+	}
+
+	/**
+	 * @param specialized
+	 *            the specialized to set
+	 */
+	public void setSpecialized(Specialized specialized) {
+		this.specialized = specialized;
+	}
+
+	/**
+	 * @return the course
+	 */
+	public Course getCourse() {
+		return course;
+	}
+
+	/**
+	 * @param course
+	 *            the course to set
+	 */
+	public void setCourse(Course course) {
+		this.course = course;
+	}
+
+	/**
+	 * @return the batch
+	 */
+	public Integer getBatch() {
+		return batch;
+	}
+
+	/**
+	 * @return the number
+	 */
+	public int getNumber() {
+		return number;
+	}
+
+	/**
+	 * @param number
+	 *            the number to set
+	 */
+	public void setNumber(int number) {
+		this.number = number;
+	}
+
+	/**
 	 * @param classId
 	 * @param code
+	 * @param specialized
+	 * @param course
+	 * @param batch
+	 * @param number
 	 */
-	public ClassFPT(int classId, String code) {
+	public ClassFPT(int classId, String code, Specialized specialized,
+			Course course, int batch, int number) {
 		super();
 		this.classId = classId;
 		this.code = code;
+		this.specialized = specialized;
+		this.course = course;
+		this.batch = batch;
+		this.number = number;
 	}
 
 	/**

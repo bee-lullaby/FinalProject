@@ -26,6 +26,23 @@ public class Specialized {
 	private String name;
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "specialized")
 	List<Student> students = new ArrayList<Student>();
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "specialized")
+	List<ClassFPT> classes = new ArrayList<ClassFPT>();
+
+	/**
+	 * @return the classes
+	 */
+	public List<ClassFPT> getClasses() {
+		return classes;
+	}
+
+	/**
+	 * @param classes
+	 *            the classes to set
+	 */
+	public void setClasses(List<ClassFPT> classes) {
+		this.classes = classes;
+	}
 
 	/**
 	 * @return the students

@@ -14,6 +14,8 @@ public interface ClassDAO {
 	public ClassFPT getClassById(int classId);
 
 	public ClassFPT getClassByCode(String code);
+	
+	public List<ClassFPT> getClassesWithPrefix(String prefix);
 
 	public void deleteClass(int classId);
 }

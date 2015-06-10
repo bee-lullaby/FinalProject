@@ -51,4 +51,21 @@ public class ClassServiceImpl implements ClassService {
 		classDAO.deleteClass(classId);
 	}
 
+	@Override
+	@Transactional
+	public List<ClassFPT> getClassesWithPrefix(String prefix) {
+		return classDAO.getClassesWithPrefix(prefix);
+	}
+
+	@Override
+	@Transactional
+	public Integer getNextClassNumber(String prefix) {
+		List<ClassFPT> classesWithPrefix = getClassesWithPrefix(prefix);
+		if (classesWithPrefix == null || classesWithPrefix.isEmpty()) {
+			return 1;
+		} else {
+			return classesWithPrefix.get(0).getNumber() + 1;
+		}
+	}
+
 }

@@ -77,4 +77,18 @@ public class ClassDAOImpl implements ClassDAO {
 					+ classFPT);
 		}
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ClassFPT> getClassesWithPrefix(String prefix) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.ClassFPT C"
+				+ " WHERE C.code LIKE :prefix ORDER BY C.number DESC";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("prefix", prefix + "%");
+		List<ClassFPT> classFPTs = (List<ClassFPT>) query.list();
+		for (ClassFPT classFPT : classFPTs) {
+			logger.info("Class list:" + classFPT);
+		}
+		return classFPTs;
+	}
 }

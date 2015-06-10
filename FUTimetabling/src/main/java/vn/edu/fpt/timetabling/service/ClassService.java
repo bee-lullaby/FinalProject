@@ -14,6 +14,10 @@ public interface ClassService {
 	public ClassFPT getClassById(int classId);
 
 	public ClassFPT getClassByCode(String code);
+	
+	public List<ClassFPT> getClassesWithPrefix(String prefix);
+	
+	public Integer getNextClassNumber(String prefix);
 
 	public void deleteClass(int classId);
 }
