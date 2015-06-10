@@ -57,12 +57,12 @@ public class ClassSemesterDAOImpl implements ClassSemesterDAO {
 				+ classSemester);
 		return classSemester;
 	}
-
+	
 	@Override
 	public void deleteClassSemester(int classSemesterId) {
 		ClassSemester classSemester = getClassSemesterById(classSemesterId);
 		if (classSemester != null) {
-			getCurrentSession().persist(classSemester);
+			getCurrentSession().delete(classSemester);
 			logger.info("classSemester was deleted successfully, classSemester details="
 					+ classSemester);
 		}

@@ -72,7 +72,7 @@ public class ClassDAOImpl implements ClassDAO {
 	public void deleteClass(int classId) {
 		ClassFPT classFPT = getClassById(classId);
 		if (classFPT != null) {
-			getCurrentSession().persist(classFPT);
+			getCurrentSession().delete(classFPT);
 			logger.info("Class was deleted successfully, class details="
 					+ classFPT);
 		}

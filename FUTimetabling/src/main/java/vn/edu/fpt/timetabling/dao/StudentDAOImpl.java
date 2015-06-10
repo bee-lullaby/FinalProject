@@ -75,7 +75,7 @@ public class StudentDAOImpl implements StudentDAO {
 	public void deleteStudent(int studentId) {
 		Student student = getStudentById(studentId);
 		if (student != null) {
-			getCurrentSession().persist(student);
+			getCurrentSession().delete(student);
 			logger.info("student was deleted successfully, student details="
 					+ student);
 		}
