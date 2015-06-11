@@ -31,7 +31,7 @@ public class TeacherSemester {
 	@JoinColumn(name = "semester_id")
 	private Semester semester;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "teacherSemester")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "teacherSemester", orphanRemoval = true)
 	List<TeacherCourseSemester> teacherCourseSemester = new ArrayList<TeacherCourseSemester>();
 
 	/**

@@ -28,7 +28,7 @@ public class Course {
 	@ManyToOne
 	@JoinColumn(name = "department_id")
 	private Department department;
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "course")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "course", orphanRemoval = true)
 	List<ClassFPT> classes = new ArrayList<ClassFPT>();
 
 	/**

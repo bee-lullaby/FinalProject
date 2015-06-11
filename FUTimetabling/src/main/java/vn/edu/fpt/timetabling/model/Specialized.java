@@ -24,9 +24,9 @@ public class Specialized {
 	private String code;
 	@Column
 	private String name;
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "specialized")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "specialized", orphanRemoval = true)
 	List<Student> students = new ArrayList<Student>();
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "specialized")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "specialized", orphanRemoval = true)
 	List<ClassFPT> classes = new ArrayList<ClassFPT>();
 
 	/**

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,40 +45,42 @@ public class ClassController {
 		this.courseService = courseService;
 	}
 
-	@RequestMapping(value = "/classes", method = RequestMethod.GET)
-	public String listCourse(HttpSession session, Model model) {
+	private boolean isSessionValid(HttpSession session) {
 		Object idToken = session.getAttribute("idToken");
 		Object accessToken = session.getAttribute("accessToken");
 		Object email = session.getAttribute("email");
 		if (idToken == null || accessToken == null || email == null) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	@RequestMapping(value = "/classes", method = RequestMethod.GET)
+	public String listCourse(HttpSession session, Model model) {
+		if (!isSessionValid(session)) {
 			return "home";
 		}
 		model.addAttribute("classFPT", new ClassFPT());
 		model.addAttribute("classes", classService.listClasses());
-		List<Specialized> specializeds = specializedService.listSpecializeds();
-		List<Course> courses = courseService.listCourses();
-		HashMap<Integer, String> specializedMap = new HashMap<Integer, String>();
-		HashMap<Integer, String> courseMap = new HashMap<Integer, String>();
-		for (Specialized specialized : specializeds) {
-			specializedMap.put(specialized.getSpecializedId(),
-					specialized.getName());
-		}
-		for (Course course : courses) {
-			courseMap.put(course.getCourseId(), course.getName());
-		}
-		model.addAttribute("specializeds", specializedMap);
-		model.addAttribute("courses", courseMap);
+		model.addAttribute("specializeds",
+				specializedService.listSpecializeds());
+		model.addAttribute("courses", courseService.listCourses());
 		return "classManagement";
 	}
 
 	// For add and update person both
 	@RequestMapping(value = "/class/add", method = RequestMethod.POST)
 	public String addClass(
+			HttpSession session,
 			@RequestParam(value = "classId", required = true) Integer classId,
 			@RequestParam(value = "type", required = true) String type,
 			@RequestParam(value = "specialized", required = false) Integer specializedId,
 			@RequestParam(value = "batch", required = false) Integer batch,
 			@RequestParam(value = "course", required = false) Integer courseId) {
+		if (!isSessionValid(session)) {
+			return "home";
+		}
 		if (type.equals("Specialized")) {
 			if (specializedId == null || batch == null) {
 				return "redirect:/classes";
@@ -90,7 +92,10 @@ public class ClassController {
 		} else {
 			return "redirect:/classes";
 		}
-		ClassFPT classFPT = new ClassFPT();
+		ClassFPT classFPT = classService.getClassById(classId);
+		if (classFPT == null) {
+			classFPT = new ClassFPT();
+		}
 		classFPT.setType(type);
 		String classCodePrefix;
 		if (type.equals("Specialized")) {
@@ -114,12 +119,46 @@ public class ClassController {
 			classFPT.setCode(classCodePrefix + "." + classFPT.getNumber());
 		}
 		if (classFPT.getClassId() == 0) {
-			// new course, add it
+			// new class, add it
 			classService.addClass(classFPT);
 		} else {
-			// existing course, call update
+			// existing class, call update
 			classService.updateClass(classFPT);
 		}
 		return "redirect:/classes";
+	}
+
+	@RequestMapping("/class/delete/{classId}")
+	public String deleteClass(HttpSession session,
+			@PathVariable("classId") int classId) {
+		if (!isSessionValid(session)) {
+			return "home";
+		}
+		classService.deleteClass(classId);
+		return "redirect:/classes";
+	}
+
+	@RequestMapping("/class/edit/{classId}")
+	public String editClass(HttpSession session,
+			@PathVariable("classId") int classId, Model model) {
+		if (!isSessionValid(session)) {
+			return "home";
+		}
+		ClassFPT classFPT = classService.getClassById(classId);
+		if (classFPT == null) {
+			return "redirect:/classes";
+		}
+		model.addAttribute("classFPT", classFPT);
+		model.addAttribute("classes", classService.listClasses());
+		model.addAttribute("specializeds",
+				specializedService.listSpecializeds());
+		model.addAttribute("courses", courseService.listCourses());
+		if (classFPT.getType().equals("Specialized")) {
+			model.addAttribute("specialized", classFPT.getSpecialized()
+					.getSpecializedId());
+		} else {
+			model.addAttribute("course", classFPT.getCourse().getCourseId());
+		}
+		return "classManagement";
 	}
 }

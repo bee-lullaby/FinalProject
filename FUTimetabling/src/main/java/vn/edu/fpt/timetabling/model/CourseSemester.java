@@ -39,7 +39,7 @@ public class CourseSemester {
 	@JoinColumn(name = "course_condition_id", referencedColumnName = "course_id")
 	private Course course_condition;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "courseSemester")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "courseSemester", orphanRemoval = true)
 	List<TeacherCourseSemester> teacherCourseSemester = new ArrayList<TeacherCourseSemester>();
 
 	/**
@@ -159,7 +159,7 @@ public class CourseSemester {
 
 	public List<Teacher> getListTeacherOfCourse() {
 		List<Teacher> teachers = new ArrayList<Teacher>();
-		for(TeacherCourseSemester tcs : getTeacherCourseSemester()) {
+		for (TeacherCourseSemester tcs : getTeacherCourseSemester()) {
 			teachers.add(tcs.getTeacherSemester().getTeacher());
 		}
 		return teachers;

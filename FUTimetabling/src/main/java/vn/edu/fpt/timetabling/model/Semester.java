@@ -31,7 +31,7 @@ public class Semester {
 	private Date startDate;
 	@Column(name = "end_date")
 	private Date endDate;
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "semester")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "semester", orphanRemoval = true)
 	List<ClassSemester> classSemesters = new ArrayList<ClassSemester>();
 
 	/**

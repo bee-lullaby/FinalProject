@@ -24,7 +24,7 @@ public class Department {
 	private String code;
 	private String name;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "department")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "department", orphanRemoval = true)
 	List<Course> courses = new ArrayList<Course>();
 
 	/**

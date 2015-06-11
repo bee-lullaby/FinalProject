@@ -51,10 +51,11 @@
 </style>
 <script src="http://code.jquery.com/jquery-2.1.4.js"></script>
 <script>
+	onload = function() {
+		temp();
+	}
 	function temp() {
-		var radios = document.getElementsByName('type'), i = 0, j = 0, specializeds = document
-				.getElementsByName('specialized'), courses = document
-				.getElementsByName('course');
+		var radios = document.getElementsByName('type'), i = 0;
 		for (i = 0; i < radios.length; i += 1) {
 			if (radios[i].checked) {
 				if (radios[i].value === 'Specialized') {
@@ -72,7 +73,6 @@
 </head>
 <body>
 	<h1>Add a Class</h1>
-
 	<c:url var="addAction" value="/class/add"></c:url>
 
 	<form:form action="${addAction}" commandName="classFPT">
@@ -112,7 +112,12 @@
 				<td><form:label path="specialized">
 						<spring:message text="Specialized" />
 					</form:label></td>
-				<td><form:select path="specialized" items="${specializeds}" /></td>
+				<td><form:select path="specialized">
+						<c:forEach var="item" items="${specializeds}">
+							<option value="${item.specializedId}"
+								${item.specializedId == specialized ? 'selected="selected"' : ''}>${item.name}</option>
+						</c:forEach>
+					</form:select></td>
 			</tr>
 			<tr class="specialized">
 				<td><form:label path="batch">
@@ -120,11 +125,16 @@
 					</form:label></td>
 				<td><form:input path="batch" /></td>
 			</tr>
-			<tr class="course hide">
+			<tr class="course">
 				<td><form:label path="course">
 						<spring:message text="Course" />
 					</form:label></td>
-				<td><form:select path="course" items="${courses}" /></td>
+				<td><form:select path="course">
+						<c:forEach var="item" items="${courses}">
+							<option value="${item.courseId}"
+								${item.courseId == course ? 'selected="selected"' : ''}>${item.name}</option>
+						</c:forEach>
+					</form:select></td>
 			</tr>
 			<tr>
 				<td colspan="2"><c:choose>
@@ -168,7 +178,7 @@
 					<td>${classFPT.type}</td>
 					<td>${classFPT.specialized.name}</td>
 					<td>${classFPT.batch}</td>
-					<td>${classFPT.course}</td>
+					<td>${classFPT.course.name}</td>
 					<td>${classFPT.number}</td>
 					<td><a
 						href="<c:url value='/class/edit/${classFPT.classId}' />">Edit</a></td>

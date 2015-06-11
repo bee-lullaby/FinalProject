@@ -36,7 +36,7 @@ public class ClassFPT {
 	private Integer batch;
 	@Column
 	private int number;
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "classFPT")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "classFPT", orphanRemoval = true)
 	List<ClassSemester> classSemesters = new ArrayList<ClassSemester>();
 
 	/**
