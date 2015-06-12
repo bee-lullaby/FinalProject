@@ -52,9 +52,12 @@ public class CourseDAOImpl implements CourseDAO {
 
 	@Override
 	public Course getCourseById(int courseId) {
-		Course course = (Course) getCurrentSession().load(Course.class,
+		Course course = (Course) getCurrentSession().get(Course.class,
 				new Integer(courseId));
-		logger.info("Course was loaded successfully, course details=" + course);
+		if (course != null) {
+			logger.info("Course was loaded successfully, course details="
+					+ course);
+		}
 		return course;
 	}
 
@@ -66,9 +69,13 @@ public class CourseDAOImpl implements CourseDAO {
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("code", code);
 		List<Course> course = (List<Course>) query.list();
-		logger.info("Course was loaded successfully, course details="
-				+ course.get(0));
-		return course.get(0);
+		if (!course.isEmpty()) {
+			logger.info("Course was loaded successfully, course details="
+					+ course.get(0));
+			return course.get(0);
+		} else {
+			return null;
+		}
 	}
 
 	@Override

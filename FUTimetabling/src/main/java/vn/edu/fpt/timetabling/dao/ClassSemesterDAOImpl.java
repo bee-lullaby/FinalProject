@@ -51,13 +51,15 @@ public class ClassSemesterDAOImpl implements ClassSemesterDAO {
 
 	@Override
 	public ClassSemester getClassSemesterById(int classSemesterId) {
-		ClassSemester classSemester = (ClassSemester) getCurrentSession().load(
+		ClassSemester classSemester = (ClassSemester) getCurrentSession().get(
 				ClassSemester.class, new Integer(classSemesterId));
-		logger.info("classSemester was loaded successfully, classSemester details="
-				+ classSemester);
+		if (classSemester != null) {
+			logger.info("classSemester was loaded successfully, classSemester details="
+					+ classSemester);
+		}
 		return classSemester;
 	}
-	
+
 	@Override
 	public void deleteClassSemester(int classSemesterId) {
 		ClassSemester classSemester = getClassSemesterById(classSemesterId);

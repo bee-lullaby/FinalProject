@@ -1,8 +1,5 @@
 package vn.edu.fpt.timetabling;
 
-import java.util.HashMap;
-import java.util.List;
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import vn.edu.fpt.timetabling.model.ClassFPT;
-import vn.edu.fpt.timetabling.model.Course;
-import vn.edu.fpt.timetabling.model.Specialized;
 import vn.edu.fpt.timetabling.service.ClassService;
 import vn.edu.fpt.timetabling.service.CourseService;
 import vn.edu.fpt.timetabling.service.SpecializedService;
+import vn.edu.fpt.timetabling.utils.SessionUtils;
 
 @Controller
 public class ClassController {
@@ -45,20 +41,9 @@ public class ClassController {
 		this.courseService = courseService;
 	}
 
-	private boolean isSessionValid(HttpSession session) {
-		Object idToken = session.getAttribute("idToken");
-		Object accessToken = session.getAttribute("accessToken");
-		Object email = session.getAttribute("email");
-		if (idToken == null || accessToken == null || email == null) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-
 	@RequestMapping(value = "/classes", method = RequestMethod.GET)
-	public String listCourse(HttpSession session, Model model) {
-		if (!isSessionValid(session)) {
+	public String listClasses(HttpSession session, Model model) {
+		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
 		model.addAttribute("classFPT", new ClassFPT());
@@ -78,7 +63,7 @@ public class ClassController {
 			@RequestParam(value = "specialized", required = false) Integer specializedId,
 			@RequestParam(value = "batch", required = false) Integer batch,
 			@RequestParam(value = "course", required = false) Integer courseId) {
-		if (!isSessionValid(session)) {
+		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
 		if (type.equals("Specialized")) {
@@ -131,7 +116,7 @@ public class ClassController {
 	@RequestMapping("/class/delete/{classId}")
 	public String deleteClass(HttpSession session,
 			@PathVariable("classId") int classId) {
-		if (!isSessionValid(session)) {
+		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
 		classService.deleteClass(classId);
@@ -141,7 +126,7 @@ public class ClassController {
 	@RequestMapping("/class/edit/{classId}")
 	public String editClass(HttpSession session,
 			@PathVariable("classId") int classId, Model model) {
-		if (!isSessionValid(session)) {
+		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
 		ClassFPT classFPT = classService.getClassById(classId);

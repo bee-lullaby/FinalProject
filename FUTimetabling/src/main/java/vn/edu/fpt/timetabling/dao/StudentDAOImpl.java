@@ -52,10 +52,12 @@ public class StudentDAOImpl implements StudentDAO {
 
 	@Override
 	public Student getStudentById(int studentId) {
-		Student student = (Student) getCurrentSession().load(Student.class,
+		Student student = (Student) getCurrentSession().get(Student.class,
 				new Integer(studentId));
-		logger.info("student was loaded successfully, student details="
-				+ student);
+		if (student != null) {
+			logger.info("student was loaded successfully, student details="
+					+ student);
+		}
 		return student;
 	}
 
@@ -66,9 +68,13 @@ public class StudentDAOImpl implements StudentDAO {
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("code", code);
 		List<Student> student = (List<Student>) query.list();
-		logger.info("student was loaded successfully, student details="
-				+ student.get(0));
-		return student.get(0);
+		if (!student.isEmpty()) {
+			logger.info("student was loaded successfully, student details="
+					+ student.get(0));
+			return student.get(0);
+		} else {
+			return null;
+		}
 	}
 
 	@Override

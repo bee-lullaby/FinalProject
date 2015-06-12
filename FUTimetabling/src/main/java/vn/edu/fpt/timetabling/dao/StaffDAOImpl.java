@@ -52,9 +52,11 @@ public class StaffDAOImpl implements StaffDAO {
 
 	@Override
 	public Staff getStaffById(int staffId) {
-		Staff staff = (Staff) getCurrentSession().load(Staff.class,
+		Staff staff = (Staff) getCurrentSession().get(Staff.class,
 				new Integer(staffId));
-		logger.info("Staff loaded successfully, staff details=" + staff);
+		if (staff != null) {
+			logger.info("Staff loaded successfully, staff details=" + staff);
+		}
 		return staff;
 	}
 
@@ -77,7 +79,7 @@ public class StaffDAOImpl implements StaffDAO {
 		Staff staff = getStaffById(staffId);
 		if (staff != null) {
 			getCurrentSession().delete(staff);
+			logger.info("Staff deleted successfully, staff details=" + staff);
 		}
-		logger.info("Staff deleted successfully, staff details=" + staff);
 	}
 }

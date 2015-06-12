@@ -29,10 +29,27 @@ public class ClassSemester {
 	@ManyToOne
 	@JoinColumn(name = "semester_id")
 	private Semester semester;
+	@Column(name = "semester")
+	private int semesterNumber = 0;
 	@Column(name = "students")
-	private int noOfStudents;
+	private int noOfStudents = 0;
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "classSemester", orphanRemoval = true)
 	List<Student> students = new ArrayList<Student>();
+
+	/**
+	 * @return the semesterNumber
+	 */
+	public int getSemesterNumber() {
+		return semesterNumber;
+	}
+
+	/**
+	 * @param semesterNumber
+	 *            the semesterNumber to set
+	 */
+	public void setSemesterNumber(int semesterNumber) {
+		this.semesterNumber = semesterNumber;
+	}
 
 	/**
 	 * 

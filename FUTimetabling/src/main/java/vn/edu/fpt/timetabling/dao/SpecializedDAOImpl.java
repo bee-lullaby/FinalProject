@@ -52,10 +52,12 @@ public class SpecializedDAOImpl implements SpecializedDAO {
 
 	@Override
 	public Specialized getSpecializedById(int specializedId) {
-		Specialized specialized = (Specialized) getCurrentSession().load(
+		Specialized specialized = (Specialized) getCurrentSession().get(
 				Specialized.class, new Integer(specializedId));
-		logger.info("Specialized was loaded successfully, specialized="
-				+ specialized);
+		if (specialized != null) {
+			logger.info("Specialized was loaded successfully, specialized="
+					+ specialized);
+		}
 		return specialized;
 	}
 
@@ -66,9 +68,13 @@ public class SpecializedDAOImpl implements SpecializedDAO {
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("code", code);
 		List<Specialized> specialized = (List<Specialized>) query.list();
-		logger.info("Specialized was loaded successfully, specialized="
-				+ specialized.get(0));
-		return specialized.get(0);
+		if (!specialized.isEmpty()) {
+			logger.info("Specialized was loaded successfully, specialized="
+					+ specialized.get(0));
+			return specialized.get(0);
+		} else {
+			return null;
+		}
 	}
 
 	@Override

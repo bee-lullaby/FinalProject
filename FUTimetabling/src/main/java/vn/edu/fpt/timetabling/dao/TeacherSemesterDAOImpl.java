@@ -41,7 +41,8 @@ public class TeacherSemesterDAOImpl implements TeacherSemesterDAO {
 	@Override
 	public List<TeacherSemester> listTeacherSemesters() {
 		List<TeacherSemester> teacherSemesters = (List<TeacherSemester>) getCurrentSession()
-				.createQuery("from vn.edu.fpt.timetabling.model.TeacherSemester")
+				.createQuery(
+						"from vn.edu.fpt.timetabling.model.TeacherSemester")
 				.list();
 		for (TeacherSemester teacherSemester : teacherSemesters) {
 			logger.info("TeacherSemester list:" + teacherSemester);
@@ -51,10 +52,12 @@ public class TeacherSemesterDAOImpl implements TeacherSemesterDAO {
 
 	@Override
 	public TeacherSemester getTeacherSemesterById(int teacherSemesterId) {
-		TeacherSemester teacherSemester = (TeacherSemester) getCurrentSession().load(
-				TeacherSemester.class, new Integer(teacherSemesterId));
-		logger.info("TeacherSemester was loaded successfully, TeacherSemester details="
-				+ teacherSemester);
+		TeacherSemester teacherSemester = (TeacherSemester) getCurrentSession()
+				.get(TeacherSemester.class, new Integer(teacherSemesterId));
+		if (teacherSemester != null) {
+			logger.info("TeacherSemester was loaded successfully, TeacherSemester details="
+					+ teacherSemester);
+		}
 		return teacherSemester;
 	}
 

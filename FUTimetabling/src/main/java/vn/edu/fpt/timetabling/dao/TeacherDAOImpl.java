@@ -53,9 +53,12 @@ public class TeacherDAOImpl implements TeacherDAO {
 
 	@Override
 	public Teacher getTeacherById(int teacherId) {
-		Teacher teacher = (Teacher) getCurrentSession().load(Teacher.class,
+		Teacher teacher = (Teacher) getCurrentSession().get(Teacher.class,
 				new Integer(teacherId));
-		logger.info("Teacher loaded successfully, teacher details=" + teacher);
+		if (teacher != null) {
+			logger.info("Teacher loaded successfully, teacher details="
+					+ teacher);
+		}
 		return teacher;
 	}
 

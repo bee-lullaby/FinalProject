@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import vn.edu.fpt.timetabling.model.TeacherCourseSemester;
 
-public class TeacherCourseSemesterDAOImpl implements TeacherCourseSemesterDAO{
+public class TeacherCourseSemesterDAOImpl implements TeacherCourseSemesterDAO {
 	private static final Logger logger = LoggerFactory
 			.getLogger(TeacherCourseSemesterDAO.class);
 
@@ -24,14 +24,16 @@ public class TeacherCourseSemesterDAOImpl implements TeacherCourseSemesterDAO{
 	}
 
 	@Override
-	public void addTeacherCourseSemester(TeacherCourseSemester teacherCourseSemester) {
+	public void addTeacherCourseSemester(
+			TeacherCourseSemester teacherCourseSemester) {
 		getCurrentSession().persist(teacherCourseSemester);
 		logger.info("TeacherCourseSemester was saved successfully, TeacherCourseSemester details="
 				+ teacherCourseSemester);
 	}
 
 	@Override
-	public void updateTeacherCourseSemester(TeacherCourseSemester teacherCourseSemester) {
+	public void updateTeacherCourseSemester(
+			TeacherCourseSemester teacherCourseSemester) {
 		getCurrentSession().update(teacherCourseSemester);
 		logger.info("TeacherCourseSemester was updated successfully, TeacherCourseSemester details="
 				+ teacherCourseSemester);
@@ -41,7 +43,8 @@ public class TeacherCourseSemesterDAOImpl implements TeacherCourseSemesterDAO{
 	@Override
 	public List<TeacherCourseSemester> listTeacherCourseSemesters() {
 		List<TeacherCourseSemester> teacherCourseSemesters = (List<TeacherCourseSemester>) getCurrentSession()
-				.createQuery("from vn.edu.fpt.timetabling.model.TeacherSemester")
+				.createQuery(
+						"from vn.edu.fpt.timetabling.model.TeacherSemester")
 				.list();
 		for (TeacherCourseSemester teacherCourseSemester : teacherCourseSemesters) {
 			logger.info("TeacherCourseSemester list:" + teacherCourseSemester);
@@ -50,11 +53,15 @@ public class TeacherCourseSemesterDAOImpl implements TeacherCourseSemesterDAO{
 	}
 
 	@Override
-	public TeacherCourseSemester getTeacherCourseSemesterById(int teacherCourseSemesterId) {
-		TeacherCourseSemester teacherCourseSemester = (TeacherCourseSemester) getCurrentSession().load(
-				TeacherCourseSemester.class, new Integer(teacherCourseSemesterId));
-		logger.info("TeacherCourseSemester was loaded successfully, TeacherCourseSemester details="
-				+ teacherCourseSemester);
+	public TeacherCourseSemester getTeacherCourseSemesterById(
+			int teacherCourseSemesterId) {
+		TeacherCourseSemester teacherCourseSemester = (TeacherCourseSemester) getCurrentSession()
+				.get(TeacherCourseSemester.class,
+						new Integer(teacherCourseSemesterId));
+		if (teacherCourseSemester != null) {
+			logger.info("TeacherCourseSemester was loaded successfully, TeacherCourseSemester details="
+					+ teacherCourseSemester);
+		}
 		return teacherCourseSemester;
 	}
 

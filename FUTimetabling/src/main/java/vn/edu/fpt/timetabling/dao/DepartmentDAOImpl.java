@@ -55,10 +55,12 @@ public class DepartmentDAOImpl implements DepartmentDAO {
 
 	@Override
 	public Department getDepartmentById(int departmentId) {
-		Department department = (Department) getCurrentSession().load(
+		Department department = (Department) getCurrentSession().get(
 				Department.class, new Integer(departmentId));
-		logger.info("Department was loaded successfully, course departments="
-				+ department);
+		if (department != null) {
+			logger.info("Department was loaded successfully, course departments="
+					+ department);
+		}
 		return department;
 	}
 
@@ -69,9 +71,13 @@ public class DepartmentDAOImpl implements DepartmentDAO {
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("code", code);
 		List<Department> department = (List<Department>) query.list();
-		logger.info("Department was loaded successfully, department details="
-				+ department.get(0));
-		return department.get(0);
+		if (!department.isEmpty()) {
+			logger.info("Department was loaded successfully, department details="
+					+ department.get(0));
+			return department.get(0);
+		} else {
+			return null;
+		}
 	}
 
 	@Override

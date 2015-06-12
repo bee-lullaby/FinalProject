@@ -50,9 +50,12 @@ public class ClassDAOImpl implements ClassDAO {
 
 	@Override
 	public ClassFPT getClassById(int classId) {
-		ClassFPT classFPT = (ClassFPT) getCurrentSession().load(ClassFPT.class,
+		ClassFPT classFPT = (ClassFPT) getCurrentSession().get(ClassFPT.class,
 				new Integer(classId));
-		logger.info("Class was loaded successfully, class details=" + classFPT);
+		if (classFPT != null) {
+			logger.info("Class was loaded successfully, class details="
+					+ classFPT);
+		}
 		return classFPT;
 	}
 
@@ -63,9 +66,13 @@ public class ClassDAOImpl implements ClassDAO {
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("code", code);
 		List<ClassFPT> classFPT = (List<ClassFPT>) query.list();
-		logger.info("Class was loaded successfully, class details="
-				+ classFPT.get(0));
-		return classFPT.get(0);
+		if (!classFPT.isEmpty()) {
+			logger.info("Class was loaded successfully, class details="
+					+ classFPT.get(0));
+			return classFPT.get(0);
+		} else {
+			return null;
+		}
 	}
 
 	@Override
