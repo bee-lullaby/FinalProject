@@ -187,24 +187,19 @@
 	</div>
 	<!-- Dialogs -->
 	<div id="dialog-info-course-1" data-role="dialog" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
-		<h1></h1>
-		<p>${course1}</p>
+		${course1}
 	</div>
 	<div id="dialog-info-course-2" data-role="dialog" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
-		<h1></h1>
-		<p>${course2}</p>
+		${course2}
 	</div>
 	<div id="dialog-info-course-3" data-role="dialog" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
-		<h1></h1>
-		<p>${course3}</p>
+		${course3}
 	</div>
 	<div id="dialog-info-course-4" data-role="dialog" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
-		<h1></h1>
-		<p>${course4}</p>
+		${course4}
 	</div>
 	<div id="dialog-info-course-5" data-role="dialog" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
-		<h1></h1>
-		<p>${course5}</p>
-	</div>s
+		${course5}
+	</div>
 </body>
 </html>
