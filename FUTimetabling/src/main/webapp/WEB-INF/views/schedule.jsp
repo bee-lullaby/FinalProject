@@ -4,36 +4,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Schedule</title>
-	<link href="resources/css/metro.css" rel="stylesheet">
-	<link href="resources/css/metro-icons.css" rel="stylesheet">
-	<link href="resources/css/docs.css" rel="stylesheet">
+<title>Schedule</title>
+<link href="resources/css/metro.css" rel="stylesheet">
+<link href="resources/css/metro-icons.css" rel="stylesheet">
+<link href="resources/css/docs.css" rel="stylesheet">
 
-	<script src="resources/js/jquery-2.1.3.min.js"></script>
-	<script src="resources/js/mine.js"></script>
-	<script src="resources/js/metro.js"></script>
-	<script src="resources/js/docs.js"></script>
-	<script src="resources/js/prettify/run_prettify.js"></script>
-	<script src="resources/js/ga.js"></script>
-	<style type="text/css">
-		th{
-			width: 14.2%;
-		}
-		td {
-			height: 80px;
-			vertical-align: top;
-			text-align: left;
-		}
-		.course-color {
-			width: 1.625rem;
-			height: 1.625rem;
-			border: 1px #ffffff solid;
-			padding: 0;
-			position: relative;
-			display: inline-block;
-			vertical-align: middle;
-		}
-	</style>
+<script src="resources/js/jquery-2.1.3.min.js"></script>
+<script src="resources/js/mine.js"></script>
+<script src="resources/js/metro.js"></script>
+<script src="resources/js/docs.js"></script>
+<script src="resources/js/prettify/run_prettify.js"></script>
+<script src="resources/js/ga.js"></script>
+<style type="text/css">
+.timetable th {
+	width: 14.2%;
+}
+
+.timetable td {
+	height: 80px;
+	vertical-align: top;
+	text-align: left;
+}
+
+.course-color {
+	width: 1.625rem;
+	height: 1.625rem;
+	border: 1px #ffffff solid;
+	padding: 0;
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+#table-course th, #table-course td {
+	text-align: left;
+	padding-left: 0;
+}
+</style>
 
 </head>
 <body>
@@ -45,11 +52,11 @@
 			</h1>
 
 			<div style="width: 100%;">
-				<div style="display:inline-block;">
+				<div style="display: inline-block;">
 					<button id="btn-prev-class" class="button">
 						<span class="mif-arrow-left"></span>
 					</button>
-					<div class="input-control select" >
+					<div class="input-control select">
 						<select id="select-classes">
 							<option>Class 1</option>
 							<option>Class 2</option>
@@ -58,19 +65,23 @@
 							<option>Class 5</option>
 							<option>Class 6</option>
 						</select>
-					</div>		
-					<button id="btn-next-class" class="button" >
+					</div>
+					<button id="btn-next-class" class="button">
 						<span class="mif-arrow-right"></span>
-					</button>	
+					</button>
 				</div>
 				<div style="float: right">
-					<button id="btn-prev-week" class="button" data-role="hint" data-hint-background="#1CB7EC"  data-hint-color="fg-white" data-hint-position="top" data-hint="Previous Week">
+					<button id="btn-prev-week" class="button" data-role="hint"
+						data-hint-background="#1CB7EC" data-hint-color="fg-white"
+						data-hint-position="top" data-hint="Previous Week">
 						<span class="mif-chevron-thin-left"></span>
-					</button>	
+					</button>
 					<div class="input-control text">
 						<input type="text">
-					</div>		
-					<button id="btn-next-week" class="button" data-role="hint" data-hint-background="#1CB7EC"  data-hint-color="fg-white" data-hint-position="top" data-hint="Next Week">
+					</div>
+					<button id="btn-next-week" class="button" data-role="hint"
+						data-hint-background="#1CB7EC" data-hint-color="fg-white"
+						data-hint-position="top" data-hint="Next Week">
 						<span class="mif-chevron-thin-right"></span>
 					</button>
 				</div>
@@ -78,42 +89,56 @@
 
 			<div style="width: 100%; line-height: 40px; margin: .5rem 0;">
 				<div style="display: inline-block">
-					<font style="color: #52677a;font-weight: 700; font-size: 1rem">Courses:</font>&nbsp;&nbsp;&nbsp;
+					<font style="color: #52677a; font-weight: 700; font-size: 1rem">Courses:</font>&nbsp;&nbsp;&nbsp;
 					<div id="course-1" style="cursor: pointer; display: inline-block">
-						<span class="course-color bg-green"></span>&nbsp;Course 1&nbsp;&nbsp;
+						<span class="course-color bg-green"></span>&nbsp;Course
+						1&nbsp;&nbsp;
 					</div>
 					<div id="course-2" style="cursor: pointer; display: inline-block">
-						<span class="course-color bg-darkViolet"></span>&nbsp;Course 2&nbsp;&nbsp;
+						<span class="course-color bg-darkViolet"></span>&nbsp;Course
+						2&nbsp;&nbsp;
 					</div>
 					<div id="course-3" style="cursor: pointer; display: inline-block">
-						<span class="course-color bg-orange"></span>&nbsp;Course 3&nbsp;&nbsp;
+						<span class="course-color bg-orange"></span>&nbsp;Course
+						3&nbsp;&nbsp;
 					</div>
 					<div id="course-4" style="cursor: pointer; display: inline-block">
-						<span class="course-color bg-blue"></span>&nbsp;Course 4&nbsp;&nbsp;
+						<span class="course-color bg-blue"></span>&nbsp;Course
+						4&nbsp;&nbsp;
 					</div>
 					<div id="course-5" style="cursor: pointer; display: inline-block">
-						<span class="course-color bg-darkPink"></span>&nbsp;Course 5&nbsp;&nbsp;
+						<span class="course-color bg-darkPink"></span>&nbsp;Course
+						5&nbsp;&nbsp;
 					</div>
 				</div>
 				<div style="float: right;">
-					<button id="btn-generate" class="button" data-role="hint" data-hint-background="#1CB7EC"  data-hint-color="fg-white" data-hint-position="top" data-hint="Generate From Previous Week">
+					<button id="btn-generate" class="button" data-role="hint"
+						data-hint-background="#1CB7EC" data-hint-color="fg-white"
+						data-hint-position="top" data-hint="Generate From Previous Week">
 						<span class="mif-table"></span>
 					</button>
 					|
-					<button id="btn-undo" class="button" data-role="hint" data-hint-background="#1CB7EC"  data-hint-color="fg-white" data-hint-position="top" data-hint="Undo">
+					<button id="btn-undo" class="button" data-role="hint"
+						data-hint-background="#1CB7EC" data-hint-color="fg-white"
+						data-hint-position="top" data-hint="Undo">
 						<span class="mif-undo"></span>
-					</button>	
-					<button id="btn-redo" class="button" data-role="hint" data-hint-background="#1CB7EC"  data-hint-color="fg-white" data-hint-position="top" data-hint="Redo">
+					</button>
+					<button id="btn-redo" class="button" data-role="hint"
+						data-hint-background="#1CB7EC" data-hint-color="fg-white"
+						data-hint-position="top" data-hint="Redo">
 						<span class="mif-redo"></span>
 					</button>
 					|
-					<button id="btn-clear" class="button" data-role="hint" data-hint-background="#1CB7EC"  data-hint-color="fg-white" data-hint-position="top" data-hint="Clear">
+					<button id="btn-clear" class="button" data-role="hint"
+						data-hint-background="#1CB7EC" data-hint-color="fg-white"
+						data-hint-position="top" data-hint="Clear">
 						<span class="mif-cross"></span>
-					</button>	
+					</button>
 				</div>
 			</div>
 			<div style="width: 100%; margin-top: 15px">
-				<table class="table cell-hovered border bordered"style="width: 100%">
+				<table class="table cell-hovered border bordered timetable"
+					style="width: 100%">
 					<thead>
 						<tr>
 							<th>Sun</th>
@@ -123,7 +148,7 @@
 							<th>Thu</th>
 							<th>Fri</th>
 							<th>Sat</th>
-						</tr>	
+						</tr>
 					</thead>
 					<tbody>
 						<tr>
@@ -180,26 +205,101 @@
 							<td id="tt-6-6"></td>
 							<td id="tt-7-6"></td>
 						</tr>
-					</tbody>	
+					</tbody>
 				</table>
 			</div>
 		</div>
 	</div>
 	<!-- Dialogs -->
-	<div id="dialog-info-course-1" data-role="dialog" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
-		${course1}
+	<div id="dialog-info-course-1" data-role="dialog" class="padding20"
+		data-close-button="true" data-overlay="true"
+		data-overlay-color="op-dark">
+		<h1>Course 1</h1>
+		<p>
+		<table id="table-course" class="table">
+			<tr>
+				<th>Teacher (4):</th>
+				<td colspan="3">
+					<div class="input-control select">
+						<select>
+							<option value="1">Teacher 1</option>
+							<option value="2">Teacher 2</option>
+							<option value="3">Teacher 3</option>
+						</select>
+					</div>
+				</td>
+			</tr>
+			<tr style="display: none">
+				<td colspan="4"></td>
+			</tr>
+			<tr>
+				<th>Remain slots:</th>
+				<td>30</td>
+				<th style="padding-left: 30px">Classes:</th>
+				<td>6</td>
+			</tr>
+			<tr>
+				<th>Morning:</th>
+				<td>4</td>
+				<th style="padding-left: 30px">Afternoon:</th>
+				<td>2</td>
+			</tr>
+		</table>
 	</div>
-	<div id="dialog-info-course-2" data-role="dialog" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
-		${course2}
+	<div id="dialog-info-course-2" data-role="dialog" class="padding20"
+		data-close-button="true" data-overlay="true"
+		data-overlay-color="op-dark">
+		<h1></h1>
+		<p></p>
 	</div>
-	<div id="dialog-info-course-3" data-role="dialog" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
-		${course3}
+	<div id="dialog-info-course-3" data-role="dialog" class="padding20"
+		data-close-button="true" data-overlay="true"
+		data-overlay-color="op-dark">
+		<h1></h1>
+		<p></p>
 	</div>
-	<div id="dialog-info-course-4" data-role="dialog" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
-		${course4}
+	<div id="dialog-info-course-4" data-role="dialog" class="padding20"
+		data-close-button="true" data-overlay="true"
+		data-overlay-color="op-dark">
+		<h1></h1>
+		<p></p>
 	</div>
-	<div id="dialog-info-course-5" data-role="dialog" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
-		${course5}
+	<div id="dialog-info-course-5" data-role="dialog" class="padding20"
+		data-close-button="true" data-overlay="true"
+		data-overlay-color="op-dark">
+		<h1></h1>
+		<p></p>
+	</div>
+
+	<div id="dialog-schedule" data-role="dialog" class="padding20"
+		data-close-button="true" data-overlay="true"
+		data-overlay-color="op-dark">
+		<h4>Monday (dd/mm) - Slot 1</h4>
+		<table>
+			<tr>
+				<th>Course:</th>
+				<td>
+					<div class="input-control select">
+						<select>
+							<option>Course 1</option>
+							<option disabled>Course 2</option>
+							<option>Course 3</option>
+							<option>Course 4</option>
+							<option>Course 5</option>
+						</select>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th>Can:</th>
+				<td>c1, c2, c3</td>
+			</tr>
+			<tr>
+				<th>Can't:</th>
+				<td>c4, c5</td>
+			</tr>
+		</table>
+
 	</div>
 </body>
 </html>
