@@ -2,6 +2,7 @@ package vn.edu.fpt.timetabling.dao;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -48,6 +49,19 @@ public class ClassSemesterDAOImpl implements ClassSemesterDAO {
 		}
 		return classSemesters;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ClassSemester> listClassSemesterBySemester(int semesterId) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.ClassSemester C WHERE C.semester_id = :semester_id";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("semester_id", semesterId);
+		List<ClassSemester> classSemesters = (List<ClassSemester>) query.list();
+		for (ClassSemester classSemester : classSemesters) {
+			logger.info("ClassSemester list:" + classSemester);
+		}
+		return classSemesters;
+	}
 
 	@Override
 	public ClassSemester getClassSemesterById(int classSemesterId) {
@@ -69,4 +83,5 @@ public class ClassSemesterDAOImpl implements ClassSemesterDAO {
 					+ classSemester);
 		}
 	}
+
 }

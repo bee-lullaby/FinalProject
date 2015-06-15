@@ -2,6 +2,7 @@ package vn.edu.fpt.timetabling.dao;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -52,6 +53,38 @@ public class TeacherCourseSemesterDAOImpl implements TeacherCourseSemesterDAO {
 		return teacherCourseSemesters;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<TeacherCourseSemester> listTeacherCourseSemestersByCourse(
+			int courseSemesterId) {
+		// TODO Auto-generated method stub
+		String hql = "FROM vn.edu.fpt.timetabling.model.TeacherCourseSemester C WHERE C.course_semester_id = :course_semester_id";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("course_semester_id", courseSemesterId);
+		List<TeacherCourseSemester> teacherCourseSemesters = (List<TeacherCourseSemester>) query
+				.list();
+		for (TeacherCourseSemester teacherCourseSemester : teacherCourseSemesters) {
+			logger.info("TeacherCourseSemester list:" + teacherCourseSemester);
+		}
+		return teacherCourseSemesters;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<TeacherCourseSemester> listTeacherCourseSemestersByTeacher(
+			int teacherSemesterId) {
+		// TODO Auto-generated method stub
+		String hql = "FROM vn.edu.fpt.timetabling.model.TeacherCourseSemester C WHERE C.teacher_semester_id = :teacher_semester_id";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("teacher_semester_id", teacherSemesterId);
+		List<TeacherCourseSemester> teacherCourseSemesters = (List<TeacherCourseSemester>) query
+				.list();
+		for (TeacherCourseSemester teacherCourseSemester : teacherCourseSemesters) {
+			logger.info("TeacherCourseSemester list:" + teacherCourseSemester);
+		}
+		return teacherCourseSemesters;
+	}
+
 	@Override
 	public TeacherCourseSemester getTeacherCourseSemesterById(
 			int teacherCourseSemesterId) {
@@ -74,4 +107,5 @@ public class TeacherCourseSemesterDAOImpl implements TeacherCourseSemesterDAO {
 					+ teacherCourseSemester);
 		}
 	}
+
 }

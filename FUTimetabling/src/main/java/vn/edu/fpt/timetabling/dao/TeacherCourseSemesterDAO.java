@@ -10,6 +10,10 @@ public interface TeacherCourseSemesterDAO {
 	public void updateTeacherCourseSemester(TeacherCourseSemester teacherCourseSemester);
 
 	public List<TeacherCourseSemester> listTeacherCourseSemesters();
+	
+	public List<TeacherCourseSemester> listTeacherCourseSemestersByCourse(int courseSemesterId);
+
+	public List<TeacherCourseSemester> listTeacherCourseSemestersByTeacher(int teacherSemesterId);
 
 	public TeacherCourseSemester getTeacherCourseSemesterById(int teacherCourseSemesterId);
 

@@ -28,7 +28,7 @@ public class Specialized {
 	List<Student> students = new ArrayList<Student>();
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "specialized", orphanRemoval = true)
 	List<ClassFPT> classes = new ArrayList<ClassFPT>();
-
+	
 	/**
 	 * @return the classes
 	 */
@@ -143,5 +143,19 @@ public class Specialized {
 		return "Specialized [specializedId=" + specializedId + ", code=" + code
 				+ ", name=" + name + "]";
 	}
+	
+	public String classesToString() {
+		StringBuilder sb = new StringBuilder();
 
+		List<ClassFPT> classes = getClasses();
+
+		if (classes.size() > 0) {
+			sb.append(classes.get(0).getCode());
+			for (int i = 1; i < classes.size(); i++) {
+				sb.append(", " + classes.get(i).getCode());
+			}
+		}
+		return sb.toString();
+	}
+	
 }

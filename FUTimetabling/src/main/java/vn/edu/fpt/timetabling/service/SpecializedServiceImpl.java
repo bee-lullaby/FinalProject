@@ -1,7 +1,14 @@
 package vn.edu.fpt.timetabling.service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.transaction.annotation.Transactional;
 
 import vn.edu.fpt.timetabling.dao.SpecializedDAO;
@@ -19,6 +26,36 @@ public class SpecializedServiceImpl implements SpecializedService {
 	@Transactional
 	public void addSpecialized(Specialized specialized) {
 		specializedDAO.addSpecialized(specialized);
+	}
+
+	@Override
+	@Transactional
+	public void addSpecializedFromFile(File specializeds) {
+		// TODO Auto-generated method stub
+		try {
+			FileInputStream file = new FileInputStream(specializeds);
+			XSSFWorkbook workbook = new XSSFWorkbook(file);
+			XSSFSheet sheet = workbook.getSheetAt(0);
+
+			Iterator<Row> rowIterator = sheet.iterator();
+
+			rowIterator.next();
+
+			while (rowIterator.hasNext()) {
+				Row row = rowIterator.next();
+				Specialized specialized = new Specialized();
+				specialized.setCode(row.getCell(0).getStringCellValue().trim());
+				specialized.setName(row.getCell(1).getStringCellValue().trim());
+				specializedDAO.addSpecialized(specialized);
+
+			}
+
+			workbook.close();
+			file.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override

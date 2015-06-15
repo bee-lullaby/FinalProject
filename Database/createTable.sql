@@ -547,6 +547,7 @@ MODIFY `time_table_id` int(11) NOT NULL AUTO_INCREMENT;
 -- Constraints for dumped tables
 --
 
+
 --
 -- Constraints for table `classes`
 --
