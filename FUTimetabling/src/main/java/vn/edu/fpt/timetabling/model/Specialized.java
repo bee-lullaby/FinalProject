@@ -146,7 +146,6 @@ public class Specialized {
 	
 	public String classesToString() {
 		StringBuilder sb = new StringBuilder();
-
 		List<ClassFPT> classes = getClasses();
 
 		if (classes.size() > 0) {

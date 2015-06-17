@@ -2,6 +2,7 @@ package vn.edu.fpt.timetabling;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import vn.edu.fpt.timetabling.model.ClassFPT;
 import vn.edu.fpt.timetabling.model.Specialized;
 import vn.edu.fpt.timetabling.service.SpecializedService;
 
@@ -27,25 +29,35 @@ public class SpecializedController {
 	public void setSpecializedService(SpecializedService specializedService) {
 		this.specializedService = specializedService;
 	}
-	
+
 	@RequestMapping(value = "/specializeds", method = RequestMethod.GET)
 	public String listSpecialized(Model model) {
 		model.addAttribute("specialized", new Specialized());
-		model.addAttribute("listSpecializeds", specializedService.listSpecializeds());
+		model.addAttribute("listSpecializeds",
+				specializedService.listSpecializeds());
 		return "specialized";
 	}
 
 	// For add and update person both
 	@RequestMapping(value = "/specialized/add", method = RequestMethod.POST)
-	public String addDepartment(@ModelAttribute("specialized") Specialized specialized) {
+	public String addSpecialized(
+			@ModelAttribute("specialized") Specialized specialized) {
+		if (specialized.getSpecializedId() == 0) {
+			specializedService.addSpecialized(specialized);
+		} else {
+			specializedService.updateSpecialized(specialized);
+		}
 		return "redirect:/specializeds";
 	}
 
 	// For add and update person both
 	@RequestMapping(value = "/specialized/addFromFile", method = RequestMethod.POST)
-	public String addDepartmentFromFile(@RequestParam("file") MultipartFile file) {
-		if(!file.isEmpty()){
-			File specializeds = new File("D:\\FU\\Do an tot nghiep\\Data\\ServerData\\" +file.getOriginalFilename());
+	public String addSpecializedFromFile(
+			@RequestParam("file") MultipartFile file) {
+		if (!file.isEmpty()) {
+			File specializeds = new File(
+					"D:\\FU\\Do an tot nghiep\\Data\\ServerData\\"
+							+ file.getOriginalFilename());
 			try {
 				file.transferTo(specializeds);
 				specializedService.addSpecializedFromFile(specializeds);
@@ -60,18 +72,25 @@ public class SpecializedController {
 		return "redirect:/specializeds";
 	}
 
-	
 	@RequestMapping("/specialized/delete/{specializedId}")
-	public String deleteDepartment(@PathVariable("specializedId") int specializedId) {
+	public String deleteSpecialized(
+			@PathVariable("specializedId") int specializedId) {
 		specializedService.deleteSpecialized(specializedId);
 		return "redirect:/specializeds";
 	}
 
 	@RequestMapping("/specialized/edit/{specializedId}")
-	public String editDepartment(@PathVariable("specializedId") int specializedId, Model model) {
-		model.addAttribute("specialized", specializedService.getSpecializedById(specializedId));
-		model.addAttribute("listSpecializeds", specializedService.listSpecializeds());
-		return "department";
+	public String editSpecialized(
+			@PathVariable("specializedId") int specializedId, Model model) {
+		Specialized specialized = specializedService
+				.getSpecializedById(specializedId);
+		List<ClassFPT> classes = specialized.getClasses();
+		System.out.println(classes.size());
+		model.addAttribute("specialized",
+				specializedService.getSpecializedById(specializedId));
+		model.addAttribute("listSpecializeds",
+				specializedService.listSpecializeds());
+		return "specialized";
 	}
 
 }

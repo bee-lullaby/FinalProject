@@ -49,17 +49,17 @@
 <body>
 	<h1>Add a Specialized</h1>
 
-	<c:url var="addAction" value="/course/add"></c:url>
+	<c:url var="addAction" value="/specialized/add"></c:url>
 
 	<form:form action="${addAction}" commandName="specialized">
 		<table>
 			<c:if test="${!empty specialized.code}">
 				<tr>
-					<td><form:label path="specializedID">
+					<td><form:label path="specializedId">
 							<spring:message text="Specialized ID" />
 						</form:label></td>
-					<td><form:input path="specializedID" readonly="true" size="8"
-							disabled="true" /> <form:hidden path="specializedID" /></td>
+					<td><form:input path="specializedId" readonly="true" size="8"
+							disabled="true" /> <form:hidden path="specializedId" /></td>
 				</tr>
 			</c:if>
 			<tr>
