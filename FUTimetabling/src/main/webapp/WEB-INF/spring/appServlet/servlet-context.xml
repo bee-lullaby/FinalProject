@@ -66,6 +66,9 @@
 				</beans:value>
 				<beans:value>vn.edu.fpt.timetabling.model.Specialized</beans:value>
 				<beans:value>vn.edu.fpt.timetabling.model.Student</beans:value>
+				<beans:value>vn.edu.fpt.timetabling.model.Room</beans:value>
+				<beans:value>vn.edu.fpt.timetabling.model.Timetable</beans:value>
+
 			</beans:list>
 		</beans:property>
 		<beans:property name="hibernateProperties">
@@ -133,7 +136,11 @@
 		<beans:property name="sessionFactory"
 			ref="hibernate4AnnotatedSessionFactory" />
 	</beans:bean>
-
+	<beans:bean id="timetableDAO" class="vn.edu.fpt.timetabling.dao.TimetableDAOImpl">
+		<beans:property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
+	
 	<!-- Service Beans -->
 	<beans:bean id="courseService"
 		class="vn.edu.fpt.timetabling.service.CourseServiceImpl">
@@ -182,6 +189,10 @@
 	<beans:bean id="studentService"
 		class="vn.edu.fpt.timetabling.service.StudentServiceImpl">
 		<beans:property name="studentDAO" ref="studentDAO"></beans:property>
+	</beans:bean>
+		<beans:bean id="timetableService"
+		class="vn.edu.fpt.timetabling.service.TimetableServiceImpl">
+		<beans:property name="timetableDAO" ref="timetableDAO"></beans:property>
 	</beans:bean>
 	<beans:bean id="scheduleService"
 		class="vn.edu.fpt.timetabling.service.ScheduleServiceImpl">

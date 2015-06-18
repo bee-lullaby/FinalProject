@@ -36,6 +36,7 @@ public class ClassFPT {
 	private Integer batch;
 	@Column
 	private int number;
+	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "classFPT", orphanRemoval = true)
 	Set<ClassSemester> classSemesters = new HashSet<ClassSemester>();
 
