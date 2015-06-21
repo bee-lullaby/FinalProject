@@ -1,8 +1,8 @@
 package vn.edu.fpt.timetabling.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -32,12 +32,12 @@ public class Semester {
 	@Column(name = "end_date")
 	private Date endDate;
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "semester", orphanRemoval = true)
-	List<ClassSemester> classSemesters = new ArrayList<ClassSemester>();
+	Set<ClassSemester> classSemesters = new HashSet<ClassSemester>();
 
 	/**
 	 * @return the classSemesters
 	 */
-	public List<ClassSemester> getClassSemesters() {
+	public Set<ClassSemester> getClassSemesters() {
 		return classSemesters;
 	}
 
@@ -45,7 +45,7 @@ public class Semester {
 	 * @param classSemesters
 	 *            the classSemesters to set
 	 */
-	public void setClassSemesters(List<ClassSemester> classSemesters) {
+	public void setClassSemesters(Set<ClassSemester> classSemesters) {
 		this.classSemesters = classSemesters;
 	}
 

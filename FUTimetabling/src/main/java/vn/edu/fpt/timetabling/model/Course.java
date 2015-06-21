@@ -1,7 +1,7 @@
 package vn.edu.fpt.timetabling.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,12 +29,12 @@ public class Course {
 	@JoinColumn(name = "department_id")
 	private Department department;
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "course", orphanRemoval = true)
-	List<ClassFPT> classes = new ArrayList<ClassFPT>();
+	Set<ClassFPT> classes = new HashSet<ClassFPT>();
 
 	/**
 	 * @return the classes
 	 */
-	public List<ClassFPT> getClasses() {
+	public Set<ClassFPT> getClasses() {
 		return classes;
 	}
 
@@ -42,7 +42,7 @@ public class Course {
 	 * @param classes
 	 *            the classes to set
 	 */
-	public void setClasses(List<ClassFPT> classes) {
+	public void setClasses(Set<ClassFPT> classes) {
 		this.classes = classes;
 	}
 

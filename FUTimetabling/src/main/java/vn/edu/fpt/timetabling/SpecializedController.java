@@ -2,7 +2,6 @@ package vn.edu.fpt.timetabling;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import vn.edu.fpt.timetabling.model.ClassFPT;
 import vn.edu.fpt.timetabling.model.Specialized;
 import vn.edu.fpt.timetabling.service.SpecializedService;
 
@@ -82,10 +80,6 @@ public class SpecializedController {
 	@RequestMapping("/specialized/edit/{specializedId}")
 	public String editSpecialized(
 			@PathVariable("specializedId") int specializedId, Model model) {
-		Specialized specialized = specializedService
-				.getSpecializedById(specializedId);
-		List<ClassFPT> classes = specialized.getClasses();
-		System.out.println(classes.size());
 		model.addAttribute("specialized",
 				specializedService.getSpecializedById(specializedId));
 		model.addAttribute("listSpecializeds",

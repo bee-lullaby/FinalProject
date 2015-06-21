@@ -48,6 +48,79 @@
 </head>
 <body>
 	<h1>Add a Course Semester</h1>
+	<c:url var="addAction" value="/courseSemester/add"></c:url>
+
+	<form:form action="${addAction}" commandName="courseSemester">
+		<table>
+			<c:choose>
+				<c:when test="${!empty courseSemester.course}">
+					<tr>
+						<td><form:label path="courseSemesterId">
+								<spring:message text="Course Semester ID" />
+							</form:label></td>
+						<td><form:input path="courseSemesterId" readonly="true"
+								size="8" disabled="true" /> <form:hidden path="courseSemesterId" /></td>
+					</tr>
+				</c:when>
+				<c:otherwise>
+					<tr>
+						<td colspan="2"><form:hidden path="courseSemesterId" value="0" /></td>
+					</tr>
+				</c:otherwise>
+			</c:choose>
+			<tr>
+				<td><form:label path="course">
+						<spring:message text="Course" />
+					</form:label></td>
+				<td><form:select path="course">
+						<c:forEach var="item" items="${courses}">
+							<option value="${item.courseId}"
+								${item.courseId == courseId ? 'selected="selected"' : ''}>${item.name}</option>
+						</c:forEach>
+					</form:select></td>
+			</tr>
+			<tr>
+				<td><form:label path="semester">
+						<spring:message text="Semester" />
+					</form:label></td>
+				<td><form:select path="semester">
+						<c:forEach var="item" items="${semesters}">
+							<option value="${item.semesterId}"
+								${item.semesterId == semesterId ? 'selected="selected"' : ''}>${item.name}</option>
+						</c:forEach>
+					</form:select></td>
+			</tr>
+			<tr>
+				<td><form:label path="slots">
+						<spring:message text="Slot Number" />
+					</form:label></td>
+				<td><form:input path="slots" /></td>
+			</tr>
+			<tr>
+				<td><form:label path="courseCondition">
+						<spring:message text="Course Condition" />
+					</form:label></td>
+				<td><form:select path="courseCondition">
+						<c:forEach var="item" items="${courseConditions}">
+							<option value="${item.courseId}"
+								${item.courseId == courseConsitionId ? 'selected="selected"' : ''}>${item.name}</option>
+						</c:forEach>
+					</form:select></td>
+			</tr>
+			<tr>
+				<td colspan="2"><c:choose>
+						<c:when test="${!empty courseSemester.course}">
+							<input type="submit"
+								value="<spring:message text="Edit Course Semester"/>" />
+						</c:when>
+						<c:otherwise>
+							<input type="submit"
+								value="<spring:message text="Add Course Semester"/>" />
+						</c:otherwise>
+					</c:choose></td>
+			</tr>
+		</table>
+	</form:form>
 	<form:form action="courseSemester/addFromFile" method="post" enctype="multipart/form-data">
 		<input name="semesterId" type="text"/>
 		<input accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" name="file" type="file" style="margin-bottom:20px" />
@@ -60,6 +133,7 @@
 					<th width="80">Course Semester ID</th>
 					<th width="120">Course</th>
 					<th width="120">Semester</th>
+					<th width="120">Slots</th>
 					<th width="120">Course Condition</th>
 					<th width="60">Edit</th>
 					<th width="60">Delete</th>
@@ -67,9 +141,10 @@
 				<c:forEach items="${listCourseSemesters}" var="courseSemester">
 					<tr>
 						<td>${courseSemester.courseSemesterId}</td>
-						<td>${courseSemester.course.code}</td>
-						<td>${courseSemester.semester.code}</td>
-						<td>${courseSemester.course_condition.code}</td>
+						<td>${courseSemester.course.name}</td>
+						<td>${courseSemester.semester.name}</td>
+						<td>${courseSemester.slots}</td>
+						<td>${courseSemester.courseCondition.name}</td>
 						<td><a href="<c:url value='/courseSemester/edit/${courseSemester.courseSemesterId}' />">Edit</a></td>
 						<td><a href="<c:url value='/courseSemester/delete/${courseSemester.courseSemesterId}' />">Delete</a></td>
 					</tr>

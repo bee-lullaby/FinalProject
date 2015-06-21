@@ -68,7 +68,7 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 						.getSemesterById(semesterId));
 				courseSemester.setSlots(slots.intValue());
 				if (codeConditionCourse.compareTo("") != 0) {
-					courseSemester.setCourse_condition(courseDAO
+					courseSemester.setCourseCondition(courseDAO
 							.getCourseByCode(codeConditionCourse));
 				}
 				courseSemesterDAO.addCourseSemester(courseSemester);

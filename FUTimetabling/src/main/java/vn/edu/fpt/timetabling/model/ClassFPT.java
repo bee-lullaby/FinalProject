@@ -1,7 +1,7 @@
 package vn.edu.fpt.timetabling.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -37,7 +37,7 @@ public class ClassFPT {
 	@Column
 	private int number;
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "classFPT", orphanRemoval = true)
-	List<ClassSemester> classSemesters = new ArrayList<ClassSemester>();
+	Set<ClassSemester> classSemesters = new HashSet<ClassSemester>();
 
 	/**
 	 * @param batch
@@ -72,7 +72,7 @@ public class ClassFPT {
 	/**
 	 * @return the classSemesters
 	 */
-	public List<ClassSemester> getClassSemesters() {
+	public Set<ClassSemester> getClassSemesters() {
 		return classSemesters;
 	}
 
@@ -80,7 +80,7 @@ public class ClassFPT {
 	 * @param classSemesters
 	 *            the classSemesters to set
 	 */
-	public void setClassSemesters(List<ClassSemester> classSemesters) {
+	public void setClassSemesters(Set<ClassSemester> classSemesters) {
 		this.classSemesters = classSemesters;
 	}
 

@@ -1,7 +1,7 @@
 package vn.edu.fpt.timetabling.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -25,7 +25,7 @@ public class Department {
 	private String name;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "department", orphanRemoval = true)
-	List<Course> courses = new ArrayList<Course>();
+	Set<Course> courses = new HashSet<Course>();
 
 	/**
 	 * 
@@ -115,7 +115,7 @@ public class Department {
 	/**
 	 * @return the courses
 	 */
-	public List<Course> getCourses() {
+	public Set<Course> getCourses() {
 		return courses;
 	}
 
@@ -123,19 +123,22 @@ public class Department {
 	 * @param courses
 	 *            the courses to set
 	 */
-	public void setCourses(List<Course> courses) {
+	public void setCourses(Set<Course> courses) {
 		this.courses = courses;
 	}
 
 	public String coursesToString() {
 		StringBuilder sb = new StringBuilder();
 
-		List<Course> courses = getCourses();
+		Set<Course> courses = getCourses();
 
 		if (courses.size() > 0) {
-			sb.append(courses.get(0).getCode());
-			for (int i = 1; i < courses.size(); i++) {
-				sb.append(", " + courses.get(i).getCode());
+			for (Course course : courses) {
+				if (sb.length() == 0) {
+					sb.append(course.getCode());
+				} else {
+					sb.append(", " + course.getCode());
+				}
 			}
 		}
 		return sb.toString();

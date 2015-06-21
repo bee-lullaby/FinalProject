@@ -2,6 +2,7 @@ package vn.edu.fpt.timetabling.service;
 
 import java.util.List;
 
+import vn.edu.fpt.timetabling.model.Specialized;
 import vn.edu.fpt.timetabling.model.Student;
 
 public interface StudentService {
@@ -16,4 +17,10 @@ public interface StudentService {
 	public Student getStudentByCode(String code);
 
 	public void deleteStudent(int studentId);
+	
+	public String getNextStudentCode(Specialized specialized);
+	
+	public String getAccount(String name, String studentCode);
+	
+	public String getEmail(String account);
 }

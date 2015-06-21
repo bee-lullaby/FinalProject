@@ -1,7 +1,9 @@
 package vn.edu.fpt.timetabling.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -37,10 +39,10 @@ public class CourseSemester {
 
 	@ManyToOne
 	@JoinColumn(name = "course_condition_id", referencedColumnName = "course_id")
-	private Course course_condition;
+	private Course courseCondition;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "courseSemester", orphanRemoval = true)
-	List<TeacherCourseSemester> teacherCourseSemester = new ArrayList<TeacherCourseSemester>();
+	Set<TeacherCourseSemester> teacherCourseSemester = new HashSet<TeacherCourseSemester>();
 
 	/**
 	 * 
@@ -63,7 +65,7 @@ public class CourseSemester {
 		this.course = course;
 		this.semester = semester;
 		this.slots = slots;
-		this.course_condition = course_condition;
+		this.courseCondition = course_condition;
 	}
 
 	/**
@@ -129,22 +131,22 @@ public class CourseSemester {
 	/**
 	 * @return the course_condition
 	 */
-	public Course getCourse_condition() {
-		return course_condition;
+	public Course getCourseCondition() {
+		return courseCondition;
 	}
 
 	/**
 	 * @param course_condition
 	 *            the course_condition to set
 	 */
-	public void setCourse_condition(Course course_condition) {
-		this.course_condition = course_condition;
+	public void setCourseCondition(Course courseCondition) {
+		this.courseCondition = courseCondition;
 	}
 
 	/**
 	 * @return the teacherCourseSemester
 	 */
-	public List<TeacherCourseSemester> getTeacherCourseSemester() {
+	public Set<TeacherCourseSemester> getTeacherCourseSemester() {
 		return teacherCourseSemester;
 	}
 
@@ -153,7 +155,7 @@ public class CourseSemester {
 	 *            the teacherCourseSemester to set
 	 */
 	public void setTeacherCourseSemester(
-			List<TeacherCourseSemester> teacherCourseSemester) {
+			Set<TeacherCourseSemester> teacherCourseSemester) {
 		this.teacherCourseSemester = teacherCourseSemester;
 	}
 
@@ -174,7 +176,7 @@ public class CourseSemester {
 	public String toString() {
 		return "CourseSemester [courseSemesterId=" + courseSemesterId
 				+ ", course=" + course + ", semester=" + semester + ", slots="
-				+ slots + ", course_condition=" + course_condition + "]";
+				+ slots + ", course_condition=" + courseCondition + "]";
 	}
 
 }

@@ -44,7 +44,8 @@ public class SpecializedDAOImpl implements SpecializedDAO {
 	public List<Specialized> listSpecializeds() {
 		List<Specialized> specializeds = (List<Specialized>) getCurrentSession()
 				.createQuery(
-						"FROM vn.edu.fpt.timetabling.model.Specialized S JOIN FETCH S.classes")
+						"FROM vn.edu.fpt.timetabling.model.Specialized"
+								+ " S JOIN FETCH S.classes JOIN FETCH S.students")
 				.list().stream().distinct().collect(Collectors.toList());
 		for (Specialized specialized : specializeds) {
 			logger.info("Specialized list:" + specialized);
@@ -54,7 +55,9 @@ public class SpecializedDAOImpl implements SpecializedDAO {
 
 	@Override
 	public Specialized getSpecializedById(int specializedId) {
-		String hql = "FROM vn.edu.fpt.timetabling.model.Specialized S JOIN FETCH S.classes WHERE S.specializedId = :specializedId";
+		String hql = "FROM vn.edu.fpt.timetabling.model.Specialized"
+				+ " S JOIN FETCH S.classes JOIN FETCH S.students"
+				+ " WHERE S.specializedId = :specializedId";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("specializedId", specializedId);
 		Object temp = query.uniqueResult();
@@ -68,18 +71,18 @@ public class SpecializedDAOImpl implements SpecializedDAO {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Specialized getSpecializedByCode(String code) {
-		String hql = "FROM vn.edu.fpt.timetabling.model.Specialized S JOIN FETCH S.classes WHERE S.code = :code";
+		String hql = "FROM vn.edu.fpt.timetabling.model.Specialized"
+				+ " S JOIN FETCH S.classes JOIN FETCH S.students WHERE S.code = :code";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("code", code);
-		List<Specialized> specialized = (List<Specialized>) query.list()
-				.stream().distinct().collect(Collectors.toList());
-		if (!specialized.isEmpty()) {
+		Object temp = query.uniqueResult();
+		if (temp != null) {
+			Specialized specialized = (Specialized) temp;
 			logger.info("Specialized was loaded successfully, specialized="
-					+ specialized.get(0));
-			return specialized.get(0);
+					+ specialized);
+			return specialized;
 		} else {
 			return null;
 		}

@@ -1,7 +1,7 @@
 package vn.edu.fpt.timetabling.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -25,14 +25,14 @@ public class Specialized {
 	@Column
 	private String name;
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "specialized", orphanRemoval = true)
-	List<Student> students = new ArrayList<Student>();
+	Set<Student> students = new HashSet<Student>();
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "specialized", orphanRemoval = true)
-	List<ClassFPT> classes = new ArrayList<ClassFPT>();
-	
+	Set<ClassFPT> classes = new HashSet<ClassFPT>();
+
 	/**
 	 * @return the classes
 	 */
-	public List<ClassFPT> getClasses() {
+	public Set<ClassFPT> getClasses() {
 		return classes;
 	}
 
@@ -40,14 +40,14 @@ public class Specialized {
 	 * @param classes
 	 *            the classes to set
 	 */
-	public void setClasses(List<ClassFPT> classes) {
+	public void setClasses(Set<ClassFPT> classes) {
 		this.classes = classes;
 	}
 
 	/**
 	 * @return the students
 	 */
-	public List<Student> getStudents() {
+	public Set<Student> getStudents() {
 		return students;
 	}
 
@@ -55,7 +55,7 @@ public class Specialized {
 	 * @param students
 	 *            the students to set
 	 */
-	public void setStudents(List<Student> students) {
+	public void setStudents(Set<Student> students) {
 		this.students = students;
 	}
 
@@ -143,18 +143,21 @@ public class Specialized {
 		return "Specialized [specializedId=" + specializedId + ", code=" + code
 				+ ", name=" + name + "]";
 	}
-	
+
 	public String classesToString() {
 		StringBuilder sb = new StringBuilder();
-		List<ClassFPT> classes = getClasses();
+		Set<ClassFPT> classes = getClasses();
 
 		if (classes.size() > 0) {
-			sb.append(classes.get(0).getCode());
-			for (int i = 1; i < classes.size(); i++) {
-				sb.append(", " + classes.get(i).getCode());
+			for (ClassFPT classFPT : classes) {
+				if (sb.length() == 0) {
+					sb.append(classFPT.getCode());
+				} else {
+					sb.append(", " + classFPT.getCode());
+				}
 			}
 		}
 		return sb.toString();
 	}
-	
+
 }
