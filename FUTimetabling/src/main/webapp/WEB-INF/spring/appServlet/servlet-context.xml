@@ -62,7 +62,7 @@
 				<beans:value>vn.edu.fpt.timetabling.model.ClassFPT</beans:value>
 				<beans:value>vn.edu.fpt.timetabling.model.ClassSemester
 				</beans:value>
-				<beans:value>vn.edu.fpt.timetabling.model.ClassCourseTeacherSemester
+				<beans:value>vn.edu.fpt.timetabling.model.ClassCourseSemester
 				</beans:value>
 				<beans:value>vn.edu.fpt.timetabling.model.Specialized</beans:value>
 				<beans:value>vn.edu.fpt.timetabling.model.Student</beans:value>
@@ -122,13 +122,18 @@
 		<beans:property name="sessionFactory"
 			ref="hibernate4AnnotatedSessionFactory" />
 	</beans:bean>
-	<beans:bean id="specializedDAO"
-		class="vn.edu.fpt.timetabling.dao.SpecializedDAOImpl">
+	<beans:bean id="classSemesterDAO"
+		class="vn.edu.fpt.timetabling.dao.ClassSemesterDAOImpl">
 		<beans:property name="sessionFactory"
 			ref="hibernate4AnnotatedSessionFactory" />
 	</beans:bean>
-	<beans:bean id="classSemesterDAO"
-		class="vn.edu.fpt.timetabling.dao.ClassSemesterDAOImpl">
+	<beans:bean id="classCourseSemesterDAO"
+		class="vn.edu.fpt.timetabling.dao.ClassCourseSemesterDAOImpl">
+		<beans:property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
+	<beans:bean id="specializedDAO"
+		class="vn.edu.fpt.timetabling.dao.SpecializedDAOImpl">
 		<beans:property name="sessionFactory"
 			ref="hibernate4AnnotatedSessionFactory" />
 	</beans:bean>
@@ -140,7 +145,7 @@
 		<beans:property name="sessionFactory"
 			ref="hibernate4AnnotatedSessionFactory" />
 	</beans:bean>
-	
+
 	<!-- Service Beans -->
 	<beans:bean id="courseService"
 		class="vn.edu.fpt.timetabling.service.CourseServiceImpl">
@@ -178,19 +183,23 @@
 		class="vn.edu.fpt.timetabling.service.ClassServiceImpl">
 		<beans:property name="classDAO" ref="classDAO"></beans:property>
 	</beans:bean>
-	<beans:bean id="specializedService"
-		class="vn.edu.fpt.timetabling.service.SpecializedServiceImpl">
-		<beans:property name="specializedDAO" ref="specializedDAO"></beans:property>
-	</beans:bean>
 	<beans:bean id="classSemesterService"
 		class="vn.edu.fpt.timetabling.service.ClassSemesterServiceImpl">
 		<beans:property name="classSemesterDAO" ref="classSemesterDAO"></beans:property>
+	</beans:bean>
+	<beans:bean id="classCourseSemesterService"
+		class="vn.edu.fpt.timetabling.service.ClassCourseSemesterServiceImpl">
+		<beans:property name="classCourseSemesterDAO" ref="classCourseSemesterDAO"></beans:property>
+	</beans:bean>
+	<beans:bean id="specializedService"
+		class="vn.edu.fpt.timetabling.service.SpecializedServiceImpl">
+		<beans:property name="specializedDAO" ref="specializedDAO"></beans:property>
 	</beans:bean>
 	<beans:bean id="studentService"
 		class="vn.edu.fpt.timetabling.service.StudentServiceImpl">
 		<beans:property name="studentDAO" ref="studentDAO"></beans:property>
 	</beans:bean>
-		<beans:bean id="timetableService"
+	<beans:bean id="timetableService"
 		class="vn.edu.fpt.timetabling.service.TimetableServiceImpl">
 		<beans:property name="timetableDAO" ref="timetableDAO"></beans:property>
 	</beans:bean>

@@ -48,7 +48,7 @@
 		<div style="width: 80%; margin: 0 auto;">
 			<h1>
 				<a href="index.html" class="nav-button transform"><span></span></a>
-				&nbsp;Schedule - Semester ...
+				&nbsp;Schedule - ${semesterName}
 			</h1>
 
 			<div style="width: 100%;">
@@ -58,12 +58,9 @@
 					</button>
 					<div class="input-control select">
 						<select id="select-classes">
-							<option>Class 1</option>
-							<option>Class 2</option>
-							<option>Class 3</option>
-							<option>Class 4</option>
-							<option>Class 5</option>
-							<option>Class 6</option>
+							<c:forEach items="${listClasses}" var="classSemester">
+								<option value="${classSemester.getClassFPT().classId}">${classSemester.getClassFPT().code}</option>
+							</c:forEach>
 						</select>
 					</div>
 					<button id="btn-next-class" class="button">
@@ -90,10 +87,12 @@
 			<div style="width: 100%; line-height: 40px; margin: .5rem 0;">
 				<div style="display: inline-block">
 					<font style="color: #52677a; font-weight: 700; font-size: 1rem">Courses:</font>&nbsp;&nbsp;&nbsp;
-					<div id="course-1" style="cursor: pointer; display: inline-block">
-						<span class="course-color bg-green"></span>&nbsp;Course
-						1&nbsp;&nbsp;
-					</div>
+					<c:forEach items="${listClasses}" var="classSemester">
+						<div id="course-1" style="cursor: pointer; display: inline-block">
+							<span class="course-color bg-green"></span>&nbsp;Course&nbsp;&nbsp;
+						</div>
+					</c:forEach>
+
 					<div id="course-2" style="cursor: pointer; display: inline-block">
 						<span class="course-color bg-darkViolet"></span>&nbsp;Course
 						2&nbsp;&nbsp;

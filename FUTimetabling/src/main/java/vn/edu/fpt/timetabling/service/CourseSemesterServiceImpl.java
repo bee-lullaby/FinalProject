@@ -87,7 +87,6 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 	@Transactional
 	public void updateCourseSemester(CourseSemester courseSemester) {
 		courseSemesterDAO.updateCourseSemester(courseSemester);
-		;
 	}
 
 	@Override

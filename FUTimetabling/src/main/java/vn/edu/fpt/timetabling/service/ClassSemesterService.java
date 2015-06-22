@@ -10,7 +10,11 @@ public interface ClassSemesterService {
 	public void updateClassSemester(ClassSemester classSemester);
 
 	public List<ClassSemester> listClassSemesters();
-
+	
+	public List<ClassSemester> listClassSemesterBySemester(int semesterId);
+	
+	public List<ClassSemester> listClassSemesterByClassSemester(int semesterId, int classId);
+	
 	public ClassSemester getClassSemesterById(int classSemesterId);
 
 	public void deleteClassSemester(int classSemesterId);

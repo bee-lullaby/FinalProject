@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import vn.edu.fpt.timetabling.model.ClassSemester;
 
@@ -15,7 +16,13 @@ public class ClassSemesterDAOImpl implements ClassSemesterDAO {
 			.getLogger(ClassSemesterDAO.class);
 
 	private SessionFactory sessionFactory;
+	
+	@Autowired
+	private SemesterDAO semesterDAO;
 
+	@Autowired
+	private ClassDAO classDAO;
+	
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
@@ -23,7 +30,8 @@ public class ClassSemesterDAOImpl implements ClassSemesterDAO {
 	private Session getCurrentSession() {
 		return sessionFactory.getCurrentSession();
 	}
-
+	
+	
 	@Override
 	public void addClassSemester(ClassSemester classSemester) {
 		getCurrentSession().persist(classSemester);
@@ -53,9 +61,9 @@ public class ClassSemesterDAOImpl implements ClassSemesterDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ClassSemester> listClassSemesterBySemester(int semesterId) {
-		String hql = "FROM vn.edu.fpt.timetabling.model.ClassSemester C WHERE C.semester_id = :semester_id";
+		String hql = "FROM vn.edu.fpt.timetabling.model.ClassSemester C WHERE C.semester = :semester";
 		Query query = getCurrentSession().createQuery(hql);
-		query.setParameter("semester_id", semesterId);
+		query.setParameter("semester", semesterDAO.getSemesterById(semesterId));
 		List<ClassSemester> classSemesters = (List<ClassSemester>) query.list();
 		for (ClassSemester classSemester : classSemesters) {
 			logger.info("ClassSemester list:" + classSemester);
@@ -87,7 +95,23 @@ public class ClassSemesterDAOImpl implements ClassSemesterDAO {
 		}
 		return classSemester;
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public ClassSemester getClassSemesterByCode(String code) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.ClassSemester C WHERE C.classFPT = :classFPT";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("classFPT", classDAO.getClassByCode(code));
+		List<ClassSemester> classSemester = (List<ClassSemester>) query.list();
+		if (!classSemester.isEmpty()) {
+			logger.info("ClassSemester was loaded successfully, ClassSemester details="
+					+ classSemester.get(0));
+			return classSemester.get(0);
+		} else {
+			return null;
+		}
+	}
+	
 	@Override
 	public void deleteClassSemester(int classSemesterId) {
 		ClassSemester classSemester = getClassSemesterById(classSemesterId);

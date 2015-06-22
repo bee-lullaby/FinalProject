@@ -23,16 +23,21 @@ public class ClassSemester {
 	@Column(name = "class_semester_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int classSemesterId;
+	
 	@ManyToOne
 	@JoinColumn(name = "class_id")
 	private ClassFPT classFPT;
+	
 	@ManyToOne
 	@JoinColumn(name = "semester_id")
 	private Semester semester;
+	
 	@Column(name = "semester")
 	private int semesterNumber = 0;
+	
 	@Column(name = "students")
 	private int noOfStudents = 0;
+	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "classSemester", orphanRemoval = true)
 	Set<Student> students = new HashSet<Student>();
 

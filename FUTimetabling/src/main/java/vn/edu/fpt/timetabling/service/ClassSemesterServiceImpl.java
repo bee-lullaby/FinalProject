@@ -33,6 +33,22 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 		return classSemesterDAO.listClassSemesters();
 	}
 
+
+	@Override
+	@Transactional
+	public List<ClassSemester> listClassSemesterBySemester(int semesterId) {
+		// TODO Auto-generated method stub
+		return classSemesterDAO.listClassSemesterBySemester(semesterId);
+	}
+
+	@Override
+	@Transactional
+	public List<ClassSemester> listClassSemesterByClassSemester(int semesterId,
+			int classId) {
+		// TODO Auto-generated method stub
+		return classSemesterDAO.listClassSemesterByClassSemester(semesterId, classId);
+	}
+	
 	@Override
 	@Transactional
 	public ClassSemester getClassSemesterById(int classSemesterId) {
@@ -44,5 +60,6 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 	public void deleteClassSemester(int classSemesterId) {
 		classSemesterDAO.deleteClassSemester(classSemesterId);
 	}
+
 
 }

@@ -12,6 +12,8 @@ public interface CourseSemesterDAO {
 	public List<CourseSemester> listCourseSemesters();
 
 	public CourseSemester getCourseSemesterById(int courseSemesterId);
-
+	
+	public CourseSemester getCourseSemesterByCode(String code);
+	
 	public void deleteCourseSemester(int courseSemesterId);
 }

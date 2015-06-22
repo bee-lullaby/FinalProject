@@ -83,32 +83,48 @@
 			</tr>
 		</table>
 	</form:form>
-	<form:form action="courses/addFromFile" method="post" enctype="multipart/form-data">
-		<input accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" name="file" type="file" style="margin-bottom:20px" />
-        <input type="submit" name="addFile" value="AddFile" class="button primary" style="margin-right:5px" />
+	<form:form action="courses/addFromFile" method="post"
+		enctype="multipart/form-data">
+		<input
+			accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+			name="file" type="file" style="margin-bottom: 20px" />
+		<input type="submit" name="addFile" value="AddFile"
+			class="button primary" style="margin-right: 5px" />
+	</form:form>
+
+	<form:form action="classCourse/addFromFile" method="post"
+		enctype="multipart/form-data">
+		<input
+			accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+			name="file" type="file" style="margin-bottom: 20px" />
+		<input type="submit" name="addFile" value="AddFile"
+			class="button primary" style="margin-right: 5px" />
 	</form:form>
 	<br>
-		<h3>Course List</h3> <c:if test="${!empty listCourses}">
-			<table class="tg">
+	<h3>Course List</h3>
+	<c:if test="${!empty listCourses}">
+		<table class="tg">
+			<tr>
+				<th width="80">Course ID</th>
+				<th width="120">Course Code</th>
+				<th width="120">Course Name</th>
+				<th width="120">Department</th>
+				<th width="60">Edit</th>
+				<th width="60">Delete</th>
+			</tr>
+			<c:forEach items="${listCourses}" var="course">
 				<tr>
-					<th width="80">Course ID</th>
-					<th width="120">Course Code</th>
-					<th width="120">Course Name</th>
-					<th width="120">Department</th>
-					<th width="60">Edit</th>
-					<th width="60">Delete</th>
+					<td>${course.courseId}</td>
+					<td>${course.code}</td>
+					<td>${course.name}</td>
+					<td>${course.department.code}</td>
+					<td><a
+						href="<c:url value='/course/edit/${course.courseId}' />">Edit</a></td>
+					<td><a
+						href="<c:url value='/course/delete/${course.courseId}' />">Delete</a></td>
 				</tr>
-				<c:forEach items="${listCourses}" var="course">
-					<tr>
-						<td>${course.courseId}</td>
-						<td>${course.code}</td>
-						<td>${course.name}</td>
-						<td>${course.department.code}</td>
-						<td><a href="<c:url value='/course/edit/${course.courseId}' />">Edit</a></td>
-						<td><a href="<c:url value='/course/delete/${course.courseId}' />">Delete</a></td>
-					</tr>
-				</c:forEach>
-			</table>
-		</c:if>
+			</c:forEach>
+		</table>
+	</c:if>
 </body>
 </html>

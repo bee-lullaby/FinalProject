@@ -15,17 +15,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import vn.edu.fpt.timetabling.model.Course;
+import vn.edu.fpt.timetabling.service.ClassCourseSemesterService;
 import vn.edu.fpt.timetabling.service.CourseService;
 
 @Controller
 public class CourseController {
-	
+
 	private CourseService courseService;
-		
+	private ClassCourseSemesterService classCourseSemesterService;
+
 	@Autowired(required = true)
 	@Qualifier(value = "courseService")
 	public void setCourseService(CourseService courseService) {
 		this.courseService = courseService;
+	}
+
+	@Autowired(required = true)
+	@Qualifier(value = "classCourseSemesterService")
+	public void setClassCourseSemesterService(
+			ClassCourseSemesterService classCourseSemesterService) {
+		this.classCourseSemesterService = classCourseSemesterService;
 	}
 
 	@RequestMapping(value = "/courses", method = RequestMethod.GET)
@@ -52,13 +61,35 @@ public class CourseController {
 	@RequestMapping(value = "/courses/addFromFile", method = RequestMethod.POST)
 	public String addCourseFromFile(@RequestParam("file") MultipartFile file) {
 		if (!file.isEmpty()) {
+
 			File courses = new File(
 					"D:\\FU\\Do an tot nghiep\\Data\\ServerData\\"
 							+ file.getOriginalFilename());
 			try {
 				file.transferTo(courses);
-				
 				courseService.addCourseFromFile(courses);
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return "redirect:/courses";
+	}
+
+	@RequestMapping(value = "/classCourse/addFromFile", method = RequestMethod.POST)
+	public String addClassCourseFromFile(
+			@RequestParam("file") MultipartFile file) {
+		if (!file.isEmpty()) {
+			File classCourses = new File(
+					"D:\\FU\\Do an tot nghiep\\Data\\ServerData\\"
+							+ file.getOriginalFilename());
+			try {
+				file.transferTo(classCourses);
+				classCourseSemesterService
+				.addClassCourseSemesterFromFile(classCourses);
 			} catch (IllegalStateException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

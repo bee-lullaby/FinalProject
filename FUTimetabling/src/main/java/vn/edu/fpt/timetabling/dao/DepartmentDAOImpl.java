@@ -1,6 +1,7 @@
 package vn.edu.fpt.timetabling.dao;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -45,8 +46,9 @@ public class DepartmentDAOImpl implements DepartmentDAO {
 	@Override
 	public List<Department> listDepartments() {
 		List<Department> departments = (List<Department>) getCurrentSession()
-				.createQuery("from vn.edu.fpt.timetabling.model.Department")
-				.list();
+				.createQuery(
+						"from vn.edu.fpt.timetabling.model.Department D LEFT OUTER JOIN FETCH D.courses")
+				.list().stream().distinct().collect(Collectors.toList());
 		for (Department department : departments) {
 			logger.info("Department list:" + department);
 		}
@@ -55,26 +57,33 @@ public class DepartmentDAOImpl implements DepartmentDAO {
 
 	@Override
 	public Department getDepartmentById(int departmentId) {
-		Department department = (Department) getCurrentSession().get(
-				Department.class, new Integer(departmentId));
-		if (department != null) {
-			logger.info("Department was loaded successfully, course departments="
+		String hql = "FROM vn.edu.fpt.timetabling.model.Department D LEFT OUTER JOIN FETCH D.courses "
+				+ "WHERE D.departmentId = :departmentId";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("departmentId", departmentId);
+		Object temp = query.uniqueResult();
+		if (temp != null) {
+			Department department = (Department) temp;
+			logger.info("Department was loaded successfully, Department="
 					+ department);
+			return department;
+		} else {
+			return null;
 		}
-		return department;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Department getDepartmentByCode(String code) {
-		String hql = "FROM vn.edu.fpt.timetabling.model.Department D WHERE D.code = :code";
+		String hql = "FROM vn.edu.fpt.timetabling.model.Department D LEFT OUTER JOIN FETCH D.courses "
+				+ "WHERE D.code = :code";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("code", code);
-		List<Department> department = (List<Department>) query.list();
-		if (!department.isEmpty()) {
-			logger.info("Department was loaded successfully, department details="
-					+ department.get(0));
-			return department.get(0);
+		Object temp = query.uniqueResult();
+		if (temp != null) {
+			Department department = (Department) temp;
+			logger.info("Department was loaded successfully, Department="
+					+ department);
+			return department;
 		} else {
 			return null;
 		}

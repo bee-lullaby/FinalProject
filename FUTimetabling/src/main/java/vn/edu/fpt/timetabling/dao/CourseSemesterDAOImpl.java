@@ -2,10 +2,12 @@ package vn.edu.fpt.timetabling.dao;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import vn.edu.fpt.timetabling.model.CourseSemester;
 
@@ -15,6 +17,12 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 
 	private SessionFactory sessionFactory;
 
+	@Autowired
+	private SemesterDAO semesterDAO;
+
+	@Autowired
+	private CourseDAO courseDAO;
+	
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
@@ -58,6 +66,22 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 					+ courseSemester);
 		}
 		return courseSemester;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public CourseSemester getCourseSemesterByCode(String code) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.CourseSemester C WHERE C.course = :course";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("course", courseDAO.getCourseByCode(code));
+		List<CourseSemester> courseSemester = (List<CourseSemester>) query.list();
+		if (!courseSemester.isEmpty()) {
+			logger.info("courseSemester was loaded successfully, courseSemester details="
+					+ courseSemester.get(0));
+			return courseSemester.get(0);
+		} else {
+			return null;
+		}
 	}
 
 	@Override
