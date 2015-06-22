@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS `class_semester` (
 DROP TABLE IF EXISTS `courses`;
 CREATE TABLE IF NOT EXISTS `courses` (
 `course_id` int(11) NOT NULL,
-  `code` varchar(10) NOT NULL,
+  `code` varchar(20) NOT NULL,
   `name` varchar(100) NOT NULL,
   `department_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=132 DEFAULT CHARSET=latin1;
