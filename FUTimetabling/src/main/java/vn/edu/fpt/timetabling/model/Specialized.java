@@ -1,6 +1,6 @@
 package vn.edu.fpt.timetabling.model;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 @Entity
@@ -25,9 +26,11 @@ public class Specialized {
 	@Column
 	private String name;
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "specialized", orphanRemoval = true)
-	Set<Student> students = new HashSet<Student>();
+	@OrderBy
+	Set<Student> students = new LinkedHashSet<Student>();
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "specialized", orphanRemoval = true)
-	Set<ClassFPT> classes = new HashSet<ClassFPT>();
+	@OrderBy
+	Set<ClassFPT> classes = new LinkedHashSet<ClassFPT>();
 
 	/**
 	 * @return the classes

@@ -1,8 +1,8 @@
 package vn.edu.fpt.timetabling.dao;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -42,11 +42,11 @@ public class SpecializedDAOImpl implements SpecializedDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Specialized> listSpecializeds() {
-		List<Specialized> specializeds = (List<Specialized>) getCurrentSession()
-				.createQuery(
-						"FROM vn.edu.fpt.timetabling.model.Specialized"
-								+ " S LEFT OUTER JOIN FETCH S.classes LEFT OUTER JOIN FETCH S.students")
-				.list().stream().collect(Collectors.toList());
+		String hql = "FROM vn.edu.fpt.timetabling.model.Specialized"
+				+ " S LEFT OUTER JOIN FETCH S.classes LEFT OUTER JOIN FETCH S.students";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<Specialized> specializeds = (List<Specialized>) query.list();
 		for (Specialized specialized : specializeds) {
 			logger.info("Specialized list:" + specialized);
 		}

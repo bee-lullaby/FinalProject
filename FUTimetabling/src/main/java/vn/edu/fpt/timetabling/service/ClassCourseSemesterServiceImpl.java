@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -90,10 +89,10 @@ public class ClassCourseSemesterServiceImpl implements
 							+ String.valueOf(ccs.getCourseSemester()
 									.getCourseSemesterId()));
 					if (i == 4) {
-						ccs.setSemester_long(1);
+						ccs.setSemesterLong(true);
 						i++;
 					} else {
-						ccs.setSemester_long(0);
+						ccs.setSemesterLong(false);
 						i++;
 					}
 					classCourseSemesterDAO.addClassCourseSemester(ccs);

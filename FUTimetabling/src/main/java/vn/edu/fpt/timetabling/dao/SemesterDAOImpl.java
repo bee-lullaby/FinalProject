@@ -2,6 +2,8 @@ package vn.edu.fpt.timetabling.dao;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -47,9 +49,12 @@ public class SemesterDAOImpl implements SemesterDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Semester> listSemesters() {
-		List<Semester> semesters = (List<Semester>) getCurrentSession()
-				.createQuery("from vn.edu.fpt.timetabling.model.Semester")
-				.list();
+		String hql = "FROM vn.edu.fpt.timetabling.model.Semester"
+				+ " S LEFT OUTER JOIN FETCH S.classSemesters"
+				+ " LEFT OUTER JOIN FETCH S.courseSemesters";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<Semester> semesters = (List<Semester>) query.list();
 		for (Semester semester : semesters) {
 			logger.info("Semester list:" + semester);
 		}
@@ -58,13 +63,21 @@ public class SemesterDAOImpl implements SemesterDAO {
 
 	@Override
 	public Semester getSemesterById(int semesterId) {
-		Semester semester = (Semester) getCurrentSession().get(Semester.class,
-				new Integer(semesterId));
-		if (semester != null) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Semester"
+				+ " S LEFT OUTER JOIN FETCH S.classSemesters"
+				+ " LEFT OUTER JOIN FETCH S.courseSemesters"
+				+ " WHERE S.semesterId = :semesterId";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("semesterId", semesterId);
+		Object temp = query.uniqueResult();
+		if (temp != null) {
+			Semester semester = (Semester) temp;
 			logger.info("Semester was loaded successfully, semester details="
 					+ semester);
+			return semester;
+		} else {
+			return null;
 		}
-		return semester;
 	}
 
 	@Override

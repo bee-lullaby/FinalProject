@@ -1,6 +1,6 @@
 package vn.edu.fpt.timetabling.model;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 @Entity
@@ -25,7 +26,8 @@ public class Department {
 	private String name;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "department", orphanRemoval = true)
-	Set<Course> courses = new HashSet<Course>();
+	@OrderBy
+	Set<Course> courses = new LinkedHashSet<Course>();
 
 	/**
 	 * 

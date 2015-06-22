@@ -9,13 +9,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 @Table(name = "class_course_semester")
 public class ClassCourseSemester {
 	@Id
 	@Column(name = "class_course_semester_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int classCourseSemeterId;
+	private int classCourseSemesterId;
 
 	@ManyToOne
 	@JoinColumn(name = "class_semester_id")
@@ -25,9 +27,12 @@ public class ClassCourseSemester {
 	@JoinColumn(name = "course_semester_id")
 	private CourseSemester courseSemester;
 
-	private int block_condition;
+	@Column(name = "block_condition")
+	private int blockCondition;
 
-	private int semester_long;
+	@Column(name = "semester_long", columnDefinition = "TINYINT")
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	private boolean semesterLong;
 
 	/**
 	 * 
@@ -37,36 +42,18 @@ public class ClassCourseSemester {
 	}
 
 	/**
-	 * @param classCourseSemeterId
-	 * @param classSemester
-	 * @param courseSemester
-	 * @param block_condition
-	 * @param semester_long
+	 * @return the classCourseSemesterId
 	 */
-	public ClassCourseSemester(int classCourseSemeterId,
-			ClassSemester classSemester, CourseSemester courseSemester,
-			int block_condition, int semester_long) {
-		super();
-		this.classCourseSemeterId = classCourseSemeterId;
-		this.classSemester = classSemester;
-		this.courseSemester = courseSemester;
-		this.block_condition = block_condition;
-		this.semester_long = semester_long;
+	public int getClassCourseSemesterId() {
+		return classCourseSemesterId;
 	}
 
 	/**
-	 * @return the classCourseSemeterId
+	 * @param classCourseSemesterId
+	 *            the classCourseSemesterId to set
 	 */
-	public int getClassCourseSemeterId() {
-		return classCourseSemeterId;
-	}
-
-	/**
-	 * @param classCourseSemeterId
-	 *            the classCourseSemeterId to set
-	 */
-	public void setClassCourseSemeterId(int classCourseSemeterId) {
-		this.classCourseSemeterId = classCourseSemeterId;
+	public void setClassCourseSemesterId(int classCourseSemesterId) {
+		this.classCourseSemesterId = classCourseSemesterId;
 	}
 
 	/**
@@ -100,33 +87,51 @@ public class ClassCourseSemester {
 	}
 
 	/**
-	 * @return the block_condition
+	 * @return the blockCondition
 	 */
-	public int getBlock_condition() {
-		return block_condition;
+	public int getBlockCondition() {
+		return blockCondition;
 	}
 
 	/**
-	 * @param block_condition
-	 *            the block_condition to set
+	 * @param blockCondition
+	 *            the blockCondition to set
 	 */
-	public void setBlock_condition(int block_condition) {
-		this.block_condition = block_condition;
+	public void setBlockCondition(int blockCondition) {
+		this.blockCondition = blockCondition;
 	}
 
 	/**
-	 * @return the semester_long
+	 * @return the semesterLong
 	 */
-	public int getSemester_long() {
-		return semester_long;
+	public boolean isSemesterLong() {
+		return semesterLong;
 	}
 
 	/**
-	 * @param semester_long
-	 *            the semester_long to set
+	 * @param semesterLong
+	 *            the semesterLong to set
 	 */
-	public void setSemester_long(int semester_long) {
-		this.semester_long = semester_long;
+	public void setSemesterLong(boolean semesterLong) {
+		this.semesterLong = semesterLong;
+	}
+
+	/**
+	 * @param classCourseSemeterId
+	 * @param classSemester
+	 * @param courseSemester
+	 * @param blockCondition
+	 * @param semesterLong
+	 */
+	public ClassCourseSemester(int classCourseSemeterId,
+			ClassSemester classSemester, CourseSemester courseSemester,
+			int blockCondition, boolean semesterLong) {
+		super();
+		this.classCourseSemesterId = classCourseSemeterId;
+		this.classSemester = classSemester;
+		this.courseSemester = courseSemester;
+		this.blockCondition = blockCondition;
+		this.semesterLong = semesterLong;
 	}
 
 	/*
@@ -137,9 +142,9 @@ public class ClassCourseSemester {
 	@Override
 	public String toString() {
 		return "ClassCourseSemester [classCourseSemeterId="
-				+ classCourseSemeterId + ", classSemester=" + classSemester
-				+ ", courseSemester=" + courseSemester + ", block_condition="
-				+ block_condition + ", semester_long=" + semester_long + "]";
+				+ classCourseSemesterId + ", classSemester=" + classSemester
+				+ ", courseSemester=" + courseSemester + ", blockCondition="
+				+ blockCondition + ", semesterLong=" + semesterLong + "]";
 	}
 
 }

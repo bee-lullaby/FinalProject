@@ -1,6 +1,6 @@
 package vn.edu.fpt.timetabling.model;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,33 +13,35 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "class_semester")
-public class ClassSemester {
+public class ClassSemester implements Comparable<ClassSemester> {
 
 	@Id
 	@Column(name = "class_semester_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int classSemesterId;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "class_id")
 	private ClassFPT classFPT;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "semester_id")
 	private Semester semester;
-	
+
 	@Column(name = "semester")
 	private int semesterNumber = 0;
-	
+
 	@Column(name = "students")
 	private int noOfStudents = 0;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "classSemester", orphanRemoval = true)
-	Set<Student> students = new HashSet<Student>();
+	@OrderBy
+	Set<Student> students = new LinkedHashSet<Student>();
 
 	/**
 	 * @return the semesterNumber
@@ -175,6 +177,18 @@ public class ClassSemester {
 		return "ClassSemester [classSemesterId=" + classSemesterId
 				+ ", classFPT=" + classFPT + ", semester=" + semester
 				+ ", students=" + noOfStudents + "]";
+	}
+
+	@Override
+	public int compareTo(ClassSemester classSemester) {
+		if (this.semester.compareTo(classSemester.getSemester()) == 0) {
+			return this.classFPT.getCode().compareTo(
+					classSemester.getClassFPT().getCode());
+		} else if (this.semester.compareTo(classSemester.getSemester()) > 0) {
+			return 1;
+		} else {
+			return -1;
+		}
 	}
 
 }

@@ -74,7 +74,7 @@ public class TimetableServiceImpl implements TimetableService {
 
 		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
 			classCourseSemesterIds.add(classCourseSemester
-					.getClassCourseSemeterId());
+					.getClassCourseSemesterId());
 		}
 		return timetableDAO.listTimetablesByCCSId(classCourseSemesterIds);
 	}
@@ -96,7 +96,7 @@ public class TimetableServiceImpl implements TimetableService {
 
 		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
 			classCourseSemesterIds.add(classCourseSemester
-					.getClassCourseSemeterId());
+					.getClassCourseSemesterId());
 		}
 		return timetableDAO.listTimetablesByCCSId(classCourseSemesterIds);
 	}

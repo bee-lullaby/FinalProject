@@ -1,6 +1,6 @@
 package vn.edu.fpt.timetabling.model;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 @Entity
@@ -36,9 +37,10 @@ public class ClassFPT {
 	private Integer batch;
 	@Column
 	private int number;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "classFPT", orphanRemoval = true)
-	Set<ClassSemester> classSemesters = new HashSet<ClassSemester>();
+	@OrderBy
+	Set<ClassSemester> classSemesters = new LinkedHashSet<ClassSemester>();
 
 	/**
 	 * @param batch

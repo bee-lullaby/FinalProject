@@ -1,7 +1,7 @@
 package vn.edu.fpt.timetabling.model;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -15,11 +15,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "course_semester")
-public class CourseSemester {
+public class CourseSemester implements Comparable<CourseSemester> {
 
 	@Id
 	@Column(name = "course_semester_id")
@@ -42,7 +43,8 @@ public class CourseSemester {
 	private Course courseCondition;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "courseSemester", orphanRemoval = true)
-	Set<TeacherCourseSemester> teacherCourseSemester = new HashSet<TeacherCourseSemester>();
+	@OrderBy
+	Set<TeacherCourseSemester> teacherCourseSemester = new LinkedHashSet<TeacherCourseSemester>();
 
 	/**
 	 * 
@@ -177,6 +179,18 @@ public class CourseSemester {
 		return "CourseSemester [courseSemesterId=" + courseSemesterId
 				+ ", course=" + course + ", semester=" + semester + ", slots="
 				+ slots + ", course_condition=" + courseCondition + "]";
+	}
+
+	@Override
+	public int compareTo(CourseSemester courseSemester) {
+		if (this.semester.compareTo(courseSemester.getSemester()) == 0) {
+			return this.course.getCode().compareTo(
+					courseSemester.getCourse().getCode());
+		} else if (this.semester.compareTo(courseSemester.getSemester()) > 0) {
+			return 1;
+		} else {
+			return -1;
+		}
 	}
 
 }

@@ -1,7 +1,7 @@
 package vn.edu.fpt.timetabling.model;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 @Entity
@@ -34,7 +35,8 @@ public class TeacherSemester {
 	private Semester semester;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "teacherSemester", orphanRemoval = true)
-	Set<TeacherCourseSemester> teacherCourseSemester = new HashSet<TeacherCourseSemester>();
+	@OrderBy
+	Set<TeacherCourseSemester> teacherCourseSemester = new LinkedHashSet<TeacherCourseSemester>();
 
 	/**
 	 * 

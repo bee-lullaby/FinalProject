@@ -6,7 +6,7 @@
 <html>
 <head>
 
-<title>Class Page</title>
+<title>Class Semester Page</title>
 <style type="text/css">
 .hide {
 	visibility: hidden;
@@ -51,7 +51,7 @@
 </style>
 </head>
 <body>
-	<h1>Add a Class</h1>
+	<h1>Add a Class Semester</h1>
 	<c:url var="addAction" value="/classSemester/add"></c:url>
 
 	<form:form action="${addAction}" commandName="classSemester">

@@ -1,7 +1,7 @@
 package vn.edu.fpt.timetabling.model;
 
 import java.util.Date;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -12,11 +12,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "semesters")
-public class Semester {
+public class Semester implements Comparable<Semester> {
 
 	@Id
 	@Column(name = "semester_id")
@@ -32,7 +33,26 @@ public class Semester {
 	@Column(name = "end_date")
 	private Date endDate;
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "semester", orphanRemoval = true)
-	Set<ClassSemester> classSemesters = new HashSet<ClassSemester>();
+	@OrderBy
+	private Set<ClassSemester> classSemesters = new LinkedHashSet<ClassSemester>();
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "semester", orphanRemoval = true)
+	@OrderBy
+	private Set<CourseSemester> courseSemesters = new LinkedHashSet<CourseSemester>();
+
+	/**
+	 * @return the courseSemesters
+	 */
+	public Set<CourseSemester> getCourseSemesters() {
+		return courseSemesters;
+	}
+
+	/**
+	 * @param courseSemesters
+	 *            the courseSemesters to set
+	 */
+	public void setCourseSemesters(Set<CourseSemester> courseSemesters) {
+		this.courseSemesters = courseSemesters;
+	}
 
 	/**
 	 * @return the classSemesters
@@ -192,6 +212,17 @@ public class Semester {
 		return "Semester [semesterId=" + semesterId + ", code=" + code
 				+ ", name=" + name + ", semesterYear=" + semesterYear
 				+ ", startDate=" + startDate + ", endDate=" + endDate + "]";
+	}
+
+	@Override
+	public int compareTo(Semester semester) {
+		if (this.semesterYear == semester.semesterYear) {
+			return this.startDate.compareTo(semester.getStartDate());
+		} else if (this.semesterYear > semester.semesterYear) {
+			return 1;
+		} else {
+			return -1;
+		}
 	}
 
 }
