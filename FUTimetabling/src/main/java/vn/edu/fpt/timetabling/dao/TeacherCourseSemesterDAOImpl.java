@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import vn.edu.fpt.timetabling.model.TeacherCourseSemester;
 
@@ -16,6 +17,12 @@ public class TeacherCourseSemesterDAOImpl implements TeacherCourseSemesterDAO {
 
 	private SessionFactory sessionFactory;
 
+	@Autowired
+	private TeacherSemesterDAO teacherSemesterDAO;
+	
+	@Autowired
+	private CourseSemesterDAO courseSemesterDAO;
+	
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
@@ -58,9 +65,9 @@ public class TeacherCourseSemesterDAOImpl implements TeacherCourseSemesterDAO {
 	public List<TeacherCourseSemester> listTeacherCourseSemestersByCourse(
 			int courseSemesterId) {
 		// TODO Auto-generated method stub
-		String hql = "FROM vn.edu.fpt.timetabling.model.TeacherCourseSemester C WHERE C.course_semester_id = :course_semester_id";
+		String hql = "FROM vn.edu.fpt.timetabling.model.TeacherCourseSemester C WHERE C.courseSemester = :courseSemester";
 		Query query = getCurrentSession().createQuery(hql);
-		query.setParameter("course_semester_id", courseSemesterId);
+		query.setParameter("courseSemester", courseSemesterDAO.getCourseSemesterById(courseSemesterId));
 		List<TeacherCourseSemester> teacherCourseSemesters = (List<TeacherCourseSemester>) query
 				.list();
 		for (TeacherCourseSemester teacherCourseSemester : teacherCourseSemesters) {
@@ -74,9 +81,9 @@ public class TeacherCourseSemesterDAOImpl implements TeacherCourseSemesterDAO {
 	public List<TeacherCourseSemester> listTeacherCourseSemestersByTeacher(
 			int teacherSemesterId) {
 		// TODO Auto-generated method stub
-		String hql = "FROM vn.edu.fpt.timetabling.model.TeacherCourseSemester C WHERE C.teacher_semester_id = :teacher_semester_id";
+		String hql = "FROM vn.edu.fpt.timetabling.model.TeacherCourseSemester C WHERE C.teacherSemester = :teacherSemester";
 		Query query = getCurrentSession().createQuery(hql);
-		query.setParameter("teacher_semester_id", teacherSemesterId);
+		query.setParameter("teacherSemester", teacherSemesterDAO.getTeacherSemesterById(teacherSemesterId));
 		List<TeacherCourseSemester> teacherCourseSemesters = (List<TeacherCourseSemester>) query
 				.list();
 		for (TeacherCourseSemester teacherCourseSemester : teacherCourseSemesters) {

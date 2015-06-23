@@ -13,7 +13,7 @@ public interface ClassSemesterDAO {
 	
 	public List<ClassSemester> listClassSemesterBySemester(int semesterId);
 		
-	public List<ClassSemester> listClassSemesterByClassSemester(int semesterId, int classId);
+	public ClassSemester listClassSemesterByClassSemester(int semesterId, int classId);
 	
 	public ClassSemester getClassSemesterById(int classSemesterId);
 	

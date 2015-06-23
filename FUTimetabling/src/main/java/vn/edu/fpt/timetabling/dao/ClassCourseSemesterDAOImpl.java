@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 
@@ -15,8 +16,15 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 	private static final Logger logger = LoggerFactory
 			.getLogger(ClassDAOImpl.class);
 
+	
 	private SessionFactory sessionFactory;
 
+	@Autowired
+	private ClassSemesterDAO classSemesterDAO;
+	
+	@Autowired
+	private CourseSemesterDAO courseSemesterDAO;
+	
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
@@ -61,9 +69,9 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 	public List<ClassCourseSemester> listClassCourseSemesterByClass(
 			int classSemesterId) {
 		// TODO Auto-generated method stub
-		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester C WHERE C.class_semester_id = :class_semester_id";
+		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester C WHERE C.classSemester = :classSemester";
 		Query query = getCurrentSession().createQuery(hql);
-		query.setParameter("class_semester_id", classSemesterId);
+		query.setParameter("classSemester", classSemesterDAO.getClassSemesterById(classSemesterId));
 		List<ClassCourseSemester> classCourseSemesters = (List<ClassCourseSemester>) query
 				.list();
 		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
@@ -77,9 +85,9 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 	public List<ClassCourseSemester> listClassCourseSemesterByCourse(
 			int courseSemesterId) {
 		// TODO Auto-generated method stub
-		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester C WHERE C.course_semester_id = :course_semester_id";
+		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester C WHERE C.courseSemester = :courseSemester";
 		Query query = getCurrentSession().createQuery(hql);
-		query.setParameter("course_semester_id", courseSemesterId);
+		query.setParameter("courseSemester", courseSemesterDAO.getCourseSemesterById(courseSemesterId));
 		List<ClassCourseSemester> classCourseSemesters = (List<ClassCourseSemester>) query
 				.list();
 		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {

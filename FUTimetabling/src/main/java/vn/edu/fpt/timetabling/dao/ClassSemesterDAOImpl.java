@@ -73,16 +73,19 @@ public class ClassSemesterDAOImpl implements ClassSemesterDAO {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ClassSemester> listClassSemesterByClassSemester(int semesterId, int classId) {
-		String hql = "FROM vn.edu.fpt.timetabling.model.ClassSemester C WHERE C.semester_id = :semester_id AND C.class_id = :class_id";
+	public ClassSemester listClassSemesterByClassSemester(int semesterId, int classId) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.ClassSemester C WHERE C.semester = :semester AND C.classFPT = :classFPT";
 		Query query = getCurrentSession().createQuery(hql);
-		query.setParameter("semester_id", semesterId);
-		query.setParameter("class_id", classId);
+		query.setParameter("semester", semesterDAO.getSemesterById(semesterId));
+		query.setParameter("classFPT", classDAO.getClassById(classId));
 		List<ClassSemester> classSemesters = (List<ClassSemester>) query.list();
-		for (ClassSemester classSemester : classSemesters) {
-			logger.info("ClassSemester list:" + classSemester);
+		if (!classSemesters.isEmpty()) {
+			logger.info("ClassSemester was loaded successfully, ClassSemester details="
+					+ classSemesters.get(0));
+			return classSemesters.get(0);
+		} else {
+			return null;
 		}
-		return classSemesters;
 	}
 	
 	@Override
@@ -102,11 +105,11 @@ public class ClassSemesterDAOImpl implements ClassSemesterDAO {
 		String hql = "FROM vn.edu.fpt.timetabling.model.ClassSemester C WHERE C.classFPT = :classFPT";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("classFPT", classDAO.getClassByCode(code));
-		List<ClassSemester> classSemester = (List<ClassSemester>) query.list();
-		if (!classSemester.isEmpty()) {
+		List<ClassSemester> classSemesters = (List<ClassSemester>) query.list();
+		if (!classSemesters.isEmpty()) {
 			logger.info("ClassSemester was loaded successfully, ClassSemester details="
-					+ classSemester.get(0));
-			return classSemester.get(0);
+					+ classSemesters.get(0));
+			return classSemesters.get(0);
 		} else {
 			return null;
 		}

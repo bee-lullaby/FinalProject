@@ -36,6 +36,26 @@
 	vertical-align: middle;
 }
 
+.color-1 {
+	background: #60a917 !important;
+}
+
+.color-2 {
+	background: #57169a !important;
+}
+
+.color-3 {
+	background: #fa6800 !important;
+}
+
+.color-4 {
+	background: #00aff0 !important;
+}
+
+.color-5 {
+	background: #9a165a !important;
+}
+
 #table-course th, #table-course td {
 	text-align: left;
 	padding-left: 0;
@@ -57,11 +77,14 @@
 						<span class="mif-arrow-left"></span>
 					</button>
 					<div class="input-control select">
-						<select id="select-classes">
-							<c:forEach items="${listClasses}" var="classSemester">
-								<option value="${classSemester.getClassFPT().classId}">${classSemester.getClassFPT().code}</option>
-							</c:forEach>
-						</select>
+						<form style="height:100%">
+							<input type="hidden" name="semesterId" value="${semesterId}">
+							<select id="select-classes" name="classId" onchange="this.form.submit()">
+								<c:forEach items="${listClasses}" var="classSemester">
+									<option value="${classSemester.getClassFPT().classId}">${classSemester.getClassFPT().code}</option>
+								</c:forEach>
+							</select>
+						</form>
 					</div>
 					<button id="btn-next-class" class="button">
 						<span class="mif-arrow-right"></span>
@@ -87,28 +110,14 @@
 			<div style="width: 100%; line-height: 40px; margin: .5rem 0;">
 				<div style="display: inline-block">
 					<font style="color: #52677a; font-weight: 700; font-size: 1rem">Courses:</font>&nbsp;&nbsp;&nbsp;
-					<c:forEach items="${listClasses}" var="classSemester">
-						<div id="course-1" style="cursor: pointer; display: inline-block">
-							<span class="course-color bg-green"></span>&nbsp;Course&nbsp;&nbsp;
+					<c:set var="count" value="0" scope="page" />
+					<c:forEach items="${listCourses}" var="courseSemester">
+						<c:set var="count" value="${count + 1}" scope="page" />
+						<div id="course-${count}"
+							style="cursor: pointer; display: inline-block">
+							<span class="course-color color-${count}"></span>&nbsp;${courseSemester.getCourse().code}&nbsp;&nbsp;
 						</div>
 					</c:forEach>
-
-					<div id="course-2" style="cursor: pointer; display: inline-block">
-						<span class="course-color bg-darkViolet"></span>&nbsp;Course
-						2&nbsp;&nbsp;
-					</div>
-					<div id="course-3" style="cursor: pointer; display: inline-block">
-						<span class="course-color bg-orange"></span>&nbsp;Course
-						3&nbsp;&nbsp;
-					</div>
-					<div id="course-4" style="cursor: pointer; display: inline-block">
-						<span class="course-color bg-blue"></span>&nbsp;Course
-						4&nbsp;&nbsp;
-					</div>
-					<div id="course-5" style="cursor: pointer; display: inline-block">
-						<span class="course-color bg-darkPink"></span>&nbsp;Course
-						5&nbsp;&nbsp;
-					</div>
 				</div>
 				<div style="float: right;">
 					<button id="btn-generate" class="button" data-role="hint"

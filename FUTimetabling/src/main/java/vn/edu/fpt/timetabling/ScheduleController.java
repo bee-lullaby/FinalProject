@@ -1,5 +1,7 @@
 package vn.edu.fpt.timetabling;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -8,32 +10,41 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import vn.edu.fpt.timetabling.service.ClassSemesterService;
-import vn.edu.fpt.timetabling.service.SemesterService;
+import vn.edu.fpt.timetabling.model.ClassSemester;
+import vn.edu.fpt.timetabling.service.ScheduleService;
 
 @Controller
 public class ScheduleController {
 
-	private SemesterService semesterService;
-	private ClassSemesterService classSemesterService;
-	
+	private ScheduleService scheduleService;
+
 	@Autowired(required = true)
-	@Qualifier(value = "semesterService")
-	public void setSemesterService(SemesterService semesterService) {
-		this.semesterService = semesterService;
+	@Qualifier(value = "scheduleService")
+	public void setScheduleService(ScheduleService scheduleService) {
+		this.scheduleService = scheduleService;
 	}
-	
-	
-	@Autowired(required = true)
-	@Qualifier(value = "classSemesterService")
-	public void ClassSemesterService(ClassSemesterService classSemesterService) {
-		this.classSemesterService = classSemesterService;
+
+	@RequestMapping(value = "/schedule", method = RequestMethod.GET)
+	public String schedule(
+			@RequestParam(value = "semesterId", required = true) int semesterId,
+			Model model) {
+		List<ClassSemester> list = scheduleService
+				.listClassBySemester(semesterId);
+		return "redirect:/schedule?semesterId=" + semesterId + "&classId="
+				+ list.get(0).getClassFPT().getClassId();
 	}
-	
-	@RequestMapping(value="/schedule", method = RequestMethod.GET)
-	public void schedule(@RequestParam(value = "semesterId", required = true) int semesterId, Model model) {
-		model.addAttribute("semesterName", semesterService.getSemesterById(semesterId).getName());
-		model.addAttribute("listClasses", classSemesterService.listClassSemesterBySemester(semesterId));
+
+	@RequestMapping(value = "/schedule", method = RequestMethod.GET, params = {
+			"semesterId", "classId" })
+	public void scheduleSemesterClass(@RequestParam int semesterId,
+			@RequestParam int classId, Model model) {
+		model.addAttribute("semesterId", semesterId);
+		model.addAttribute("semesterName",
+				scheduleService.getSemesterById(semesterId).getName());
+		model.addAttribute("listClasses",
+				scheduleService.listClassBySemester(semesterId));
+		model.addAttribute("listCourses",
+				scheduleService.listCourseByClassSemester(classId, semesterId));
 		return;
 	}
 }

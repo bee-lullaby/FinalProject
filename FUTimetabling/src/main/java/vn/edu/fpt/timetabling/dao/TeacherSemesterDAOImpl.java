@@ -2,6 +2,8 @@ package vn.edu.fpt.timetabling.dao;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -40,10 +42,11 @@ public class TeacherSemesterDAOImpl implements TeacherSemesterDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<TeacherSemester> listTeacherSemesters() {
-		List<TeacherSemester> teacherSemesters = (List<TeacherSemester>) getCurrentSession()
-				.createQuery(
-						"from vn.edu.fpt.timetabling.model.TeacherSemester")
-				.list();
+		String hql = "FROM vn.edu.fpt.timetabling.model.TeacherSemester"
+				+ " T LEFT OUTER JOIN FETCH T.teacher LEFT OUTER JOIN FETCH T.semester";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<TeacherSemester> teacherSemesters = (List<TeacherSemester>) query.list();
 		for (TeacherSemester teacherSemester : teacherSemesters) {
 			logger.info("TeacherSemester list:" + teacherSemester);
 		}
@@ -52,13 +55,20 @@ public class TeacherSemesterDAOImpl implements TeacherSemesterDAO {
 
 	@Override
 	public TeacherSemester getTeacherSemesterById(int teacherSemesterId) {
-		TeacherSemester teacherSemester = (TeacherSemester) getCurrentSession()
-				.get(TeacherSemester.class, new Integer(teacherSemesterId));
-		if (teacherSemester != null) {
-			logger.info("TeacherSemester was loaded successfully, TeacherSemester details="
+		String hql = "FROM vn.edu.fpt.timetabling.model.Specialized"
+				+ " T LEFT OUTER JOIN FETCH T.teacher LEFT OUTER JOIN FETCH T.semester"
+				+ " WHERE T.teacherSemesterId = :teacherSemesterId";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("teacherSemesterId", teacherSemesterId);
+		Object temp = query.uniqueResult();
+		if (temp != null) {
+			TeacherSemester teacherSemester = (TeacherSemester) temp;
+			logger.info("TeacherSemester was loaded successfully, TeacherSemester="
 					+ teacherSemester);
+			return teacherSemester;
+		} else {
+			return null;
 		}
-		return teacherSemester;
 	}
 
 	@Override

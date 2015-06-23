@@ -83,7 +83,24 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 			return null;
 		}
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public CourseSemester getCourseSemesterByCourseSemester(int courseId, int semesterId) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.CourseSemester C WHERE C.course = :course AND C.semester = :semester";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("course", courseDAO.getCourseById(courseId));
+		query.setParameter("course", semesterDAO.getSemesterById(semesterId));
+		List<CourseSemester> courseSemester = (List<CourseSemester>) query.list();
+		if (!courseSemester.isEmpty()) {
+			logger.info("courseSemester was loaded successfully, courseSemester details="
+					+ courseSemester.get(0));
+			return courseSemester.get(0);
+		} else {
+			return null;
+		}
+	}
+	
 	@Override
 	public void deleteCourseSemester(int courseSemesterId) {
 		CourseSemester courseSemester = getCourseSemesterById(courseSemesterId);
