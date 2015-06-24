@@ -2,11 +2,13 @@ package vn.edu.fpt.timetabling.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import vn.edu.fpt.timetabling.dao.ClassSemesterDAO;
 import vn.edu.fpt.timetabling.model.ClassSemester;
 
+@Service
 public class ClassSemesterServiceImpl implements ClassSemesterService {
 
 	private ClassSemesterDAO classSemesterDAO;
@@ -33,7 +35,6 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 		return classSemesterDAO.listClassSemesters();
 	}
 
-
 	@Override
 	@Transactional
 	public List<ClassSemester> listClassSemesterBySemester(int semesterId) {
@@ -46,9 +47,10 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 	public ClassSemester getClassSemesterByClassSemester(int semesterId,
 			int classId) {
 		// TODO Auto-generated method stub
-		return classSemesterDAO.getClassSemesterByClassSemester(semesterId, classId);
+		return classSemesterDAO.getClassSemesterByClassSemester(semesterId,
+				classId);
 	}
-	
+
 	@Override
 	@Transactional
 	public ClassSemester getClassSemesterById(int classSemesterId) {
@@ -60,6 +62,5 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 	public void deleteClassSemester(int classSemesterId) {
 		classSemesterDAO.deleteClassSemester(classSemesterId);
 	}
-
 
 }

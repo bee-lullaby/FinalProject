@@ -9,11 +9,13 @@ import java.util.List;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import vn.edu.fpt.timetabling.dao.SpecializedDAO;
 import vn.edu.fpt.timetabling.model.Specialized;
 
+@Service
 public class SpecializedServiceImpl implements SpecializedService {
 
 	private SpecializedDAO specializedDAO;

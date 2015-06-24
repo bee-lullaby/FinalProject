@@ -2,11 +2,13 @@ package vn.edu.fpt.timetabling.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import vn.edu.fpt.timetabling.dao.ClassDAO;
 import vn.edu.fpt.timetabling.model.ClassFPT;
 
+@Service
 public class ClassServiceImpl implements ClassService {
 
 	private ClassDAO classDAO;

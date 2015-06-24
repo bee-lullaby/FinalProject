@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import vn.edu.fpt.timetabling.dao.StudentDAO;
 import vn.edu.fpt.timetabling.model.Specialized;
 import vn.edu.fpt.timetabling.model.Student;
 
+@Service
 public class StudentServiceImpl implements StudentService {
 
 	private StudentDAO studentDAO;
