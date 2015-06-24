@@ -73,7 +73,7 @@ public class ClassSemesterDAOImpl implements ClassSemesterDAO {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public ClassSemester listClassSemesterByClassSemester(int semesterId, int classId) {
+	public ClassSemester getClassSemesterByClassSemester(int semesterId, int classId) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.ClassSemester C WHERE C.semester = :semester AND C.classFPT = :classFPT";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("semester", semesterDAO.getSemesterById(semesterId));

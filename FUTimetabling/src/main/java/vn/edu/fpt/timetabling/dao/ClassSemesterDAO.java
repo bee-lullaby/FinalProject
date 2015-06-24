@@ -10,14 +10,15 @@ public interface ClassSemesterDAO {
 	public void updateClassSemester(ClassSemester classSemester);
 
 	public List<ClassSemester> listClassSemesters();
-	
+
 	public List<ClassSemester> listClassSemesterBySemester(int semesterId);
-		
-	public ClassSemester listClassSemesterByClassSemester(int semesterId, int classId);
-	
+
 	public ClassSemester getClassSemesterById(int classSemesterId);
-	
+
 	public ClassSemester getClassSemesterByCode(String code);
-	
+
+	public ClassSemester getClassSemesterByClassSemester(int semesterId,
+			int classId);
+
 	public void deleteClassSemester(int classSemesterId);
 }
