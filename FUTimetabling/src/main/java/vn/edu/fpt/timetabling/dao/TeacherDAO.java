@@ -15,5 +15,7 @@ public interface TeacherDAO {
 
 	public Teacher getTeacherByEmail(String email);
 
+	public Teacher getTeacherByAccount(String account);
+	
 	public void deleteTeacher(int teacherId);
 }

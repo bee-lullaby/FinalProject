@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import vn.edu.fpt.timetabling.model.TeacherSemester;
 
@@ -17,6 +18,9 @@ public class TeacherSemesterDAOImpl implements TeacherSemesterDAO {
 
 	private SessionFactory sessionFactory;
 
+	@Autowired
+	private TeacherDAO teacherDAO;
+	
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
@@ -70,7 +74,23 @@ public class TeacherSemesterDAOImpl implements TeacherSemesterDAO {
 			return null;
 		}
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public TeacherSemester getTeacherSemesterByAccount(String account) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.TeacherSemester C WHERE C.teacher = :teacher";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("teacher", teacherDAO.getTeacherByAccount(account));
+		List<TeacherSemester> teacherSemesters = (List<TeacherSemester>) query.list();
+		if (!teacherSemesters.isEmpty()) {
+			logger.info("TeacherSemester was loaded successfully, TeacherSemester details="
+					+ teacherSemesters.get(0));
+			return teacherSemesters.get(0);
+		} else {
+			return null;
+		}
+	}
+	
 	@Override
 	public void deleteTeacherSemester(int teacherSemesterId) {
 		TeacherSemester teacherSemester = getTeacherSemesterById(teacherSemesterId);

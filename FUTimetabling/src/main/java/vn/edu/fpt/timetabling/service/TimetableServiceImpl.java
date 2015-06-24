@@ -83,16 +83,14 @@ public class TimetableServiceImpl implements TimetableService {
 	@Override
 	public List<Timetable> listTimetablesByClass(int classId, int semesterId) {
 		// TODO Auto-generated method stub
-		List<ClassSemester> classSemesters = classSemesterDAO
-				.listClassSemesterByClassSemester(semesterId, classId);
+		ClassSemester classSemester = classSemesterDAO
+				.getClassSemesterByClassSemester(semesterId, classId);
 		List<ClassCourseSemester> classCourseSemesters = new ArrayList<ClassCourseSemester>();
 		List<Integer> classCourseSemesterIds = new ArrayList<Integer>();
 
-		for (ClassSemester classSemester : classSemesters) {
-			classCourseSemesters.addAll(classCourseSemesterDAO
-					.listClassCourseSemesterByClass(classSemester
-							.getClassSemesterId()));
-		}
+		classCourseSemesters.addAll(classCourseSemesterDAO
+				.listClassCourseSemesterByClass(classSemester
+						.getClassSemesterId()));
 
 		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
 			classCourseSemesterIds.add(classCourseSemester

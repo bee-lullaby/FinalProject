@@ -76,6 +76,20 @@ public class TeacherDAOImpl implements TeacherDAO {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public Teacher getTeacherByAccount(String account) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Teacher S WHERE S.account = :account";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("account", account);
+		List<Teacher> teacher = (List<Teacher>) query.list();
+		if (teacher != null && !teacher.isEmpty()) {
+			return teacher.get(0);
+		} else {
+			return null;
+		}
+	}
+	
 	@Override
 	public void deleteTeacher(int teacherId) {
 		Teacher teacher = getTeacherById(teacherId);

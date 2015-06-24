@@ -18,7 +18,6 @@ import vn.edu.fpt.timetabling.model.ClassSemester;
 import vn.edu.fpt.timetabling.model.CourseSemester;
 import vn.edu.fpt.timetabling.model.Semester;
 import vn.edu.fpt.timetabling.model.TeacherCourseSemester;
-import vn.edu.fpt.timetabling.model.TeacherSemester;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
@@ -54,11 +53,30 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Transactional
 	@Override
-	public List<CourseSemester> listCourseByClassSemester(int classId,
+	public List<ClassCourseSemester> listClassCourseSemesterByClassSemester(int classId,
 			int semesterId) {
 		// TODO Auto-generated method stub
 		int classSemesterId = classSemesterDAO
-				.listClassSemesterByClassSemester(semesterId, classId)
+				.getClassSemesterByClassSemester(semesterId, classId)
+				.getClassSemesterId();
+		List<ClassCourseSemester> classCourseSemesters = classCourseSemesterDAO
+				.listClassCourseSemesterByClass(classSemesterId);
+//
+//		List<CourseSemester> courseSemesters = new ArrayList<CourseSemester>();
+//		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
+//			courseSemesters.add(classCourseSemester.getCourseSemester());
+//		}
+
+		return classCourseSemesters;
+	}
+	
+	@Transactional
+	@Override
+	public List<CourseSemester> listCourseSemesterByClass(int classId,
+			int semesterId) {
+		// TODO Auto-generated method stub
+		int classSemesterId = classSemesterDAO
+				.getClassSemesterByClassSemester(semesterId, classId)
 				.getClassSemesterId();
 		List<ClassCourseSemester> classCourseSemesters = classCourseSemesterDAO
 				.listClassCourseSemesterByClass(classSemesterId);
@@ -70,22 +88,20 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 		return courseSemesters;
 	}
-
+	
+	@Transactional
 	@Override
-	public List<TeacherSemester> listTeacherByCourseSemester(int courseId,
+	public List<TeacherCourseSemester> listTeacherByCourseSemester(int classId,
 			int semesterId) {
 		// TODO Auto-generated method stub
-		int courseSemesterId = courseSemesterDAO
-				.getCourseSemesterByCourseSemester(courseId, semesterId)
-				.getCourseSemesterId();
-		List<TeacherCourseSemester> teacherCourseSemesters = teacherCourseSemesterDAO
-				.listTeacherCourseSemestersByCourse(courseSemesterId);
-
-		List<TeacherSemester> teacherSemesters = new ArrayList<TeacherSemester>();
-		for (TeacherCourseSemester teacherCourseSemester : teacherCourseSemesters) {
-			teacherSemesters.add(teacherCourseSemester.getTeacherSemester());
+		
+		List<CourseSemester> courseSemesters = listCourseSemesterByClass(classId, semesterId);
+		List<TeacherCourseSemester> teacherCourseSemesters = new ArrayList<TeacherCourseSemester>();
+		for(CourseSemester courseSemester : courseSemesters) {
+			teacherCourseSemesters.addAll( teacherCourseSemesterDAO
+					.listTeacherCourseSemestersByCourse(courseSemester.getCourseSemesterId()));
 		}
-		return teacherSemesters;
+		return teacherCourseSemesters;
 	}
 
 }

@@ -82,6 +82,16 @@
 			</tr>
 		</table>
 	</form:form>
+	
+	<form:form action="teacherCourse/addFromFile" method="post"
+		enctype="multipart/form-data">
+		<input
+			accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+			name="file" type="file" style="margin-bottom: 20px" />
+		<input type="submit" name="addFile" value="AddFile"
+			class="button primary" style="margin-right: 5px" />
+	</form:form>
+	
 	<br>
 		<h3>Teachers List</h3> <c:if test="${!empty listTeachers}">
 			<table class="tg">

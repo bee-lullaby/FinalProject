@@ -77,11 +77,22 @@
 						<span class="mif-arrow-left"></span>
 					</button>
 					<div class="input-control select">
-						<form style="height:100%">
+						<form style="height: 100%">
 							<input type="hidden" name="semesterId" value="${semesterId}">
-							<select id="select-classes" name="classId" onchange="this.form.submit()">
+							<select id="select-classes" name="classId"
+								onchange="this.form.submit()">
+
 								<c:forEach items="${listClasses}" var="classSemester">
-									<option value="${classSemester.getClassFPT().classId}">${classSemester.getClassFPT().code}</option>
+									<c:choose>
+										<c:when
+											test="${classSemester.getClassFPT().classId == param.classId}">
+											<option value="${classSemester.getClassFPT().classId}"
+												selected>${classSemester.getClassFPT().code}</option>
+										</c:when>
+										<c:otherwise>
+											<option value="${classSemester.getClassFPT().classId}">${classSemester.getClassFPT().code}</option>
+										</c:otherwise>
+									</c:choose>
 								</c:forEach>
 							</select>
 						</form>
@@ -110,15 +121,17 @@
 			<div style="width: 100%; line-height: 40px; margin: .5rem 0;">
 				<div style="display: inline-block">
 					<font style="color: #52677a; font-weight: 700; font-size: 1rem">Courses:</font>&nbsp;&nbsp;&nbsp;
-					<c:set var="count" value="0" scope="page" />
-					<c:forEach items="${listCourses}" var="courseSemester">
-						<c:set var="count" value="${count + 1}" scope="page" />
-						<div id="course-${count}"
+					<c:set var="x" value="0" scope="page" />
+					<c:forEach items="${listClassCourses}" var="classCourseSemester">
+						<c:set var="x" value="${x + 1}" scope="page" />
+						<div id="course-${x}"
 							style="cursor: pointer; display: inline-block">
-							<span class="course-color color-${count}"></span>&nbsp;${courseSemester.getCourse().code}&nbsp;&nbsp;
+							<span class="course-color color-${x}"></span>
+							&nbsp;${classCourseSemester.getCourseSemester().getCourse().code}&nbsp;&nbsp;
 						</div>
 					</c:forEach>
 				</div>
+
 				<div style="float: right;">
 					<button id="btn-generate" class="button" data-role="hint"
 						data-hint-background="#1CB7EC" data-hint-color="fg-white"
@@ -219,65 +232,55 @@
 		</div>
 	</div>
 	<!-- Dialogs -->
-	<div id="dialog-info-course-1" data-role="dialog" class="padding20"
-		data-close-button="true" data-overlay="true"
-		data-overlay-color="op-dark">
-		<h1>Course 1</h1>
-		<p>
-		<table id="table-course" class="table">
-			<tr>
-				<th>Teacher (4):</th>
-				<td colspan="3">
-					<div class="input-control select">
-						<select>
-							<option value="1">Teacher 1</option>
-							<option value="2">Teacher 2</option>
-							<option value="3">Teacher 3</option>
-						</select>
-					</div>
-				</td>
-			</tr>
-			<tr style="display: none">
-				<td colspan="4"></td>
-			</tr>
-			<tr>
-				<th>Remain slots:</th>
-				<td>30</td>
-				<th style="padding-left: 30px">Classes:</th>
-				<td>6</td>
-			</tr>
-			<tr>
-				<th>Morning:</th>
-				<td>4</td>
-				<th style="padding-left: 30px">Afternoon:</th>
-				<td>2</td>
-			</tr>
-		</table>
-	</div>
-	<div id="dialog-info-course-2" data-role="dialog" class="padding20"
-		data-close-button="true" data-overlay="true"
-		data-overlay-color="op-dark">
-		<h1></h1>
-		<p></p>
-	</div>
-	<div id="dialog-info-course-3" data-role="dialog" class="padding20"
-		data-close-button="true" data-overlay="true"
-		data-overlay-color="op-dark">
-		<h1></h1>
-		<p></p>
-	</div>
-	<div id="dialog-info-course-4" data-role="dialog" class="padding20"
-		data-close-button="true" data-overlay="true"
-		data-overlay-color="op-dark">
-		<h1></h1>
-		<p></p>
-	</div>
-	<div id="dialog-info-course-5" data-role="dialog" class="padding20"
-		data-close-button="true" data-overlay="true"
-		data-overlay-color="op-dark">
-		<h1></h1>
-		<p></p>
-	</div>
+
+	<c:set var="y" value="0" scope="page" />
+	<c:forEach items="${listCourses}" var="courseSemester">
+
+		<c:set var="y" value="${y + 1}" scope="page" />
+		<div id="dialog-info-course-${y}" data-role="dialog" class="padding20"
+			data-close-button="true" data-overlay="true"
+			data-overlay-color="op-dark">
+
+			<h1>${courseSemester.getCourse().code}</h1>
+			<table id="table-course" class="table">
+				<tr>
+					<th>Teacher (4):</th>
+					<td colspan="3">
+						<div class="input-control select">
+							<select>
+								<c:forEach items="${listTeacherCourseSemester}" var="teacher">
+									<c:choose>
+										<c:when
+											test="${courseSemester.courseSemesterId == teacher.getCourseSemester().courseSemesterId}">
+											<option value="${teacher.getTeacherSemester().getTeacher().teacherId}">
+												${teacher.getTeacherSemester().getTeacher().account}</option>
+										</c:when>
+									</c:choose>
+
+								</c:forEach>
+							</select>
+						</div>
+					</td>
+				</tr>
+				<tr style="display: none">
+					<td colspan="4"></td>
+				</tr>
+				<tr>
+					<th>Remain slots:</th>
+					<td>30</td>
+					<th style="padding-left: 30px">Classes:</th>
+					<td>6</td>
+				</tr>
+				<tr>
+					<th>Morning:</th>
+					<td>4</td>
+					<th style="padding-left: 30px">Afternoon:</th>
+					<td>2</td>
+				</tr>
+			</table>
+		</div>
+	</c:forEach>
+
 
 	<div id="dialog-schedule" data-role="dialog" class="padding20"
 		data-close-button="true" data-overlay="true"

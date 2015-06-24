@@ -12,6 +12,8 @@ public interface TeacherSemesterDAO {
 	public List<TeacherSemester> listTeacherSemesters();
 
 	public TeacherSemester getTeacherSemesterById(int teacherSemesterId);
-
+	
+	public TeacherSemester getTeacherSemesterByAccount(String account);
+	
 	public void deleteTeacherSemester(int teacherSemesterId);
 }

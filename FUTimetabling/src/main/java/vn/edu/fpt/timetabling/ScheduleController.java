@@ -43,8 +43,12 @@ public class ScheduleController {
 				scheduleService.getSemesterById(semesterId).getName());
 		model.addAttribute("listClasses",
 				scheduleService.listClassBySemester(semesterId));
+		model.addAttribute("listClassCourses", scheduleService
+				.listClassCourseSemesterByClassSemester(classId, semesterId));
 		model.addAttribute("listCourses",
-				scheduleService.listCourseByClassSemester(classId, semesterId));
+				scheduleService.listCourseSemesterByClass(classId, semesterId));
+		model.addAttribute("listTeacherCourseSemester", scheduleService
+				.listTeacherByCourseSemester(classId, semesterId));
 		return;
 	}
 }

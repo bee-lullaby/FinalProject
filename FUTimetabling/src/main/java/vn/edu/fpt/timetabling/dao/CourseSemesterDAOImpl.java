@@ -2,6 +2,7 @@ package vn.edu.fpt.timetabling.dao;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -48,9 +49,11 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<CourseSemester> listCourseSemesters() {
-		List<CourseSemester> courseSemesters = (List<CourseSemester>) getCurrentSession()
-				.createQuery("from vn.edu.fpt.timetabling.model.CourseSemester")
-				.list();
+		String hql = "FROM vn.edu.fpt.timetabling.model.CourseSemester"
+				+ " C LEFT OUTER JOIN FETCH C.course LEFT OUTER JOIN FETCH C.semester";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<CourseSemester> courseSemesters = (List<CourseSemester>) query.list();
 		for (CourseSemester courseSemester : courseSemesters) {
 			logger.info("CourseSemester list:" + courseSemester);
 		}
@@ -59,43 +62,54 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 
 	@Override
 	public CourseSemester getCourseSemesterById(int courseSemesterId) {
-		CourseSemester courseSemester = (CourseSemester) getCurrentSession()
-				.get(CourseSemester.class, new Integer(courseSemesterId));
-		if (courseSemester != null) {
-			logger.info("CourseSemester was loaded successfully, classSemester details="
-					+ courseSemester);
-		}
-		return courseSemester;
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public CourseSemester getCourseSemesterByCode(String code) {
-		String hql = "FROM vn.edu.fpt.timetabling.model.CourseSemester C WHERE C.course = :course";
+		String hql = "FROM vn.edu.fpt.timetabling.model.CourseSemester"
+				+ " C LEFT OUTER JOIN FETCH C.course LEFT OUTER JOIN FETCH C.semester"
+				+ " WHERE C.courseSemesterId = :courseSemesterId";
 		Query query = getCurrentSession().createQuery(hql);
-		query.setParameter("course", courseDAO.getCourseByCode(code));
-		List<CourseSemester> courseSemester = (List<CourseSemester>) query.list();
-		if (!courseSemester.isEmpty()) {
-			logger.info("courseSemester was loaded successfully, courseSemester details="
-					+ courseSemester.get(0));
-			return courseSemester.get(0);
+		query.setParameter("courseSemesterId", courseSemesterId);
+		Object temp = query.uniqueResult();
+		if (temp != null) {
+			CourseSemester courseSemester = (CourseSemester) temp;
+			logger.info("CourseSemester was loaded successfully, CourseSemester="
+					+ courseSemester);
+			return courseSemester;
 		} else {
 			return null;
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
+	@Override
+	public CourseSemester getCourseSemesterByCode(String code) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.CourseSemester"
+				+ " C LEFT OUTER JOIN FETCH C.course LEFT OUTER JOIN FETCH C.semester"
+				+ " WHERE C.course = :course";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("course", courseDAO.getCourseByCode(code));
+		Object temp = query.uniqueResult();
+		if (temp != null) {
+			CourseSemester courseSemester = (CourseSemester) temp;
+			logger.info("CourseSemester was loaded successfully, CourseSemester="
+					+ courseSemester);
+			return courseSemester;
+		} else {
+			return null;
+		}
+	}
+	
 	@Override
 	public CourseSemester getCourseSemesterByCourseSemester(int courseId, int semesterId) {
-		String hql = "FROM vn.edu.fpt.timetabling.model.CourseSemester C WHERE C.course = :course AND C.semester = :semester";
+		String hql = "FROM vn.edu.fpt.timetabling.model.CourseSemester"
+				+ " C LEFT OUTER JOIN FETCH C.course LEFT OUTER JOIN FETCH C.semester"
+				+ " WHERE C.course = :course AND C.semester = :semester";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("course", courseDAO.getCourseById(courseId));
 		query.setParameter("course", semesterDAO.getSemesterById(semesterId));
-		List<CourseSemester> courseSemester = (List<CourseSemester>) query.list();
-		if (!courseSemester.isEmpty()) {
-			logger.info("courseSemester was loaded successfully, courseSemester details="
-					+ courseSemester.get(0));
-			return courseSemester.get(0);
+		Object temp = query.uniqueResult();
+		if (temp != null) {
+			CourseSemester courseSemester = (CourseSemester) temp;
+			logger.info("CourseSemester was loaded successfully, CourseSemester="
+					+ courseSemester);
+			return courseSemester;
 		} else {
 			return null;
 		}
