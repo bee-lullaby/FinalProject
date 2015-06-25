@@ -33,6 +33,24 @@ public class Course {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "course", orphanRemoval = true)
 	@OrderBy
 	Set<ClassFPT> classes = new LinkedHashSet<ClassFPT>();
+	
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "course", orphanRemoval = true)
+	@OrderBy
+	Set<CourseSemester> courseSemester = new LinkedHashSet<CourseSemester>();
+	
+	/**
+	 * @return the courseSemester
+	 */
+	public Set<CourseSemester> getCourseSemester() {
+		return courseSemester;
+	}
+
+	/**
+	 * @param courseSemester the courseSemester to set
+	 */
+	public void setCourseSemester(Set<CourseSemester> courseSemester) {
+		this.courseSemester = courseSemester;
+	}
 
 	/**
 	 * @return the classes

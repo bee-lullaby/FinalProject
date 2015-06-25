@@ -1,12 +1,19 @@
 package vn.edu.fpt.timetabling.model;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
@@ -33,6 +40,25 @@ public class ClassCourseSemester {
 	@Column(name = "semester_long", columnDefinition = "TINYINT")
 	@Type(type = "org.hibernate.type.NumericBooleanType")
 	private boolean semesterLong;
+	
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "classCourseSemester", orphanRemoval = true)
+	@OrderBy
+	Set<Timetable> timetable = new LinkedHashSet<Timetable>();
+
+	
+	/**
+	 * @return the timetable
+	 */
+	public Set<Timetable> getTimetable() {
+		return timetable;
+	}
+
+	/**
+	 * @param timetable the timetable to set
+	 */
+	public void setTimetable(Set<Timetable> timetable) {
+		this.timetable = timetable;
+	}
 
 	/**
 	 * 

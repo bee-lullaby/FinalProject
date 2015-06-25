@@ -1,6 +1,6 @@
 package vn.edu.fpt.timetabling.service;
 
-import java.util.List;
+import java.util.Set;
 
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassSemester;
@@ -12,13 +12,15 @@ public interface ScheduleService {
 	
 	public Semester getSemesterById(int semesterId);
 	
-	public List<ClassSemester> listClassBySemester(int semesterId);
+	public ClassSemester getClassSemesterByClassSemester(int semesterId, int classId);
 	
-	public List<ClassCourseSemester> listClassCourseSemesterByClassSemester(int classId, int semesterId);
+	public Set<ClassSemester> listClassBySemester(int semesterId);
 	
-	public List<TeacherCourseSemester> listTeacherByCourseSemester(int classId,
+	public Set<ClassCourseSemester> listClassCourseSemesterByClassSemester(int classId, int semesterId);
+	
+	public Set<TeacherCourseSemester> listTeacherByCourseSemester(int classId,
 			int semesterId);
 	
-	public List<CourseSemester> listCourseSemesterByClass(int classId,
+	public Set<CourseSemester> listCourseSemesterByClass(int classId,
 			int semesterId);
 }

@@ -1,10 +1,17 @@
 package vn.edu.fpt.timetabling.model;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 @Entity
@@ -18,6 +25,24 @@ public class Teacher {
 	private String account;
 	private String name;
 	private String email;
+	
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "teacher", orphanRemoval = true)
+	@OrderBy
+	Set<TeacherSemester> teacherSemesters = new LinkedHashSet<TeacherSemester>();
+
+	/**
+	 * @return the teacherSemesters
+	 */
+	public Set<TeacherSemester> getTeacherSemesters() {
+		return teacherSemesters;
+	}
+
+	/**
+	 * @param teacherSemesters the teacherSemesters to set
+	 */
+	public void setTeacherSemesters(Set<TeacherSemester> teacherSemesters) {
+		this.teacherSemesters = teacherSemesters;
+	}
 
 	/**
 	 * 

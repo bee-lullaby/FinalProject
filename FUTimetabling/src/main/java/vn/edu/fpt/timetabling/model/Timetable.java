@@ -22,6 +22,10 @@ public class Timetable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int timeTableId;
 
+	@ManyToOne
+	@JoinColumn(name = "class_course_semester_id")
+	private ClassCourseSemester classCourseSemester;
+
 	@Column(name = "date", columnDefinition = "DATETIME")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date date;
@@ -34,8 +38,8 @@ public class Timetable {
 	private Room room;
 
 	@ManyToOne
-	@JoinColumn(name = "teacher_id")
-	private Teacher teacher;
+	@JoinColumn(name = "teacher_semester_id")
+	private TeacherSemester teacherSemester;
 
 	/**
 	 * 
@@ -46,19 +50,36 @@ public class Timetable {
 
 	/**
 	 * @param timeTableId
+	 * @param classCourseSemester
 	 * @param date
 	 * @param slot
 	 * @param room
-	 * @param teacher
+	 * @param teacherSemester
 	 */
-	public Timetable(int timeTableId, Date date, int slot, Room room,
-			Teacher teacher) {
+	public Timetable(int timeTableId, ClassCourseSemester classCourseSemester,
+			Date date, int slot, Room room, TeacherSemester teacherSemester) {
 		super();
 		this.timeTableId = timeTableId;
+		this.classCourseSemester = classCourseSemester;
 		this.date = date;
 		this.slot = slot;
 		this.room = room;
-		this.teacher = teacher;
+		this.teacherSemester = teacherSemester;
+	}
+
+	/**
+	 * @return the classCourseSemester
+	 */
+	public ClassCourseSemester getClassCourseSemester() {
+		return classCourseSemester;
+	}
+
+	/**
+	 * @param classCourseSemester
+	 *            the classCourseSemester to set
+	 */
+	public void setClassCourseSemester(ClassCourseSemester classCourseSemester) {
+		this.classCourseSemester = classCourseSemester;
 	}
 
 	/**
@@ -124,17 +145,6 @@ public class Timetable {
 	/**
 	 * @return the teacher
 	 */
-	public Teacher getTeacher() {
-		return teacher;
-	}
-
-	/**
-	 * @param teacher
-	 *            the teacher to set
-	 */
-	public void setTeacher(Teacher teacher) {
-		this.teacher = teacher;
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -144,8 +154,23 @@ public class Timetable {
 	@Override
 	public String toString() {
 		return "TimeTable [timeTableId=" + timeTableId + ", date=" + date
-				+ ", slot=" + slot + ", room=" + room + ", teacher=" + teacher
-				+ "]";
+				+ ", slot=" + slot + ", room=" + room + ", teacher="
+				+ teacherSemester + "]";
+	}
+
+	/**
+	 * @return the teacherSemester
+	 */
+	public TeacherSemester getTeacherSemester() {
+		return teacherSemester;
+	}
+
+	/**
+	 * @param teacherSemester
+	 *            the teacherSemester to set
+	 */
+	public void setTeacherSemester(TeacherSemester teacherSemester) {
+		this.teacherSemester = teacherSemester;
 	}
 
 }

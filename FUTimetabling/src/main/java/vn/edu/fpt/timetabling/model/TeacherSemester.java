@@ -37,7 +37,11 @@ public class TeacherSemester {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "teacherSemester", orphanRemoval = true)
 	@OrderBy
 	Set<TeacherCourseSemester> teacherCourseSemester = new LinkedHashSet<TeacherCourseSemester>();
-
+	
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "teacherSemester", orphanRemoval = true)
+	@OrderBy
+	Set<Timetable> timetable = new LinkedHashSet<Timetable>();
+	
 	/**
 	 * 
 	 */

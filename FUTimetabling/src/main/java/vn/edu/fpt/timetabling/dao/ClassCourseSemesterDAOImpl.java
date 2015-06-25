@@ -2,6 +2,7 @@ package vn.edu.fpt.timetabling.dao;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,21 +11,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
+import vn.edu.fpt.timetabling.model.ClassSemester;
 
 public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ClassDAOImpl.class);
 
-	
 	private SessionFactory sessionFactory;
 
 	@Autowired
 	private ClassSemesterDAO classSemesterDAO;
-	
+
 	@Autowired
 	private CourseSemesterDAO courseSemesterDAO;
-	
+
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
@@ -53,10 +54,11 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ClassCourseSemester> listClassCourseSemesters() {
-		// TODO Auto-generated method stub
-		List<ClassCourseSemester> classCourseSemesters = (List<ClassCourseSemester>) getCurrentSession()
-				.createQuery(
-						"from vn.edu.fpt.timetabling.model.ClassCourseSemester")
+		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester"
+				+ " C LEFT OUTER JOIN FETCH C.timetable";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<ClassCourseSemester> classCourseSemesters = (List<ClassCourseSemester>) query
 				.list();
 		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
 			logger.info("ClassCourseSemester list:" + classCourseSemester);
@@ -69,9 +71,13 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 	public List<ClassCourseSemester> listClassCourseSemesterByClass(
 			int classSemesterId) {
 		// TODO Auto-generated method stub
+		
+		
+		
 		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester C WHERE C.classSemester = :classSemester";
 		Query query = getCurrentSession().createQuery(hql);
-		query.setParameter("classSemester", classSemesterDAO.getClassSemesterById(classSemesterId));
+		query.setParameter("classSemester",
+				classSemesterDAO.getClassSemesterById(classSemesterId));
 		List<ClassCourseSemester> classCourseSemesters = (List<ClassCourseSemester>) query
 				.list();
 		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
@@ -87,7 +93,8 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 		// TODO Auto-generated method stub
 		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester C WHERE C.courseSemester = :courseSemester";
 		Query query = getCurrentSession().createQuery(hql);
-		query.setParameter("courseSemester", courseSemesterDAO.getCourseSemesterById(courseSemesterId));
+		query.setParameter("courseSemester",
+				courseSemesterDAO.getCourseSemesterById(courseSemesterId));
 		List<ClassCourseSemester> classCourseSemesters = (List<ClassCourseSemester>) query
 				.list();
 		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {

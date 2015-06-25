@@ -1,7 +1,9 @@
 package vn.edu.fpt.timetabling.service;
 
-import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import vn.edu.fpt.timetabling.dao.ClassCourseSemesterDAO;
 import vn.edu.fpt.timetabling.dao.ClassSemesterDAO;
+import vn.edu.fpt.timetabling.dao.SemesterDAO;
 import vn.edu.fpt.timetabling.dao.TimetableDAO;
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassSemester;
@@ -20,6 +23,9 @@ public class TimetableServiceImpl implements TimetableService {
 
 	@Autowired
 	private TimetableDAO timetableDAO;
+
+	@Autowired
+	private SemesterDAO semesterDAO;
 
 	@Autowired
 	private ClassSemesterDAO classSemesterDAO;
@@ -58,59 +64,69 @@ public class TimetableServiceImpl implements TimetableService {
 
 	@Transactional
 	@Override
-	public List<Timetable> listTimetablesBySemester(int semesterId) {
+	public Set<Timetable> listTimetablesBySemester(int semesterId) {
 		// TODO Auto-generated method stub
+		Set<ClassSemester> classSemesters = semesterDAO.getSemesterById(
+				semesterId).getClassSemesters();
+		Iterator<ClassSemester> classSemester = classSemesters.iterator();
 
-		List<ClassSemester> classSemesters = classSemesterDAO
-				.listClassSemesterBySemester(semesterId);
-		List<ClassCourseSemester> classCourseSemesters = new ArrayList<ClassCourseSemester>();
-		List<Integer> classCourseSemesterIds = new ArrayList<Integer>();
-
-		for (ClassSemester classSemester : classSemesters) {
-			classCourseSemesters.addAll(classCourseSemesterDAO
-					.listClassCourseSemesterByClass(classSemester
-							.getClassSemesterId()));
+		Set<ClassCourseSemester> classCourseSemesters = new LinkedHashSet<ClassCourseSemester>();
+		while (classSemester.hasNext()) {
+			classCourseSemesters.addAll(classSemester.next()
+					.getClassCourseSemester());
 		}
 
-		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
-			classCourseSemesterIds.add(classCourseSemester
-					.getClassCourseSemesterId());
+		Iterator<ClassCourseSemester> classCourseSemester = classCourseSemesters
+				.iterator();
+
+		Set<Timetable> timetable = new LinkedHashSet<Timetable>();
+		while (classCourseSemester.hasNext()) {
+			timetable.addAll(classCourseSemester.next().getTimetable());
 		}
-		return timetableDAO.listTimetablesByCCSId(classCourseSemesterIds);
+
+		return timetable;
 	}
 
 	@Transactional
 	@Override
-	public List<Timetable> listTimetablesByClass(int classId, int semesterId) {
+	public Set<Timetable> listTimetablesByClass(int classId, int semesterId) {
 		// TODO Auto-generated method stub
 		ClassSemester classSemester = classSemesterDAO
 				.getClassSemesterByClassSemester(semesterId, classId);
-		List<ClassCourseSemester> classCourseSemesters = new ArrayList<ClassCourseSemester>();
-		List<Integer> classCourseSemesterIds = new ArrayList<Integer>();
 
-		classCourseSemesters.addAll(classCourseSemesterDAO
-				.listClassCourseSemesterByClass(classSemester
-						.getClassSemesterId()));
+		Set<ClassCourseSemester> classCourseSemesters = classSemester
+				.getClassCourseSemester();
+		Iterator<ClassCourseSemester> classCourseSemester = classCourseSemesters
+				.iterator();
 
-		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
-			classCourseSemesterIds.add(classCourseSemester
-					.getClassCourseSemesterId());
+		Set<Timetable> timetable = new LinkedHashSet<Timetable>();
+		while (classCourseSemester.hasNext()) {
+			timetable.addAll(classCourseSemester.next().getTimetable());
 		}
-		return timetableDAO.listTimetablesByCCSId(classCourseSemesterIds);
+
+		return timetable;
+	}
+	
+	@Transactional
+	@Override
+	public Set<Timetable> listTimetablesByClassCourse(int classCourseSemesterId) {
+		// TODO Auto-generated method stub
+		return classCourseSemesterDAO.getClassCourseSemesterById(classCourseSemesterId).getTimetable();
 	}
 
+	
 	@Transactional
 	@Override
 	public Timetable getTimetableById(int timetableId) {
 		// TODO Auto-generated method stub
-		return null;
+		return timetableDAO.getTimetableById(timetableId);
 	}
 
 	@Transactional
 	@Override
 	public void deleteTimetable(int timetableId) {
 		// TODO Auto-generated method stub
-
+		timetableDAO.deleteTimetable(timetableId);
 	}
 
 }

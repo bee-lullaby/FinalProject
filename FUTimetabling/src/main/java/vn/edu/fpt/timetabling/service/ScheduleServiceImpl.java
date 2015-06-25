@@ -1,18 +1,15 @@
 package vn.edu.fpt.timetabling.service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import vn.edu.fpt.timetabling.dao.ClassCourseSemesterDAO;
 import vn.edu.fpt.timetabling.dao.ClassSemesterDAO;
-import vn.edu.fpt.timetabling.dao.CourseSemesterDAO;
 import vn.edu.fpt.timetabling.dao.SemesterDAO;
-import vn.edu.fpt.timetabling.dao.TeacherCourseSemesterDAO;
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassSemester;
 import vn.edu.fpt.timetabling.model.CourseSemester;
@@ -28,15 +25,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Autowired
 	private ClassSemesterDAO classSemesterDAO;
 
-	@Autowired
-	private ClassCourseSemesterDAO classCourseSemesterDAO;
-
-	@Autowired
-	private CourseSemesterDAO courseSemesterDAO;
-
-	@Autowired
-	private TeacherCourseSemesterDAO teacherCourseSemesterDAO;
-
 	@Transactional
 	@Override
 	public Semester getSemesterById(int semesterId) {
@@ -46,60 +34,60 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Transactional
 	@Override
-	public List<ClassSemester> listClassBySemester(int semesterId) {
+	public ClassSemester getClassSemesterByClassSemester(int semesterId,
+			int classId) {
 		// TODO Auto-generated method stub
-		return classSemesterDAO.listClassSemesterBySemester(semesterId);
+		return classSemesterDAO.getClassSemesterByClassSemester(semesterId,
+				classId);
 	}
 
 	@Transactional
 	@Override
-	public List<ClassCourseSemester> listClassCourseSemesterByClassSemester(int classId,
-			int semesterId) {
+	public Set<ClassSemester> listClassBySemester(int semesterId) {
 		// TODO Auto-generated method stub
-		int classSemesterId = classSemesterDAO
-				.getClassSemesterByClassSemester(semesterId, classId)
-				.getClassSemesterId();
-		List<ClassCourseSemester> classCourseSemesters = classCourseSemesterDAO
-				.listClassCourseSemesterByClass(classSemesterId);
-//
-//		List<CourseSemester> courseSemesters = new ArrayList<CourseSemester>();
-//		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
-//			courseSemesters.add(classCourseSemester.getCourseSemester());
-//		}
-
-		return classCourseSemesters;
+		return semesterDAO.getSemesterById(semesterId).getClassSemesters();
 	}
-	
+
 	@Transactional
 	@Override
-	public List<CourseSemester> listCourseSemesterByClass(int classId,
+	public Set<ClassCourseSemester> listClassCourseSemesterByClassSemester(
+			int classId, int semesterId) {
+		// TODO Auto-generated method stub
+		ClassSemester classSemester = classSemesterDAO
+				.getClassSemesterByClassSemester(semesterId, classId);
+		return classSemester.getClassCourseSemester();
+	}
+
+	@Transactional
+	@Override
+	public Set<CourseSemester> listCourseSemesterByClass(int classId,
 			int semesterId) {
 		// TODO Auto-generated method stub
-		int classSemesterId = classSemesterDAO
-				.getClassSemesterByClassSemester(semesterId, classId)
-				.getClassSemesterId();
-		List<ClassCourseSemester> classCourseSemesters = classCourseSemesterDAO
-				.listClassCourseSemesterByClass(classSemesterId);
+		ClassSemester classSemester = classSemesterDAO
+				.getClassSemesterByClassSemester(semesterId, classId);
+		Set<ClassCourseSemester> classCourseSemesters = classSemester
+				.getClassCourseSemester();
 
-		List<CourseSemester> courseSemesters = new ArrayList<CourseSemester>();
+		Set<CourseSemester> courseSemesters = new LinkedHashSet<CourseSemester>();
 		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
 			courseSemesters.add(classCourseSemester.getCourseSemester());
 		}
 
 		return courseSemesters;
 	}
-	
+
 	@Transactional
 	@Override
-	public List<TeacherCourseSemester> listTeacherByCourseSemester(int classId,
+	public Set<TeacherCourseSemester> listTeacherByCourseSemester(int classId,
 			int semesterId) {
 		// TODO Auto-generated method stub
-		
-		List<CourseSemester> courseSemesters = listCourseSemesterByClass(classId, semesterId);
-		List<TeacherCourseSemester> teacherCourseSemesters = new ArrayList<TeacherCourseSemester>();
-		for(CourseSemester courseSemester : courseSemesters) {
-			teacherCourseSemesters.addAll( teacherCourseSemesterDAO
-					.listTeacherCourseSemestersByCourse(courseSemester.getCourseSemesterId()));
+
+		Set<CourseSemester> courseSemesters = listCourseSemesterByClass(
+				classId, semesterId);
+		Set<TeacherCourseSemester> teacherCourseSemesters = new LinkedHashSet<TeacherCourseSemester>();
+		for (CourseSemester courseSemester : courseSemesters) {
+			teacherCourseSemesters.addAll(courseSemester
+					.getTeacherCourseSemester());
 		}
 		return teacherCourseSemesters;
 	}

@@ -47,7 +47,8 @@ public class TeacherSemesterDAOImpl implements TeacherSemesterDAO {
 	@Override
 	public List<TeacherSemester> listTeacherSemesters() {
 		String hql = "FROM vn.edu.fpt.timetabling.model.TeacherSemester"
-				+ " T LEFT OUTER JOIN FETCH T.teacher LEFT OUTER JOIN FETCH T.semester";
+				+ " T LEFT OUTER JOIN FETCH T.teacherCourseSemester"
+				+ "   LEFT OUTER JOIN FETCH T.timetable";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<TeacherSemester> teacherSemesters = (List<TeacherSemester>) query.list();
@@ -60,7 +61,8 @@ public class TeacherSemesterDAOImpl implements TeacherSemesterDAO {
 	@Override
 	public TeacherSemester getTeacherSemesterById(int teacherSemesterId) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.Specialized"
-				+ " T LEFT OUTER JOIN FETCH T.teacher LEFT OUTER JOIN FETCH T.semester"
+				+ " T LEFT OUTER JOIN FETCH T.teacherCourseSemester"
+				+ "   LEFT OUTER JOIN FETCH T.timetable"
 				+ " WHERE T.teacherSemesterId = :teacherSemesterId";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("teacherSemesterId", teacherSemesterId);

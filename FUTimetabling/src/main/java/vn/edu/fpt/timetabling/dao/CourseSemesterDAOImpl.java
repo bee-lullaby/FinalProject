@@ -50,7 +50,9 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 	@Override
 	public List<CourseSemester> listCourseSemesters() {
 		String hql = "FROM vn.edu.fpt.timetabling.model.CourseSemester"
-				+ " C LEFT OUTER JOIN FETCH C.course LEFT OUTER JOIN FETCH C.semester";
+				+ " C LEFT OUTER JOIN FETCH C.teacherCourseSemester "
+				+ "   LEFT OUTER JOIN FETCH C.classCourseSemester"
+				+ "   LEFT OUTER JOIN FETCH C.programSemesterDetails";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<CourseSemester> courseSemesters = (List<CourseSemester>) query.list();
@@ -63,7 +65,9 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 	@Override
 	public CourseSemester getCourseSemesterById(int courseSemesterId) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.CourseSemester"
-				+ " C LEFT OUTER JOIN FETCH C.course LEFT OUTER JOIN FETCH C.semester"
+				+ " C LEFT OUTER JOIN FETCH C.teacherCourseSemester "
+				+ "   LEFT OUTER JOIN FETCH C.classCourseSemester"
+				+ "   LEFT OUTER JOIN FETCH C.programSemesterDetails"
 				+ " WHERE C.courseSemesterId = :courseSemesterId";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("courseSemesterId", courseSemesterId);
@@ -81,7 +85,9 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 	@Override
 	public CourseSemester getCourseSemesterByCode(String code) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.CourseSemester"
-				+ " C LEFT OUTER JOIN FETCH C.course LEFT OUTER JOIN FETCH C.semester"
+				+ " C LEFT OUTER JOIN FETCH C.teacherCourseSemester "
+				+ "   LEFT OUTER JOIN FETCH C.classCourseSemester"
+				+ "   LEFT OUTER JOIN FETCH C.programSemesterDetails"
 				+ " WHERE C.course = :course";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("course", courseDAO.getCourseByCode(code));
@@ -99,7 +105,9 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 	@Override
 	public CourseSemester getCourseSemesterByCourseSemester(int courseId, int semesterId) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.CourseSemester"
-				+ " C LEFT OUTER JOIN FETCH C.course LEFT OUTER JOIN FETCH C.semester"
+				+ " C LEFT OUTER JOIN FETCH C.teacherCourseSemester "
+				+ "   LEFT OUTER JOIN FETCH C.classCourseSemester"
+				+ "   LEFT OUTER JOIN FETCH C.programSemesterDetails"
 				+ " WHERE C.course = :course AND C.semester = :semester";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("course", courseDAO.getCourseById(courseId));

@@ -48,7 +48,26 @@ public class CourseSemester implements Comparable<CourseSemester> {
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "courseSemester", orphanRemoval = true)
 	@OrderBy
+	Set<ClassCourseSemester> classCourseSemester = new LinkedHashSet<ClassCourseSemester>();
+	
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "courseSemester", orphanRemoval = true)
+	@OrderBy
 	Set<ProgramSemesterDetail> programSemesterDetails = new LinkedHashSet<ProgramSemesterDetail>();
+
+	
+	/**
+	 * @return the classCourseSemester
+	 */
+	public Set<ClassCourseSemester> getClassCourseSemester() {
+		return classCourseSemester;
+	}
+
+	/**
+	 * @param classCourseSemester the classCourseSemester to set
+	 */
+	public void setClassCourseSemester(Set<ClassCourseSemester> classCourseSemester) {
+		this.classCourseSemester = classCourseSemester;
+	}
 
 	/**
 	 * @return the programSemesterDetails

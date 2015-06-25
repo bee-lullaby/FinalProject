@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import vn.edu.fpt.timetabling.model.ClassSemester;
+import vn.edu.fpt.timetabling.model.Semester;
 import vn.edu.fpt.timetabling.service.ScheduleService;
 
 @Controller
@@ -38,15 +39,15 @@ public class ScheduleController {
 			"semesterId", "classId" })
 	public void scheduleSemesterClass(@RequestParam int semesterId,
 			@RequestParam int classId, Model model) {
-		model.addAttribute("semesterId", semesterId);
-		model.addAttribute("semesterName",
-				scheduleService.getSemesterById(semesterId).getName());
-		model.addAttribute("listClasses",
-				scheduleService.listClassBySemester(semesterId));
-		model.addAttribute("listClassCourses", scheduleService
-				.listClassCourseSemesterByClassSemester(classId, semesterId));
-		model.addAttribute("listCourses",
-				scheduleService.listCourseSemesterByClass(classId, semesterId));
+
+		Semester semester = scheduleService.getSemesterById(semesterId);
+		ClassSemester classSemester = scheduleService.getClassSemesterByClassSemester(semesterId, classId);
+		
+		model.addAttribute("semesterId", semester.getSemesterId());
+		model.addAttribute("semesterName", semester.getName());
+		model.addAttribute("listClasses", semester.getClassSemesters());
+		model.addAttribute("listClassCourses", classSemester.getClassCourseSemester());
+		model.addAttribute("listCourses", scheduleService.listCourseSemesterByClass(classId, semesterId));
 		model.addAttribute("listTeacherCourseSemester", scheduleService
 				.listTeacherByCourseSemester(classId, semesterId));
 		return;
