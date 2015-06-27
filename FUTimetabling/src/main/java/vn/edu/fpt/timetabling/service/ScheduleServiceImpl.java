@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import vn.edu.fpt.timetabling.dao.ClassSemesterDAO;
+import vn.edu.fpt.timetabling.dao.CourseSemesterDAO;
 import vn.edu.fpt.timetabling.dao.SemesterDAO;
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassSemester;
@@ -25,10 +26,12 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Autowired
 	private ClassSemesterDAO classSemesterDAO;
 
+	@Autowired
+	private CourseSemesterDAO courseSemesterDAO;
+
 	@Transactional
 	@Override
 	public Semester getSemesterById(int semesterId) {
-		// TODO Auto-generated method stub
 		return semesterDAO.getSemesterById(semesterId);
 	}
 
@@ -36,7 +39,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Override
 	public ClassSemester getClassSemesterByClassSemester(int semesterId,
 			int classId) {
-		// TODO Auto-generated method stub
 		return classSemesterDAO.getClassSemesterByClassSemester(semesterId,
 				classId);
 	}
@@ -44,7 +46,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Transactional
 	@Override
 	public Set<ClassSemester> listClassBySemester(int semesterId) {
-		// TODO Auto-generated method stub
 		return semesterDAO.getSemesterById(semesterId).getClassSemesters();
 	}
 
@@ -52,7 +53,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Override
 	public Set<ClassCourseSemester> listClassCourseSemesterByClassSemester(
 			int classId, int semesterId) {
-		// TODO Auto-generated method stub
 		ClassSemester classSemester = classSemesterDAO
 				.getClassSemesterByClassSemester(semesterId, classId);
 		return classSemester.getClassCourseSemester();
@@ -70,7 +70,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 		Set<CourseSemester> courseSemesters = new LinkedHashSet<CourseSemester>();
 		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
-			courseSemesters.add(classCourseSemester.getCourseSemester());
+			courseSemesters.add(courseSemesterDAO
+					.getCourseSemesterById(classCourseSemester
+							.getCourseSemester().getCourseSemesterId()));
 		}
 
 		return courseSemesters;
@@ -87,7 +89,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		Set<TeacherCourseSemester> teacherCourseSemesters = new LinkedHashSet<TeacherCourseSemester>();
 		for (CourseSemester courseSemester : courseSemesters) {
 			teacherCourseSemesters.addAll(courseSemester
-					.getTeacherCourseSemester());
+					.getTeacherCourseSemesters());
 		}
 		return teacherCourseSemesters;
 	}

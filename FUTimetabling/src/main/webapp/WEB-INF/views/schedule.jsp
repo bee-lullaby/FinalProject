@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -225,7 +226,7 @@
 					<th>Remain slots:</th>
 					<td>${courseSemester.getSlots()}</td>
 					<th style="padding-left: 30px">Classes:</th>
-					<td>${courseSemester.getNumberOfClass()}</td>
+					<td>${fn:length(courseSemester.classCourseSemesters)}</td>
 				</tr>
 				<tr>
 					<th>Morning:</th>

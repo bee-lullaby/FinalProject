@@ -1,8 +1,7 @@
 package vn.edu.fpt.timetabling.model;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -44,15 +43,47 @@ public class CourseSemester implements Comparable<CourseSemester> {
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "courseSemester", orphanRemoval = true)
 	@OrderBy
-	Set<TeacherCourseSemester> teacherCourseSemesters = new LinkedHashSet<TeacherCourseSemester>();
+	private Set<TeacherCourseSemester> teacherCourseSemesters = new LinkedHashSet<TeacherCourseSemester>();
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "courseSemester", orphanRemoval = true)
 	@OrderBy
-	Set<ClassCourseSemester> classCourseSemesters = new LinkedHashSet<ClassCourseSemester>();
+	private Set<ClassCourseSemester> classCourseSemesters = new LinkedHashSet<ClassCourseSemester>();
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "courseSemester", orphanRemoval = true)
 	@OrderBy
-	Set<ProgramSemesterDetail> programSemesterDetails = new LinkedHashSet<ProgramSemesterDetail>();
+	private Set<ProgramSemesterDetail> programSemesterDetails = new LinkedHashSet<ProgramSemesterDetail>();
+
+	/**
+	 * @return the teacherCourseSemesters
+	 */
+	public Set<TeacherCourseSemester> getTeacherCourseSemesters() {
+		return teacherCourseSemesters;
+	}
+
+	/**
+	 * @param teacherCourseSemesters
+	 *            the teacherCourseSemesters to set
+	 */
+	public void setTeacherCourseSemesters(
+			Set<TeacherCourseSemester> teacherCourseSemesters) {
+		this.teacherCourseSemesters = teacherCourseSemesters;
+	}
+
+	/**
+	 * @return the classCourseSemesters
+	 */
+	public Set<ClassCourseSemester> getClassCourseSemesters() {
+		return classCourseSemesters;
+	}
+
+	/**
+	 * @param classCourseSemesters
+	 *            the classCourseSemesters to set
+	 */
+	public void setClassCourseSemesters(
+			Set<ClassCourseSemester> classCourseSemesters) {
+		this.classCourseSemesters = classCourseSemesters;
+	}
 
 	/**
 	 * 
@@ -77,7 +108,7 @@ public class CourseSemester implements Comparable<CourseSemester> {
 		this.slots = slots;
 		this.courseCondition = course_condition;
 	}
-	
+
 	/**
 	 * @return the courseSemesterId
 	 */
@@ -86,7 +117,8 @@ public class CourseSemester implements Comparable<CourseSemester> {
 	}
 
 	/**
-	 * @param courseSemesterId the courseSemesterId to set
+	 * @param courseSemesterId
+	 *            the courseSemesterId to set
 	 */
 	public void setCourseSemesterId(int courseSemesterId) {
 		this.courseSemesterId = courseSemesterId;
@@ -100,7 +132,8 @@ public class CourseSemester implements Comparable<CourseSemester> {
 	}
 
 	/**
-	 * @param course the course to set
+	 * @param course
+	 *            the course to set
 	 */
 	public void setCourse(Course course) {
 		this.course = course;
@@ -114,7 +147,8 @@ public class CourseSemester implements Comparable<CourseSemester> {
 	}
 
 	/**
-	 * @param semester the semester to set
+	 * @param semester
+	 *            the semester to set
 	 */
 	public void setSemester(Semester semester) {
 		this.semester = semester;
@@ -128,7 +162,8 @@ public class CourseSemester implements Comparable<CourseSemester> {
 	}
 
 	/**
-	 * @param slots the slots to set
+	 * @param slots
+	 *            the slots to set
 	 */
 	public void setSlots(int slots) {
 		this.slots = slots;
@@ -142,39 +177,11 @@ public class CourseSemester implements Comparable<CourseSemester> {
 	}
 
 	/**
-	 * @param courseCondition the courseCondition to set
+	 * @param courseCondition
+	 *            the courseCondition to set
 	 */
 	public void setCourseCondition(Course courseCondition) {
 		this.courseCondition = courseCondition;
-	}
-
-	/**
-	 * @return the teacherCourseSemester
-	 */
-	public Set<TeacherCourseSemester> getTeacherCourseSemester() {
-		return teacherCourseSemesters;
-	}
-
-	/**
-	 * @param teacherCourseSemester the teacherCourseSemester to set
-	 */
-	public void setTeacherCourseSemester(
-			Set<TeacherCourseSemester> teacherCourseSemester) {
-		this.teacherCourseSemesters = teacherCourseSemester;
-	}
-
-	/**
-	 * @return the classCourseSemester
-	 */
-	public Set<ClassCourseSemester> getClassCourseSemester() {
-		return classCourseSemesters;
-	}
-
-	/**
-	 * @param classCourseSemester the classCourseSemester to set
-	 */
-	public void setClassCourseSemester(Set<ClassCourseSemester> classCourseSemester) {
-		this.classCourseSemesters = classCourseSemester;
 	}
 
 	/**
@@ -185,30 +192,22 @@ public class CourseSemester implements Comparable<CourseSemester> {
 	}
 
 	/**
-	 * @param programSemesterDetails the programSemesterDetails to set
+	 * @param programSemesterDetails
+	 *            the programSemesterDetails to set
 	 */
 	public void setProgramSemesterDetails(
 			Set<ProgramSemesterDetail> programSemesterDetails) {
 		this.programSemesterDetails = programSemesterDetails;
 	}
-	
-	public List<Teacher> getListTeacherOfCourse() {
-		List<Teacher> teachers = new ArrayList<Teacher>();
-		for (TeacherCourseSemester tcs : getTeacherCourseSemester()) {
+
+	public Set<Teacher> getListTeacherOfCourse() {
+		Set<Teacher> teachers = new HashSet<Teacher>();
+		for (TeacherCourseSemester tcs : getTeacherCourseSemesters()) {
 			teachers.add(tcs.getTeacherSemester().getTeacher());
 		}
 		return teachers;
 	}
-	
-	public int getTest() {
-		return 1;
-	}
-	
-	public int getNumberOfClass() {
-		Set<ClassCourseSemester> set = getClassCourseSemester();
-		return set.size();
-	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -230,7 +229,7 @@ public class CourseSemester implements Comparable<CourseSemester> {
 			return 1;
 		} else {
 			return -1;
-		}	
+		}
 	}
-	
+
 }
