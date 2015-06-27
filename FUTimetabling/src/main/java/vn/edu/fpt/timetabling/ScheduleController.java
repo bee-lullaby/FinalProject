@@ -1,6 +1,7 @@
 package vn.edu.fpt.timetabling;
 
-import java.util.List;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,10 +30,10 @@ public class ScheduleController {
 	public String schedule(
 			@RequestParam(value = "semesterId", required = true) int semesterId,
 			Model model) {
-		List<ClassSemester> list = (List<ClassSemester>) scheduleService
-				.listClassBySemester(semesterId);
+		Set<ClassSemester> list = scheduleService.listClassBySemester(semesterId);
+		Iterator<ClassSemester> i = list.iterator();
 		return "redirect:/schedule?semesterId=" + semesterId + "&classId="
-				+ list.get(0).getClassFPT().getClassId();
+				+ i.next().getClassFPT().getClassId();
 	}
 
 	@RequestMapping(value = "/schedule", method = RequestMethod.GET, params = {
@@ -41,13 +42,16 @@ public class ScheduleController {
 			@RequestParam int classId, Model model) {
 
 		Semester semester = scheduleService.getSemesterById(semesterId);
-		ClassSemester classSemester = scheduleService.getClassSemesterByClassSemester(semesterId, classId);
-		
+		ClassSemester classSemester = scheduleService
+				.getClassSemesterByClassSemester(semesterId, classId);
+
 		model.addAttribute("semesterId", semester.getSemesterId());
 		model.addAttribute("semesterName", semester.getName());
 		model.addAttribute("listClasses", semester.getClassSemesters());
-		model.addAttribute("listClassCourses", classSemester.getClassCourseSemester());
-		model.addAttribute("listCourses", scheduleService.listCourseSemesterByClass(classId, semesterId));
+		model.addAttribute("listClassCourses",
+				classSemester.getClassCourseSemester());
+		model.addAttribute("listCourses",
+				scheduleService.listCourseSemesterByClass(classId, semesterId));
 		model.addAttribute("listTeacherCourseSemester", scheduleService
 				.listTeacherByCourseSemester(classId, semesterId));
 		return;

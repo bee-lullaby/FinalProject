@@ -225,7 +225,7 @@
 					<th>Remain slots:</th>
 					<td>${courseSemester.getSlots()}</td>
 					<th style="padding-left: 30px">Classes:</th>
-					<td>${courseSemester.getSlots()}</td>
+					<td>${courseSemester.getNumberOfClass()}</td>
 				</tr>
 				<tr>
 					<th>Morning:</th>

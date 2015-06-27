@@ -81,15 +81,14 @@ public class CourseController {
 
 	@RequestMapping(value = "/classCourse/addFromFile", method = RequestMethod.POST)
 	public String addClassCourseFromFile(
-			@RequestParam("file") MultipartFile file) {
+			@RequestParam("file") MultipartFile file, @RequestParam("semesterId") int semesterId) {
 		if (!file.isEmpty()) {
 			File classCourses = new File(
 					"D:\\FU\\Do an tot nghiep\\Data\\ServerData\\"
 							+ file.getOriginalFilename());
 			try {
 				file.transferTo(classCourses);
-				classCourseSemesterService
-				.addClassCourseSemesterFromFile(classCourses);
+				classCourseSemesterService.addClassCourseSemesterFromFile(classCourses, semesterId);
 			} catch (IllegalStateException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
