@@ -8,7 +8,7 @@ import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 public interface ClassCourseSemesterService {
 	public void addClassCourseSemester(ClassCourseSemester classCourseSemester);
 
-	public void addClassCourseSemesterFromFile(File courses);
+	public void addClassCourseSemesterFromFile(File classCourses, int semesterId);
 	
 	public void updateClassCourseSemester(ClassCourseSemester classCourseSemester);
 	

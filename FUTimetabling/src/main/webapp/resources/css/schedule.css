@@ -1,0 +1,44 @@
+.timetable th {
+	width: 14.2%;
+}
+
+.timetable td {
+	height: 80px;
+	vertical-align: top;
+	text-align: left;
+}
+
+.course-color {
+	width: 1.625rem;
+	height: 1.625rem;
+	border: 1px #ffffff solid;
+	padding: 0;
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.color-1 {
+	background: #60a917 !important;
+}
+
+.color-2 {
+	background: #57169a !important;
+}
+
+.color-3 {
+	background: #fa6800 !important;
+}
+
+.color-4 {
+	background: #00aff0 !important;
+}
+
+.color-5 {
+	background: #9a165a !important;
+}
+
+#table-course th, #table-course td {
+	text-align: left;
+	padding-left: 0;
+}

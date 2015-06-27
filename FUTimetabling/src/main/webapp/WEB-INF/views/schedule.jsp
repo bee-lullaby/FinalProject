@@ -5,62 +5,18 @@
 <html>
 <head>
 <title>Schedule</title>
+
+<link href="resources/css/schedule.css" rel="stylesheet">
 <link href="resources/css/metro.css" rel="stylesheet">
 <link href="resources/css/metro-icons.css" rel="stylesheet">
 <link href="resources/css/docs.css" rel="stylesheet">
 
 <script src="resources/js/jquery-2.1.3.min.js"></script>
-<script src="resources/js/mine.js"></script>
+<script src="resources/js/schedule.js"></script>
 <script src="resources/js/metro.js"></script>
 <script src="resources/js/docs.js"></script>
 <script src="resources/js/prettify/run_prettify.js"></script>
 <script src="resources/js/ga.js"></script>
-<style type="text/css">
-.timetable th {
-	width: 14.2%;
-}
-
-.timetable td {
-	height: 80px;
-	vertical-align: top;
-	text-align: left;
-}
-
-.course-color {
-	width: 1.625rem;
-	height: 1.625rem;
-	border: 1px #ffffff solid;
-	padding: 0;
-	position: relative;
-	display: inline-block;
-	vertical-align: middle;
-}
-
-.color-1 {
-	background: #60a917 !important;
-}
-
-.color-2 {
-	background: #57169a !important;
-}
-
-.color-3 {
-	background: #fa6800 !important;
-}
-
-.color-4 {
-	background: #00aff0 !important;
-}
-
-.color-5 {
-	background: #9a165a !important;
-}
-
-#table-course th, #table-course td {
-	text-align: left;
-	padding-left: 0;
-}
-</style>
 
 </head>
 <body>
@@ -244,7 +200,7 @@
 			<h1>${courseSemester.getCourse().code}</h1>
 			<table id="table-course" class="table">
 				<tr>
-					<th>Teacher (4):</th>
+					<th>Teacher (<font id="numberOfTeacher"></font>):</th>
 					<td colspan="3">
 						<div class="input-control select">
 							<select>
@@ -267,9 +223,9 @@
 				</tr>
 				<tr>
 					<th>Remain slots:</th>
-					<td>30</td>
+					<td>${courseSemester.getSlots()}</td>
 					<th style="padding-left: 30px">Classes:</th>
-					<td>6</td>
+					<td>${courseSemester.getSlots()}</td>
 				</tr>
 				<tr>
 					<th>Morning:</th>
@@ -309,8 +265,14 @@
 				<th>Can't:</th>
 				<td>c4, c5</td>
 			</tr>
-		</table>
 
+			
+		</table>
+		<button id="btn-clear" class="button" data-role="hint"
+			data-hint-background="#1CB7EC" data-hint-color="fg-white"
+			data-hint-position="top" data-hint="Clear">
+			<span class="mif-cross"></span>
+		</button>
 	</div>
 </body>
 </html>

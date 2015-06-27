@@ -231,5 +231,10 @@ public class CourseSemester implements Comparable<CourseSemester> {
 			return -1;
 		}
 	}
-
+	
+	
+	public int getNumberOfClass() {
+		Set<ClassCourseSemester> set = getClassCourseSemester();
+		return set.size();
+	}
 }

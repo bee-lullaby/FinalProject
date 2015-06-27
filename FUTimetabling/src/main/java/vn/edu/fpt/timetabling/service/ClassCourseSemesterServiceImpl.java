@@ -58,7 +58,7 @@ public class ClassCourseSemesterServiceImpl implements
 
 	@Override
 	@Transactional
-	public void addClassCourseSemesterFromFile(File classCourses) {
+	public void addClassCourseSemesterFromFile(File classCourses, int semesterId) {
 		try {
 			FileInputStream file = new FileInputStream(classCourses);
 			XSSFWorkbook workbook = new XSSFWorkbook(file);
@@ -76,7 +76,7 @@ public class ClassCourseSemesterServiceImpl implements
 				while (i <= 4) {
 					ClassCourseSemester ccs = new ClassCourseSemester();
 					ClassSemester cs = classSemesterDAO
-							.getClassSemesterByCode(classCode);
+							.getClassSemesterByCode(classCode, semesterId);
 					ccs.setClassSemester(cs);
 					logger.info("CLASS: "
 							+ String.valueOf(ccs.getClassSemester()

@@ -34,14 +34,7 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 	public List<ClassSemester> listClassSemesters() {
 		return classSemesterDAO.listClassSemesters();
 	}
-
-	@Override
-	@Transactional
-	public List<ClassSemester> listClassSemesterBySemester(int semesterId) {
-		// TODO Auto-generated method stub
-		return classSemesterDAO.listClassSemesterBySemester(semesterId);
-	}
-
+	
 	@Override
 	@Transactional
 	public ClassSemester getClassSemesterByClassSemester(int semesterId,

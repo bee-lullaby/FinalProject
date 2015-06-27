@@ -106,15 +106,22 @@ public class ClassSemesterDAOImpl implements ClassSemesterDAO {
 	}
 
 	@Override
-	public ClassSemester getClassSemesterByCode(String classCode) {
+	public ClassSemester getClassSemesterByCode(String classCode, int semesterId) {
 		// TODO Auto-generated method stub
-		return null;
+		String hql =  "FROM vn.edu.fpt.timetabling.model.ClassSemester"
+				+ " C LEFT OUTER JOIN FETCH C.classCourseSemester"
+				+ " WHERE C.semester = :semester AND C.classFPT = :classFPT";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("semester", semesterDAO.getSemesterById(semesterId));
+		query.setParameter("classFPT", classDAO.getClassByCode(classCode));
+		Object temp = query.uniqueResult();
+		if (temp != null) {
+			ClassSemester classSemester = (ClassSemester) temp;
+			logger.info("ClassSemester was loaded successfully, ClassSemester details="
+					+ classSemester);
+			return classSemester;
+		} else {
+			return null;
+		}
 	}
-
-	@Override
-	public List<ClassSemester> listClassSemesterBySemester(int semesterId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
