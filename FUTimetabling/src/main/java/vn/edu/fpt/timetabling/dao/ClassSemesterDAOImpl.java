@@ -9,10 +9,11 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import vn.edu.fpt.timetabling.model.ClassSemester;
-import vn.edu.fpt.timetabling.model.ProgramSemester;
 
+@Repository
 public class ClassSemesterDAOImpl implements ClassSemesterDAO {
 	private static final Logger logger = LoggerFactory
 			.getLogger(ClassSemesterDAO.class);
@@ -102,6 +103,18 @@ public class ClassSemesterDAOImpl implements ClassSemesterDAO {
 			logger.info("classSemester was deleted successfully, classSemester details="
 					+ classSemester);
 		}
+	}
+
+	@Override
+	public ClassSemester getClassSemesterByCode(String classCode) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ClassSemester> listClassSemesterBySemester(int semesterId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

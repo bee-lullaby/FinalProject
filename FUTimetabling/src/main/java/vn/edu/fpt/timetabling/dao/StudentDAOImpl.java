@@ -7,9 +7,11 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import vn.edu.fpt.timetabling.model.Student;
 
+@Repository
 public class StudentDAOImpl implements StudentDAO {
 	private static final Logger logger = LoggerFactory
 			.getLogger(StudentDAOImpl.class);

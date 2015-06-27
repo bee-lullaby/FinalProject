@@ -9,9 +9,11 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import vn.edu.fpt.timetabling.model.TeacherSemester;
 
+@Repository
 public class TeacherSemesterDAOImpl implements TeacherSemesterDAO {
 	private static final Logger logger = LoggerFactory
 			.getLogger(TeacherSemesterDAO.class);
@@ -20,7 +22,7 @@ public class TeacherSemesterDAOImpl implements TeacherSemesterDAO {
 
 	@Autowired
 	private TeacherDAO teacherDAO;
-	
+
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
@@ -51,7 +53,8 @@ public class TeacherSemesterDAOImpl implements TeacherSemesterDAO {
 				+ "   LEFT OUTER JOIN FETCH T.timetable";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		List<TeacherSemester> teacherSemesters = (List<TeacherSemester>) query.list();
+		List<TeacherSemester> teacherSemesters = (List<TeacherSemester>) query
+				.list();
 		for (TeacherSemester teacherSemester : teacherSemesters) {
 			logger.info("TeacherSemester list:" + teacherSemester);
 		}
@@ -76,14 +79,15 @@ public class TeacherSemesterDAOImpl implements TeacherSemesterDAO {
 			return null;
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public TeacherSemester getTeacherSemesterByAccount(String account) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.TeacherSemester C WHERE C.teacher = :teacher";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("teacher", teacherDAO.getTeacherByAccount(account));
-		List<TeacherSemester> teacherSemesters = (List<TeacherSemester>) query.list();
+		List<TeacherSemester> teacherSemesters = (List<TeacherSemester>) query
+				.list();
 		if (!teacherSemesters.isEmpty()) {
 			logger.info("TeacherSemester was loaded successfully, TeacherSemester details="
 					+ teacherSemesters.get(0));
@@ -92,7 +96,7 @@ public class TeacherSemesterDAOImpl implements TeacherSemesterDAO {
 			return null;
 		}
 	}
-	
+
 	@Override
 	public void deleteTeacherSemester(int teacherSemesterId) {
 		TeacherSemester teacherSemester = getTeacherSemesterById(teacherSemesterId);

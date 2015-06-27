@@ -17,4 +17,8 @@ public interface ClassSemesterDAO {
 			int classId);
 
 	public void deleteClassSemester(int classSemesterId);
+
+	public ClassSemester getClassSemesterByCode(String classCode);
+
+	public List<ClassSemester> listClassSemesterBySemester(int semesterId);
 }

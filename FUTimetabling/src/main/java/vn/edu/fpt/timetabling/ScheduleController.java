@@ -29,7 +29,7 @@ public class ScheduleController {
 	public String schedule(
 			@RequestParam(value = "semesterId", required = true) int semesterId,
 			Model model) {
-		List<ClassSemester> list = scheduleService
+		List<ClassSemester> list = (List<ClassSemester>) scheduleService
 				.listClassBySemester(semesterId);
 		return "redirect:/schedule?semesterId=" + semesterId + "&classId="
 				+ list.get(0).getClassFPT().getClassId();

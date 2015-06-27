@@ -9,9 +9,11 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import vn.edu.fpt.timetabling.model.CourseSemester;
 
+@Repository
 public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 	private static final Logger logger = LoggerFactory
 			.getLogger(CourseSemesterDAO.class);
@@ -23,7 +25,7 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 
 	@Autowired
 	private CourseDAO courseDAO;
-	
+
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
@@ -55,7 +57,8 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 				+ "   LEFT OUTER JOIN FETCH C.programSemesterDetails";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		List<CourseSemester> courseSemesters = (List<CourseSemester>) query.list();
+		List<CourseSemester> courseSemesters = (List<CourseSemester>) query
+				.list();
 		for (CourseSemester courseSemester : courseSemesters) {
 			logger.info("CourseSemester list:" + courseSemester);
 		}
@@ -81,7 +84,7 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 			return null;
 		}
 	}
-	
+
 	@Override
 	public CourseSemester getCourseSemesterByCode(String code) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.CourseSemester"
@@ -101,9 +104,10 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 			return null;
 		}
 	}
-	
+
 	@Override
-	public CourseSemester getCourseSemesterByCourseSemester(int courseId, int semesterId) {
+	public CourseSemester getCourseSemesterByCourseSemester(int courseId,
+			int semesterId) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.CourseSemester"
 				+ " C LEFT OUTER JOIN FETCH C.teacherCourseSemester "
 				+ "   LEFT OUTER JOIN FETCH C.classCourseSemester"
@@ -122,7 +126,7 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 			return null;
 		}
 	}
-	
+
 	@Override
 	public void deleteCourseSemester(int courseSemesterId) {
 		CourseSemester courseSemester = getCourseSemesterById(courseSemesterId);

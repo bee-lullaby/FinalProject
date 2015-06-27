@@ -9,10 +9,11 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
-import vn.edu.fpt.timetabling.model.ClassSemester;
 
+@Repository
 public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 
 	private static final Logger logger = LoggerFactory
@@ -71,9 +72,7 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 	public List<ClassCourseSemester> listClassCourseSemesterByClass(
 			int classSemesterId) {
 		// TODO Auto-generated method stub
-		
-		
-		
+
 		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester C WHERE C.classSemester = :classSemester";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("classSemester",

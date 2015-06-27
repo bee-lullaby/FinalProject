@@ -8,9 +8,11 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import vn.edu.fpt.timetabling.model.Timetable;
 
+@Repository
 public class TimetableDAOImpl implements TimetableDAO {
 
 	private static final Logger logger = LoggerFactory
@@ -54,7 +56,7 @@ public class TimetableDAOImpl implements TimetableDAO {
 		}
 		return timetables;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Timetable> listTimetablesByCCSId(
@@ -80,8 +82,8 @@ public class TimetableDAOImpl implements TimetableDAO {
 	@Override
 	public Timetable getTimetableById(int timetableId) {
 		// TODO Auto-generated method stub
-		Timetable timetable = (Timetable) getCurrentSession().get(Timetable.class,
-				new Integer(timetableId));
+		Timetable timetable = (Timetable) getCurrentSession().get(
+				Timetable.class, new Integer(timetableId));
 		if (timetable != null) {
 			logger.info("Timetable was loaded successfully, timetable details="
 					+ timetable);
