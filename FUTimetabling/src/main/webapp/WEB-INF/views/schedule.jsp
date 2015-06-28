@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -64,8 +64,10 @@
 						data-hint-position="top" data-hint="Previous Week">
 						<span class="mif-chevron-thin-left"></span>
 					</button>
-					<div class="input-control text">
-						<input type="text">
+					<div class="input-control select">
+						<select id="select-weeks">
+						
+						</select>
 					</div>
 					<button id="btn-next-week" class="button" data-role="hint"
 						data-hint-background="#1CB7EC" data-hint-color="fg-white"
@@ -114,18 +116,21 @@
 					</button>
 				</div>
 			</div>
-			<div style="width: 100%; margin-top: 15px">
-				<table class="table cell-hovered border bordered timetable"
+			<div id="timetable-container" style="width: 100%; margin-top: 15px">
+				<input type="hidden" id="startDate" value="${startDate}" /> <input
+					type="hidden" id="endDate" value="${endDate}" />
+				<table id="timetable"
+					class="table cell-hovered border bordered timetable"
 					style="width: 100%">
 					<thead>
-						<tr>
-							<th>Sun</th>
-							<th>Mon</th>
-							<th>Tue</th>
-							<th>Wed</th>
-							<th>Thu</th>
-							<th>Fri</th>
-							<th>Sat</th>
+						<tr id="header">
+							<th id="sun">Sun</th>
+							<th id="mon">Mon</th>
+							<th id="tue">Tue</th>
+							<th id="wed">Wed</th>
+							<th id="thu">Thu</th>
+							<th id="fri">Fri</th>
+							<th id="sat">Sat</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -201,7 +206,8 @@
 			<h1>${courseSemester.getCourse().code}</h1>
 			<table id="table-course" class="table">
 				<tr>
-					<th>Teacher (<font id="numberOfTeacher"></font>):</th>
+					<th>Teacher (<font id="numberOfTeacher"></font>):
+					</th>
 					<td colspan="3">
 						<div class="input-control select">
 							<select>
@@ -209,7 +215,8 @@
 									<c:choose>
 										<c:when
 											test="${courseSemester.courseSemesterId == teacher.getCourseSemester().courseSemesterId}">
-											<option value="${teacher.getTeacherSemester().getTeacher().teacherId}">
+											<option
+												value="${teacher.getTeacherSemester().getTeacher().teacherId}">
 												${teacher.getTeacherSemester().getTeacher().account}</option>
 										</c:when>
 									</c:choose>
@@ -228,12 +235,7 @@
 					<th style="padding-left: 30px">Classes:</th>
 					<td>${fn:length(courseSemester.classCourseSemesters)}</td>
 				</tr>
-				<tr>
-					<th>Morning:</th>
-					<td>4</td>
-					<th style="padding-left: 30px">Afternoon:</th>
-					<td>2</td>
-				</tr>
+
 			</table>
 		</div>
 	</c:forEach>
@@ -242,11 +244,11 @@
 	<div id="dialog-schedule" data-role="dialog" class="padding20"
 		data-close-button="true" data-overlay="true"
 		data-overlay-color="op-dark">
-		<h4>Monday (dd/mm) - Slot 1</h4>
-		<table>
+
+		<table class="bordered">
 			<tr>
-				<th>Course:</th>
-				<td>
+				<td style="padding: 10px; vertical-align: top;">
+					<h3 id="slot-day">Course:</h3> Course:
 					<div class="input-control select">
 						<select>
 							<option>Course 1</option>
@@ -255,25 +257,38 @@
 							<option>Course 4</option>
 							<option>Course 5</option>
 						</select>
-					</div>
+					</div> <br>
+					<button id="btn-clear" class="button" data-role="hint"
+						data-hint-background="#1CB7EC" data-hint-color="fg-white"
+						data-hint-position="top" data-hint="Clear">SAVE</button>
 				</td>
-			</tr>
-			<tr>
-				<th>Can:</th>
-				<td>c1, c2, c3</td>
-			</tr>
-			<tr>
-				<th>Can't:</th>
-				<td>c4, c5</td>
-			</tr>
+				<td style="border-left: thin solid #999999; padding: 10px;">
+					<table>
+						<tr>
+							<td style="text-align: left; padding: 5px;"><h4>Course
+									1</h4></td>
+						</tr>
+						<tr>
+							<th style="text-align: left; padding: 5px;">Remain Slots:</th>
+							<td id="remains_slot"></td>
+						</tr>
+						<tr>
+							<th style="text-align: left; padding: 5px;">Teachers:</th>
+							<td id="teachers"></td>
+						</tr>
+						<tr>
+							<th style="text-align: left; padding: 5px;">Morning:</th>
+							<td id="morning"></td>
+						</tr>
+						<tr>
+							<th style="text-align: left; padding: 5px;">Afternoon:</th>
+							<td id="afternoon"></td>
+						</tr>
+					</table>
+				</td>
 
-			
+			</tr>
 		</table>
-		<button id="btn-clear" class="button" data-role="hint"
-			data-hint-background="#1CB7EC" data-hint-color="fg-white"
-			data-hint-position="top" data-hint="Clear">
-			<span class="mif-cross"></span>
-		</button>
 	</div>
 </body>
 </html>

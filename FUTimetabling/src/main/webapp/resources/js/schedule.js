@@ -1,5 +1,13 @@
 $(document).ready(function(){	
 	
+	var startDate = $("#timetable-container").find("#startDate").val();
+	var endDate = $("#timetable-container").find("#startDate").val();
+	
+	var day = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+	
+	_setDateTimetable();
+	
+	
 	$("div[id^='course-']").on("click", function() {
 		var course;
 		if (this.id.indexOf('1') > -1) {
@@ -20,8 +28,12 @@ $(document).ready(function(){
 	});
 	
 	$("td[id^='tt-']").on("click", function() {
-		console.log($(this).find("select").size());
-		console.log(a);
+		var columnNo = $(this).index() + 1;
+		console.log(columnNo);
+		
+		var header = $(this).closest("table").find("tr:nth-child(1) th:nth-child("+columnNo+")").text();
+		var slot = $(this).parent().get(0).rowIndex;
+		$("#dialog-schedule #slot-day").text(header +" - Slot " +slot);
 		_showDialog("dialog-schedule");
 	});
 	
@@ -34,5 +46,27 @@ $(document).ready(function(){
 			dialog.close();
 		}
 	}
-
+	
+	
+	function _setDateTimetable() {
+		var d = new Date(startDate);
+		console.log(d);
+		d.setDate(d.getDate() - 1);
+		var textDate = d.getDate() +"/" +d.getMonth() +"  -  ";
+		
+		$("#timetable #header th").each(function() {
+			var day = d.getDate();
+			var month = d.getMonth() + 1;
+			$(this).text($(this).text() + " (" +day +"/" +month +")");
+			d.setDate(d.getDate() + 1);
+		});
+		
+		var day = d.getDate();
+		var month = d.getMonth() + 1;
+		textDate += day +"/" +month;
+		
+		$('#select-weeks').append($("<option></option>")
+							.attr("value", "week-1")
+							.text(textDate));
+	}
 });
