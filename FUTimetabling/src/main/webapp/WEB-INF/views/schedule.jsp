@@ -29,12 +29,13 @@
 			</h1>
 
 			<div style="width: 100%;">
+
 				<div style="display: inline-block;">
-					<button id="btn-prev-class" class="button">
-						<span class="mif-arrow-left"></span>
-					</button>
-					<div class="input-control select">
-						<form style="height: 100%">
+					<form style="height: 100%">
+						<button id="btn-prev-class" class="button">
+							<span class="mif-arrow-left"></span>
+						</button>
+						<div class="input-control select">
 							<input type="hidden" name="semesterId" value="${semesterId}">
 							<select id="select-classes" name="classId"
 								onchange="this.form.submit()">
@@ -52,11 +53,12 @@
 									</c:choose>
 								</c:forEach>
 							</select>
-						</form>
-					</div>
-					<button id="btn-next-class" class="button">
-						<span class="mif-arrow-right"></span>
-					</button>
+
+						</div>
+						<button id="btn-next-class" class="button">
+							<span class="mif-arrow-right"></span>
+						</button>
+					</form>
 				</div>
 				<div style="float: right">
 					<button id="btn-prev-week" class="button" data-role="hint"
@@ -65,8 +67,8 @@
 						<span class="mif-chevron-thin-left"></span>
 					</button>
 					<div class="input-control select">
-						<select id="select-weeks">
-						
+						<select id="select-weeks" onchange="_setDateHeader()">
+
 						</select>
 					</div>
 					<button id="btn-next-week" class="button" data-role="hint"

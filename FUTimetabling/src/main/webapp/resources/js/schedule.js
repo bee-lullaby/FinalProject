@@ -1,12 +1,14 @@
 $(document).ready(function(){	
 	
 	var startDate = $("#timetable-container").find("#startDate").val();
-	var endDate = $("#timetable-container").find("#startDate").val();
+	var endDate = $("#timetable-container").find("#endDate").val();
 	
-	var day = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+	var dayName = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+	var days = [];
 	
 	_setDateTimetable();
 	
+	_setDateHeader();
 	
 	$("div[id^='course-']").on("click", function() {
 		var course;
@@ -49,24 +51,87 @@ $(document).ready(function(){
 	
 	
 	function _setDateTimetable() {
-		var d = new Date(startDate);
-		console.log(d);
-		d.setDate(d.getDate() - 1);
-		var textDate = d.getDate() +"/" +d.getMonth() +"  -  ";
+		var start = new Date(startDate);
+		var end = new Date(endDate);
+		start.setDate(start.getDate() - 1);
 		
+		var date = new Date(startDate);
+		date.setDate(date.getDate() - 1);
+		var count = 0;
+		while (date.getTime() < end.getTime()) {
+			var day = date.getDate();
+			var month = date.getMonth() + 1;
+			var textDay =  day +"/" +month +"  -  ";
+			
+			date.setDate(date.getDate() + 6);
+			day = date.getDate();
+			month = date.getMonth() + 1;
+			textDay += day +"/" +month;
+			
+			$('#select-weeks').append($("<option></option>")
+					.attr("value", "week-" + ++count)
+					.text(textDay));
+			date.setDate(date.getDate() + 1);
+			console.log(date);
+			console.log(end);
+		}
+	}
+	
+	function _setDateHeader() {
+		var start = new Date(startDate);
+		start.setDate(start.getDate() - 1);
+		var week = $("#select-weeks option:selected").index();
+		
+		start.setDate(start.getDate() + 7*(week));
+		var $counter= 0;
 		$("#timetable #header th").each(function() {
-			var day = d.getDate();
-			var month = d.getMonth() + 1;
-			$(this).text($(this).text() + " (" +day +"/" +month +")");
-			d.setDate(d.getDate() + 1);
+			
+			var day = start.getDate();
+			var month = start.getMonth() + 1;
+			$(this).text(dayName[$counter] + " (" +day +"/" +month +")");
+			start.setDate(start.getDate() + 1);
+			$counter += 1;
 		});
 		
-		var day = d.getDate();
-		var month = d.getMonth() + 1;
-		textDate += day +"/" +month;
-		
-		$('#select-weeks').append($("<option></option>")
-							.attr("value", "week-1")
-							.text(textDate));
 	}
+	
+	$("#select-weeks").change(function(){
+		_setDateHeader();
+	});
+	
+	$("#btn-next-week").on("click", function() {
+		var nextOption = $("#select-weeks option:selected").next("option");
+		if (nextOption.length > 0) {
+			$("#select-weeks option:selected").removeAttr("selected");
+			nextOption.attr("selected", "selected");
+		}
+		_setDateHeader();
+	});
+	
+	$("#btn-prev-week").on("click", function() {
+		var prevOption = $("#select-weeks option:selected").prev("option");
+		if (prevOption.length > 0) {
+			$("#select-weeks option:selected").removeAttr("selected");
+			prevOption.attr("selected", "selected");
+		}
+		_setDateHeader();
+	});
+	
+	$("#btn-next-class").on("click", function() {
+		var nextOption = $("#select-classes option:selected").next("option");
+		if (nextOption.length > 0) {
+			$("#select-classes option:selected").removeAttr("selected");
+			nextOption.attr("selected", "selected");
+		}
+		$(this).form.submit();	
+	});
+	
+	$("#btn-prev-class").on("click", function() {
+		var prevOption = $("#select-classes option:selected").prev("option");
+		if (prevOption.length > 0) {
+			$("#select-classes option:selected").removeAttr("selected");
+			prevOption.attr("selected", "selected");
+		}
+		$(this).form.submit();	
+	});
 });
