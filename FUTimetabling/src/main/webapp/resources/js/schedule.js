@@ -6,6 +6,8 @@ $(document).ready(function(){
 	var dayName = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 	var days = [];
 	
+	
+	
 	_setDateTimetable();
 	
 	_setDateHeader();
@@ -31,11 +33,11 @@ $(document).ready(function(){
 	
 	$("td[id^='tt-']").on("click", function() {
 		var columnNo = $(this).index() + 1;
-		console.log(columnNo);
 		
 		var header = $(this).closest("table").find("tr:nth-child(1) th:nth-child("+columnNo+")").text();
 		var slot = $(this).parent().get(0).rowIndex;
 		$("#dialog-schedule #slot-day").text(header +" - Slot " +slot);
+		_setCourseInfoDialog(); 
 		_showDialog("dialog-schedule");
 	});
 	
@@ -72,8 +74,6 @@ $(document).ready(function(){
 					.attr("value", "week-" + ++count)
 					.text(textDay));
 			date.setDate(date.getDate() + 1);
-			console.log(date);
-			console.log(end);
 		}
 	}
 	
@@ -95,7 +95,7 @@ $(document).ready(function(){
 		
 	}
 	
-	$("#select-weeks").change(function(){
+	$("#select-weeks").on("change", function(){
 		_setDateHeader();
 	});
 	
@@ -134,4 +134,13 @@ $(document).ready(function(){
 		}
 		$(this).form.submit();	
 	});
+	
+	$("#set-courses").on("change", function() {
+		_setCourseInfoDialog(); 
+	});
+	
+	function _setCourseInfoDialog() {
+		var courseSelected = $("#set-courses option:selected").text();
+		$("#course-info-to-set").find("#course-code").text(courseSelected);
+	};
 });

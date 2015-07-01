@@ -252,12 +252,10 @@
 				<td style="padding: 10px; vertical-align: top;">
 					<h3 id="slot-day">Course:</h3> Course:
 					<div class="input-control select">
-						<select>
-							<option>Course 1</option>
-							<option disabled>Course 2</option>
-							<option>Course 3</option>
-							<option>Course 4</option>
-							<option>Course 5</option>
+						<select id="set-courses" name="setCourse">
+							<c:forEach items="${listCourses}" var="courseSemester">
+								<option value="${courseSemester.getCourse().code}">${courseSemester.getCourse().code}</option>
+							</c:forEach>
 						</select>
 					</div> <br>
 					<button id="btn-clear" class="button" data-role="hint"
@@ -265,29 +263,30 @@
 						data-hint-position="top" data-hint="Clear">SAVE</button>
 				</td>
 				<td style="border-left: thin solid #999999; padding: 10px;">
-					<table>
+					<table id="course-info-to-set">
+						
 						<tr>
-							<td style="text-align: left; padding: 5px;"><h4>Course
-									1</h4></td>
+							<td style="text-align: left; padding: 5px;"><h4
+									id="course-code"></h4></td>
 						</tr>
 						<tr>
 							<th style="text-align: left; padding: 5px;">Remain Slots:</th>
-							<td id="remains_slot"></td>
+							<td id="remains_slot">30</td>
 						</tr>
 						<tr>
-							<th style="text-align: left; padding: 5px;">Teachers:</th>
-							<td id="teachers"></td>
+							<th style="text-align: left; padding: 5px;">Classes learn the course: </th>
+							<td id="cltc"></td>
 						</tr>
 						<tr>
-							<th style="text-align: left; padding: 5px;">Morning:</th>
-							<td id="morning"></td>
+							<th style="text-align: left; padding: 5px;">In this slot: </th>
+							<td id="in-this-slot"></td>
 						</tr>
 						<tr>
 							<th style="text-align: left; padding: 5px;">Afternoon:</th>
-							<td id="afternoon"></td>
+							<td id="teachers"></td>
 						</tr>
 					</table>
-				</td>
+			</td>
 
 			</tr>
 		</table>
