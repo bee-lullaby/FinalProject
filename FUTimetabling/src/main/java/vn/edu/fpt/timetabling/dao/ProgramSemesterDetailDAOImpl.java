@@ -46,7 +46,8 @@ public class ProgramSemesterDetailDAOImpl implements ProgramSemesterDetailDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ProgramSemesterDetail> listProgramSemesterDetails() {
-		String hql = "FROM vn.edu.fpt.timetabling.model.ProgramSemesterDetail";
+		String hql = "FROM vn.edu.fpt.timetabling.model.ProgramSemesterDetail PSD"
+				+ " ORDER BY PSD.programSemesterDetailId";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<ProgramSemesterDetail> programSemesterDetails = (List<ProgramSemesterDetail>) query
@@ -60,8 +61,8 @@ public class ProgramSemesterDetailDAOImpl implements ProgramSemesterDetailDAO {
 	@Override
 	public ProgramSemesterDetail getProgramSemesterDetailById(
 			int programSemesterDetailId) {
-		String hql = "FROM vn.edu.fpt.timetabling.model.ProgramSemesterDetail"
-				+ " WHERE S.programSemesterDetailId = :programSemesterDetailId";
+		String hql = "FROM vn.edu.fpt.timetabling.model.ProgramSemesterDetail PSD"
+				+ " WHERE PSD.programSemesterDetailId = :programSemesterDetailId";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("programSemesterDetailId", programSemesterDetailId);
 		Object temp = query.uniqueResult();
@@ -77,8 +78,12 @@ public class ProgramSemesterDetailDAOImpl implements ProgramSemesterDetailDAO {
 
 	@Override
 	public void deleteProgramSemesterDetail(int programSemesterDetailId) {
-		// TODO Auto-generated method stub
-
+		ProgramSemesterDetail programSemesterDetail = getProgramSemesterDetailById(programSemesterDetailId);
+		if (programSemesterDetail != null) {
+			getCurrentSession().delete(programSemesterDetail);
+			logger.info("ProgramSemesterDetail was deleted successfully, ProgramSemesterDetail details="
+					+ programSemesterDetail);
+		}
 	}
 
 }

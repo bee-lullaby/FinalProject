@@ -14,6 +14,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 @Table(name = "specialized")
 public class Specialized {
@@ -25,12 +27,30 @@ public class Specialized {
 	private String code;
 	@Column
 	private String name;
+	@Column(name = "is_detail_specialized", columnDefinition = "TINYINT")
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	private boolean detailSpecialized;
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "specialized", orphanRemoval = true)
 	@OrderBy
 	Set<Student> students = new LinkedHashSet<Student>();
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "specialized", orphanRemoval = true)
 	@OrderBy
 	Set<ClassFPT> classes = new LinkedHashSet<ClassFPT>();
+
+	/**
+	 * @return the detailSpecialized
+	 */
+	public boolean isDetailSpecialized() {
+		return detailSpecialized;
+	}
+
+	/**
+	 * @param detailSpecialized
+	 *            the detailSpecialized to set
+	 */
+	public void setDetailSpecialized(boolean detailSpecialized) {
+		this.detailSpecialized = detailSpecialized;
+	}
 
 	/**
 	 * @return the classes

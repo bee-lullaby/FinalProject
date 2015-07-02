@@ -52,6 +52,7 @@ public class SemesterDAOImpl implements SemesterDAO {
 		String hql = "FROM vn.edu.fpt.timetabling.model.Semester"
 				+ " S LEFT OUTER JOIN FETCH S.classSemesters"
 				+ " LEFT OUTER JOIN FETCH S.courseSemesters"
+				+ " LEFT OUTER JOIN FETCH S.programSemesters"
 				+ " LEFT OUTER JOIN FETCH S.teacherSemesters";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -67,6 +68,7 @@ public class SemesterDAOImpl implements SemesterDAO {
 		String hql = "FROM vn.edu.fpt.timetabling.model.Semester"
 				+ " S LEFT OUTER JOIN FETCH S.classSemesters"
 				+ " LEFT OUTER JOIN FETCH S.courseSemesters"
+				+ " LEFT OUTER JOIN FETCH S.programSemesters"
 				+ " LEFT OUTER JOIN FETCH S.teacherSemesters"
 				+ " WHERE S.semesterId = :semesterId";
 		Query query = getCurrentSession().createQuery(hql);

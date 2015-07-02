@@ -45,7 +45,8 @@ public class SpecializedDAOImpl implements SpecializedDAO {
 	@Override
 	public List<Specialized> listSpecializeds() {
 		String hql = "FROM vn.edu.fpt.timetabling.model.Specialized"
-				+ " S LEFT OUTER JOIN FETCH S.classes LEFT OUTER JOIN FETCH S.students";
+				+ " S LEFT OUTER JOIN FETCH S.classes LEFT OUTER JOIN FETCH S.students"
+				+ " WHERE S.detailSpecialized IS FALSE";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<Specialized> specializeds = (List<Specialized>) query.list();
@@ -98,6 +99,21 @@ public class SpecializedDAOImpl implements SpecializedDAO {
 			logger.info("Specialized was deleted successfully, specialized="
 					+ specialized);
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Specialized> listDetailSpecializeds() {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Specialized"
+				+ " S LEFT OUTER JOIN FETCH S.classes LEFT OUTER JOIN FETCH S.students"
+				+ " WHERE S.detailSpecialized IS TRUE";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<Specialized> specializeds = (List<Specialized>) query.list();
+		for (Specialized specialized : specializeds) {
+			logger.info("Specialized list:" + specialized);
+		}
+		return specializeds;
 	}
 
 }

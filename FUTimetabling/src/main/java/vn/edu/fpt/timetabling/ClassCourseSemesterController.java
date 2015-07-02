@@ -63,25 +63,26 @@ public class ClassCourseSemesterController {
 		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
+		Semester semester;
 		if (semesterId != null || session.getAttribute("semesterId") != null) {
 			if (semesterId == null) {
 				semesterId = (Integer) session.getAttribute("semesterId");
 			}
-			Semester semester = semesterService.getSemesterById(semesterId);
+			semester = semesterService.getSemesterById(semesterId);
 			if (semester == null) {
-				return "classCourseSelectSemester";
+				semester = semesterService.listSemesters().get(0);
 			}
-			model.addAttribute("classCourseSemester", new ClassCourseSemester());
-			model.addAttribute("classCourseSemesters",
-					classCourseSemesterService.listClassCourseSemesters());
-			model.addAttribute("classSemesters", semester.getClassSemesters());
-			model.addAttribute("courseSemesters", semester.getCourseSemesters());
-			session.setAttribute("semesterId", semesterId);
-			return "classCourse";
+
 		} else {
-			model.addAttribute("semesters", semesterService.listSemesters());
+			semester = semesterService.listSemesters().get(0);
 		}
-		return "classCourseSelectSemester";
+		model.addAttribute("classCourseSemester", new ClassCourseSemester());
+		model.addAttribute("classCourseSemesters",
+				classCourseSemesterService.listClassCourseSemesters());
+		model.addAttribute("classSemesters", semester.getClassSemesters());
+		model.addAttribute("courseSemesters", semester.getCourseSemesters());
+		session.setAttribute("semesterId", semesterId);
+		return "classCourse";
 	}
 
 	@RequestMapping(value = "/classCourseSemester/add", method = RequestMethod.POST)

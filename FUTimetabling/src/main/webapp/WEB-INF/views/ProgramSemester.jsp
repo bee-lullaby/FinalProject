@@ -103,6 +103,17 @@
 					</form:select></td>
 			</tr>
 			<tr>
+				<td><form:label path="detailSpecialized">
+						<spring:message text="Detail Specialized" />
+					</form:label></td>
+				<td><form:select path="detailSpecialized">
+						<c:forEach var="item" items="${detailSpecializeds}">
+							<option value="${item.specializedId}"
+								${item.specializedId == detailSpecializedId ? 'selected="selected"' : ''}>${item.name}</option>
+						</c:forEach>
+					</form:select></td>
+			</tr>
+			<tr>
 				<td colspan="2"><c:choose>
 						<c:when test="${!empty programSemester.semester}">
 							<input type="submit"
@@ -133,6 +144,7 @@
 				<th width="120">Semester</th>
 				<th width="120">Current Semester</th>
 				<th width="120">Specialized</th>
+				<th width="120">Detail Specialized</th>
 				<th width="120">Courses</th>
 				<th width="60">Edit</th>
 				<th width="60">Delete</th>
@@ -143,6 +155,7 @@
 					<td>${programSemesterTemp.semester.name}</td>
 					<td>${programSemesterTemp.currentSemester}</td>
 					<td>${programSemesterTemp.specialized.name}</td>
+					<td>${programSemesterTemp.detailSpecialized.name}</td>
 					<td>${programSemesterTemp.programSemesterDetails}</td>
 					<td><a
 						href="<c:url value='/programSemester/edit/${programSemesterTemp.programSemesterId}' />">Edit</a></td>

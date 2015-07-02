@@ -90,4 +90,10 @@ public class SpecializedServiceImpl implements SpecializedService {
 		specializedDAO.deleteSpecialized(specializedId);
 	}
 
+	@Override
+	@Transactional
+	public List<Specialized> listDetailSpecializeds() {
+		return specializedDAO.listDetailSpecializeds();
+	}
+
 }

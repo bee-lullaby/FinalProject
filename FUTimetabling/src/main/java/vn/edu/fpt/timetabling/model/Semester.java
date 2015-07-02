@@ -41,6 +41,39 @@ public class Semester implements Comparable<Semester> {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "semester", orphanRemoval = true)
 	@OrderBy
 	private Set<TeacherSemester> teacherSemesters = new LinkedHashSet<TeacherSemester>();
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "semester", orphanRemoval = true)
+	@OrderBy
+	private Set<ProgramSemester> programSemesters = new LinkedHashSet<ProgramSemester>();
+
+	/**
+	 * @return the teacherSemesters
+	 */
+	public Set<TeacherSemester> getTeacherSemesters() {
+		return teacherSemesters;
+	}
+
+	/**
+	 * @param teacherSemesters
+	 *            the teacherSemesters to set
+	 */
+	public void setTeacherSemesters(Set<TeacherSemester> teacherSemesters) {
+		this.teacherSemesters = teacherSemesters;
+	}
+
+	/**
+	 * @return the programSemesters
+	 */
+	public Set<ProgramSemester> getProgramSemesters() {
+		return programSemesters;
+	}
+
+	/**
+	 * @param programSemesters
+	 *            the programSemesters to set
+	 */
+	public void setProgramSemesters(Set<ProgramSemester> programSemesters) {
+		this.programSemesters = programSemesters;
+	}
 
 	/**
 	 * @return the courseSemesters

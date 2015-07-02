@@ -10,6 +10,8 @@ public interface SpecializedDAO {
 	public void updateSpecialized(Specialized specialized);
 
 	public List<Specialized> listSpecializeds();
+	
+	public List<Specialized> listDetailSpecializeds();
 
 	public Specialized getSpecializedById(int specializedId);
 

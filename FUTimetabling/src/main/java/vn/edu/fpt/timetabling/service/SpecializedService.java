@@ -14,6 +14,8 @@ public interface SpecializedService {
 
 	public List<Specialized> listSpecializeds();
 
+	public List<Specialized> listDetailSpecializeds();
+
 	public Specialized getSpecializedById(int specializedId);
 
 	public Specialized getSpecializedByCode(String code);

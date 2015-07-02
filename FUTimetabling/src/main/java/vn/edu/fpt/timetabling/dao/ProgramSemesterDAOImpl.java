@@ -45,7 +45,8 @@ public class ProgramSemesterDAOImpl implements ProgramSemesterDAO {
 	@Override
 	public List<ProgramSemester> listProgramSemesters() {
 		String hql = "FROM vn.edu.fpt.timetabling.model.ProgramSemester"
-				+ " S LEFT OUTER JOIN FETCH S.programSemesterDetails";
+				+ " PS LEFT OUTER JOIN FETCH PS.programSemesterDetails"
+				+ " ORDER BY PS.programSemesterId";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<ProgramSemester> programSemesters = (List<ProgramSemester>) query
@@ -59,8 +60,8 @@ public class ProgramSemesterDAOImpl implements ProgramSemesterDAO {
 	@Override
 	public ProgramSemester getProgramSemesterById(int programSemesterId) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.ProgramSemester"
-				+ " S LEFT OUTER JOIN FETCH S.programSemesterDetails"
-				+ " WHERE S.programSemesterId = :programSemesterId";
+				+ " PS LEFT OUTER JOIN FETCH PS.programSemesterDetails"
+				+ " WHERE PS.programSemesterId = :programSemesterId";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("programSemesterId", programSemesterId);
 		Object temp = query.uniqueResult();

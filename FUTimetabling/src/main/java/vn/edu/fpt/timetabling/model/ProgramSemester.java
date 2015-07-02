@@ -35,9 +35,28 @@ public class ProgramSemester {
 	@JoinColumn(name = "specialized_id")
 	private Specialized specialized;
 
+	@ManyToOne
+	@JoinColumn(name = "detail_specialized_id")
+	private Specialized detailSpecialized;
+
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "programSemester", orphanRemoval = true)
 	@OrderBy
 	Set<ProgramSemesterDetail> programSemesterDetails = new LinkedHashSet<ProgramSemesterDetail>();
+
+	/**
+	 * @return the detailSpecialized
+	 */
+	public Specialized getDetailSpecialized() {
+		return detailSpecialized;
+	}
+
+	/**
+	 * @param detailSpecialized
+	 *            the detailSpecialized to set
+	 */
+	public void setDetailSpecialized(Specialized detailSpecialized) {
+		this.detailSpecialized = detailSpecialized;
+	}
 
 	/**
 	 * @return the programSemesterDetails

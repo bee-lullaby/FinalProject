@@ -37,15 +37,14 @@ public class ClassCourseSemester {
 	@Column(name = "block_condition")
 	private int blockCondition;
 
-	@Column(name = "semester_long", columnDefinition = "TINYINT")
+	@Column(name = "is_semester_long", columnDefinition = "TINYINT")
 	@Type(type = "org.hibernate.type.NumericBooleanType")
 	private boolean semesterLong;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "classCourseSemester", orphanRemoval = true)
 	@OrderBy
 	Set<Timetable> timetable = new LinkedHashSet<Timetable>();
 
-	
 	/**
 	 * @return the timetable
 	 */
@@ -54,7 +53,8 @@ public class ClassCourseSemester {
 	}
 
 	/**
-	 * @param timetable the timetable to set
+	 * @param timetable
+	 *            the timetable to set
 	 */
 	public void setTimetable(Set<Timetable> timetable) {
 		this.timetable = timetable;

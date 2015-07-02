@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 25, 2015 at 01:29 PM
+-- Generation Time: Jul 02, 2015 at 09:34 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -19,6 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `academic_portal`
 --
+CREATE DATABASE IF NOT EXISTS `academic_portal` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `academic_portal`;
 
 -- --------------------------------------------------------
 
@@ -26,6 +28,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `classes`
 --
 
+DROP TABLE IF EXISTS `classes`;
 CREATE TABLE IF NOT EXISTS `classes` (
 `class_id` int(11) NOT NULL,
   `code` varchar(10) NOT NULL,
@@ -42,12 +45,13 @@ CREATE TABLE IF NOT EXISTS `classes` (
 -- Table structure for table `class_course_semester`
 --
 
+DROP TABLE IF EXISTS `class_course_semester`;
 CREATE TABLE IF NOT EXISTS `class_course_semester` (
 `class_course_semester_id` int(11) NOT NULL,
   `class_semester_id` int(11) NOT NULL,
   `course_semester_id` int(11) NOT NULL,
   `block_condition` int(11) DEFAULT NULL,
-  `semester_long` tinyint(1) NOT NULL
+  `is_semester_long` tinyint(1) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=131 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -56,6 +60,7 @@ CREATE TABLE IF NOT EXISTS `class_course_semester` (
 -- Table structure for table `class_course_student_semester`
 --
 
+DROP TABLE IF EXISTS `class_course_student_semester`;
 CREATE TABLE IF NOT EXISTS `class_course_student_semester` (
 `class_course_student_semester_id` int(11) NOT NULL,
   `class_course_semester_id` int(11) NOT NULL,
@@ -68,6 +73,7 @@ CREATE TABLE IF NOT EXISTS `class_course_student_semester` (
 -- Table structure for table `class_course_teacher_semester`
 --
 
+DROP TABLE IF EXISTS `class_course_teacher_semester`;
 CREATE TABLE IF NOT EXISTS `class_course_teacher_semester` (
 `class_course_teacher_semester_id` int(11) NOT NULL,
   `class_semester_id` int(11) NOT NULL,
@@ -81,6 +87,7 @@ CREATE TABLE IF NOT EXISTS `class_course_teacher_semester` (
 -- Table structure for table `class_semester`
 --
 
+DROP TABLE IF EXISTS `class_semester`;
 CREATE TABLE IF NOT EXISTS `class_semester` (
 `class_semester_id` int(11) NOT NULL,
   `class_id` int(11) NOT NULL,
@@ -95,12 +102,13 @@ CREATE TABLE IF NOT EXISTS `class_semester` (
 -- Table structure for table `courses`
 --
 
+DROP TABLE IF EXISTS `courses`;
 CREATE TABLE IF NOT EXISTS `courses` (
 `course_id` int(11) NOT NULL,
   `code` varchar(20) NOT NULL,
   `name` varchar(100) NOT NULL,
   `department_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -108,13 +116,14 @@ CREATE TABLE IF NOT EXISTS `courses` (
 -- Table structure for table `course_semester`
 --
 
+DROP TABLE IF EXISTS `course_semester`;
 CREATE TABLE IF NOT EXISTS `course_semester` (
 `course_semester_id` int(11) NOT NULL,
   `course_id` int(11) NOT NULL,
   `semester_id` int(11) NOT NULL,
   `slots` int(11) NOT NULL,
   `course_condition_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -122,6 +131,7 @@ CREATE TABLE IF NOT EXISTS `course_semester` (
 -- Table structure for table `department`
 --
 
+DROP TABLE IF EXISTS `department`;
 CREATE TABLE IF NOT EXISTS `department` (
 `department_id` int(11) NOT NULL,
   `code` varchar(10) NOT NULL,
@@ -134,12 +144,14 @@ CREATE TABLE IF NOT EXISTS `department` (
 -- Table structure for table `program_semester`
 --
 
+DROP TABLE IF EXISTS `program_semester`;
 CREATE TABLE IF NOT EXISTS `program_semester` (
 `program_semester_id` int(11) NOT NULL,
   `semester_id` int(11) NOT NULL,
   `current_semester` int(11) NOT NULL,
-  `specialized_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `specialized_id` int(11) NOT NULL,
+  `detail_specialized_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -147,6 +159,7 @@ CREATE TABLE IF NOT EXISTS `program_semester` (
 -- Table structure for table `program_semester_detail`
 --
 
+DROP TABLE IF EXISTS `program_semester_detail`;
 CREATE TABLE IF NOT EXISTS `program_semester_detail` (
 `program_semester_detail_id` int(11) NOT NULL,
   `program_semester_id` int(11) NOT NULL,
@@ -159,6 +172,7 @@ CREATE TABLE IF NOT EXISTS `program_semester_detail` (
 -- Table structure for table `rooms`
 --
 
+DROP TABLE IF EXISTS `rooms`;
 CREATE TABLE IF NOT EXISTS `rooms` (
 `room_id` int(11) NOT NULL,
   `code` varchar(10) NOT NULL,
@@ -172,6 +186,7 @@ CREATE TABLE IF NOT EXISTS `rooms` (
 -- Table structure for table `semesters`
 --
 
+DROP TABLE IF EXISTS `semesters`;
 CREATE TABLE IF NOT EXISTS `semesters` (
 `semester_id` int(11) NOT NULL,
   `code` varchar(10) NOT NULL,
@@ -187,11 +202,13 @@ CREATE TABLE IF NOT EXISTS `semesters` (
 -- Table structure for table `specialized`
 --
 
+DROP TABLE IF EXISTS `specialized`;
 CREATE TABLE IF NOT EXISTS `specialized` (
 `specialized_id` int(11) NOT NULL,
   `code` varchar(10) NOT NULL,
-  `name` varchar(20) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+  `name` varchar(20) NOT NULL,
+  `is_detail_specialized` tinyint(1) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -199,13 +216,14 @@ CREATE TABLE IF NOT EXISTS `specialized` (
 -- Table structure for table `staff`
 --
 
+DROP TABLE IF EXISTS `staff`;
 CREATE TABLE IF NOT EXISTS `staff` (
 `staff_id` int(11) NOT NULL,
   `account` varchar(20) NOT NULL,
   `name` varchar(100) NOT NULL,
   `email` varchar(50) NOT NULL,
   `account_type` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -213,6 +231,7 @@ CREATE TABLE IF NOT EXISTS `staff` (
 -- Table structure for table `students`
 --
 
+DROP TABLE IF EXISTS `students`;
 CREATE TABLE IF NOT EXISTS `students` (
 `student_id` int(11) NOT NULL,
   `account` varchar(20) NOT NULL,
@@ -231,6 +250,7 @@ CREATE TABLE IF NOT EXISTS `students` (
 -- Table structure for table `student_course`
 --
 
+DROP TABLE IF EXISTS `student_course`;
 CREATE TABLE IF NOT EXISTS `student_course` (
 `student_course_id` int(11) NOT NULL,
   `student_id` int(11) NOT NULL,
@@ -246,6 +266,7 @@ CREATE TABLE IF NOT EXISTS `student_course` (
 -- Table structure for table `teachers`
 --
 
+DROP TABLE IF EXISTS `teachers`;
 CREATE TABLE IF NOT EXISTS `teachers` (
 `teacher_id` int(11) NOT NULL,
   `account` varchar(20) NOT NULL,
@@ -260,6 +281,7 @@ CREATE TABLE IF NOT EXISTS `teachers` (
 -- Table structure for table `teacher_course_semester`
 --
 
+DROP TABLE IF EXISTS `teacher_course_semester`;
 CREATE TABLE IF NOT EXISTS `teacher_course_semester` (
 `teacher_course_semester_id` int(11) NOT NULL,
   `teacher_semester_id` int(11) NOT NULL,
@@ -272,6 +294,7 @@ CREATE TABLE IF NOT EXISTS `teacher_course_semester` (
 -- Table structure for table `teacher_semester`
 --
 
+DROP TABLE IF EXISTS `teacher_semester`;
 CREATE TABLE IF NOT EXISTS `teacher_semester` (
 `teacher_semester_id` int(11) NOT NULL,
   `teacher_id` int(11) NOT NULL,
@@ -284,6 +307,7 @@ CREATE TABLE IF NOT EXISTS `teacher_semester` (
 -- Table structure for table `time_table`
 --
 
+DROP TABLE IF EXISTS `time_table`;
 CREATE TABLE IF NOT EXISTS `time_table` (
 `time_table_id` int(11) NOT NULL,
   `class_course_semester_id` int(11) NOT NULL,
@@ -349,7 +373,7 @@ ALTER TABLE `department`
 -- Indexes for table `program_semester`
 --
 ALTER TABLE `program_semester`
- ADD PRIMARY KEY (`program_semester_id`), ADD UNIQUE KEY `semester_id` (`semester_id`,`current_semester`,`specialized_id`), ADD KEY `specialized_id` (`specialized_id`);
+ ADD PRIMARY KEY (`program_semester_id`), ADD UNIQUE KEY `semester_id_2` (`semester_id`,`current_semester`,`specialized_id`,`detail_specialized_id`), ADD KEY `semester_id` (`semester_id`), ADD KEY `specialized_id` (`specialized_id`), ADD KEY `detail_specialized_id` (`detail_specialized_id`);
 
 --
 -- Indexes for table `program_semester_detail`
@@ -450,12 +474,12 @@ MODIFY `class_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=32;
 -- AUTO_INCREMENT for table `courses`
 --
 ALTER TABLE `courses`
-MODIFY `course_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=43;
+MODIFY `course_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=47;
 --
 -- AUTO_INCREMENT for table `course_semester`
 --
 ALTER TABLE `course_semester`
-MODIFY `course_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=43;
+MODIFY `course_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=47;
 --
 -- AUTO_INCREMENT for table `department`
 --
@@ -465,7 +489,7 @@ MODIFY `department_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
 -- AUTO_INCREMENT for table `program_semester`
 --
 ALTER TABLE `program_semester`
-MODIFY `program_semester_id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `program_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT for table `program_semester_detail`
 --
@@ -485,12 +509,12 @@ MODIFY `semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 -- AUTO_INCREMENT for table `specialized`
 --
 ALTER TABLE `specialized`
-MODIFY `specialized_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+MODIFY `specialized_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `staff`
 --
 ALTER TABLE `staff`
-MODIFY `staff_id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `staff_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `students`
 --
@@ -579,8 +603,9 @@ ADD CONSTRAINT `course_semester_ibfk_5` FOREIGN KEY (`semester_id`) REFERENCES `
 -- Constraints for table `program_semester`
 --
 ALTER TABLE `program_semester`
-ADD CONSTRAINT `program_semester_ibfk_1` FOREIGN KEY (`specialized_id`) REFERENCES `specialized` (`specialized_id`),
-ADD CONSTRAINT `program_semester_ibfk_2` FOREIGN KEY (`semester_id`) REFERENCES `semesters` (`semester_id`);
+ADD CONSTRAINT `program_semester_ibfk_1` FOREIGN KEY (`semester_id`) REFERENCES `semesters` (`semester_id`),
+ADD CONSTRAINT `program_semester_ibfk_2` FOREIGN KEY (`specialized_id`) REFERENCES `specialized` (`specialized_id`),
+ADD CONSTRAINT `program_semester_ibfk_3` FOREIGN KEY (`detail_specialized_id`) REFERENCES `specialized` (`specialized_id`);
 
 --
 -- Constraints for table `program_semester_detail`
