@@ -31,8 +31,7 @@ public class CourseSemesterController {
 
 	@Autowired(required = true)
 	@Qualifier(value = "courseSemesterService")
-	public void setCourseSemesterService(
-			CourseSemesterService courseSemesterService) {
+	public void setCourseSemesterService(CourseSemesterService courseSemesterService) {
 		this.courseSemesterService = courseSemesterService;
 	}
 
@@ -54,9 +53,8 @@ public class CourseSemesterController {
 			return "home";
 		}
 		model.addAttribute("courseSemester", new CourseSemester());
-		model.addAttribute("listCourseSemesters",
-				courseSemesterService.listCourseSemesters());
-		model.addAttribute("semesters", semesterService.listSemesters());
+		model.addAttribute("listCourseSemesters", courseSemesterService.listCourseSemesters());
+		model.addAttribute("semesters", semesterService.listSemesters(false, false, false, false));
 		model.addAttribute("courses", courseService.listCourses());
 		Course course = new Course();
 		course.setCourseId(-1);
@@ -69,18 +67,15 @@ public class CourseSemesterController {
 
 	// For add and update person both
 	@RequestMapping(value = "/courseSemester/addFromFile", method = RequestMethod.POST)
-	public String addCourseSemesterFromFile(
-			@RequestParam("file") MultipartFile file,
+	public String addCourseSemesterFromFile(@RequestParam("file") MultipartFile file,
 			@RequestParam("semesterId") int semesterId) {
 		if (!file.isEmpty()) {
 			File courseSemesters = new File(
-					"D:\\FU\\Do an tot nghiep\\Data\\ServerData\\"
-							+ file.getOriginalFilename());
+					"D:\\FU\\Do an tot nghiep\\Data\\ServerData\\" + file.getOriginalFilename());
 			try {
 				file.transferTo(courseSemesters);
 
-				courseSemesterService.addCourseSemesterFromFile(
-						courseSemesters, semesterId);
+				courseSemesterService.addCourseSemesterFromFile(courseSemesters, semesterId);
 			} catch (IllegalStateException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -93,8 +88,7 @@ public class CourseSemesterController {
 	}
 
 	@RequestMapping(value = "/courseSemester/add", method = RequestMethod.POST)
-	public String addCourseSemester(
-			HttpSession session,
+	public String addCourseSemester(HttpSession session,
 			@RequestParam(value = "courseSemesterId", required = true) int courseSemesterId,
 			@RequestParam(value = "course", required = true) int courseId,
 			@RequestParam(value = "semester", required = true) int semesterId,
@@ -106,17 +100,15 @@ public class CourseSemesterController {
 		if (courseId == courseConditionId) {
 			return "redirect:/courseSemesters";
 		}
-		CourseSemester courseSemester = courseSemesterService
-				.getCourseSemesterById(courseSemesterId);
+		CourseSemester courseSemester = courseSemesterService.getCourseSemesterById(courseSemesterId);
 		if (courseSemester == null) {
 			courseSemester = new CourseSemester();
 		}
 		courseSemester.setCourse(courseService.getCourseById(courseId));
-		courseSemester.setSemester(semesterService.getSemesterById(semesterId));
+		courseSemester.setSemester(semesterService.getSemesterById(semesterId, false, false, false, false));
 		courseSemester.setSlots(slots);
 		if (courseConditionId != null) {
-			courseSemester.setCourseCondition(courseService
-					.getCourseById(courseConditionId));
+			courseSemester.setCourseCondition(courseService.getCourseById(courseConditionId));
 		} else {
 			courseSemester.setCourseCondition(null);
 		}
@@ -131,8 +123,7 @@ public class CourseSemesterController {
 	}
 
 	@RequestMapping("/courseSemester/delete/{courseSemesterId}")
-	public String deleteCourseSemester(HttpSession session,
-			@PathVariable("courseSemesterId") int courseSemesterId) {
+	public String deleteCourseSemester(HttpSession session, @PathVariable("courseSemesterId") int courseSemesterId) {
 		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
@@ -141,20 +132,18 @@ public class CourseSemesterController {
 	}
 
 	@RequestMapping("/courseSemester/edit/{courseSemesterId}")
-	public String editCourseSemester(HttpSession session,
-			@PathVariable("courseSemesterId") int courseSemesterId, Model model) {
+	public String editCourseSemester(HttpSession session, @PathVariable("courseSemesterId") int courseSemesterId,
+			Model model) {
 		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
-		CourseSemester courseSemester = courseSemesterService
-				.getCourseSemesterById(courseSemesterId);
+		CourseSemester courseSemester = courseSemesterService.getCourseSemesterById(courseSemesterId);
 		if (courseSemester == null) {
 			return "redirect:/courseSemesters";
 		}
 		model.addAttribute("courseSemester", courseSemester);
-		model.addAttribute("courseSemesters",
-				courseSemesterService.listCourseSemesters());
-		model.addAttribute("semesters", semesterService.listSemesters());
+		model.addAttribute("courseSemesters", courseSemesterService.listCourseSemesters());
+		model.addAttribute("semesters", semesterService.listSemesters(false, false, false, false));
 		model.addAttribute("courses", courseService.listCourses());
 		Course course = new Course();
 		course.setCourseId(-1);
@@ -164,8 +153,7 @@ public class CourseSemesterController {
 		model.addAttribute("courseConditions", courses);
 		model.addAttribute("courseId", courseSemester.getCourse().getCourseId());
 		if (courseSemester.getCourseCondition() != null) {
-			model.addAttribute("courseConditionId", courseSemester
-					.getCourseCondition().getCourseId());
+			model.addAttribute("courseConditionId", courseSemester.getCourseCondition().getCourseId());
 		}
 		return "courseSemester";
 	}

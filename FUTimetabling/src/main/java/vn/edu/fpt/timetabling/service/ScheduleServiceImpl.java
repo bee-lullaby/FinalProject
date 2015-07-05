@@ -14,7 +14,6 @@ import vn.edu.fpt.timetabling.dao.SemesterDAO;
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassSemester;
 import vn.edu.fpt.timetabling.model.CourseSemester;
-import vn.edu.fpt.timetabling.model.Semester;
 import vn.edu.fpt.timetabling.model.TeacherCourseSemester;
 
 @Service
@@ -31,48 +30,34 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Transactional
 	@Override
-	public Semester getSemesterById(int semesterId) {
-		return semesterDAO.getSemesterById(semesterId);
-	}
-
-	@Transactional
-	@Override
-	public ClassSemester getClassSemesterByClassSemester(int semesterId,
-			int classId) {
-		return classSemesterDAO.getClassSemesterByClassSemester(semesterId,
-				classId);
+	public ClassSemester getClassSemesterByClassSemester(int semesterId, int classId) {
+		return classSemesterDAO.getClassSemesterByClassSemester(semesterId, classId);
 	}
 
 	@Transactional
 	@Override
 	public Set<ClassSemester> listClassBySemester(int semesterId) {
-		return semesterDAO.getSemesterById(semesterId).getClassSemesters();
+		return semesterDAO.getSemesterById(semesterId, true, false, false, false).getClassSemesters();
 	}
 
 	@Transactional
 	@Override
-	public Set<ClassCourseSemester> listClassCourseSemesterByClassSemester(
-			int classId, int semesterId) {
-		ClassSemester classSemester = classSemesterDAO
-				.getClassSemesterByClassSemester(semesterId, classId);
+	public Set<ClassCourseSemester> listClassCourseSemesterByClassSemester(int classId, int semesterId) {
+		ClassSemester classSemester = classSemesterDAO.getClassSemesterByClassSemester(semesterId, classId);
 		return classSemester.getClassCourseSemester();
 	}
 
 	@Transactional
 	@Override
-	public Set<CourseSemester> listCourseSemesterByClass(int classId,
-			int semesterId) {
+	public Set<CourseSemester> listCourseSemesterByClass(int classId, int semesterId) {
 		// TODO Auto-generated method stub
-		ClassSemester classSemester = classSemesterDAO
-				.getClassSemesterByClassSemester(semesterId, classId);
-		Set<ClassCourseSemester> classCourseSemesters = classSemester
-				.getClassCourseSemester();
+		ClassSemester classSemester = classSemesterDAO.getClassSemesterByClassSemester(semesterId, classId);
+		Set<ClassCourseSemester> classCourseSemesters = classSemester.getClassCourseSemester();
 
 		Set<CourseSemester> courseSemesters = new LinkedHashSet<CourseSemester>();
 		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
 			courseSemesters.add(courseSemesterDAO
-					.getCourseSemesterById(classCourseSemester
-							.getCourseSemester().getCourseSemesterId()));
+					.getCourseSemesterById(classCourseSemester.getCourseSemester().getCourseSemesterId()));
 		}
 
 		return courseSemesters;
@@ -80,16 +65,13 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Transactional
 	@Override
-	public Set<TeacherCourseSemester> listTeacherByCourseSemester(int classId,
-			int semesterId) {
+	public Set<TeacherCourseSemester> listTeacherByCourseSemester(int classId, int semesterId) {
 		// TODO Auto-generated method stub
 
-		Set<CourseSemester> courseSemesters = listCourseSemesterByClass(
-				classId, semesterId);
+		Set<CourseSemester> courseSemesters = listCourseSemesterByClass(classId, semesterId);
 		Set<TeacherCourseSemester> teacherCourseSemesters = new LinkedHashSet<TeacherCourseSemester>();
 		for (CourseSemester courseSemester : courseSemesters) {
-			teacherCourseSemesters.addAll(courseSemester
-					.getTeacherCourseSemesters());
+			teacherCourseSemesters.addAll(courseSemester.getTeacherCourseSemesters());
 		}
 		return teacherCourseSemesters;
 	}

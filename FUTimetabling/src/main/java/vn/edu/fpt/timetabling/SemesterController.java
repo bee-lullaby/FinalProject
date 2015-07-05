@@ -15,7 +15,7 @@ import vn.edu.fpt.timetabling.service.SemesterService;
 
 @Controller
 public class SemesterController {
-	
+
 	private SemesterService semesterService;
 
 	@Autowired(required = true)
@@ -27,7 +27,7 @@ public class SemesterController {
 	@RequestMapping(value = "/semesters", method = RequestMethod.GET)
 	public String listSemester(Model model) {
 		model.addAttribute("semester", new Course());
-		model.addAttribute("listSemesters", semesterService.listSemesters());
+		model.addAttribute("listSemesters", semesterService.listSemesters(false, false, false, false));
 		return "semester";
 	}
 
@@ -52,8 +52,8 @@ public class SemesterController {
 
 	@RequestMapping("/semester/edit/{semesterId}")
 	public String editSemester(@PathVariable("semesterId") int semesterId, Model model) {
-		model.addAttribute("semester", semesterService.getSemesterById(semesterId));
-		model.addAttribute("listSemesters", semesterService.listSemesters());
+		model.addAttribute("semester", semesterService.getSemesterById(semesterId, false, false, false, false));
+		model.addAttribute("listSemesters", semesterService.listSemesters(false, false, false, false));
 		return "semester";
 	}
 }

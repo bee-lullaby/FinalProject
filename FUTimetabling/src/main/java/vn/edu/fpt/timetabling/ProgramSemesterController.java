@@ -30,8 +30,7 @@ public class ProgramSemesterController {
 
 	@Autowired(required = true)
 	@Qualifier(value = "programSemesterService")
-	public void setProgramSemesterService(
-			ProgramSemesterService programSemesterService) {
+	public void setProgramSemesterService(ProgramSemesterService programSemesterService) {
 		this.programSemesterService = programSemesterService;
 	}
 
@@ -53,21 +52,17 @@ public class ProgramSemesterController {
 			return "home";
 		}
 		model.addAttribute("programSemester", new ProgramSemester());
-		model.addAttribute("programSemesters",
-				programSemesterService.listProgramSemesters());
-		model.addAttribute("semesters", semesterService.listSemesters());
-		model.addAttribute("specializeds",
-				specializedService.listSpecializeds());
-		List<Specialized> detailSpecializeds = specializedService
-				.listDetailSpecializeds();
+		model.addAttribute("programSemesters", programSemesterService.listProgramSemesters());
+		model.addAttribute("semesters", semesterService.listSemesters(false, false, false, false));
+		model.addAttribute("specializeds", specializedService.listSpecializeds());
+		List<Specialized> detailSpecializeds = specializedService.listDetailSpecializeds();
 		detailSpecializeds.add(0, new Specialized());
 		model.addAttribute("detailSpecializeds", detailSpecializeds);
 		return "programSemester";
 	}
 
 	@RequestMapping(value = "/programSemester/add", method = RequestMethod.POST)
-	public String addProgramSemester(
-			HttpSession session,
+	public String addProgramSemester(HttpSession session,
 			@RequestParam(value = "programSemesterId", required = true) int programSemesterId,
 			@RequestParam(value = "semester", required = true) int semesterId,
 			@RequestParam(value = "currentSemester", required = true) int currentSemester,
@@ -76,20 +71,17 @@ public class ProgramSemesterController {
 		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
-		ProgramSemester programSemester = programSemesterService
-				.getProgramSemesterById(programSemesterId);
+		ProgramSemester programSemester = programSemesterService.getProgramSemesterById(programSemesterId);
 		if (programSemester == null) {
 			programSemester = new ProgramSemester();
 		}
-		Semester semester = semesterService.getSemesterById(semesterId);
-		Specialized specialized = specializedService
-				.getSpecializedById(specializedId);
+		Semester semester = semesterService.getSemesterById(semesterId, false, false, false, false);
+		Specialized specialized = specializedService.getSpecializedById(specializedId);
 		if (semester == null || specialized == null) {
 			return "redirect:/programSemesters";
 		}
 		if (detailSpecializedId != null) {
-			Specialized detailSpecialized = specializedService
-					.getSpecializedById(detailSpecializedId);
+			Specialized detailSpecialized = specializedService.getSpecializedById(detailSpecializedId);
 			if (detailSpecialized != null) {
 				programSemester.setDetailSpecialized(detailSpecialized);
 			}
@@ -108,8 +100,7 @@ public class ProgramSemesterController {
 	}
 
 	@RequestMapping("/programSemester/delete/{programSemesterId}")
-	public String deleteProgramSemester(HttpSession session,
-			@PathVariable("programSemesterId") int programSemesterId) {
+	public String deleteProgramSemester(HttpSession session, @PathVariable("programSemesterId") int programSemesterId) {
 		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
@@ -118,33 +109,25 @@ public class ProgramSemesterController {
 	}
 
 	@RequestMapping("/programSemester/edit/{programSemesterId}")
-	public String editProgramSemester(HttpSession session,
-			@PathVariable("programSemesterId") int programSemesterId,
+	public String editProgramSemester(HttpSession session, @PathVariable("programSemesterId") int programSemesterId,
 			Model model) {
 		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
-		ProgramSemester programSemester = programSemesterService
-				.getProgramSemesterById(programSemesterId);
+		ProgramSemester programSemester = programSemesterService.getProgramSemesterById(programSemesterId);
 		if (programSemester == null) {
 			return "redirect:/programSemesters";
 		}
 		model.addAttribute("programSemester", programSemester);
-		model.addAttribute("programSemesters",
-				programSemesterService.listProgramSemesters());
-		model.addAttribute("semesters", semesterService.listSemesters());
-		model.addAttribute("specializeds",
-				specializedService.listSpecializeds());
-		List<Specialized> detailSpecializeds = specializedService
-				.listDetailSpecializeds();
+		model.addAttribute("programSemesters", programSemesterService.listProgramSemesters());
+		model.addAttribute("semesters", semesterService.listSemesters(false, false, false, false));
+		model.addAttribute("specializeds", specializedService.listSpecializeds());
+		List<Specialized> detailSpecializeds = specializedService.listDetailSpecializeds();
 		detailSpecializeds.add(0, new Specialized());
 		model.addAttribute("detailSpecializeds", detailSpecializeds);
-		model.addAttribute("semesterId", programSemester.getSemester()
-				.getSemesterId());
-		model.addAttribute("specializedId", programSemester.getSpecialized()
-				.getSpecializedId());
-		model.addAttribute("detailSpecializedId", programSemester
-				.getDetailSpecialized().getSpecializedId());
+		model.addAttribute("semesterId", programSemester.getSemester().getSemesterId());
+		model.addAttribute("specializedId", programSemester.getSpecialized().getSpecializedId());
+		model.addAttribute("detailSpecializedId", programSemester.getDetailSpecialized().getSpecializedId());
 		return "programSemester";
 	}
 }

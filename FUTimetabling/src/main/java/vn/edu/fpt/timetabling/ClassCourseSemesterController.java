@@ -30,8 +30,7 @@ public class ClassCourseSemesterController {
 
 	@Autowired(required = true)
 	@Qualifier(value = "classCourseSemesterService")
-	public void setClassCourseSemesterService(
-			ClassCourseSemesterService classCourseSemesterService) {
+	public void setClassCourseSemesterService(ClassCourseSemesterService classCourseSemesterService) {
 		this.classCourseSemesterService = classCourseSemesterService;
 	}
 
@@ -43,22 +42,18 @@ public class ClassCourseSemesterController {
 
 	@Autowired(required = true)
 	@Qualifier(value = "classSemesterService")
-	public void setClassSemesterService(
-			ClassSemesterService classSemesterService) {
+	public void setClassSemesterService(ClassSemesterService classSemesterService) {
 		this.classSemesterService = classSemesterService;
 	}
 
 	@Autowired(required = true)
 	@Qualifier(value = "courseSemesterService")
-	public void setCourseSemesterService(
-			CourseSemesterService courseSemesterService) {
+	public void setCourseSemesterService(CourseSemesterService courseSemesterService) {
 		this.courseSemesterService = courseSemesterService;
 	}
 
 	@RequestMapping(value = "/classCourseSemesters", method = RequestMethod.GET)
-	public String listClassCourseSemester(
-			HttpSession session,
-			Model model,
+	public String listClassCourseSemester(HttpSession session, Model model,
 			@RequestParam(value = "semesterId", required = false) Integer semesterId) {
 		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
@@ -68,17 +63,16 @@ public class ClassCourseSemesterController {
 			if (semesterId == null) {
 				semesterId = (Integer) session.getAttribute("semesterId");
 			}
-			semester = semesterService.getSemesterById(semesterId);
+			semester = semesterService.getSemesterById(semesterId, true, true, false, false);
 			if (semester == null) {
-				semester = semesterService.listSemesters().get(0);
+				semester = semesterService.listSemesters(true, true, false, false).get(0);
 			}
 
 		} else {
-			semester = semesterService.listSemesters().get(0);
+			semester = semesterService.listSemesters(true, true, false, false).get(0);
 		}
 		model.addAttribute("classCourseSemester", new ClassCourseSemester());
-		model.addAttribute("classCourseSemesters",
-				classCourseSemesterService.listClassCourseSemesters());
+		model.addAttribute("classCourseSemesters", classCourseSemesterService.listClassCourseSemesters());
 		model.addAttribute("classSemesters", semester.getClassSemesters());
 		model.addAttribute("courseSemesters", semester.getCourseSemesters());
 		session.setAttribute("semesterId", semesterId);
@@ -86,8 +80,7 @@ public class ClassCourseSemesterController {
 	}
 
 	@RequestMapping(value = "/classCourseSemester/add", method = RequestMethod.POST)
-	public String addClassCourseSemester(
-			HttpSession session,
+	public String addClassCourseSemester(HttpSession session,
 			@RequestParam(value = "classCourseSemesterId") int classCourseSemesterId,
 			@RequestParam(value = "classSemester") int classSemesterId,
 			@RequestParam(value = "courseSemester") int courseSemesterId,
@@ -96,16 +89,12 @@ public class ClassCourseSemesterController {
 		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
-		ClassSemester classSemester = classSemesterService
-				.getClassSemesterById(classSemesterId);
-		CourseSemester courseSemester = courseSemesterService
-				.getCourseSemesterById(courseSemesterId);
+		ClassSemester classSemester = classSemesterService.getClassSemesterById(classSemesterId);
+		CourseSemester courseSemester = courseSemesterService.getCourseSemesterById(courseSemesterId);
 		System.out.println("aaaa");
 		System.out.println(courseSemester.getSemester());
-		if (classSemester == null
-				|| courseSemester == null
-				|| classSemester.getSemester().compareTo(
-						courseSemester.getSemester()) != 0) {
+		if (classSemester == null || courseSemester == null
+				|| classSemester.getSemester().compareTo(courseSemester.getSemester()) != 0) {
 			return "redirect:/classCourseSemesters";
 		}
 		ClassCourseSemester classCourseSemester = classCourseSemesterService
@@ -123,12 +112,10 @@ public class ClassCourseSemesterController {
 		}
 		if (classCourseSemester.getClassCourseSemesterId() == 0) {
 			// new class semester, add it
-			classCourseSemesterService
-					.addClassCourseSemester(classCourseSemester);
+			classCourseSemesterService.addClassCourseSemester(classCourseSemester);
 		} else {
 			// existing class semester, call update
-			classCourseSemesterService
-					.updateClassCourseSemester(classCourseSemester);
+			classCourseSemesterService.updateClassCourseSemester(classCourseSemester);
 		}
 		return "redirect:/classCourseSemesters";
 	}
@@ -139,15 +126,13 @@ public class ClassCourseSemesterController {
 		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
-		classCourseSemesterService
-				.deleteClassCourseSemester(classCourseSemesterId);
+		classCourseSemesterService.deleteClassCourseSemester(classCourseSemesterId);
 		return "redirect:/classCourseSemesters";
 	}
 
 	@RequestMapping("/classCourseSemester/edit/{classCourseSemesterId}")
 	public String editCourseSemester(HttpSession session,
-			@PathVariable("classCourseSemesterId") int classCourseSemesterId,
-			Model model) {
+			@PathVariable("classCourseSemesterId") int classCourseSemesterId, Model model) {
 		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
@@ -158,17 +143,14 @@ public class ClassCourseSemesterController {
 		}
 		ClassSemester classSemester = classCourseSemester.getClassSemester();
 		CourseSemester courseSemester = classCourseSemester.getCourseSemester();
-		Semester semester = semesterService.getSemesterById(classSemester
-				.getSemester().getSemesterId());
+		Semester semester = semesterService.getSemesterById(classSemester.getSemester().getSemesterId(), true, true,
+				false, false);
 		model.addAttribute("classCourseSemester", classCourseSemester);
-		model.addAttribute("classCourseSemesters",
-				classCourseSemesterService.listClassCourseSemesters());
+		model.addAttribute("classCourseSemesters", classCourseSemesterService.listClassCourseSemesters());
 		model.addAttribute("classSemesters", semester.getClassSemesters());
 		model.addAttribute("courseSemesters", semester.getCourseSemesters());
-		model.addAttribute("classSemesterId",
-				classSemester.getClassSemesterId());
-		model.addAttribute("courseSemesterId",
-				courseSemester.getCourseSemesterId());
+		model.addAttribute("classSemesterId", classSemester.getClassSemesterId());
+		model.addAttribute("courseSemesterId", courseSemester.getCourseSemesterId());
 		return "classCourse";
 	}
 }

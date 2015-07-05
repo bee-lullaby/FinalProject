@@ -15,8 +15,7 @@ import vn.edu.fpt.timetabling.model.Semester;
 @Repository
 public class SemesterDAOImpl implements SemesterDAO {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(SemesterDAOImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(SemesterDAOImpl.class);
 
 	private SessionFactory sessionFactory;
 
@@ -35,25 +34,32 @@ public class SemesterDAOImpl implements SemesterDAO {
 	@Override
 	public void addSemester(Semester semester) {
 		getCurrentSession().persist(semester);
-		logger.info("Semester was saved successfully, semester details="
-				+ semester);
+		logger.info("Semester was saved successfully, semester details=" + semester);
 	}
 
 	@Override
 	public void updateSemester(Semester semester) {
 		getCurrentSession().update(semester);
-		logger.info("Semester was updated successfully, semester details="
-				+ semester);
+		logger.info("Semester was updated successfully, semester details=" + semester);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Semester> listSemesters() {
-		String hql = "FROM vn.edu.fpt.timetabling.model.Semester"
-				+ " S LEFT OUTER JOIN FETCH S.classSemesters"
-				+ " LEFT OUTER JOIN FETCH S.courseSemesters"
-				+ " LEFT OUTER JOIN FETCH S.programSemesters"
-				+ " LEFT OUTER JOIN FETCH S.teacherSemesters";
+	public List<Semester> listSemesters(boolean jointClassSemester, boolean jointCourseSemester,
+			boolean jointProgramSemester, boolean jointTeacherSemester) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Semester S";
+		if (jointClassSemester) {
+			hql += " LEFT OUTER JOIN FETCH S.classSemesters";
+		}
+		if (jointCourseSemester) {
+			hql += " LEFT OUTER JOIN FETCH S.courseSemesters";
+		}
+		if (jointProgramSemester) {
+			hql += " LEFT OUTER JOIN FETCH S.programSemesters";
+		}
+		if (jointTeacherSemester) {
+			hql += " LEFT OUTER JOIN FETCH S.teacherSemesters";
+		}
 		Query query = getCurrentSession().createQuery(hql);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<Semester> semesters = (List<Semester>) query.list();
@@ -64,20 +70,28 @@ public class SemesterDAOImpl implements SemesterDAO {
 	}
 
 	@Override
-	public Semester getSemesterById(int semesterId) {
-		String hql = "FROM vn.edu.fpt.timetabling.model.Semester"
-				+ " S LEFT OUTER JOIN FETCH S.classSemesters"
-				+ " LEFT OUTER JOIN FETCH S.courseSemesters"
-				+ " LEFT OUTER JOIN FETCH S.programSemesters"
-				+ " LEFT OUTER JOIN FETCH S.teacherSemesters"
-				+ " WHERE S.semesterId = :semesterId";
+	public Semester getSemesterById(int semesterId, boolean jointClassSemester, boolean jointCourseSemester,
+			boolean jointProgramSemester, boolean jointTeacherSemester) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Semester S";
+		if (jointClassSemester) {
+			hql += " LEFT OUTER JOIN FETCH S.classSemesters";
+		}
+		if (jointCourseSemester) {
+			hql += " LEFT OUTER JOIN FETCH S.courseSemesters";
+		}
+		if (jointProgramSemester) {
+			hql += " LEFT OUTER JOIN FETCH S.programSemesters";
+		}
+		if (jointTeacherSemester) {
+			hql += " LEFT OUTER JOIN FETCH S.teacherSemesters";
+		}
+		hql += " WHERE S.semesterId = :semesterId";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("semesterId", semesterId);
 		Object temp = query.uniqueResult();
 		if (temp != null) {
 			Semester semester = (Semester) temp;
-			logger.info("Semester was loaded successfully, semester details="
-					+ semester);
+			logger.info("Semester was loaded successfully, semester details=" + semester);
 			return semester;
 		} else {
 			return null;
@@ -86,11 +100,10 @@ public class SemesterDAOImpl implements SemesterDAO {
 
 	@Override
 	public void deleteSemester(int semesterId) {
-		Semester semester = getSemesterById(semesterId);
+		Semester semester = getSemesterById(semesterId, false, false, false, false);
 		if (semester != null) {
 			getCurrentSession().delete(semester);
-			logger.info("semester was deleted successfully, semester details="
-					+ semester);
+			logger.info("semester was deleted successfully, semester details=" + semester);
 		}
 	}
 

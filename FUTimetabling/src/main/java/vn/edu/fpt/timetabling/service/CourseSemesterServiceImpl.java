@@ -33,7 +33,7 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 	public void setCourseSemesterDAO(CourseSemesterDAO courseSemesterDAO) {
 		this.courseSemesterDAO = courseSemesterDAO;
 	}
-	
+
 	@Override
 	@Transactional
 	public void addCourseSemester(CourseSemester courseSemester) {
@@ -64,12 +64,10 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 					codeConditionCourse = row.getCell(4).getStringCellValue();
 				}
 				courseSemester.setCourse(courseDAO.getCourseByCode(codeCourse));
-				courseSemester.setSemester(semesterDAO
-						.getSemesterById(semesterId));
+				courseSemester.setSemester(semesterDAO.getSemesterById(semesterId, false, false, false, false));
 				courseSemester.setSlots(slots.intValue());
 				if (codeConditionCourse.compareTo("") != 0) {
-					courseSemester.setCourseCondition(courseDAO
-							.getCourseByCode(codeConditionCourse));
+					courseSemester.setCourseCondition(courseDAO.getCourseByCode(codeConditionCourse));
 				}
 				courseSemesterDAO.addCourseSemester(courseSemester);
 

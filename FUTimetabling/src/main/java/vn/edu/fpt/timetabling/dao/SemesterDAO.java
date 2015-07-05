@@ -9,9 +9,11 @@ public interface SemesterDAO {
 
 	public void updateSemester(Semester semester);
 
-	public List<Semester> listSemesters();
+	public List<Semester> listSemesters(boolean jointClassSemester, boolean jointCourseSemester,
+			boolean jointProgramSemester, boolean jointTeacherSemester);
 
-	public Semester getSemesterById(int semesterId);
+	public Semester getSemesterById(int semesterId, boolean jointClassSemester, boolean jointCourseSemester,
+			boolean jointProgramSemester, boolean jointTeacherSemester);
 
 	public void deleteSemester(int semesterId);
 

@@ -89,6 +89,9 @@
 					<th width="80">Semester ID</th>
 					<th width="120">Semester Code</th>
 					<th width="120">Semester Name</th>
+					<th width="120">Semester Year</th>
+					<th width="120">Semester Start Date</th>
+					<th width="120">Semester End Date</th>
 					<th width="60">Edit</th>
 					<th width="60">Delete</th>
 				</tr>

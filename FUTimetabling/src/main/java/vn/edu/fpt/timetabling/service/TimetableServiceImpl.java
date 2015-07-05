@@ -66,18 +66,16 @@ public class TimetableServiceImpl implements TimetableService {
 	@Override
 	public Set<Timetable> listTimetablesBySemester(int semesterId) {
 		// TODO Auto-generated method stub
-		Set<ClassSemester> classSemesters = semesterDAO.getSemesterById(
-				semesterId).getClassSemesters();
+		Set<ClassSemester> classSemesters = semesterDAO.getSemesterById(semesterId, true, false, false, false)
+				.getClassSemesters();
 		Iterator<ClassSemester> classSemester = classSemesters.iterator();
 
 		Set<ClassCourseSemester> classCourseSemesters = new LinkedHashSet<ClassCourseSemester>();
 		while (classSemester.hasNext()) {
-			classCourseSemesters.addAll(classSemester.next()
-					.getClassCourseSemester());
+			classCourseSemesters.addAll(classSemester.next().getClassCourseSemester());
 		}
 
-		Iterator<ClassCourseSemester> classCourseSemester = classCourseSemesters
-				.iterator();
+		Iterator<ClassCourseSemester> classCourseSemester = classCourseSemesters.iterator();
 
 		Set<Timetable> timetable = new LinkedHashSet<Timetable>();
 		while (classCourseSemester.hasNext()) {
@@ -91,13 +89,10 @@ public class TimetableServiceImpl implements TimetableService {
 	@Override
 	public Set<Timetable> listTimetablesByClass(int classId, int semesterId) {
 		// TODO Auto-generated method stub
-		ClassSemester classSemester = classSemesterDAO
-				.getClassSemesterByClassSemester(semesterId, classId);
+		ClassSemester classSemester = classSemesterDAO.getClassSemesterByClassSemester(semesterId, classId);
 
-		Set<ClassCourseSemester> classCourseSemesters = classSemester
-				.getClassCourseSemester();
-		Iterator<ClassCourseSemester> classCourseSemester = classCourseSemesters
-				.iterator();
+		Set<ClassCourseSemester> classCourseSemesters = classSemester.getClassCourseSemester();
+		Iterator<ClassCourseSemester> classCourseSemester = classCourseSemesters.iterator();
 
 		Set<Timetable> timetable = new LinkedHashSet<Timetable>();
 		while (classCourseSemester.hasNext()) {
@@ -106,7 +101,7 @@ public class TimetableServiceImpl implements TimetableService {
 
 		return timetable;
 	}
-	
+
 	@Transactional
 	@Override
 	public Set<Timetable> listTimetablesByClassCourse(int classCourseSemesterId) {
@@ -114,7 +109,6 @@ public class TimetableServiceImpl implements TimetableService {
 		return classCourseSemesterDAO.getClassCourseSemesterById(classCourseSemesterId).getTimetable();
 	}
 
-	
 	@Transactional
 	@Override
 	public Timetable getTimetableById(int timetableId) {

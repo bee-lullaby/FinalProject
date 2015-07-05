@@ -25,8 +25,7 @@ public class ClassSemesterController {
 
 	@Autowired(required = true)
 	@Qualifier(value = "classSemesterService")
-	public void setClassSemesterService(
-			ClassSemesterService classSemesterService) {
+	public void setClassSemesterService(ClassSemesterService classSemesterService) {
 		this.classSemesterService = classSemesterService;
 	}
 
@@ -48,16 +47,14 @@ public class ClassSemesterController {
 			return "home";
 		}
 		model.addAttribute("classSemester", new ClassSemester());
-		model.addAttribute("classSemesters",
-				classSemesterService.listClassSemesters());
-		model.addAttribute("semesters", semesterService.listSemesters());
+		model.addAttribute("classSemesters", classSemesterService.listClassSemesters());
+		model.addAttribute("semesters", semesterService.listSemesters(false, false, false, false));
 		model.addAttribute("classes", classService.listClasses());
 		return "classSemester";
 	}
 
 	@RequestMapping(value = "/classSemester/add", method = RequestMethod.POST)
-	public String addClassSemester(
-			HttpSession session,
+	public String addClassSemester(HttpSession session,
 			@RequestParam(value = "classSemesterId", required = true) int classSemesterId,
 			@RequestParam(value = "classFPT", required = true) int classId,
 			@RequestParam(value = "semester", required = true) int semesterId,
@@ -65,13 +62,12 @@ public class ClassSemesterController {
 		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
-		ClassSemester classSemester = classSemesterService
-				.getClassSemesterById(classSemesterId);
+		ClassSemester classSemester = classSemesterService.getClassSemesterById(classSemesterId);
 		if (classSemester == null) {
 			classSemester = new ClassSemester();
 		}
 		classSemester.setClassFPT(classService.getClassById(classId));
-		classSemester.setSemester(semesterService.getSemesterById(semesterId));
+		classSemester.setSemester(semesterService.getSemesterById(semesterId, false, false, false, false));
 		classSemester.setSemesterNumber(semesterNumber);
 		if (classSemester.getClassSemesterId() == 0) {
 			// new class semester, add it
@@ -84,8 +80,7 @@ public class ClassSemesterController {
 	}
 
 	@RequestMapping("/classSemester/delete/{classSemesterId}")
-	public String deleteClassSemester(HttpSession session,
-			@PathVariable("classSemesterId") int classSemesterId) {
+	public String deleteClassSemester(HttpSession session, @PathVariable("classSemesterId") int classSemesterId) {
 		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
@@ -94,23 +89,20 @@ public class ClassSemesterController {
 	}
 
 	@RequestMapping("/classSemester/edit/{classSemesterId}")
-	public String editClassSemester(HttpSession session,
-			@PathVariable("classSemesterId") int classSemesterId, Model model) {
+	public String editClassSemester(HttpSession session, @PathVariable("classSemesterId") int classSemesterId,
+			Model model) {
 		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
-		ClassSemester classSemester = classSemesterService
-				.getClassSemesterById(classSemesterId);
+		ClassSemester classSemester = classSemesterService.getClassSemesterById(classSemesterId);
 		if (classSemester == null) {
 			return "redirect:/classSemesters";
 		}
 		model.addAttribute("classSemester", classSemester);
-		model.addAttribute("classSemesters",
-				classSemesterService.listClassSemesters());
-		model.addAttribute("semesters", semesterService.listSemesters());
+		model.addAttribute("classSemesters", classSemesterService.listClassSemesters());
+		model.addAttribute("semesters", semesterService.listSemesters(false, false, false, false));
 		model.addAttribute("classes", classService.listClasses());
-		model.addAttribute("semesterId", classSemester.getSemester()
-				.getSemesterId());
+		model.addAttribute("semesterId", classSemester.getSemester().getSemesterId());
 		model.addAttribute("classId", classSemester.getClassFPT().getClassId());
 		return "classSemester";
 	}

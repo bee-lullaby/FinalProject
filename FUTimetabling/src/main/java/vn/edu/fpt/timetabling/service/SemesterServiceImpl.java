@@ -10,11 +10,12 @@ import vn.edu.fpt.timetabling.model.Semester;
 
 @Service
 public class SemesterServiceImpl implements SemesterService {
-	
+
 	private SemesterDAO semesterDAO;
 
 	/**
-	 * @param semesterDAO the semesterDAO to set
+	 * @param semesterDAO
+	 *            the semesterDAO to set
 	 */
 	public void setSemesterDAO(SemesterDAO semesterDAO) {
 		this.semesterDAO = semesterDAO;
@@ -36,16 +37,20 @@ public class SemesterServiceImpl implements SemesterService {
 
 	@Override
 	@Transactional
-	public List<Semester> listSemesters() {
+	public List<Semester> listSemesters(boolean jointClassSemester, boolean jointCourseSemester,
+			boolean jointProgramSemester, boolean jointTeacherSemester) {
 		// TODO Auto-generated method stub
-		return semesterDAO.listSemesters();
+		return semesterDAO.listSemesters(jointClassSemester, jointCourseSemester, jointProgramSemester,
+				jointTeacherSemester);
 	}
 
 	@Override
 	@Transactional
-	public Semester getSemesterById(int semesterId) {
+	public Semester getSemesterById(int semesterId, boolean jointClassSemester, boolean jointCourseSemester,
+			boolean jointProgramSemester, boolean jointTeacherSemester) {
 		// TODO Auto-generated method stub
-		return semesterDAO.getSemesterById(semesterId);
+		return semesterDAO.getSemesterById(semesterId, jointClassSemester, jointCourseSemester, jointProgramSemester,
+				jointTeacherSemester);
 	}
 
 	@Override
