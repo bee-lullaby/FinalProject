@@ -42,15 +42,12 @@ public class StudentController {
 		}
 		model.addAttribute("student", new Student());
 		model.addAttribute("students", studentService.listStudents());
-		model.addAttribute("specializeds",
-				specializedService.listSpecializeds());
+		model.addAttribute("specializeds", specializedService.listSpecializeds());
 		return "student";
 	}
 
-	@RequestMapping(value = "/student/add", method = RequestMethod.POST)
-	public String addStudent(
-			HttpSession session,
-			@RequestParam(value = "studentId", required = true) int studentId,
+	@RequestMapping(value = "/student/add", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	public String addStudent(HttpSession session, @RequestParam(value = "studentId", required = true) int studentId,
 			@RequestParam(value = "name", required = true) String name,
 			@RequestParam(value = "specialized", required = true) int specializedId,
 			@RequestParam(value = "batch", required = true) String batch,
@@ -65,8 +62,7 @@ public class StudentController {
 			update = false;
 		}
 		student.setName(name);
-		Specialized specialized = specializedService
-				.getSpecializedById(specializedId);
+		Specialized specialized = specializedService.getSpecializedById(specializedId);
 		student.setSpecialized(specialized);
 		String studentCode;
 		if (update) {
@@ -92,8 +88,7 @@ public class StudentController {
 	}
 
 	@RequestMapping("/student/delete/{studentId}")
-	public String deleteStudent(HttpSession session,
-			@PathVariable("studentId") int studentId) {
+	public String deleteStudent(HttpSession session, @PathVariable("studentId") int studentId) {
 		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
@@ -102,8 +97,7 @@ public class StudentController {
 	}
 
 	@RequestMapping("/student/edit/{studentId}")
-	public String editStudent(HttpSession session,
-			@PathVariable("studentId") int studentId, Model model) {
+	public String editStudent(HttpSession session, @PathVariable("studentId") int studentId, Model model) {
 		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
@@ -113,8 +107,7 @@ public class StudentController {
 		}
 		model.addAttribute("student", student);
 		model.addAttribute("students", studentService.listStudents());
-		model.addAttribute("specializeds",
-				specializedService.listSpecializeds());
+		model.addAttribute("specializeds", specializedService.listSpecializeds());
 		return "student";
 	}
 }

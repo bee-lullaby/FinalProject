@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 05, 2015 at 06:24 PM
+-- Generation Time: Jul 05, 2015 at 07:44 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `academic_portal`
 --
-CREATE DATABASE IF NOT EXISTS `academic_portal` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+CREATE DATABASE IF NOT EXISTS `academic_portal` DEFAULT CHARACTER SET utf8 COLLATE utf8_vietnamese_ci;
 USE `academic_portal`;
 
 -- --------------------------------------------------------
@@ -234,15 +234,15 @@ CREATE TABLE IF NOT EXISTS `staff` (
 DROP TABLE IF EXISTS `students`;
 CREATE TABLE IF NOT EXISTS `students` (
 `student_id` int(11) NOT NULL,
-  `account` varchar(20) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `student_code` varchar(10) NOT NULL,
+  `account` varchar(20) CHARACTER SET latin1 NOT NULL,
+  `name` varchar(100) COLLATE utf8_vietnamese_ci NOT NULL,
+  `email` varchar(50) CHARACTER SET latin1 NOT NULL,
+  `student_code` varchar(10) CHARACTER SET latin1 NOT NULL,
   `specialized_id` int(11) NOT NULL,
-  `batch` varchar(10) NOT NULL,
+  `batch` varchar(10) CHARACTER SET latin1 NOT NULL,
   `semester` int(11) NOT NULL,
   `class_semester_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_vietnamese_ci;
 
 -- --------------------------------------------------------
 
@@ -519,7 +519,7 @@ MODIFY `staff_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=23;
 --
 -- AUTO_INCREMENT for table `student_course`
 --

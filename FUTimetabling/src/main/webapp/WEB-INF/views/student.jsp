@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
@@ -5,7 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Student Page</title>
 <style type="text/css">
 .tg {
@@ -50,13 +51,14 @@
 	<h1>Add a Student</h1>
 	<c:url var="addAction" value="/student/add"></c:url>
 
-	<form:form action="${addAction}" commandName="student">
+	<form:form action="${addAction}" commandName="student"
+		acceptCharset="UTF-8">
 		<table>
 			<c:choose>
 				<c:when test="${!empty student.account}">
 					<tr>
 						<td><form:label path="studentId">
-								<spring:message text="Student ID" />
+								<spring:message text="Student IDx" />
 							</form:label></td>
 						<td><form:input path="studentId" readonly="true" size="8"
 								disabled="true" /> <form:hidden path="studentId" /></td>
@@ -132,8 +134,7 @@
 								value="<spring:message text="Edit Student"/>" />
 						</c:when>
 						<c:otherwise>
-							<input type="submit"
-								value="<spring:message text="Add Student"/>" />
+							<input type="submit" value="<spring:message text="Add Student"/>" />
 						</c:otherwise>
 					</c:choose></td>
 			</tr>

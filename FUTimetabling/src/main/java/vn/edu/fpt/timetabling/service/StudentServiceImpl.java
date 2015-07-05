@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import vn.edu.fpt.timetabling.dao.StudentDAO;
 import vn.edu.fpt.timetabling.model.Specialized;
 import vn.edu.fpt.timetabling.model.Student;
+import java.text.Normalizer;
+import java.util.regex.Pattern;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -75,7 +77,6 @@ public class StudentServiceImpl implements StudentService {
 						studentCode = temp;
 					}
 				}
-				System.out.println(studentCode);
 			}
 			Integer number = Integer.parseInt(studentCode.substring(2));
 			code += String.format("%05d", number + 1);
@@ -86,11 +87,14 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	@Transactional
 	public String getAccount(String name, String studentCode) {
-		StringTokenizer stringTokenizer = new StringTokenizer(name);
+		String temp = Normalizer.normalize(name, Normalizer.Form.NFD);
+		Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+		StringTokenizer stringTokenizer = new StringTokenizer(
+				pattern.matcher(temp).replaceAll("").replaceAll("Đ", "D").replaceAll("đ", "d"));
 		String account = "";
 		if (stringTokenizer.hasMoreTokens()) {
 			while (true) {
-				String temp = stringTokenizer.nextToken();
+				temp = stringTokenizer.nextToken();
 				if (stringTokenizer.hasMoreTokens()) {
 					account += Character.toUpperCase(temp.charAt(0));
 				} else {

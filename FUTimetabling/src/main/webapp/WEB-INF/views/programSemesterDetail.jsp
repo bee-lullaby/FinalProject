@@ -133,7 +133,7 @@
 		<table class="tg">
 			<tr>
 				<th width="80">Program Semester Detail ID</th>
-				<th width="120">Program Semester</th>
+				<th width="200">Program Semester</th>
 				<th width="120">Course</th>
 				<th width="60">Edit</th>
 				<th width="60">Delete</th>
@@ -143,6 +143,7 @@
 				<tr>
 					<td>${programSemesterDetailTemp.programSemesterDetailId}</td>
 					<td>${programSemesterDetailTemp.programSemester.specialized.name}
+						${programSemesterDetailTemp.programSemester.detailSpecialized != null ? programSemesterDetailTemp.programSemester.detailSpecialized.name : ''}
 						- Semester
 						${programSemesterDetailTemp.programSemester.currentSemester}</td>
 					<td>${programSemesterDetailTemp.courseSemester.course.name}</td>
