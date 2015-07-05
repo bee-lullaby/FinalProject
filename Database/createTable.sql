@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 02, 2015 at 09:34 PM
+-- Generation Time: Jul 05, 2015 at 06:24 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS `courses` (
   `code` varchar(20) NOT NULL,
   `name` varchar(100) NOT NULL,
   `department_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS `course_semester` (
   `semester_id` int(11) NOT NULL,
   `slots` int(11) NOT NULL,
   `course_condition_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -164,7 +164,7 @@ CREATE TABLE IF NOT EXISTS `program_semester_detail` (
 `program_semester_detail_id` int(11) NOT NULL,
   `program_semester_id` int(11) NOT NULL,
   `course_semester_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -474,12 +474,12 @@ MODIFY `class_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=32;
 -- AUTO_INCREMENT for table `courses`
 --
 ALTER TABLE `courses`
-MODIFY `course_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=47;
+MODIFY `course_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=52;
 --
 -- AUTO_INCREMENT for table `course_semester`
 --
 ALTER TABLE `course_semester`
-MODIFY `course_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=47;
+MODIFY `course_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=52;
 --
 -- AUTO_INCREMENT for table `department`
 --
@@ -494,7 +494,7 @@ MODIFY `program_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=21;
 -- AUTO_INCREMENT for table `program_semester_detail`
 --
 ALTER TABLE `program_semester_detail`
-MODIFY `program_semester_detail_id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `program_semester_detail_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=101;
 --
 -- AUTO_INCREMENT for table `rooms`
 --

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 02, 2015 at 09:34 PM
+-- Generation Time: Jul 05, 2015 at 06:24 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -318,7 +318,7 @@ CREATE TABLE IF NOT EXISTS `courses` (
   `code` varchar(20) NOT NULL,
   `name` varchar(100) NOT NULL,
   `department_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `courses`
@@ -370,7 +370,12 @@ INSERT INTO `courses` (`course_id`, `code`, `name`, `department_id`) VALUES
 (43, 'FIN303', 'FIN303', 1),
 (44, 'FIN301', 'FIN301', 1),
 (45, 'MAS201', 'MAS201', 8),
-(46, 'ENM301', 'ENM301', 6);
+(46, 'ENM301', 'ENM301', 6),
+(47, 'BKG201', 'BKG201', 4),
+(48, 'SSC101', 'SSC101', 4),
+(49, 'MKT202', 'MKT202', 4),
+(50, 'MKT301', 'MKT301', 4),
+(51, 'ENM401', 'ENM401', 6);
 
 -- --------------------------------------------------------
 
@@ -385,7 +390,7 @@ CREATE TABLE IF NOT EXISTS `course_semester` (
   `semester_id` int(11) NOT NULL,
   `slots` int(11) NOT NULL,
   `course_condition_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `course_semester`
@@ -437,7 +442,12 @@ INSERT INTO `course_semester` (`course_semester_id`, `course_id`, `semester_id`,
 (43, 43, 1, 30, NULL),
 (44, 44, 1, 30, NULL),
 (45, 45, 1, 30, NULL),
-(46, 46, 1, 30, NULL);
+(46, 46, 1, 30, NULL),
+(47, 47, 1, 30, NULL),
+(48, 48, 1, 30, NULL),
+(49, 49, 1, 30, NULL),
+(50, 50, 1, 30, NULL),
+(51, 51, 1, 30, NULL);
 
 -- --------------------------------------------------------
 
@@ -519,7 +529,113 @@ CREATE TABLE IF NOT EXISTS `program_semester_detail` (
 `program_semester_detail_id` int(11) NOT NULL,
   `program_semester_id` int(11) NOT NULL,
   `course_semester_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `program_semester_detail`
+--
+
+INSERT INTO `program_semester_detail` (`program_semester_detail_id`, `program_semester_id`, `course_semester_id`) VALUES
+(4, 1, 4),
+(1, 1, 11),
+(3, 1, 32),
+(5, 1, 37),
+(2, 1, 41),
+(8, 2, 4),
+(7, 2, 11),
+(6, 2, 32),
+(10, 2, 36),
+(9, 2, 37),
+(14, 3, 4),
+(11, 3, 11),
+(13, 3, 32),
+(15, 3, 37),
+(12, 3, 41),
+(19, 4, 2),
+(18, 4, 15),
+(16, 4, 16),
+(20, 4, 19),
+(17, 4, 25),
+(23, 5, 12),
+(25, 5, 28),
+(24, 5, 32),
+(22, 5, 39),
+(21, 5, 40),
+(29, 6, 5),
+(30, 6, 28),
+(27, 6, 31),
+(28, 6, 39),
+(26, 6, 40),
+(33, 7, 12),
+(35, 7, 28),
+(34, 7, 31),
+(32, 7, 39),
+(31, 7, 40),
+(37, 8, 3),
+(36, 8, 14),
+(40, 8, 20),
+(38, 8, 24),
+(39, 8, 42),
+(41, 9, 1),
+(42, 9, 17),
+(44, 9, 20),
+(43, 9, 30),
+(45, 9, 34),
+(46, 10, 1),
+(47, 10, 17),
+(49, 10, 20),
+(48, 10, 30),
+(50, 10, 34),
+(53, 11, 9),
+(51, 11, 27),
+(55, 11, 29),
+(52, 11, 35),
+(54, 11, 38),
+(58, 12, 9),
+(57, 12, 13),
+(56, 12, 18),
+(59, 12, 27),
+(60, 12, 29),
+(63, 13, 10),
+(61, 13, 26),
+(65, 13, 29),
+(62, 13, 35),
+(64, 13, 38),
+(70, 14, 6),
+(69, 14, 21),
+(66, 14, 22),
+(67, 14, 23),
+(68, 14, 33),
+(75, 15, 6),
+(74, 15, 21),
+(71, 15, 22),
+(72, 15, 23),
+(73, 15, 33),
+(80, 16, 7),
+(76, 16, 43),
+(77, 16, 44),
+(78, 16, 45),
+(79, 16, 46),
+(85, 17, 7),
+(81, 17, 43),
+(82, 17, 44),
+(83, 17, 45),
+(84, 17, 46),
+(90, 18, 7),
+(86, 18, 44),
+(87, 18, 45),
+(88, 18, 46),
+(89, 18, 47),
+(95, 19, 8),
+(94, 19, 20),
+(91, 19, 48),
+(92, 19, 49),
+(93, 19, 50),
+(100, 20, 8),
+(96, 20, 48),
+(97, 20, 49),
+(98, 20, 50),
+(99, 20, 51);
 
 -- --------------------------------------------------------
 
@@ -986,12 +1102,12 @@ MODIFY `class_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=32;
 -- AUTO_INCREMENT for table `courses`
 --
 ALTER TABLE `courses`
-MODIFY `course_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=47;
+MODIFY `course_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=52;
 --
 -- AUTO_INCREMENT for table `course_semester`
 --
 ALTER TABLE `course_semester`
-MODIFY `course_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=47;
+MODIFY `course_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=52;
 --
 -- AUTO_INCREMENT for table `department`
 --
@@ -1006,7 +1122,7 @@ MODIFY `program_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=21;
 -- AUTO_INCREMENT for table `program_semester_detail`
 --
 ALTER TABLE `program_semester_detail`
-MODIFY `program_semester_detail_id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `program_semester_detail_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=101;
 --
 -- AUTO_INCREMENT for table `rooms`
 --
