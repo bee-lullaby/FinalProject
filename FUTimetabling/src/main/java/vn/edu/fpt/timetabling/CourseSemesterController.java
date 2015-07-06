@@ -53,7 +53,7 @@ public class CourseSemesterController {
 			return "home";
 		}
 		model.addAttribute("courseSemester", new CourseSemester());
-		model.addAttribute("listCourseSemesters", courseSemesterService.listCourseSemesters());
+		model.addAttribute("listCourseSemesters", courseSemesterService.listCourseSemesters(false, false, false));
 		model.addAttribute("semesters", semesterService.listSemesters(false, false, false, false));
 		model.addAttribute("courses", courseService.listCourses());
 		Course course = new Course();
@@ -100,7 +100,7 @@ public class CourseSemesterController {
 		if (courseId == courseConditionId) {
 			return "redirect:/courseSemesters";
 		}
-		CourseSemester courseSemester = courseSemesterService.getCourseSemesterById(courseSemesterId);
+		CourseSemester courseSemester = courseSemesterService.getCourseSemesterById(courseSemesterId, false, false, false);
 		if (courseSemester == null) {
 			courseSemester = new CourseSemester();
 		}
@@ -137,12 +137,12 @@ public class CourseSemesterController {
 		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
-		CourseSemester courseSemester = courseSemesterService.getCourseSemesterById(courseSemesterId);
+		CourseSemester courseSemester = courseSemesterService.getCourseSemesterById(courseSemesterId, false, false, false);
 		if (courseSemester == null) {
 			return "redirect:/courseSemesters";
 		}
 		model.addAttribute("courseSemester", courseSemester);
-		model.addAttribute("courseSemesters", courseSemesterService.listCourseSemesters());
+		model.addAttribute("courseSemesters", courseSemesterService.listCourseSemesters(false, false, false));
 		model.addAttribute("semesters", semesterService.listSemesters(false, false, false, false));
 		model.addAttribute("courses", courseService.listCourses());
 		Course course = new Course();

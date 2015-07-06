@@ -121,6 +121,7 @@
 			<div id="timetable-container" style="width: 100%; margin-top: 15px">
 				<input type="hidden" id="startDate" value="${startDate}" /> <input
 					type="hidden" id="endDate" value="${endDate}" />
+				<div id="testJSON">${testJSON}</div>
 				<table id="timetable"
 					class="table cell-hovered border bordered timetable"
 					style="width: 100%">
@@ -264,7 +265,7 @@
 				</td>
 				<td style="border-left: thin solid #999999; padding: 10px;">
 					<table id="course-info-to-set">
-						
+
 						<tr>
 							<td style="text-align: left; padding: 5px;"><h4
 									id="course-code"></h4></td>
@@ -274,11 +275,12 @@
 							<td id="remains_slot">30</td>
 						</tr>
 						<tr>
-							<th style="text-align: left; padding: 5px;">Classes learn the course: </th>
+							<th style="text-align: left; padding: 5px;">Classes learn
+								the course:</th>
 							<td id="cltc"></td>
 						</tr>
 						<tr>
-							<th style="text-align: left; padding: 5px;">In this slot: </th>
+							<th style="text-align: left; padding: 5px;">In this slot:</th>
 							<td id="in-this-slot"></td>
 						</tr>
 						<tr>
@@ -286,7 +288,7 @@
 							<td id="teachers"></td>
 						</tr>
 					</table>
-			</td>
+				</td>
 
 			</tr>
 		</table>

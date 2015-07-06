@@ -1,21 +1,27 @@
 package vn.edu.fpt.timetabling.service;
 
-import java.util.Set;
+import java.util.List;
 
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassSemester;
 import vn.edu.fpt.timetabling.model.CourseSemester;
+import vn.edu.fpt.timetabling.model.DaySlot;
 import vn.edu.fpt.timetabling.model.TeacherCourseSemester;
+import vn.edu.fpt.timetabling.model.Timetable;
 
 public interface ScheduleService {
 
 	public ClassSemester getClassSemesterByClassSemester(int semesterId, int classId);
 
-	public Set<ClassSemester> listClassBySemester(int semesterId);
+	public List<ClassSemester> listClassBySemester(int semesterId);
 
-	public Set<ClassCourseSemester> listClassCourseSemesterByClassSemester(int classId, int semesterId);
+	public List<ClassCourseSemester> listClassCourseSemesterByClassSemester(int classId, int semesterId);
 
-	public Set<TeacherCourseSemester> listTeacherByCourseSemester(int classId, int semesterId);
+	public List<TeacherCourseSemester> listTeacherByCourseSemester(int classId, int semesterId);
 
-	public Set<CourseSemester> listCourseSemesterByClass(int classId, int semesterId);
+	public List<CourseSemester> listCourseSemesterByClass(int classId, int semesterId);
+	
+	public List<Timetable> listTimetableOfClassCourseSemester(List<ClassCourseSemester> classCourseSemesters);
+	
+	public List<DaySlot> getListDaySlot(int semesterId, int classId, int week);
 }

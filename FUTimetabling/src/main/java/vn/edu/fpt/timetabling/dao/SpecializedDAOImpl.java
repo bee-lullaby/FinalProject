@@ -45,7 +45,8 @@ public class SpecializedDAOImpl implements SpecializedDAO {
 	@Override
 	public List<Specialized> listSpecializeds() {
 		String hql = "FROM vn.edu.fpt.timetabling.model.Specialized"
-				+ " S LEFT OUTER JOIN FETCH S.classes LEFT OUTER JOIN FETCH S.students"
+				+ " S LEFT OUTER JOIN FETCH S.classes "
+				+ "   LEFT OUTER JOIN FETCH S.students"
 				+ " WHERE S.detailSpecialized IS FALSE";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -59,7 +60,8 @@ public class SpecializedDAOImpl implements SpecializedDAO {
 	@Override
 	public Specialized getSpecializedById(int specializedId) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.Specialized"
-				+ " S LEFT OUTER JOIN FETCH S.classes LEFT OUTER JOIN FETCH S.students"
+				+ " S LEFT OUTER JOIN FETCH S.classes "
+				+ "   LEFT OUTER JOIN FETCH S.students"
 				+ " WHERE S.specializedId = :specializedId";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("specializedId", specializedId);
@@ -77,7 +79,9 @@ public class SpecializedDAOImpl implements SpecializedDAO {
 	@Override
 	public Specialized getSpecializedByCode(String code) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.Specialized"
-				+ " S LEFT OUTER JOIN FETCH S.classes LEFT OUTER JOIN FETCH S.students WHERE S.code = :code";
+				+ " S LEFT OUTER JOIN FETCH S.classes "
+				+ "   LEFT OUTER JOIN FETCH S.students "
+				+ "WHERE S.code = :code";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("code", code);
 		Object temp = query.uniqueResult();

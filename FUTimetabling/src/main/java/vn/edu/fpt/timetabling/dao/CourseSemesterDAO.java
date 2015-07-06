@@ -9,13 +9,25 @@ public interface CourseSemesterDAO {
 
 	public void updateCourseSemester(CourseSemester courseSemester);
 
-	public List<CourseSemester> listCourseSemesters();
+	public List<CourseSemester> listCourseSemesters(
+			boolean jointClassCourseSemester,
+			boolean jointTeacherCourseSemester,
+			boolean jointProgramSemesterDetails);
 
-	public CourseSemester getCourseSemesterById(int courseSemesterId);
-	
-	public CourseSemester getCourseSemesterByCode(String code);
-	
-	public CourseSemester getCourseSemesterByCourseSemester(int courseId, int semesterId);
-	
+	public CourseSemester getCourseSemesterById(int courseSemesterId,
+			boolean jointClassCourseSemester,
+			boolean jointTeacherCourseSemester,
+			boolean jointProgramSemesterDetails);
+
+	public CourseSemester getCourseSemesterByCode(String code,
+			boolean jointClassCourseSemester,
+			boolean jointTeacherCourseSemester,
+			boolean jointProgramSemesterDetails);
+
+	public CourseSemester getCourseSemesterByCourseSemester(int courseId,
+			int semesterId, boolean jointClassCourseSemester,
+			boolean jointTeacherCourseSemester,
+			boolean jointProgramSemesterDetails);
+
 	public void deleteCourseSemester(int courseSemesterId);
 }

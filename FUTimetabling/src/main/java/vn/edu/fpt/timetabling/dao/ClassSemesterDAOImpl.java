@@ -47,9 +47,11 @@ public class ClassSemesterDAOImpl implements ClassSemesterDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ClassSemester> listClassSemesters() {
-		String hql = "FROM vn.edu.fpt.timetabling.model.ClassSemester"
-				+ " C LEFT OUTER JOIN FETCH C.classCourseSemester";
+	public List<ClassSemester> listClassSemesters(boolean jointClassCourseSemester) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.ClassSemester C";
+				if (jointClassCourseSemester) {
+					hql += " LEFT OUTER JOIN FETCH C.classCourseSemester";
+				}		
 		Query query = getCurrentSession().createQuery(hql);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<ClassSemester> classSemesters = (List<ClassSemester>) query.list();
@@ -58,12 +60,33 @@ public class ClassSemesterDAOImpl implements ClassSemesterDAO {
 		}
 		return classSemesters;
 	}
-
+	
 	@Override
-	public ClassSemester getClassSemesterByClassSemester(int semesterId, int classId) {
-		String hql = "FROM vn.edu.fpt.timetabling.model.ClassSemester"
-				+ " C LEFT OUTER JOIN FETCH C.classCourseSemester"
-				+ " WHERE C.semester = :semester AND C.classFPT = :classFPT";
+	public ClassSemester getClassSemesterById(int classSemesterId, boolean jointClassCourseSemester) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.ClassSemester C";
+		if (jointClassCourseSemester) {
+			hql += " LEFT OUTER JOIN FETCH C.classCourseSemester";
+		}		
+		hql += " WHERE C.classSemesterId = :classSemesterId";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("classSemesterId", classSemesterId);
+		Object temp = query.uniqueResult();
+		if (temp != null) {
+			ClassSemester classSemester = (ClassSemester) temp;
+			logger.info("ClassSemester was loaded successfully, ClassSemester details=" + classSemester);
+			return classSemester;
+		} else {
+			return null;
+		}
+	}
+	
+	@Override
+	public ClassSemester getClassSemesterByClassSemester(int semesterId, int classId, boolean jointClassCourseSemester) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.ClassSemester C";
+		if (jointClassCourseSemester) {
+			hql += " LEFT OUTER JOIN FETCH C.classCourseSemester";
+		}		
+		hql += " WHERE C.semester = :semester AND C.classFPT = :classFPT";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("semester", semesterDAO.getSemesterById(semesterId, false, false, false, false));
 		query.setParameter("classFPT", classDAO.getClassById(classId));
@@ -78,30 +101,12 @@ public class ClassSemesterDAOImpl implements ClassSemesterDAO {
 	}
 
 	@Override
-	public ClassSemester getClassSemesterById(int classSemesterId) {
-		ClassSemester classSemester = (ClassSemester) getCurrentSession().get(ClassSemester.class,
-				new Integer(classSemesterId));
-		if (classSemester != null) {
-			logger.info("classSemester was loaded successfully, classSemester details=" + classSemester);
-		}
-		return classSemester;
-	}
-
-	@Override
-	public void deleteClassSemester(int classSemesterId) {
-		ClassSemester classSemester = getClassSemesterById(classSemesterId);
-		if (classSemester != null) {
-			getCurrentSession().delete(classSemester);
-			logger.info("classSemester was deleted successfully, classSemester details=" + classSemester);
-		}
-	}
-
-	@Override
-	public ClassSemester getClassSemesterByCode(String classCode, int semesterId) {
-		// TODO Auto-generated method stub
-		String hql = "FROM vn.edu.fpt.timetabling.model.ClassSemester"
-				+ " C LEFT OUTER JOIN FETCH C.classCourseSemester"
-				+ " WHERE C.semester = :semester AND C.classFPT = :classFPT";
+	public ClassSemester getClassSemesterByCode(String classCode, int semesterId, boolean jointClassCourseSemester) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.ClassSemester C";
+		if (jointClassCourseSemester) {
+			hql += " LEFT OUTER JOIN FETCH C.classCourseSemester";
+		}		
+		hql +=  " WHERE C.semester = :semester AND C.classFPT = :classFPT";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("semester", semesterDAO.getSemesterById(semesterId, false, false, false, false));
 		query.setParameter("classFPT", classDAO.getClassByCode(classCode));
@@ -112,6 +117,17 @@ public class ClassSemesterDAOImpl implements ClassSemesterDAO {
 			return classSemester;
 		} else {
 			return null;
+		}
+	}
+	
+
+
+	@Override
+	public void deleteClassSemester(int classSemesterId) {
+		ClassSemester classSemester = getClassSemesterById(classSemesterId, false);
+		if (classSemester != null) {
+			getCurrentSession().delete(classSemester);
+			logger.info("classSemester was deleted successfully, classSemester details=" + classSemester);
 		}
 	}
 }

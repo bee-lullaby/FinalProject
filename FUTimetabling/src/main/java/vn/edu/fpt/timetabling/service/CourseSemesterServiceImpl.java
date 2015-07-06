@@ -34,11 +34,6 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 		this.courseSemesterDAO = courseSemesterDAO;
 	}
 
-	@Override
-	@Transactional
-	public void addCourseSemester(CourseSemester courseSemester) {
-		courseSemesterDAO.addCourseSemester(courseSemester);
-	}
 
 	@Override
 	@Transactional
@@ -81,28 +76,72 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 		}
 	}
 
+
+	@Override
+	@Transactional
+	public void addCourseSemester(CourseSemester courseSemester) {
+		// TODO Auto-generated method stub
+		courseSemesterDAO.addCourseSemester(courseSemester);
+	}
+
+
 	@Override
 	@Transactional
 	public void updateCourseSemester(CourseSemester courseSemester) {
+		// TODO Auto-generated method stub
 		courseSemesterDAO.updateCourseSemester(courseSemester);
 	}
 
-	@Override
-	@Transactional
-	public List<CourseSemester> listCourseSemesters() {
-		return courseSemesterDAO.listCourseSemesters();
-	}
 
 	@Override
 	@Transactional
-	public CourseSemester getCourseSemesterById(int courseSemesterId) {
-		return courseSemesterDAO.getCourseSemesterById(courseSemesterId);
+	public List<CourseSemester> listCourseSemesters(
+			boolean jointClassCourseSemester,
+			boolean jointTeacherCourseSemester,
+			boolean jointProgramSemesterDetails) {
+		// TODO Auto-generated method stub
+		return courseSemesterDAO.listCourseSemesters(jointClassCourseSemester, jointTeacherCourseSemester, jointProgramSemesterDetails);
 	}
+
 
 	@Override
 	@Transactional
+	public CourseSemester getCourseSemesterById(int courseSemesterId,
+			boolean jointClassCourseSemester,
+			boolean jointTeacherCourseSemester,
+			boolean jointProgramSemesterDetails) {
+		// TODO Auto-generated method stub
+		return courseSemesterDAO.getCourseSemesterById(courseSemesterId, jointClassCourseSemester, jointTeacherCourseSemester, jointProgramSemesterDetails);
+	}
+
+
+	@Override
+	@Transactional
+	public CourseSemester getCourseSemesterByCode(String code,
+			boolean jointClassCourseSemester,
+			boolean jointTeacherCourseSemester,
+			boolean jointProgramSemesterDetails) {
+		// TODO Auto-generated method stub
+		return courseSemesterDAO.getCourseSemesterByCode(code, jointClassCourseSemester, jointTeacherCourseSemester, jointProgramSemesterDetails);
+	}
+
+
+	@Override
+	public CourseSemester getCourseSemesterByCourseSemester(int courseId,
+			int semesterId, boolean jointClassCourseSemester,
+			boolean jointTeacherCourseSemester,
+			boolean jointProgramSemesterDetails) {
+		// TODO Auto-generated method stub
+		return courseSemesterDAO.getCourseSemesterByCourseSemester(courseId, semesterId, jointClassCourseSemester, jointTeacherCourseSemester, jointProgramSemesterDetails);
+	}
+
+
+	@Override
 	public void deleteCourseSemester(int courseSemesterId) {
+		// TODO Auto-generated method stub
 		courseSemesterDAO.deleteCourseSemester(courseSemesterId);
 	}
+
+	
 
 }

@@ -76,7 +76,7 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester C WHERE C.classSemester = :classSemester";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("classSemester",
-				classSemesterDAO.getClassSemesterById(classSemesterId));
+				classSemesterDAO.getClassSemesterById(classSemesterId, true));
 		List<ClassCourseSemester> classCourseSemesters = (List<ClassCourseSemester>) query
 				.list();
 		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
@@ -93,7 +93,7 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester C WHERE C.courseSemester = :courseSemester";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("courseSemester",
-				courseSemesterDAO.getCourseSemesterById(courseSemesterId));
+				courseSemesterDAO.getCourseSemesterById(courseSemesterId, false, false, false));
 		List<ClassCourseSemester> classCourseSemesters = (List<ClassCourseSemester>) query
 				.list();
 		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {

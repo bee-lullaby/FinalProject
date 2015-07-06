@@ -93,7 +93,7 @@ public class ProgramSemesterDetailController {
 			programSemesterDetail = new ProgramSemesterDetail();
 		}
 		ProgramSemester programSemester = programSemesterService.getProgramSemesterById(programSemesterId);
-		CourseSemester courseSemester = courseSemesterService.getCourseSemesterById(courseSemesterId);
+		CourseSemester courseSemester = courseSemesterService.getCourseSemesterById(courseSemesterId, false, false, false);
 		if (programSemester == null || courseSemester == null) {
 			return "redirect:/programSemesterDetails";
 		}

@@ -73,7 +73,7 @@ public class TeacherCourseSemesterSeviceImpl implements
 				}
 				while(cellIterator.hasNext()) {
 					TeacherCourseSemester tcs = new TeacherCourseSemester();
-					tcs.setCourseSemester(courseSemesterDAO.getCourseSemesterByCode(courseCode));
+					tcs.setCourseSemester(courseSemesterDAO.getCourseSemesterByCode(courseCode, false, false, false));
 					
 					String teacherAccount = cellIterator.next().getStringCellValue().trim();
 					logger.info(courseCode +" " +teacherAccount);

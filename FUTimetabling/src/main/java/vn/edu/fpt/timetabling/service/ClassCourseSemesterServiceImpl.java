@@ -76,7 +76,7 @@ public class ClassCourseSemesterServiceImpl implements
 				while (i <= 4) {
 					ClassCourseSemester ccs = new ClassCourseSemester();
 					ClassSemester cs = classSemesterDAO
-							.getClassSemesterByCode(classCode, semesterId);
+							.getClassSemesterByCode(classCode, semesterId, true);
 					ccs.setClassSemester(cs);
 					logger.info("CLASS: "
 							+ String.valueOf(ccs.getClassSemester()
@@ -84,7 +84,7 @@ public class ClassCourseSemesterServiceImpl implements
 					String courseCode = row.getCell(i + 1).getStringCellValue()
 							.trim();
 					ccs.setCourseSemester(courseSemesterDAO
-							.getCourseSemesterByCode(courseCode));
+							.getCourseSemesterByCode(courseCode, false, false, false));
 					logger.info("COURSE: "
 							+ String.valueOf(ccs.getCourseSemester()
 									.getCourseSemesterId()));

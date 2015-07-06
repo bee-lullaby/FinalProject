@@ -2,6 +2,7 @@ package vn.edu.fpt.timetabling.dao;
 
 import java.util.List;
 
+import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.Timetable;
 
 public interface TimetableDAO {
@@ -11,9 +12,11 @@ public interface TimetableDAO {
 
 	public List<Timetable> listTimetables();
 
-	public List<Timetable> listTimetablesByCCSId(List<Integer> classCourseSemesterIds);
+	public List<Timetable> listTimetablesByCCSId(List<ClassCourseSemester> classCourseSemesters);
 	
 	public Timetable getTimetableById(int timetableId);
-
+	
 	public void deleteTimetable(int timetableId);
+	
+	
 }

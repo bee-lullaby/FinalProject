@@ -6,7 +6,7 @@ $(document).ready(function(){
 	var dayName = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 	var days = [];
 	
-	
+	var text = $("#testJSON").text();
 	
 	_setDateTimetable();
 	
@@ -39,6 +39,51 @@ $(document).ready(function(){
 		$("#dialog-schedule #slot-day").text(header +" - Slot " +slot);
 		_setCourseInfoDialog(); 
 		_showDialog("dialog-schedule");
+	});
+	
+
+	$("#select-weeks").on("change", function(){
+		_setDateHeader();
+	});
+	
+	$("#btn-next-week").on("click", function() {
+		var nextOption = $("#select-weeks option:selected").next("option");
+		if (nextOption.length > 0) {
+			$("#select-weeks option:selected").removeAttr("selected");
+			nextOption.attr("selected", "selected");
+		}
+		_setDateHeader();
+	});
+	
+	$("#btn-prev-week").on("click", function() {
+		var prevOption = $("#select-weeks option:selected").prev("option");
+		if (prevOption.length > 0) {
+			$("#select-weeks option:selected").removeAttr("selected");
+			prevOption.attr("selected", "selected");
+		}
+		_setDateHeader();
+	});
+	
+	$("#btn-next-class").on("click", function() {
+		var nextOption = $("#select-classes option:selected").next("option");
+		if (nextOption.length > 0) {
+			$("#select-classes option:selected").removeAttr("selected");
+			nextOption.attr("selected", "selected");
+		}
+		$(this).form.submit();	
+	});
+	
+	$("#btn-prev-class").on("click", function() {
+		var prevOption = $("#select-classes option:selected").prev("option");
+		if (prevOption.length > 0) {
+			$("#select-classes option:selected").removeAttr("selected");
+			prevOption.attr("selected", "selected");
+		}
+		$(this).form.submit();	
+	});
+	
+	$("#set-courses").on("change", function() {
+		_setCourseInfoDialog(); 
 	});
 	
 	function _showDialog(id) {
@@ -95,52 +140,13 @@ $(document).ready(function(){
 		
 	}
 	
-	$("#select-weeks").on("change", function(){
-		_setDateHeader();
-	});
-	
-	$("#btn-next-week").on("click", function() {
-		var nextOption = $("#select-weeks option:selected").next("option");
-		if (nextOption.length > 0) {
-			$("#select-weeks option:selected").removeAttr("selected");
-			nextOption.attr("selected", "selected");
-		}
-		_setDateHeader();
-	});
-	
-	$("#btn-prev-week").on("click", function() {
-		var prevOption = $("#select-weeks option:selected").prev("option");
-		if (prevOption.length > 0) {
-			$("#select-weeks option:selected").removeAttr("selected");
-			prevOption.attr("selected", "selected");
-		}
-		_setDateHeader();
-	});
-	
-	$("#btn-next-class").on("click", function() {
-		var nextOption = $("#select-classes option:selected").next("option");
-		if (nextOption.length > 0) {
-			$("#select-classes option:selected").removeAttr("selected");
-			nextOption.attr("selected", "selected");
-		}
-		$(this).form.submit();	
-	});
-	
-	$("#btn-prev-class").on("click", function() {
-		var prevOption = $("#select-classes option:selected").prev("option");
-		if (prevOption.length > 0) {
-			$("#select-classes option:selected").removeAttr("selected");
-			prevOption.attr("selected", "selected");
-		}
-		$(this).form.submit();	
-	});
-	
-	$("#set-courses").on("change", function() {
-		_setCourseInfoDialog(); 
-	});
-	
 	function _setCourseInfoDialog() {
 		var courseSelected = $("#set-courses option:selected").text();
 		$("#course-info-to-set").find("#course-code").text(courseSelected);
 	};
+	
+	function _testJSON() {
+		console.log(text);
+		var obj = JSON.parse(testJSON);
+	}
 });

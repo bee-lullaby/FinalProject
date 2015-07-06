@@ -69,7 +69,7 @@ public class TeacherCourseSemesterDAOImpl implements TeacherCourseSemesterDAO {
 		// TODO Auto-generated method stub
 		String hql = "FROM vn.edu.fpt.timetabling.model.TeacherCourseSemester C WHERE C.courseSemester = :courseSemester";
 		Query query = getCurrentSession().createQuery(hql);
-		query.setParameter("courseSemester", courseSemesterDAO.getCourseSemesterById(courseSemesterId));
+		query.setParameter("courseSemester", courseSemesterDAO.getCourseSemesterById(courseSemesterId, false, false, false));
 		List<TeacherCourseSemester> teacherCourseSemesters = (List<TeacherCourseSemester>) query
 				.list();
 		for (TeacherCourseSemester teacherCourseSemester : teacherCourseSemesters) {

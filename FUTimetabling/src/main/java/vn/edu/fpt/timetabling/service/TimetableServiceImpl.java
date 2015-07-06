@@ -89,7 +89,7 @@ public class TimetableServiceImpl implements TimetableService {
 	@Override
 	public Set<Timetable> listTimetablesByClass(int classId, int semesterId) {
 		// TODO Auto-generated method stub
-		ClassSemester classSemester = classSemesterDAO.getClassSemesterByClassSemester(semesterId, classId);
+		ClassSemester classSemester = classSemesterDAO.getClassSemesterByClassSemester(semesterId, classId, true);
 
 		Set<ClassCourseSemester> classCourseSemesters = classSemester.getClassCourseSemester();
 		Iterator<ClassCourseSemester> classCourseSemester = classCourseSemesters.iterator();

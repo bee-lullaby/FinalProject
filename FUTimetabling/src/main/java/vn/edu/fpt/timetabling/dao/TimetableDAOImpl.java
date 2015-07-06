@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.Timetable;
 
 @Repository
@@ -17,7 +18,9 @@ public class TimetableDAOImpl implements TimetableDAO {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ClassDAOImpl.class);
-
+	
+	
+	
 	private SessionFactory sessionFactory;
 
 	public void setSessionFactory(SessionFactory sessionFactory) {
@@ -60,14 +63,15 @@ public class TimetableDAOImpl implements TimetableDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Timetable> listTimetablesByCCSId(
-			List<Integer> classCourseSemesterIds) {
+			List<ClassCourseSemester> classCourseSemesters) {
 		// TODO Auto-generated method stub
 		List<Timetable> timetables = new ArrayList<Timetable>();
-		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T WHERE T.class_course_semester_id = :class_course_semester_id";
-		for (int classCourseSemesterId : classCourseSemesterIds) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T "
+				+ "WHERE T.classCourseSemester = :classCourseSemester";
+		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
 			Query query = getCurrentSession().createQuery(hql);
-			query.setParameter("class_course_semester_id",
-					classCourseSemesterId);
+			query.setParameter("classCourseSemester",
+					classCourseSemester);
 			timetables.addAll((List<Timetable>) query.list());
 		}
 

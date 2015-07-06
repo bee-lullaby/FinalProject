@@ -89,8 +89,9 @@ public class ClassCourseSemesterController {
 		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
-		ClassSemester classSemester = classSemesterService.getClassSemesterById(classSemesterId);
-		CourseSemester courseSemester = courseSemesterService.getCourseSemesterById(courseSemesterId);
+		// change
+		ClassSemester classSemester = classSemesterService.getClassSemesterById(classSemesterId, false);
+		CourseSemester courseSemester = courseSemesterService.getCourseSemesterById(courseSemesterId, false, false, false);
 		System.out.println("aaaa");
 		System.out.println(courseSemester.getSemester());
 		if (classSemester == null || courseSemester == null

@@ -47,7 +47,7 @@ public class ClassSemesterController {
 			return "home";
 		}
 		model.addAttribute("classSemester", new ClassSemester());
-		model.addAttribute("classSemesters", classSemesterService.listClassSemesters());
+		model.addAttribute("classSemesters", classSemesterService.listClassSemesters(false));
 		model.addAttribute("semesters", semesterService.listSemesters(false, false, false, false));
 		model.addAttribute("classes", classService.listClasses());
 		return "classSemester";
@@ -62,7 +62,7 @@ public class ClassSemesterController {
 		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
-		ClassSemester classSemester = classSemesterService.getClassSemesterById(classSemesterId);
+		ClassSemester classSemester = classSemesterService.getClassSemesterById(classSemesterId, false);
 		if (classSemester == null) {
 			classSemester = new ClassSemester();
 		}
@@ -94,12 +94,12 @@ public class ClassSemesterController {
 		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
-		ClassSemester classSemester = classSemesterService.getClassSemesterById(classSemesterId);
+		ClassSemester classSemester = classSemesterService.getClassSemesterById(classSemesterId, false);
 		if (classSemester == null) {
 			return "redirect:/classSemesters";
 		}
 		model.addAttribute("classSemester", classSemester);
-		model.addAttribute("classSemesters", classSemesterService.listClassSemesters());
+		model.addAttribute("classSemesters", classSemesterService.listClassSemesters(false));
 		model.addAttribute("semesters", semesterService.listSemesters(false, false, false, false));
 		model.addAttribute("classes", classService.listClasses());
 		model.addAttribute("semesterId", classSemester.getSemester().getSemesterId());
