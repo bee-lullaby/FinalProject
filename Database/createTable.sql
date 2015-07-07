@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 05, 2015 at 07:44 PM
+-- Generation Time: Jul 07, 2015 at 11:25 AM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -34,8 +34,10 @@ CREATE TABLE IF NOT EXISTS `classes` (
   `code` varchar(10) NOT NULL,
   `type` varchar(11) NOT NULL,
   `specialized_id` int(11) DEFAULT NULL,
+  `detail_specialized_id` int(11) DEFAULT NULL,
   `course_id` int(11) DEFAULT NULL,
   `batch` int(11) DEFAULT NULL,
+  `batch_char` varchar(1) NOT NULL,
   `number` int(11) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
 
@@ -151,7 +153,7 @@ CREATE TABLE IF NOT EXISTS `program_semester` (
   `current_semester` int(11) NOT NULL,
   `specialized_id` int(11) NOT NULL,
   `detail_specialized_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -164,7 +166,7 @@ CREATE TABLE IF NOT EXISTS `program_semester_detail` (
 `program_semester_detail_id` int(11) NOT NULL,
   `program_semester_id` int(11) NOT NULL,
   `course_semester_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=106 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -325,7 +327,7 @@ CREATE TABLE IF NOT EXISTS `time_table` (
 -- Indexes for table `classes`
 --
 ALTER TABLE `classes`
- ADD PRIMARY KEY (`class_id`), ADD UNIQUE KEY `code` (`code`), ADD KEY `specialized_id` (`specialized_id`), ADD KEY `course_id` (`course_id`);
+ ADD PRIMARY KEY (`class_id`), ADD UNIQUE KEY `code` (`code`), ADD KEY `specialized_id` (`specialized_id`), ADD KEY `course_id` (`course_id`), ADD KEY `detail_specialized_id` (`detail_specialized_id`);
 
 --
 -- Indexes for table `class_course_semester`
@@ -489,12 +491,12 @@ MODIFY `department_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
 -- AUTO_INCREMENT for table `program_semester`
 --
 ALTER TABLE `program_semester`
-MODIFY `program_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=21;
+MODIFY `program_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=22;
 --
 -- AUTO_INCREMENT for table `program_semester_detail`
 --
 ALTER TABLE `program_semester_detail`
-MODIFY `program_semester_detail_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=101;
+MODIFY `program_semester_detail_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=106;
 --
 -- AUTO_INCREMENT for table `rooms`
 --
@@ -554,7 +556,8 @@ MODIFY `time_table_id` int(11) NOT NULL AUTO_INCREMENT;
 --
 ALTER TABLE `classes`
 ADD CONSTRAINT `classes_ibfk_1` FOREIGN KEY (`specialized_id`) REFERENCES `specialized` (`specialized_id`),
-ADD CONSTRAINT `classes_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`);
+ADD CONSTRAINT `classes_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
+ADD CONSTRAINT `classes_ibfk_3` FOREIGN KEY (`detail_specialized_id`) REFERENCES `specialized` (`specialized_id`);
 
 --
 -- Constraints for table `class_course_semester`

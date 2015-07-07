@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 05, 2015 at 07:44 PM
+-- Generation Time: Jul 07, 2015 at 11:25 AM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -34,8 +34,10 @@ CREATE TABLE IF NOT EXISTS `classes` (
   `code` varchar(10) NOT NULL,
   `type` varchar(11) NOT NULL,
   `specialized_id` int(11) DEFAULT NULL,
+  `detail_specialized_id` int(11) DEFAULT NULL,
   `course_id` int(11) DEFAULT NULL,
   `batch` int(11) DEFAULT NULL,
+  `batch_char` varchar(1) NOT NULL,
   `number` int(11) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
 
@@ -43,38 +45,38 @@ CREATE TABLE IF NOT EXISTS `classes` (
 -- Dumping data for table `classes`
 --
 
-INSERT INTO `classes` (`class_id`, `code`, `type`, `specialized_id`, `course_id`, `batch`, `number`) VALUES
-(1, 'SE1001', 'Specialized', 1, NULL, 10, 1),
-(2, 'SE1002', 'Specialized', 1, NULL, 10, 2),
-(3, 'SE1003', 'Specialized', 1, NULL, 10, 3),
-(4, 'SE1004', 'Specialized', 1, NULL, 10, 4),
-(5, 'SE1005', 'Specialized', 1, NULL, 10, 5),
-(6, 'SE1006', 'Specialized', 1, NULL, 10, 6),
-(7, 'SE1007', 'Specialized', 1, NULL, 10, 7),
-(8, 'SE1008', 'Specialized', 1, NULL, 10, 8),
-(9, 'SE1009', 'Specialized', 1, NULL, 10, 9),
-(10, 'SE1010', 'Specialized', 1, NULL, 10, 10),
-(11, 'SE1011', 'Specialized', 1, NULL, 10, 11),
-(12, 'SE1012', 'Specialized', 1, NULL, 10, 12),
-(13, 'SE1013', 'Specialized', 1, NULL, 10, 13),
-(14, 'EC1001', 'Specialized', 2, NULL, 10, 1),
-(15, 'EC1002', 'Specialized', 2, NULL, 10, 2),
-(16, 'EC1003', 'Specialized', 2, NULL, 10, 3),
-(17, 'IA1001', 'Specialized', 3, NULL, 10, 1),
-(18, 'IA1002', 'Specialized', 3, NULL, 10, 2),
-(19, 'IA1003', 'Specialized', 3, NULL, 10, 3),
-(20, 'GD1001', 'Specialized', 4, NULL, 10, 1),
-(21, 'GD1002', 'Specialized', 4, NULL, 10, 2),
-(22, 'BA1001', 'Specialized', 5, NULL, 10, 1),
-(23, 'BA1002', 'Specialized', 5, NULL, 10, 2),
-(24, 'FIN0803', 'Specialized', 5, NULL, 8, 3),
-(25, 'IBA0902', 'Specialized', 5, NULL, 9, 2),
-(26, 'IBA1001', 'Specialized', 5, NULL, 10, 1),
-(27, 'MKT0902', 'Specialized', 5, NULL, 9, 2),
-(28, 'COB0803', 'Specialized', 6, NULL, 8, 3),
-(29, 'COF0803', 'Specialized', 6, NULL, 8, 3),
-(30, 'FB1001', 'Specialized', 6, NULL, 10, 1),
-(31, 'FB1002', 'Specialized', 6, NULL, 10, 2);
+INSERT INTO `classes` (`class_id`, `code`, `type`, `specialized_id`, `detail_specialized_id`, `course_id`, `batch`, `batch_char`, `number`) VALUES
+(1, 'SE1001', 'Specialized', 1, NULL, NULL, 10, 'A', 1),
+(2, 'SE1002', 'Specialized', 1, NULL, NULL, 10, 'A', 2),
+(3, 'SE1003', 'Specialized', 1, NULL, NULL, 10, 'A', 3),
+(4, 'SE1004', 'Specialized', 1, NULL, NULL, 10, 'B', 4),
+(5, 'SE1005', 'Specialized', 1, NULL, NULL, 10, 'B', 5),
+(6, 'SE1006', 'Specialized', 1, NULL, NULL, 10, 'B', 6),
+(7, 'SE1007', 'Specialized', 1, NULL, NULL, 10, 'C', 7),
+(8, 'SE1008', 'Specialized', 1, NULL, NULL, 10, 'C', 8),
+(9, 'SE1009', 'Specialized', 1, NULL, NULL, 10, 'C', 9),
+(10, 'SE1010', 'Specialized', 1, NULL, NULL, 10, 'C', 10),
+(11, 'SE1011', 'Specialized', 1, NULL, NULL, 10, 'C', 11),
+(12, 'SE1012', 'Specialized', 1, NULL, NULL, 10, 'C', 12),
+(13, 'SE1013', 'Specialized', 1, NULL, NULL, 10, 'C', 13),
+(14, 'EC1001', 'Specialized', 2, NULL, NULL, 10, 'A', 1),
+(15, 'EC1002', 'Specialized', 2, NULL, NULL, 10, 'B', 2),
+(16, 'EC1003', 'Specialized', 2, NULL, NULL, 10, 'C', 3),
+(17, 'IA1001', 'Specialized', 3, NULL, NULL, 10, 'A', 1),
+(18, 'IA1002', 'Specialized', 3, NULL, NULL, 10, 'B', 2),
+(19, 'IA1003', 'Specialized', 3, NULL, NULL, 10, 'C', 3),
+(20, 'GD1001', 'Specialized', 4, NULL, NULL, 10, 'B', 1),
+(21, 'GD1002', 'Specialized', 4, NULL, NULL, 10, 'C', 2),
+(22, 'BA1001', 'Specialized', 5, NULL, NULL, 10, 'A', 1),
+(23, 'BA1002', 'Specialized', 5, NULL, NULL, 10, 'B', 2),
+(24, 'FIN0903', 'Specialized', 5, 7, NULL, 9, 'C', 3),
+(25, 'IBA0902', 'Specialized', 5, 10, NULL, 9, 'B', 2),
+(26, 'IBA1001', 'Specialized', 5, 10, NULL, 10, 'A', 1),
+(27, 'MKT0902', 'Specialized', 5, 11, NULL, 9, 'B', 2),
+(28, 'COB0903', 'Specialized', 6, 9, NULL, 9, 'C', 3),
+(29, 'COF0903', 'Specialized', 6, 8, NULL, 9, 'C', 3),
+(30, 'FB1001', 'Specialized', 6, NULL, NULL, 10, 'A', 1),
+(31, 'FB1002', 'Specialized', 6, NULL, NULL, 10, 'B', 2);
 
 -- --------------------------------------------------------
 
@@ -274,37 +276,37 @@ CREATE TABLE IF NOT EXISTS `class_semester` (
 --
 
 INSERT INTO `class_semester` (`class_semester_id`, `class_id`, `semester_id`, `semester`, `students`) VALUES
-(1, 1, 1, 0, 0),
-(2, 2, 1, 0, 0),
-(3, 3, 1, 0, 0),
-(4, 4, 1, 0, 0),
-(5, 5, 1, 0, 0),
-(6, 6, 1, 0, 0),
-(7, 7, 1, 0, 0),
-(8, 8, 1, 0, 0),
-(9, 9, 1, 0, 0),
-(10, 10, 1, 0, 0),
-(11, 11, 1, 0, 0),
-(12, 12, 1, 0, 0),
-(13, 13, 1, 0, 0),
-(14, 14, 1, 0, 0),
-(15, 15, 1, 0, 0),
-(16, 16, 1, 0, 0),
-(17, 17, 1, 0, 0),
-(18, 18, 1, 0, 0),
-(19, 19, 1, 0, 0),
-(20, 20, 1, 0, 0),
-(21, 21, 1, 0, 0),
-(22, 22, 1, 0, 0),
-(23, 23, 1, 0, 0),
-(24, 24, 1, 0, 0),
-(25, 25, 1, 0, 0),
-(26, 26, 1, 0, 0),
-(27, 27, 1, 0, 0),
-(28, 28, 1, 0, 0),
-(29, 29, 1, 0, 0),
-(30, 30, 1, 0, 0),
-(31, 31, 1, 0, 0);
+(1, 1, 1, 3, 0),
+(2, 2, 1, 3, 0),
+(3, 3, 1, 3, 0),
+(4, 4, 1, 2, 0),
+(5, 5, 1, 2, 0),
+(6, 6, 1, 2, 0),
+(7, 7, 1, 1, 0),
+(8, 8, 1, 1, 0),
+(9, 9, 1, 1, 0),
+(10, 10, 1, 1, 0),
+(11, 11, 1, 1, 0),
+(12, 12, 1, 1, 0),
+(13, 13, 1, 1, 0),
+(14, 14, 1, 3, 0),
+(15, 15, 1, 2, 0),
+(16, 16, 1, 1, 0),
+(17, 17, 1, 3, 0),
+(18, 18, 1, 2, 0),
+(19, 19, 1, 1, 0),
+(20, 20, 1, 2, 0),
+(21, 21, 1, 1, 0),
+(22, 22, 1, 3, 0),
+(23, 23, 1, 2, 0),
+(24, 24, 1, 4, 0),
+(25, 25, 1, 5, 0),
+(26, 26, 1, 3, 0),
+(27, 27, 1, 5, 0),
+(28, 28, 1, 4, 0),
+(29, 29, 1, 4, 0),
+(30, 30, 1, 3, 0),
+(31, 31, 1, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -490,7 +492,7 @@ CREATE TABLE IF NOT EXISTS `program_semester` (
   `current_semester` int(11) NOT NULL,
   `specialized_id` int(11) NOT NULL,
   `detail_specialized_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `program_semester`
@@ -511,6 +513,7 @@ INSERT INTO `program_semester` (`program_semester_id`, `semester_id`, `current_s
 (12, 1, 3, 2, NULL),
 (13, 1, 3, 3, NULL),
 (14, 1, 3, 5, NULL),
+(21, 1, 3, 5, 10),
 (15, 1, 3, 6, NULL),
 (16, 1, 4, 5, 7),
 (17, 1, 4, 6, 8),
@@ -529,7 +532,7 @@ CREATE TABLE IF NOT EXISTS `program_semester_detail` (
 `program_semester_detail_id` int(11) NOT NULL,
   `program_semester_id` int(11) NOT NULL,
   `course_semester_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=106 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `program_semester_detail`
@@ -635,7 +638,12 @@ INSERT INTO `program_semester_detail` (`program_semester_detail_id`, `program_se
 (96, 20, 48),
 (97, 20, 49),
 (98, 20, 50),
-(99, 20, 51);
+(99, 20, 51),
+(105, 21, 6),
+(104, 21, 21),
+(101, 21, 22),
+(102, 21, 23),
+(103, 21, 33);
 
 -- --------------------------------------------------------
 
@@ -960,7 +968,7 @@ CREATE TABLE IF NOT EXISTS `time_table` (
 -- Indexes for table `classes`
 --
 ALTER TABLE `classes`
- ADD PRIMARY KEY (`class_id`), ADD UNIQUE KEY `code` (`code`), ADD KEY `specialized_id` (`specialized_id`), ADD KEY `course_id` (`course_id`);
+ ADD PRIMARY KEY (`class_id`), ADD UNIQUE KEY `code` (`code`), ADD KEY `specialized_id` (`specialized_id`), ADD KEY `course_id` (`course_id`), ADD KEY `detail_specialized_id` (`detail_specialized_id`);
 
 --
 -- Indexes for table `class_course_semester`
@@ -1124,12 +1132,12 @@ MODIFY `department_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
 -- AUTO_INCREMENT for table `program_semester`
 --
 ALTER TABLE `program_semester`
-MODIFY `program_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=21;
+MODIFY `program_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=22;
 --
 -- AUTO_INCREMENT for table `program_semester_detail`
 --
 ALTER TABLE `program_semester_detail`
-MODIFY `program_semester_detail_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=101;
+MODIFY `program_semester_detail_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=106;
 --
 -- AUTO_INCREMENT for table `rooms`
 --
@@ -1189,7 +1197,8 @@ MODIFY `time_table_id` int(11) NOT NULL AUTO_INCREMENT;
 --
 ALTER TABLE `classes`
 ADD CONSTRAINT `classes_ibfk_1` FOREIGN KEY (`specialized_id`) REFERENCES `specialized` (`specialized_id`),
-ADD CONSTRAINT `classes_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`);
+ADD CONSTRAINT `classes_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
+ADD CONSTRAINT `classes_ibfk_3` FOREIGN KEY (`detail_specialized_id`) REFERENCES `specialized` (`specialized_id`);
 
 --
 -- Constraints for table `class_course_semester`
