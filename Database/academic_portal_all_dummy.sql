@@ -659,6 +659,13 @@ CREATE TABLE IF NOT EXISTS `rooms` (
   `capacity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `rooms`
+--
+
+INSERT INTO `rooms` (`room_id`, `code`, `room_type`, `capacity`) VALUES
+(1, 'room1', 'room', 30);
+
 -- --------------------------------------------------------
 
 --
@@ -963,6 +970,14 @@ CREATE TABLE IF NOT EXISTS `time_table` (
   `room_id` int(11) NOT NULL,
   `teacher_semester_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `time_table`
+--
+
+INSERT INTO `time_table` (`time_table_id`, `class_course_semester_id`, `date`, `slot`, `room_id`, `teacher_semester_id`) VALUES
+(5, 1, '2015-09-07', 1, 1, 8),
+(6, 2, '2015-09-07', 2, 1, 19);
 
 --
 -- Indexes for dumped tables

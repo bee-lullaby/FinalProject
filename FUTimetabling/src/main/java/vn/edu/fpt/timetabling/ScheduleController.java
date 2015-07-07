@@ -1,5 +1,7 @@
 package vn.edu.fpt.timetabling;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +19,10 @@ import vn.edu.fpt.timetabling.model.ClassSemester;
 import vn.edu.fpt.timetabling.model.Semester;
 import vn.edu.fpt.timetabling.service.ScheduleService;
 import vn.edu.fpt.timetabling.service.SemesterService;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 public class ScheduleController {
@@ -81,15 +87,27 @@ public class ScheduleController {
 		model.addAttribute("listTeacherCourseSemester", scheduleService
 				.listTeacherByCourseSemester(classId, semesterId));
 		
-//		ObjectMapper om = new ObjectMapper();
-//		StringWriter sw = new StringWriter();
-//		
+		ObjectMapper om = new ObjectMapper();
+		StringWriter sw = new StringWriter();
+		
+		try {
+			om.writeValue(sw, scheduleService.getListDaySlot(semesterId, classId, 1));
+			model.addAttribute("testJSON", sw);
+		} catch (JsonGenerationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		
 //		logger.info(startDate);
 //		logger.info(endDate);
 		
-		scheduleService.getListDaySlot(semesterId, classId, 1);
 		return;
 	}
 }

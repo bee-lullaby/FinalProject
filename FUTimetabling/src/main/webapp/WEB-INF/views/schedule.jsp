@@ -85,9 +85,9 @@
 					<c:set var="x" value="0" scope="page" />
 					<c:forEach items="${listClassCourses}" var="classCourseSemester">
 						<c:set var="x" value="${x + 1}" scope="page" />
-						<div id="course-${x}"
+						<div id="${classCourseSemester.getCourseSemester().getCourse().courseId}"
 							style="cursor: pointer; display: inline-block">
-							<span class="course-color color-${x}"></span>
+							<span id="${classCourseSemester.classCourseSemesterId}" class="course-color color-${x}"></span>
 							&nbsp;${classCourseSemester.getCourseSemester().getCourse().code}&nbsp;&nbsp;
 						</div>
 					</c:forEach>
@@ -121,7 +121,7 @@
 			<div id="timetable-container" style="width: 100%; margin-top: 15px">
 				<input type="hidden" id="startDate" value="${startDate}" /> <input
 					type="hidden" id="endDate" value="${endDate}" />
-				<div id="testJSON">${testJSON}</div>
+				<div id="testJSON" style="display: none">${testJSON}</div>
 				<table id="timetable"
 					class="table cell-hovered border bordered timetable"
 					style="width: 100%">
@@ -136,61 +136,13 @@
 							<th id="sat">Sat</th>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
-							<td id="tt-1-1"></td>
-							<td id="tt-2-1"></td>
-							<td id="tt-3-1"></td>
-							<td id="tt-4-1"></td>
-							<td id="tt-5-1"></td>
-							<td id="tt-6-1"></td>
-							<td id="tt-7-1"></td>
-						</tr>
-						<tr>
-							<td id="tt-1-2"></td>
-							<td id="tt-2-2"></td>
-							<td id="tt-3-2"></td>
-							<td id="tt-4-2"></td>
-							<td id="tt-5-2"></td>
-							<td id="tt-6-2"></td>
-							<td id="tt-7-2"></td>
-						</tr>
-						<tr>
-							<td id="tt-1-3"></td>
-							<td id="tt-2-3"></td>
-							<td id="tt-3-3"></td>
-							<td id="tt-4-3"></td>
-							<td id="tt-5-3"></td>
-							<td id="tt-6-3"></td>
-							<td id="tt-7-3"></td>
-						</tr>
-						<tr>
-							<td id="tt-1-4"></td>
-							<td id="tt-2-4"></td>
-							<td id="tt-3-4"></td>
-							<td id="tt-4-4"></td>
-							<td id="tt-5-4"></td>
-							<td id="tt-6-4"></td>
-							<td id="tt-7-4"></td>
-						</tr>
-						<tr>
-							<td id="tt-1-5"></td>
-							<td id="tt-2-5"></td>
-							<td id="tt-3-5"></td>
-							<td id="tt-4-5"></td>
-							<td id="tt-5-5"></td>
-							<td id="tt-6-5"></td>
-							<td id="tt-7-5"></td>
-						</tr>
-						<tr>
-							<td id="tt-1-6"></td>
-							<td id="tt-2-6"></td>
-							<td id="tt-3-6"></td>
-							<td id="tt-4-6"></td>
-							<td id="tt-5-6"></td>
-							<td id="tt-6-6"></td>
-							<td id="tt-7-6"></td>
-						</tr>
+					<tbody id="timetable-body">
+						<tr id="slot-1"></tr>
+						<tr id="slot-2"></tr>
+						<tr id="slot-3"></tr>
+						<tr id="slot-4"></tr>
+						<tr id="slot-5"></tr>
+						<tr id="slot-6"></tr>
 					</tbody>
 				</table>
 			</div>
@@ -255,13 +207,11 @@
 					<div class="input-control select">
 						<select id="set-courses" name="setCourse">
 							<c:forEach items="${listCourses}" var="courseSemester">
-								<option value="${courseSemester.getCourse().code}">${courseSemester.getCourse().code}</option>
+								<option value="${courseSemester.getCourse().courseId}">${courseSemester.getCourse().code}</option>
 							</c:forEach>
 						</select>
 					</div> <br>
-					<button id="btn-clear" class="button" data-role="hint"
-						data-hint-background="#1CB7EC" data-hint-color="fg-white"
-						data-hint-position="top" data-hint="Clear">SAVE</button>
+					<button id="btn-set-course" class="button">SET</button>
 				</td>
 				<td style="border-left: thin solid #999999; padding: 10px;">
 					<table id="course-info-to-set">
@@ -275,16 +225,15 @@
 							<td id="remains_slot">30</td>
 						</tr>
 						<tr>
-							<th style="text-align: left; padding: 5px;">Classes learn
-								the course:</th>
-							<td id="cltc"></td>
+							<th style="text-align: left; padding: 5px;">Classes:</th>
+							<td id="classes"></td>
 						</tr>
 						<tr>
 							<th style="text-align: left; padding: 5px;">In this slot:</th>
-							<td id="in-this-slot"></td>
+							<td id="slot"></td>
 						</tr>
 						<tr>
-							<th style="text-align: left; padding: 5px;">Afternoon:</th>
+							<th style="text-align: left; padding: 5px;">Teachers:</th>
 							<td id="teachers"></td>
 						</tr>
 					</table>

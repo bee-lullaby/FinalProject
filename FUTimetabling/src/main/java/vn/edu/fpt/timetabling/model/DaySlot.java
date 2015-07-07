@@ -7,7 +7,7 @@ public class DaySlot {
 	private int slot;
 	private int setCourseSlot;
 
-	private HashMap<Integer, DataSchedule> dataSchedule;
+	private HashMap<String, DataSchedule> dataSchedule;
 
 	/**
 	 * 
@@ -23,7 +23,7 @@ public class DaySlot {
 	 * @param dataSchedule
 	 */
 	public DaySlot(String date, int slot, int setCourseSlot,
-			HashMap<Integer, DataSchedule> dataSchedule) {
+			HashMap<String, DataSchedule> dataSchedule) {
 		super();
 		this.date = date;
 		this.slot = slot;
@@ -79,7 +79,7 @@ public class DaySlot {
 	/**
 	 * @return the dataSchedule
 	 */
-	public HashMap<Integer, DataSchedule> getDataSchedule() {
+	public HashMap<String, DataSchedule> getDataSchedule() {
 		return dataSchedule;
 	}
 
@@ -87,7 +87,7 @@ public class DaySlot {
 	 * @param dataSchedule
 	 *            the dataSchedule to set
 	 */
-	public void setDataSchedule(HashMap<Integer, DataSchedule> dataSchedule) {
+	public void setDataSchedule(HashMap<String, DataSchedule> dataSchedule) {
 		this.dataSchedule = dataSchedule;
 	}
 
