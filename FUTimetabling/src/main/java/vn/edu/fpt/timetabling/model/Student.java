@@ -27,6 +27,9 @@ public class Student {
 	@ManyToOne
 	@JoinColumn(name = "specialized_id")
 	private Specialized specialized;
+	@ManyToOne
+	@JoinColumn(name = "detail_specialized_id")
+	private Specialized detailSpecialized;
 	@Column
 	private String batch;
 	@Column
@@ -34,6 +37,14 @@ public class Student {
 	@ManyToOne
 	@JoinColumn(name = "class_semester_id")
 	private ClassSemester classSemester;
+
+	public Specialized getDetailSpecialized() {
+		return detailSpecialized;
+	}
+
+	public void setDetailSpecialized(Specialized detailSpecialized) {
+		this.detailSpecialized = detailSpecialized;
+	}
 
 	/**
 	 * 
@@ -53,9 +64,8 @@ public class Student {
 	 * @param semester
 	 * @param classSemester
 	 */
-	public Student(int studentId, String account, String name, String email,
-			String studentCode, Specialized specialized, String batch,
-			int semester, ClassSemester classSemester) {
+	public Student(int studentId, String account, String name, String email, String studentCode,
+			Specialized specialized, String batch, int semester, ClassSemester classSemester) {
 		super();
 		this.studentId = studentId;
 		this.account = account;
@@ -78,8 +88,7 @@ public class Student {
 	 * @param semester
 	 * @param classSemester
 	 */
-	public Student(String account, String name, String email,
-			String studentCode, Specialized specialized, String batch,
+	public Student(String account, String name, String email, String studentCode, Specialized specialized, String batch,
 			int semester, ClassSemester classSemester) {
 		super();
 		this.account = account;
@@ -234,11 +243,9 @@ public class Student {
 	 */
 	@Override
 	public String toString() {
-		return "Student [studentId=" + studentId + ", account=" + account
-				+ ", name=" + name + ", email=" + email + ", studentCode="
-				+ studentCode + ", specialized=" + specialized + ", batch="
-				+ batch + ", semester=" + semester + ", classSemester="
-				+ classSemester + "]";
+		return "Student [studentId=" + studentId + ", account=" + account + ", name=" + name + ", email=" + email
+				+ ", studentCode=" + studentCode + ", specialized=" + specialized + ", batch=" + batch + ", semester="
+				+ semester + ", classSemester=" + classSemester + "]";
 	}
 
 }

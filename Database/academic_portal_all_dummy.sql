@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 07, 2015 at 11:25 AM
+-- Generation Time: Jul 07, 2015 at 01:13 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -143,9 +143,9 @@ INSERT INTO `class_course_semester` (`class_course_semester_id`, `class_semester
 (43, 19, 32, 0, 0),
 (44, 19, 4, 0, 0),
 (45, 19, 37, 0, 1),
-(46, 21, 16, 0, 0),
+(46, 21, 16, 1, 0),
 (47, 21, 25, 0, 0),
-(48, 21, 15, 0, 0),
+(48, 21, 15, 2, 0),
 (49, 21, 2, 0, 0),
 (50, 21, 19, 0, 1),
 (51, 4, 40, 0, 0),
@@ -173,8 +173,8 @@ INSERT INTO `class_course_semester` (`class_course_semester_id`, `class_semester
 (73, 18, 12, 0, 0),
 (74, 18, 31, 0, 0),
 (75, 18, 28, 0, 1),
-(76, 20, 14, 0, 0),
-(77, 20, 3, 0, 0),
+(76, 20, 14, 2, 0),
+(77, 20, 3, 1, 0),
 (78, 20, 24, 0, 0),
 (79, 20, 42, 0, 0),
 (80, 20, 20, 0, 1),
@@ -240,7 +240,7 @@ CREATE TABLE IF NOT EXISTS `class_course_student_semester` (
 `class_course_student_semester_id` int(11) NOT NULL,
   `class_course_semester_id` int(11) NOT NULL,
   `student_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -673,14 +673,15 @@ CREATE TABLE IF NOT EXISTS `semesters` (
   `semester_year` int(11) NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `semesters`
 --
 
 INSERT INTO `semesters` (`semester_id`, `code`, `name`, `semester_year`, `start_date`, `end_date`) VALUES
-(1, 'FALL15', 'Fall 2015', 2015, '2015-09-07', '2015-12-31');
+(1, 'FALL15', 'Fall 2015', 2015, '2015-09-07', '2015-12-31'),
+(3, '1', '1', 1, '2015-07-01', '2015-07-15');
 
 -- --------------------------------------------------------
 
@@ -749,17 +750,20 @@ CREATE TABLE IF NOT EXISTS `students` (
   `email` varchar(50) CHARACTER SET latin1 NOT NULL,
   `student_code` varchar(10) CHARACTER SET latin1 NOT NULL,
   `specialized_id` int(11) NOT NULL,
+  `detail_specialized_id` int(11) DEFAULT NULL,
   `batch` varchar(10) CHARACTER SET latin1 NOT NULL,
   `semester` int(11) NOT NULL,
   `class_semester_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_vietnamese_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 COLLATE=utf8_vietnamese_ci;
 
 --
 -- Dumping data for table `students`
 --
 
-INSERT INTO `students` (`student_id`, `account`, `name`, `email`, `student_code`, `specialized_id`, `batch`, `semester`, `class_semester_id`) VALUES
-(22, 'DucHMSE00001', 'Hoàng Minh Đức', 'DucHMSE00001@fpt.edu.vn', 'SE00001', 1, '', 0, NULL);
+INSERT INTO `students` (`student_id`, `account`, `name`, `email`, `student_code`, `specialized_id`, `detail_specialized_id`, `batch`, `semester`, `class_semester_id`) VALUES
+(23, 'DucHMSE00000', 'Hoàng Minh Đức', 'DucHMSE00000@fpt.edu.vn', 'SE00000', 1, NULL, '7B', 1, NULL),
+(24, 'CongLTSE00001', 'Lưu Thành Công', 'CongLTSE00001@fpt.edu.vn', 'SE00001', 1, NULL, '7B', 2, NULL),
+(25, 'ThanhVCSE00002', 'Vũ Công Thành', 'ThanhVCSE00002@fpt.edu.vn', 'SE00002', 1, NULL, '7B', 3, NULL);
 
 -- --------------------------------------------------------
 
@@ -1052,7 +1056,7 @@ ALTER TABLE `staff`
 -- Indexes for table `students`
 --
 ALTER TABLE `students`
- ADD PRIMARY KEY (`student_id`), ADD UNIQUE KEY `account` (`account`,`email`,`student_code`), ADD KEY `class_semester_id` (`class_semester_id`), ADD KEY `specialized_id` (`specialized_id`);
+ ADD PRIMARY KEY (`student_id`), ADD UNIQUE KEY `account` (`account`,`email`,`student_code`), ADD KEY `class_semester_id` (`class_semester_id`), ADD KEY `specialized_id` (`specialized_id`), ADD KEY `detail_specialized_id` (`detail_specialized_id`);
 
 --
 -- Indexes for table `student_course`
@@ -1102,7 +1106,7 @@ MODIFY `class_course_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT
 -- AUTO_INCREMENT for table `class_course_student_semester`
 --
 ALTER TABLE `class_course_student_semester`
-MODIFY `class_course_student_semester_id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `class_course_student_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `class_course_teacher_semester`
 --
@@ -1147,7 +1151,7 @@ MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT;
 -- AUTO_INCREMENT for table `semesters`
 --
 ALTER TABLE `semesters`
-MODIFY `semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+MODIFY `semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `specialized`
 --
@@ -1162,7 +1166,7 @@ MODIFY `staff_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=23;
+MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=26;
 --
 -- AUTO_INCREMENT for table `student_course`
 --
@@ -1263,7 +1267,8 @@ ADD CONSTRAINT `program_semester_detail_ibfk_2` FOREIGN KEY (`course_semester_id
 --
 ALTER TABLE `students`
 ADD CONSTRAINT `students_ibfk_1` FOREIGN KEY (`class_semester_id`) REFERENCES `class_semester` (`class_semester_id`),
-ADD CONSTRAINT `students_ibfk_2` FOREIGN KEY (`specialized_id`) REFERENCES `specialized` (`specialized_id`);
+ADD CONSTRAINT `students_ibfk_2` FOREIGN KEY (`specialized_id`) REFERENCES `specialized` (`specialized_id`),
+ADD CONSTRAINT `students_ibfk_3` FOREIGN KEY (`detail_specialized_id`) REFERENCES `specialized` (`specialized_id`);
 
 --
 -- Constraints for table `student_course`

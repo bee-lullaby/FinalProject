@@ -17,10 +17,13 @@ public interface StudentService {
 	public Student getStudentByCode(String code);
 
 	public void deleteStudent(int studentId);
-	
+
 	public String getNextStudentCode(Specialized specialized);
-	
+
 	public String getAccount(String name, String studentCode);
-	
+
 	public String getEmail(String account);
+
+	public List<Student> listStudentsBySpecializedSemester(int specializedId, int detailspecializedId,
+			int semesterNumber, int classCourseSemesterId);
 }

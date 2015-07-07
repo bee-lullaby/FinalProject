@@ -16,13 +16,15 @@ import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 @Repository
 public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(ClassDAOImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(ClassCourseSemesterDAOImpl.class);
 
 	private SessionFactory sessionFactory;
 
 	@Autowired
 	private ClassSemesterDAO classSemesterDAO;
+
+	@Autowired
+	private SemesterDAO semesterDAO;
 
 	@Autowired
 	private CourseSemesterDAO courseSemesterDAO;
@@ -37,30 +39,25 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 
 	@Override
 	public void addClassCourseSemester(ClassCourseSemester classCourseSemester) {
-		// TODO Auto-generated method stub
 		getCurrentSession().persist(classCourseSemester);
-		logger.info("ClassCourseSemester was saved successfully, ClassCourseSemester details="
-				+ classCourseSemester);
+		logger.info("ClassCourseSemester was saved successfully, ClassCourseSemester details=" + classCourseSemester);
 	}
 
 	@Override
-	public void updateClassCourseSemester(
-			ClassCourseSemester classCourseSemester) {
-		// TODO Auto-generated method stub
+	public void updateClassCourseSemester(ClassCourseSemester classCourseSemester) {
 		getCurrentSession().update(classCourseSemester);
-		logger.info("ClassCourseSemester was updated successfully, class details="
-				+ classCourseSemester);
+		logger.info("ClassCourseSemester was updated successfully, class details=" + classCourseSemester);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ClassCourseSemester> listClassCourseSemesters() {
-		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester"
-				+ " C LEFT OUTER JOIN FETCH C.timetable";
+		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester CCS" 
+				+ " LEFT OUTER JOIN FETCH CCS.timetable"
+				+ " ORDER BY CCS.classCourseSemesterId";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		List<ClassCourseSemester> classCourseSemesters = (List<ClassCourseSemester>) query
-				.list();
+		List<ClassCourseSemester> classCourseSemesters = (List<ClassCourseSemester>) query.list();
 		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
 			logger.info("ClassCourseSemester list:" + classCourseSemester);
 		}
@@ -69,16 +66,11 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ClassCourseSemester> listClassCourseSemesterByClass(
-			int classSemesterId) {
-		// TODO Auto-generated method stub
-
+	public List<ClassCourseSemester> listClassCourseSemesterByClass(int classSemesterId) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester C WHERE C.classSemester = :classSemester";
 		Query query = getCurrentSession().createQuery(hql);
-		query.setParameter("classSemester",
-				classSemesterDAO.getClassSemesterById(classSemesterId, true));
-		List<ClassCourseSemester> classCourseSemesters = (List<ClassCourseSemester>) query
-				.list();
+		query.setParameter("classSemester", classSemesterDAO.getClassSemesterById(classSemesterId, true));
+		List<ClassCourseSemester> classCourseSemesters = (List<ClassCourseSemester>) query.list();
 		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
 			logger.info("ClassCourseSemester list:" + classCourseSemester);
 		}
@@ -87,15 +79,12 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ClassCourseSemester> listClassCourseSemesterByCourse(
-			int courseSemesterId) {
-		// TODO Auto-generated method stub
+	public List<ClassCourseSemester> listClassCourseSemesterByCourse(int courseSemesterId) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester C WHERE C.courseSemester = :courseSemester";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("courseSemester",
 				courseSemesterDAO.getCourseSemesterById(courseSemesterId, false, false, false));
-		List<ClassCourseSemester> classCourseSemesters = (List<ClassCourseSemester>) query
-				.list();
+		List<ClassCourseSemester> classCourseSemesters = (List<ClassCourseSemester>) query.list();
 		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
 			logger.info("ClassCourseSemester list:" + classCourseSemester);
 		}
@@ -103,15 +92,12 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 	}
 
 	@Override
-	public ClassCourseSemester getClassCourseSemesterById(
-			int classCourseSemesterId) {
-		// TODO Auto-generated method stub
+	public ClassCourseSemester getClassCourseSemesterById(int classCourseSemesterId) {
 		ClassCourseSemester classCourseSemester = (ClassCourseSemester) getCurrentSession()
-				.get(ClassCourseSemester.class,
-						new Integer(classCourseSemesterId));
+				.get(ClassCourseSemester.class, new Integer(classCourseSemesterId));
 		if (classCourseSemester != null) {
-			logger.info("ClassCourseSemester was loaded successfully, ClassCourseSemester details="
-					+ classCourseSemester);
+			logger.info(
+					"ClassCourseSemester was loaded successfully, ClassCourseSemester details=" + classCourseSemester);
 		}
 		return classCourseSemester;
 	}
@@ -121,10 +107,24 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 		ClassCourseSemester classCourseSemester = getClassCourseSemesterById(classCourseSemesterId);
 		if (classCourseSemester != null) {
 			getCurrentSession().delete(classCourseSemester);
-			logger.info("ClassCourseSemester was deleted successfully, classCourseSemester details="
-					+ classCourseSemester);
+			logger.info(
+					"ClassCourseSemester was deleted successfully, classCourseSemester details=" + classCourseSemester);
 		}
 
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ClassCourseSemester> listClassCourseSemesterBySemester(int semesterId) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester C";
+		hql += " WHERE C.classSemester.semester = :semester";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("semester", semesterDAO.getSemesterById(semesterId, false, false, false, false));
+		List<ClassCourseSemester> classCourseSemesters = (List<ClassCourseSemester>) query.list();
+		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
+			logger.info("ClassCourseSemester list:" + classCourseSemester);
+		}
+		return classCourseSemesters;
 	}
 
 }

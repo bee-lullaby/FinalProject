@@ -22,11 +22,9 @@ import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassSemester;
 
 @Service
-public class ClassCourseSemesterServiceImpl implements
-		ClassCourseSemesterService {
+public class ClassCourseSemesterServiceImpl implements ClassCourseSemesterService {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(ClassCourseSemesterServiceImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(ClassCourseSemesterServiceImpl.class);
 
 	private ClassCourseSemesterDAO classCourseSemesterDAO;
 
@@ -36,19 +34,9 @@ public class ClassCourseSemesterServiceImpl implements
 	@Autowired
 	private CourseSemesterDAO courseSemesterDAO;
 
-	public void setClassCourseSemesterDAO(
-			ClassCourseSemesterDAO classCourseSemesterDAO) {
+	public void setClassCourseSemesterDAO(ClassCourseSemesterDAO classCourseSemesterDAO) {
 		this.classCourseSemesterDAO = classCourseSemesterDAO;
 	}
-
-	//
-	// public void setClassSemesterDAO(ClassSemesterDAO classSemesterDAO) {
-	// this.classSemesterDAO = classSemesterDAO;
-	// }
-	//
-	// public void setCourseSemesterDAO(CourseSemesterDAO courseSemesterDAO) {
-	// this.courseSemesterDAO = courseSemesterDAO;
-	// }
 
 	@Override
 	@Transactional
@@ -75,19 +63,12 @@ public class ClassCourseSemesterServiceImpl implements
 				int i = 0;
 				while (i <= 4) {
 					ClassCourseSemester ccs = new ClassCourseSemester();
-					ClassSemester cs = classSemesterDAO
-							.getClassSemesterByCode(classCode, semesterId, true);
+					ClassSemester cs = classSemesterDAO.getClassSemesterByCode(classCode, semesterId, true);
 					ccs.setClassSemester(cs);
-					logger.info("CLASS: "
-							+ String.valueOf(ccs.getClassSemester()
-									.getClassSemesterId()));
-					String courseCode = row.getCell(i + 1).getStringCellValue()
-							.trim();
-					ccs.setCourseSemester(courseSemesterDAO
-							.getCourseSemesterByCode(courseCode, false, false, false));
-					logger.info("COURSE: "
-							+ String.valueOf(ccs.getCourseSemester()
-									.getCourseSemesterId()));
+					logger.info("CLASS: " + String.valueOf(ccs.getClassSemester().getClassSemesterId()));
+					String courseCode = row.getCell(i + 1).getStringCellValue().trim();
+					ccs.setCourseSemester(courseSemesterDAO.getCourseSemesterByCode(courseCode, false, false, false));
+					logger.info("COURSE: " + String.valueOf(ccs.getCourseSemester().getCourseSemesterId()));
 					if (i == 4) {
 						ccs.setSemesterLong(true);
 						i++;
@@ -110,8 +91,7 @@ public class ClassCourseSemesterServiceImpl implements
 
 	@Override
 	@Transactional
-	public void updateClassCourseSemester(
-			ClassCourseSemester classCourseSemester) {
+	public void updateClassCourseSemester(ClassCourseSemester classCourseSemester) {
 		classCourseSemesterDAO.updateClassCourseSemester(classCourseSemester);
 	}
 
@@ -123,16 +103,20 @@ public class ClassCourseSemesterServiceImpl implements
 
 	@Override
 	@Transactional
-	public ClassCourseSemester getClassCourseSemesterById(
-			int classCourseSemesterId) {
-		return classCourseSemesterDAO
-				.getClassCourseSemesterById(classCourseSemesterId);
+	public ClassCourseSemester getClassCourseSemesterById(int classCourseSemesterId) {
+		return classCourseSemesterDAO.getClassCourseSemesterById(classCourseSemesterId);
 	}
 
 	@Override
 	@Transactional
 	public void deleteClassCourseSemester(int classCourseSemesterId) {
 		classCourseSemesterDAO.deleteClassCourseSemester(classCourseSemesterId);
+	}
+
+	@Override
+	@Transactional
+	public List<ClassCourseSemester> listClassCourseSemesterBySemester(int semesterId) {
+		return classCourseSemesterDAO.listClassCourseSemesterBySemester(semesterId);
 	}
 
 }

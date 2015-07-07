@@ -31,16 +31,37 @@ public class ClassFPT {
 	@JoinColumn(name = "specialized_id")
 	private Specialized specialized;
 	@ManyToOne
+	@JoinColumn(name = "detail_specialized_id")
+	private Specialized detailSpecialized;
+	@ManyToOne
 	@JoinColumn(name = "course_id")
 	private Course course;
 	@Column
 	private Integer batch;
+	@Column(name = "batch_char")
+	private char batchChar;
 	@Column
 	private int number;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "classFPT", orphanRemoval = true)
 	@OrderBy
 	Set<ClassSemester> classSemesters = new LinkedHashSet<ClassSemester>();
+
+	public Specialized getDetailSpecialized() {
+		return detailSpecialized;
+	}
+
+	public void setDetailSpecialized(Specialized detailSpecialized) {
+		this.detailSpecialized = detailSpecialized;
+	}
+
+	public char getBatchChar() {
+		return batchChar;
+	}
+
+	public void setBatchChar(char batchChar) {
+		this.batchChar = batchChar;
+	}
 
 	/**
 	 * @param batch
@@ -147,8 +168,7 @@ public class ClassFPT {
 	 * @param batch
 	 * @param number
 	 */
-	public ClassFPT(int classId, String code, Specialized specialized,
-			Course course, int batch, int number) {
+	public ClassFPT(int classId, String code, Specialized specialized, Course course, int batch, int number) {
 		super();
 		this.classId = classId;
 		this.code = code;

@@ -1,8 +1,10 @@
 package vn.edu.fpt.timetabling.service;
 
+import java.text.Normalizer;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import vn.edu.fpt.timetabling.dao.StudentDAO;
 import vn.edu.fpt.timetabling.model.Specialized;
 import vn.edu.fpt.timetabling.model.Student;
-import java.text.Normalizer;
-import java.util.regex.Pattern;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -112,6 +112,13 @@ public class StudentServiceImpl implements StudentService {
 	public String getEmail(String account) {
 		String email = account + "@fpt.edu.vn";
 		return email;
+	}
+
+	@Override
+	@Transactional
+	public List<Student> listStudentsBySpecializedSemester(int specializedId, int detailspecializedId,
+			int semesterNumber, int classCourseSemesterId) {
+		return studentDAO.listStudentsBySpecializedSemester(specializedId, detailspecializedId, semesterNumber, classCourseSemesterId);
 	}
 
 }

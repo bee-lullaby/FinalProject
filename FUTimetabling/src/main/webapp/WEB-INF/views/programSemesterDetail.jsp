@@ -49,9 +49,17 @@
 	background-color: #f9f9f9
 }
 </style>
+<script>
+	selectSemester = function(semester) {
+		var semesterId = semester.value;
+		window.location
+				.replace("http://localhost:8080/Timetabling/programSemesterDetails?semesterId="
+						+ semesterId);
+	};
+</script>
 </head>
 <body>
-	<select>
+	<select onchange="selectSemester(this)">
 		<c:forEach var="item" items="${semesters}">
 			<option value="${item.semesterId}"
 				${item.semesterId == semesterId ? 'selected="selected"' : ''}>

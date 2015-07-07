@@ -1,5 +1,7 @@
 package vn.edu.fpt.timetabling;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,24 +60,29 @@ public class ClassCourseSemesterController {
 		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
+		List<Semester> semesters = semesterService.listSemesters(true, true, false, false);
 		Semester semester;
-		if (semesterId != null || session.getAttribute("semesterId") != null) {
+		if (semesterId != null || session.getAttribute("semester") != null) {
 			if (semesterId == null) {
-				semesterId = (Integer) session.getAttribute("semesterId");
+				semester = (Semester) session.getAttribute("semester");
+			} else {
+				semester = semesterService.getSemesterById(semesterId, true, true, false, false);
 			}
-			semester = semesterService.getSemesterById(semesterId, true, true, false, false);
 			if (semester == null) {
-				semester = semesterService.listSemesters(true, true, false, false).get(0);
+				semester = semesters.get(0);
 			}
-
 		} else {
-			semester = semesterService.listSemesters(true, true, false, false).get(0);
+			semester = semesters.get(0);
 		}
+		semesterId = semester.getSemesterId();
 		model.addAttribute("classCourseSemester", new ClassCourseSemester());
-		model.addAttribute("classCourseSemesters", classCourseSemesterService.listClassCourseSemesters());
+		model.addAttribute("classCourseSemesters",
+				classCourseSemesterService.listClassCourseSemesterBySemester(semesterId));
 		model.addAttribute("classSemesters", semester.getClassSemesters());
 		model.addAttribute("courseSemesters", semester.getCourseSemesters());
-		session.setAttribute("semesterId", semesterId);
+		model.addAttribute("semesterId", semesterId);
+		model.addAttribute("semesters", semesters);
+		session.setAttribute("semester", semester);
 		return "classCourse";
 	}
 
@@ -91,9 +98,8 @@ public class ClassCourseSemesterController {
 		}
 		// change
 		ClassSemester classSemester = classSemesterService.getClassSemesterById(classSemesterId, false);
-		CourseSemester courseSemester = courseSemesterService.getCourseSemesterById(courseSemesterId, false, false, false);
-		System.out.println("aaaa");
-		System.out.println(courseSemester.getSemester());
+		CourseSemester courseSemester = courseSemesterService.getCourseSemesterById(courseSemesterId, false, false,
+				false);
 		if (classSemester == null || courseSemester == null
 				|| classSemester.getSemester().compareTo(courseSemester.getSemester()) != 0) {
 			return "redirect:/classCourseSemesters";
@@ -144,14 +150,30 @@ public class ClassCourseSemesterController {
 		}
 		ClassSemester classSemester = classCourseSemester.getClassSemester();
 		CourseSemester courseSemester = classCourseSemester.getCourseSemester();
-		Semester semester = semesterService.getSemesterById(classSemester.getSemester().getSemesterId(), true, true,
-				false, false);
+		List<Semester> semesters = semesterService.listSemesters(true, true, false, false);
+		Semester semester;
+		int semesterId;
+		if (session.getAttribute("semester") != null) {
+			semester = (Semester) session.getAttribute("semester");
+			if (semester == null) {
+				semester = semesterService.getSemesterById(classSemester.getSemester().getSemesterId(), true, true,
+						false, false);
+			}
+		} else {
+			semester = semesterService.getSemesterById(classSemester.getSemester().getSemesterId(), true, true, false,
+					false);
+		}
+		semesterId = semester.getSemesterId();
 		model.addAttribute("classCourseSemester", classCourseSemester);
-		model.addAttribute("classCourseSemesters", classCourseSemesterService.listClassCourseSemesters());
+		model.addAttribute("classCourseSemesters",
+				classCourseSemesterService.listClassCourseSemesterBySemester(semesterId));
 		model.addAttribute("classSemesters", semester.getClassSemesters());
 		model.addAttribute("courseSemesters", semester.getCourseSemesters());
 		model.addAttribute("classSemesterId", classSemester.getClassSemesterId());
 		model.addAttribute("courseSemesterId", courseSemester.getCourseSemesterId());
+		model.addAttribute("semesters", semesters);
+		model.addAttribute("semesterId", semesterId);
+		session.setAttribute("semester", semester);
 		return "classCourse";
 	}
 }

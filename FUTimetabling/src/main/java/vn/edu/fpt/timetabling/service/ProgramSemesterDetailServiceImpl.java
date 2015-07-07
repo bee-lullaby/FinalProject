@@ -9,29 +9,23 @@ import vn.edu.fpt.timetabling.dao.ProgramSemesterDetailDAO;
 import vn.edu.fpt.timetabling.model.ProgramSemesterDetail;
 
 @Service
-public class ProgramSemesterDetailServiceImpl implements
-		ProgramSemesterDetailService {
+public class ProgramSemesterDetailServiceImpl implements ProgramSemesterDetailService {
 	private ProgramSemesterDetailDAO programSemesterDetailDAO;
 
-	public void setProgramSemesterDetailDAO(
-			ProgramSemesterDetailDAO programSemesterDetailDAO) {
+	public void setProgramSemesterDetailDAO(ProgramSemesterDetailDAO programSemesterDetailDAO) {
 		this.programSemesterDetailDAO = programSemesterDetailDAO;
 	}
 
 	@Override
 	@Transactional
-	public void addProgramSemesterDetail(
-			ProgramSemesterDetail programSemesterDetail) {
-		programSemesterDetailDAO
-				.addProgramSemesterDetail(programSemesterDetail);
+	public void addProgramSemesterDetail(ProgramSemesterDetail programSemesterDetail) {
+		programSemesterDetailDAO.addProgramSemesterDetail(programSemesterDetail);
 	}
 
 	@Override
 	@Transactional
-	public void updateProgramSemesterDetail(
-			ProgramSemesterDetail programSemesterDetail) {
-		programSemesterDetailDAO
-				.updateProgramSemesterDetail(programSemesterDetail);
+	public void updateProgramSemesterDetail(ProgramSemesterDetail programSemesterDetail) {
+		programSemesterDetailDAO.updateProgramSemesterDetail(programSemesterDetail);
 	}
 
 	@Override
@@ -42,17 +36,20 @@ public class ProgramSemesterDetailServiceImpl implements
 
 	@Override
 	@Transactional
-	public ProgramSemesterDetail getProgramSemesterDetailById(
-			int programSemesterDetailId) {
-		return programSemesterDetailDAO
-				.getProgramSemesterDetailById(programSemesterDetailId);
+	public ProgramSemesterDetail getProgramSemesterDetailById(int programSemesterDetailId) {
+		return programSemesterDetailDAO.getProgramSemesterDetailById(programSemesterDetailId);
 	}
 
 	@Override
 	@Transactional
 	public void deleteProgramSemesterDetail(int programSemesterDetailId) {
-		programSemesterDetailDAO
-				.deleteProgramSemesterDetail(programSemesterDetailId);
+		programSemesterDetailDAO.deleteProgramSemesterDetail(programSemesterDetailId);
+	}
+
+	@Override
+	@Transactional
+	public List<ProgramSemesterDetail> listProgramSemesterDetailsBySemester(int semesterId) {
+		return programSemesterDetailDAO.listProgramSemesterDetailsBySemester(semesterId);
 	}
 
 }

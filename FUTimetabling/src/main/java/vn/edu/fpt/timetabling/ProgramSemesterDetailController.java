@@ -60,22 +60,27 @@ public class ProgramSemesterDetailController {
 			return "home";
 		}
 		Semester semester;
-		if (semesterId != null || session.getAttribute("semesterId") != null) {
+		if (semesterId != null || session.getAttribute("semester") != null) {
 			if (semesterId == null) {
-				semesterId = (Integer) session.getAttribute("semesterId");
+				semester = (Semester) session.getAttribute("semester");
+			} else {
+				semester = semesterService.getSemesterById(semesterId, false, true, true, false);
 			}
-			semester = semesterService.getSemesterById(semesterId, false, true, true, false);
 			if (semester == null) {
 				semester = semesterService.listSemesters(false, true, true, false).get(0);
 			}
 		} else {
 			semester = semesterService.listSemesters(false, true, true, false).get(0);
 		}
+		semesterId = semester.getSemesterId();
 		model.addAttribute("programSemesterDetail", new ProgramSemesterDetail());
-		model.addAttribute("programSemesterDetails", programSemesterDetailService.listProgramSemesterDetails());
+		model.addAttribute("programSemesterDetails",
+				programSemesterDetailService.listProgramSemesterDetailsBySemester(semesterId));
 		model.addAttribute("programSemesters", semester.getProgramSemesters());
 		model.addAttribute("courseSemesters", semester.getCourseSemesters());
 		model.addAttribute("semesters", semesterService.listSemesters(false, false, false, false));
+		model.addAttribute("semesterId", semesterId);
+		session.setAttribute("semester", semester);
 		return "programSemesterDetail";
 	}
 
@@ -93,7 +98,8 @@ public class ProgramSemesterDetailController {
 			programSemesterDetail = new ProgramSemesterDetail();
 		}
 		ProgramSemester programSemester = programSemesterService.getProgramSemesterById(programSemesterId);
-		CourseSemester courseSemester = courseSemesterService.getCourseSemesterById(courseSemesterId, false, false, false);
+		CourseSemester courseSemester = courseSemesterService.getCourseSemesterById(courseSemesterId, false, false,
+				false);
 		if (programSemester == null || courseSemester == null) {
 			return "redirect:/programSemesterDetails";
 		}
@@ -131,22 +137,23 @@ public class ProgramSemesterDetailController {
 			return "redirect:/programSemesterDetails";
 		}
 		Semester semester;
-		if (session.getAttribute("semesterId") != null) {
-			int semesterId = (Integer) session.getAttribute("semesterId");
-			semester = semesterService.getSemesterById(semesterId, false, true, true, false);
-			if (semester == null) {
-				semester = semesterService.listSemesters(false, true, true, false).get(0);
-			}
+		int semesterId;
+		if (session.getAttribute("semester") != null) {
+			semester = (Semester) session.getAttribute("semesterId");
 		} else {
 			semester = semesterService.listSemesters(false, true, true, false).get(0);
+			session.setAttribute("semester", semester);
 		}
+		semesterId = semester.getSemesterId();
 		model.addAttribute("programSemesterDetail", programSemesterDetail);
-		model.addAttribute("programSemesterDetails", programSemesterDetailService.listProgramSemesterDetails());
+		model.addAttribute("programSemesterDetails",
+				programSemesterDetailService.listProgramSemesterDetailsBySemester(semesterId));
 		model.addAttribute("programSemesters", semester.getProgramSemesters());
 		model.addAttribute("courseSemesters", semester.getCourseSemesters());
 		model.addAttribute("semesters", semesterService.listSemesters(false, false, false, false));
 		model.addAttribute("programSemesterId", programSemesterDetail.getProgramSemester().getProgramSemesterId());
 		model.addAttribute("courseSemesterId", programSemesterDetail.getCourseSemester().getCourseSemesterId());
+		model.addAttribute("semesterId", semesterId);
 		return "programSemesterDetail";
 	}
 }

@@ -16,4 +16,7 @@ public interface StudentDAO {
 	public Student getStudentByCode(String code);
 
 	public void deleteStudent(int studentId);
+
+	public List<Student> listStudentsBySpecializedSemester(int specializedId, int detailspecializedId,
+			int semesterNumber, int classCourseSemesterId);
 }

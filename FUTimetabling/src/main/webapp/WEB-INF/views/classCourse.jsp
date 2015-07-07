@@ -49,8 +49,22 @@
 	background-color: #f9f9f9
 }
 </style>
+<script>
+	selectSemester = function(semester) {
+		var semesterId = semester.value;
+		window.location
+				.replace("http://localhost:8080/Timetabling/classCourseSemesters?semesterId="
+						+ semesterId);
+	};
+</script>
 </head>
 <body>
+	<select onchange="selectSemester(this)">
+		<c:forEach var="item" items="${semesters}">
+			<option value="${item.semesterId}"
+				${item.semesterId == semesterId ? 'selected="selected"' : ''}>${item.name}</option>
+		</c:forEach>
+	</select>
 	<h1>Add a Class Course</h1>
 	<c:url var="addAction" value="/classCourseSemester/add"></c:url>
 
