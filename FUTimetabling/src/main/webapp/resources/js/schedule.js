@@ -4,11 +4,11 @@ $(document).ready(function(){
 	var endDate = $("#timetable-container").find("#endDate").val();
 	
 	var dayName = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-	var days = [];
 	
-	var JSONdataSchedule = $("#testJSON").text();
+	var JSONdataSchedule = $("#JSONdata").text();
+	var JSONToSubmit = $("#JSONToSubmit");
 	
-	var dataSchedule;
+	var JSONdata = JSON.parse(JSONdataSchedule);
 	
 	_setDateTimetable();
 	
@@ -36,12 +36,8 @@ $(document).ready(function(){
 	});
 	
 	$("#timetable-body tr td").on("click", function() {
-		_testJSON();
 		var columnNo = $(this).index() + 1;
-		
-//		var header = $(this).closest("table").find("tr:nth-child(1) th:nth-child("+columnNo+")").text();
 		var slot = $(this).parent().get(0).rowIndex;
-		
 		if($(this).is("[class^='color-']")) {
 			var courseSet = $(this).attr("class");
 			var courseSelected = $("span[class*='" +courseSet +"']").parent().closest('div').text().trim();
@@ -49,15 +45,15 @@ $(document).ready(function(){
 			$("#set-courses option:contains('" +courseSelected +"')").attr("selected", "selected");
 		}
 		
+		var position = $(this).data("position");
+		var JSONobj = JSONdata[position];
+		var d = new Date(JSONobj.date);
 		
-		var d = new Date($(this).data("date"));
-		
-		$("#dialog-schedule #slot-day").text(dayName[d.getDay()] +" (" +d.getDate() +"/" +(d.getMonth() + 1) +") - Slot " +$(this).data("slot"));
-		
-		
-		dataSchedule = $(this).data("dataSchedule");
-		_setCourseInfoDialog(dataSchedule); 
+		$("#dialog-schedule #slot-day").text(dayName[d.getDay()] +" (" +d.getDate() +"/" +(d.getMonth() + 1) +") - Slot " +JSONobj.slot);
 		$("#dialog-schedule").data("td", $(this));
+		$("#dialog-schedule").data("position", position);
+		$("#dialog-schedule").data("prev-course-selected", $("#set-courses option:selected").text());
+		_setCourseInfoDialog(JSONdata[position].dataSchedule); 
 		_showDialog("dialog-schedule");
 	});
 	
@@ -103,25 +99,35 @@ $(document).ready(function(){
 	});
 	
 	$("#set-courses").on("change", function() {
-		if(dataSchedule !== undefined) {
-			_setCourseInfoDialog(dataSchedule);
-		}
+		_setCourseInfoDialog(JSONdata[$("#dialog-schedule").data("position")].dataSchedule);
 	});
 	
 	$("#btn-set-course").on("click", function(){
 		_showDialog("dialog-schedule");
 		
 		var courseSelected = $("#set-courses option:selected").val();
-		var color = $("div[id='" +courseSelected +"'] span").attr("class").split(" ")[1];
-		var date = $("#dialog-schedule").data("date");
-		var slot = $("#dialog-schedule").data("slot");
+		var color = $("span[id='" +courseSelected +"'] ").attr("class").split(" ")[1];
 		var td = $("#dialog-schedule").data("td");
+		var position = $("#dialog-schedule").data("position");
+		var prevCourse = $("#dialog-schedule").data("prev-course-selected");
 		if(td.is("[class^='color-']")) {
 			td.removeClass(td.attr("class"));
+			JSONdata[position].dataSchedule[prevCourse].classInSlot -= 1;
 		}
+		
 		td.addClass(color);
+
+		var courseSelectedName = $("#set-courses option:selected").text();
+		JSONdata[position].setCourseSlot = courseSelected;
+		JSONdata[position].dataSchedule[courseSelectedName].classInSlot += 1;
+		
+		$("#dialog-schedule").removeData("prev-course-selected");
 	});
 	
+	$("#btn-submit").on("click", function(){
+		JSONToSubmit.attr("value", JSON.stringify(JSONdata));
+		$(this).form.submit();
+	});
 	
 	function _showDialog(id) {
 		var dialog = $("#" + id).data('dialog');
@@ -182,36 +188,20 @@ $(document).ready(function(){
 		$("#course-info-to-set #classes").text(data.numOfClasses);
 		$("#course-info-to-set #slot").text(data.classInSlot);
 		$("#course-info-to-set #teachers").text(data.numOfTeachers);
-		
 	};
-	
-	function _testJSON() {
-		var obj = JSON.parse(JSONdataSchedule);
-		var JSONString = JSON.stringify(obj);
-		for(var i = 0; i < obj.length; i++) {
-			var dts = obj[i];
-		}
-	}
 	
 	function _setTimetable() {
 		var obj = JSON.parse(JSONdataSchedule);
 		for(var i = 0; i < obj.length; i++) {
-			var dts = obj[i];
-			if(obj[i].setCourseSlot !== -1) {
-				var color = $("#" +obj[i].setCourseSlot).attr("class").split(' ')[1];
-				$('#slot-' +obj[i].slot).append($("<td></td>")
+			if(JSONdata[i].setCourseSlot !== -1) {
+				var color = $("#" +JSONdata[i].setCourseSlot).attr("class").split(' ')[1];
+				$('#slot-' +JSONdata[i].slot).append($("<td></td>")
 						.addClass(color)
-						.data("date", obj[i].date)
-						.data("slot", obj[i].slot)
-						.data("setCourseSlot", obj[i].setCourseSlot)
-						.data("dataSchedule", obj[i].dataSchedule));
+						.data("position", i));
 			} 
 			else {
-				$('#slot-' +obj[i].slot).append($("<td></td>")
-						.data("date", obj[i].date)
-						.data("slot", obj[i].slot)
-						.data("setCourseSlot", obj[i].setCourseSlot)
-						.data("dataSchedule", obj[i].dataSchedule));
+				$('#slot-' +JSONdata[i].slot).append($("<td></td>")
+						.data("position", i));
 			}
 				
 		}

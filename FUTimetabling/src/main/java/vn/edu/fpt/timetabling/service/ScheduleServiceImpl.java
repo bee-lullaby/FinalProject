@@ -1,5 +1,6 @@
 package vn.edu.fpt.timetabling.service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import vn.edu.fpt.timetabling.dao.ClassCourseSemesterDAO;
 import vn.edu.fpt.timetabling.dao.ClassSemesterDAO;
 import vn.edu.fpt.timetabling.dao.CourseSemesterDAO;
 import vn.edu.fpt.timetabling.dao.SemesterDAO;
@@ -24,6 +26,7 @@ import vn.edu.fpt.timetabling.model.ClassSemester;
 import vn.edu.fpt.timetabling.model.CourseSemester;
 import vn.edu.fpt.timetabling.model.DataSchedule;
 import vn.edu.fpt.timetabling.model.DaySlot;
+import vn.edu.fpt.timetabling.model.Room;
 import vn.edu.fpt.timetabling.model.Semester;
 import vn.edu.fpt.timetabling.model.TeacherCourseSemester;
 import vn.edu.fpt.timetabling.model.Timetable;
@@ -44,6 +47,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Autowired
 	private CourseSemesterDAO courseSemesterDAO;
 
+	@Autowired
+	private ClassCourseSemesterDAO classCourseSemesterDAO;
+	
 	@Autowired
 	private TimetableDAO timetableDAO;
 
@@ -159,14 +165,13 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		List<DaySlot> list = new ArrayList<DaySlot>();
-		
-		
+
 		for (int i = 0; i < 7; i++) {
 			for (int j = 1; j < 7; j++) {
-				
+
 				DaySlot ds = new DaySlot();
 				HashMap<String, DataSchedule> dataSchedule = new HashMap<String, DataSchedule>();
-				
+
 				ds.setDate(sdf.format(cal.getTime()));
 				ds.setSlot(j);
 				Object o = TimetableUtils.containsTimetable(timetables,
@@ -178,12 +183,14 @@ public class ScheduleServiceImpl implements ScheduleService {
 				} else {
 					ds.setSetCourseSlot(-1);
 				}
-				
-				for(CourseSemester cs : courseSemesters) {
+
+				for (CourseSemester cs : courseSemesters) {
 					DataSchedule dataS = new DataSchedule();
 					dataS.setNumOfClasses(cs.getClassCourseSemesters().size());
-					dataS.setClassInSlot(TimetableUtils.findNumberSameDaySlot(mapCourseTimetable.get(cs), cal.getTime(), j));
-					dataS.setNumOfTeachers(cs.getTeacherCourseSemesters().size());
+					dataS.setClassInSlot(TimetableUtils.findNumberSameDaySlot(
+							mapCourseTimetable.get(cs), cal.getTime(), j));
+					dataS.setNumOfTeachers(cs.getTeacherCourseSemesters()
+							.size());
 					dataSchedule.put(cs.getCourse().getCode(), dataS);
 				}
 				ds.setDataSchedule(dataSchedule);
@@ -192,5 +199,35 @@ public class ScheduleServiceImpl implements ScheduleService {
 			cal.set(Calendar.DATE, cal.get(Calendar.DATE) + 1);
 		}
 		return list;
+	}
+
+	@Transactional
+	@Override
+	public boolean addTimetable(List<DaySlot> daySlots) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		for (DaySlot dayslot : daySlots) {
+			if (dayslot.getSetCourseSlot() != -1) {
+				Timetable timetable = new Timetable();
+				Date date;
+				try {
+					date = sdf.parse(dayslot.getDate());
+
+					timetable.setClassCourseSemester(classCourseSemesterDAO
+							.getClassCourseSemesterById(dayslot
+									.getSetCourseSlot()));
+					timetable.setDate(date);
+					timetable.setSlot(dayslot.getSlot());
+					Room a = new Room();
+					a.setRoomId(1);
+					timetable.setRoom(a);
+					timetableDAO.addTimetable(timetable);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return true;
 	}
 }

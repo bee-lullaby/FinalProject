@@ -85,43 +85,40 @@
 					<c:set var="x" value="0" scope="page" />
 					<c:forEach items="${listClassCourses}" var="classCourseSemester">
 						<c:set var="x" value="${x + 1}" scope="page" />
-						<div id="${classCourseSemester.getCourseSemester().getCourse().courseId}"
-							style="cursor: pointer; display: inline-block">
-							<span id="${classCourseSemester.classCourseSemesterId}" class="course-color color-${x}"></span>
+						<div id="course-${x}" style="cursor: pointer; display: inline-block">
+							<span id="${classCourseSemester.classCourseSemesterId}"
+								class="course-color color-${x}"></span>
 							&nbsp;${classCourseSemester.getCourseSemester().getCourse().code}&nbsp;&nbsp;
 						</div>
 					</c:forEach>
 				</div>
 
 				<div style="float: right;">
-					<button id="btn-generate" class="button" data-role="hint"
-						data-hint-background="#1CB7EC" data-hint-color="fg-white"
-						data-hint-position="top" data-hint="Generate From Previous Week">
-						<span class="mif-table"></span>
-					</button>
-					|
-					<button id="btn-undo" class="button" data-role="hint"
-						data-hint-background="#1CB7EC" data-hint-color="fg-white"
-						data-hint-position="top" data-hint="Undo">
-						<span class="mif-undo"></span>
-					</button>
-					<button id="btn-redo" class="button" data-role="hint"
-						data-hint-background="#1CB7EC" data-hint-color="fg-white"
-						data-hint-position="top" data-hint="Redo">
-						<span class="mif-redo"></span>
-					</button>
-					|
-					<button id="btn-clear" class="button" data-role="hint"
-						data-hint-background="#1CB7EC" data-hint-color="fg-white"
-						data-hint-position="top" data-hint="Clear">
-						<span class="mif-cross"></span>
-					</button>
+					<form:form action="schedule/updateTimetable" method="post">
+						<button id="btn-generate" class="button" data-role="hint"
+							data-hint-background="#1CB7EC" data-hint-color="fg-white"
+							data-hint-position="top" data-hint="Generate From Previous Week">
+							<span class="mif-table"></span>
+						</button>
+						|
+						<button id="btn-clear" class="button" data-role="hint"
+							data-hint-background="#1CB7EC" data-hint-color="fg-white"
+							data-hint-position="top" data-hint="Clear">
+							<span class="mif-cross"></span>
+						</button>
+						<button id="btn-submit" class="button" data-role="hint"
+							data-hint-background="#1CB7EC" data-hint-color="fg-white"
+							data-hint-position="top" data-hint="Submit">
+							<span class="mif-download"></span>
+						</button>
+						<div id="JSONdata" style="display: none">${JSONdata}</div>
+						<input type="hidden" type="text" id="JSONToSubmit" name="JSONToSubmit"/>
+					</form:form>
 				</div>
 			</div>
 			<div id="timetable-container" style="width: 100%; margin-top: 15px">
 				<input type="hidden" id="startDate" value="${startDate}" /> <input
 					type="hidden" id="endDate" value="${endDate}" />
-				<div id="testJSON" style="display: none">${testJSON}</div>
 				<table id="timetable"
 					class="table cell-hovered border bordered timetable"
 					style="width: 100%">
@@ -151,14 +148,13 @@
 	<!-- Dialogs -->
 
 	<c:set var="y" value="0" scope="page" />
-	<c:forEach items="${listCourses}" var="courseSemester">
+	<c:forEach items="${listClassCourses}" var="classCourseSemester">
 
 		<c:set var="y" value="${y + 1}" scope="page" />
 		<div id="dialog-info-course-${y}" data-role="dialog" class="padding20"
 			data-close-button="true" data-overlay="true"
 			data-overlay-color="op-dark">
-
-			<h1>${courseSemester.getCourse().code}</h1>
+			<h1>${classCourseSemester.getCourseSemester().getCourse().code}</h1>
 			<table id="table-course" class="table">
 				<tr>
 					<th>Teacher (<font id="numberOfTeacher"></font>):
@@ -169,7 +165,7 @@
 								<c:forEach items="${listTeacherCourseSemester}" var="teacher">
 									<c:choose>
 										<c:when
-											test="${courseSemester.courseSemesterId == teacher.getCourseSemester().courseSemesterId}">
+											test="${classCourseSemester.getCourseSemester().courseSemesterId == teacher.getCourseSemester().courseSemesterId}">
 											<option
 												value="${teacher.getTeacherSemester().getTeacher().teacherId}">
 												${teacher.getTeacherSemester().getTeacher().account}</option>
@@ -181,16 +177,6 @@
 						</div>
 					</td>
 				</tr>
-				<tr style="display: none">
-					<td colspan="4"></td>
-				</tr>
-				<tr>
-					<th>Remain slots:</th>
-					<td>${courseSemester.getSlots()}</td>
-					<th style="padding-left: 30px">Classes:</th>
-					<td>${fn:length(courseSemester.classCourseSemesters)}</td>
-				</tr>
-
 			</table>
 		</div>
 	</c:forEach>
@@ -206,8 +192,8 @@
 					<h3 id="slot-day">Course:</h3> Course:
 					<div class="input-control select">
 						<select id="set-courses" name="setCourse">
-							<c:forEach items="${listCourses}" var="courseSemester">
-								<option value="${courseSemester.getCourse().courseId}">${courseSemester.getCourse().code}</option>
+							<c:forEach items="${listClassCourses}" var="classCourseSemester">
+								<option value="${classCourseSemester.classCourseSemesterId}">${classCourseSemester.getCourseSemester().getCourse().code}</option>
 							</c:forEach>
 						</select>
 					</div> <br>

@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -16,18 +18,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassSemester;
+import vn.edu.fpt.timetabling.model.DaySlot;
 import vn.edu.fpt.timetabling.model.Semester;
 import vn.edu.fpt.timetabling.service.ScheduleService;
 import vn.edu.fpt.timetabling.service.SemesterService;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
 @Controller
 public class ScheduleController {
-//	private static final Logger logger = LoggerFactory
-//			.getLogger(ScheduleController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ScheduleController.class);
 	private ScheduleService scheduleService;
 	private SemesterService semesterService;
 
@@ -82,8 +86,6 @@ public class ScheduleController {
 		model.addAttribute("listClasses", semester.getClassSemesters());
 		model.addAttribute("listClassCourses",
 				classCourseSemesters);
-		model.addAttribute("listCourses",
-				scheduleService.listCourseSemesterByClass(classId, semesterId));
 		model.addAttribute("listTeacherCourseSemester", scheduleService
 				.listTeacherByCourseSemester(classId, semesterId));
 		
@@ -92,7 +94,7 @@ public class ScheduleController {
 		
 		try {
 			om.writeValue(sw, scheduleService.getListDaySlot(semesterId, classId, 1));
-			model.addAttribute("testJSON", sw);
+			model.addAttribute("JSONdata", sw);
 		} catch (JsonGenerationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -110,4 +112,30 @@ public class ScheduleController {
 		
 		return;
 	}
+	
+	@RequestMapping(value = "/schedule/updateTimetable", method = RequestMethod.POST)
+	public String updateTimetable(@RequestParam(value = "JSONToSubmit", required = true) String JSONToSubmit) {
+		logger.info(JSONToSubmit);
+		
+		ObjectMapper om = new ObjectMapper();
+		TypeFactory typeFactory = om.getTypeFactory();
+		List<DaySlot> daySlots;
+		try {
+			daySlots = om.readValue(JSONToSubmit, typeFactory.constructCollectionType(List.class, DaySlot.class));
+			boolean result = scheduleService.addTimetable(daySlots);
+			if(result) logger.info("hameo");
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return "redirect:/schedule";
+	}
+	
 }
