@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
+import vn.edu.fpt.timetabling.model.Semester;
+import vn.edu.fpt.timetabling.model.Student;
 
 @Repository
 public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
@@ -25,6 +27,9 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 
 	@Autowired
 	private SemesterDAO semesterDAO;
+
+	@Autowired
+	private StudentDAO studentDAO;
 
 	@Autowired
 	private CourseSemesterDAO courseSemesterDAO;
@@ -52,9 +57,8 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ClassCourseSemester> listClassCourseSemesters() {
-		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester CCS" 
-				+ " LEFT OUTER JOIN FETCH CCS.timetable"
-				+ " ORDER BY CCS.classCourseSemesterId";
+		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester CCS"
+				+ " LEFT OUTER JOIN FETCH CCS.timetable" + " ORDER BY CCS.classCourseSemesterId";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<ClassCourseSemester> classCourseSemesters = (List<ClassCourseSemester>) query.list();
@@ -124,6 +128,21 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
 			logger.info("ClassCourseSemester list:" + classCourseSemester);
 		}
+		return classCourseSemesters;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ClassCourseSemester> listClassCourseSemesterByStudent(int semesterId, int studentId) {
+		Semester semester = semesterDAO.getSemesterById(semesterId, false, false, false, false);
+		Student student = studentDAO.getStudentById(studentId);
+		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester CCS"
+				+ " LEFT OUTER JOIN FETCH CCS.classCourseStudentSemesters CCSS" + " WHERE CCS.classSemester.semester = :semester"
+				+ " AND CCSS.student = :student";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("student", student);
+		query.setParameter("semester", semester);
+		List<ClassCourseSemester> classCourseSemesters = (List<ClassCourseSemester>) query.list();
 		return classCourseSemesters;
 	}
 

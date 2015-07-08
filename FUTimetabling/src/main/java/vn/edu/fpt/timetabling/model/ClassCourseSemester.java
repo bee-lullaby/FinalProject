@@ -45,6 +45,18 @@ public class ClassCourseSemester {
 	@OrderBy
 	Set<Timetable> timetable = new LinkedHashSet<Timetable>();
 
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "classCourseSemester", orphanRemoval = true)
+	@OrderBy
+	Set<ClassCourseStudentSemester> classCourseStudentSemesters = new LinkedHashSet<ClassCourseStudentSemester>();
+
+	public Set<ClassCourseStudentSemester> getClassCourseStudentSemesters() {
+		return classCourseStudentSemesters;
+	}
+
+	public void setClassCourseStudentSemesters(Set<ClassCourseStudentSemester> classCourseStudentSemesters) {
+		this.classCourseStudentSemesters = classCourseStudentSemesters;
+	}
+
 	/**
 	 * @return the timetable
 	 */
@@ -149,8 +161,7 @@ public class ClassCourseSemester {
 	 * @param blockCondition
 	 * @param semesterLong
 	 */
-	public ClassCourseSemester(int classCourseSemeterId,
-			ClassSemester classSemester, CourseSemester courseSemester,
+	public ClassCourseSemester(int classCourseSemeterId, ClassSemester classSemester, CourseSemester courseSemester,
 			int blockCondition, boolean semesterLong) {
 		super();
 		this.classCourseSemesterId = classCourseSemeterId;
@@ -167,10 +178,9 @@ public class ClassCourseSemester {
 	 */
 	@Override
 	public String toString() {
-		return "ClassCourseSemester [classCourseSemeterId="
-				+ classCourseSemesterId + ", classSemester=" + classSemester
-				+ ", courseSemester=" + courseSemester + ", blockCondition="
-				+ blockCondition + ", semesterLong=" + semesterLong + "]";
+		return "ClassCourseSemester [classCourseSemeterId=" + classCourseSemesterId + ", classSemester=" + classSemester
+				+ ", courseSemester=" + courseSemester + ", blockCondition=" + blockCondition + ", semesterLong="
+				+ semesterLong + "]";
 	}
 
 }

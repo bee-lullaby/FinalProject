@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 07, 2015 at 01:13 PM
+-- Generation Time: Jul 08, 2015 at 10:20 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -240,7 +240,25 @@ CREATE TABLE IF NOT EXISTS `class_course_student_semester` (
 `class_course_student_semester_id` int(11) NOT NULL,
   `class_course_semester_id` int(11) NOT NULL,
   `student_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `class_course_student_semester`
+--
+
+INSERT INTO `class_course_student_semester` (`class_course_student_semester_id`, `class_course_semester_id`, `student_id`) VALUES
+(43, 1, 23),
+(44, 4, 23),
+(38, 51, 24),
+(39, 52, 24),
+(40, 53, 24),
+(41, 54, 24),
+(42, 55, 24),
+(33, 91, 25),
+(34, 92, 25),
+(35, 93, 25),
+(36, 94, 25),
+(37, 95, 25);
 
 -- --------------------------------------------------------
 
@@ -267,46 +285,45 @@ CREATE TABLE IF NOT EXISTS `class_semester` (
 `class_semester_id` int(11) NOT NULL,
   `class_id` int(11) NOT NULL,
   `semester_id` int(11) NOT NULL,
-  `semester` int(11) NOT NULL,
-  `students` int(11) NOT NULL
+  `semester` int(11) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `class_semester`
 --
 
-INSERT INTO `class_semester` (`class_semester_id`, `class_id`, `semester_id`, `semester`, `students`) VALUES
-(1, 1, 1, 3, 0),
-(2, 2, 1, 3, 0),
-(3, 3, 1, 3, 0),
-(4, 4, 1, 2, 0),
-(5, 5, 1, 2, 0),
-(6, 6, 1, 2, 0),
-(7, 7, 1, 1, 0),
-(8, 8, 1, 1, 0),
-(9, 9, 1, 1, 0),
-(10, 10, 1, 1, 0),
-(11, 11, 1, 1, 0),
-(12, 12, 1, 1, 0),
-(13, 13, 1, 1, 0),
-(14, 14, 1, 3, 0),
-(15, 15, 1, 2, 0),
-(16, 16, 1, 1, 0),
-(17, 17, 1, 3, 0),
-(18, 18, 1, 2, 0),
-(19, 19, 1, 1, 0),
-(20, 20, 1, 2, 0),
-(21, 21, 1, 1, 0),
-(22, 22, 1, 3, 0),
-(23, 23, 1, 2, 0),
-(24, 24, 1, 4, 0),
-(25, 25, 1, 5, 0),
-(26, 26, 1, 3, 0),
-(27, 27, 1, 5, 0),
-(28, 28, 1, 4, 0),
-(29, 29, 1, 4, 0),
-(30, 30, 1, 3, 0),
-(31, 31, 1, 2, 0);
+INSERT INTO `class_semester` (`class_semester_id`, `class_id`, `semester_id`, `semester`) VALUES
+(1, 1, 1, 3),
+(2, 2, 1, 3),
+(3, 3, 1, 3),
+(4, 4, 1, 2),
+(5, 5, 1, 2),
+(6, 6, 1, 2),
+(7, 7, 1, 1),
+(8, 8, 1, 1),
+(9, 9, 1, 1),
+(10, 10, 1, 1),
+(11, 11, 1, 1),
+(12, 12, 1, 1),
+(13, 13, 1, 1),
+(14, 14, 1, 3),
+(15, 15, 1, 2),
+(16, 16, 1, 1),
+(17, 17, 1, 3),
+(18, 18, 1, 2),
+(19, 19, 1, 1),
+(20, 20, 1, 2),
+(21, 21, 1, 1),
+(22, 22, 1, 3),
+(23, 23, 1, 2),
+(24, 24, 1, 4),
+(25, 25, 1, 5),
+(26, 26, 1, 3),
+(27, 27, 1, 5),
+(28, 28, 1, 4),
+(29, 29, 1, 4),
+(30, 30, 1, 3),
+(31, 31, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -657,7 +674,7 @@ CREATE TABLE IF NOT EXISTS `rooms` (
   `code` varchar(10) NOT NULL,
   `room_type` varchar(100) NOT NULL,
   `capacity` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `rooms`
@@ -969,7 +986,7 @@ CREATE TABLE IF NOT EXISTS `time_table` (
   `slot` int(11) NOT NULL,
   `room_id` int(11) NOT NULL,
   `teacher_semester_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `time_table`
@@ -1121,7 +1138,7 @@ MODIFY `class_course_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT
 -- AUTO_INCREMENT for table `class_course_student_semester`
 --
 ALTER TABLE `class_course_student_semester`
-MODIFY `class_course_student_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+MODIFY `class_course_student_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=45;
 --
 -- AUTO_INCREMENT for table `class_course_teacher_semester`
 --
@@ -1161,7 +1178,7 @@ MODIFY `program_semester_detail_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREME
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `semesters`
 --
@@ -1206,7 +1223,7 @@ MODIFY `teacher_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=27;
 -- AUTO_INCREMENT for table `time_table`
 --
 ALTER TABLE `time_table`
-MODIFY `time_table_id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `time_table_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 -- Constraints for dumped tables
 --

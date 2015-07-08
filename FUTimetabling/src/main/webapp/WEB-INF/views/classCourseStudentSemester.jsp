@@ -6,7 +6,7 @@
 <html>
 <head>
 
-<title>Class Course Student Semester Page</title>
+<title>Add Student To Class</title>
 <style type="text/css">
 .hide {
 	visibility: hidden;
@@ -56,6 +56,12 @@
 				.replace("http://localhost:8080/Timetabling/classCourseStudentSemesters?semesterId="
 						+ semesterId);
 	};
+	selectClassSemester = function(classSemester) {
+		var classSemesterId = classSemester.value;
+		window.location
+				.replace("http://localhost:8080/Timetabling/classCourseStudentSemesters?classSemesterId="
+						+ classSemesterId);
+	};
 	selectClassCourseSemester = function(classCourseSemester) {
 		var classCourseSemesterId = classCourseSemester.value;
 		window.location
@@ -78,13 +84,22 @@
 			</select></td>
 		</tr>
 		<tr>
-			<td><label> <spring:message text="Class Course Semester" />
+			<td><label> <spring:message text="Class" />
+			</label></td>
+			<td><select onchange="selectClassSemester(this)">
+					<c:forEach var="item" items="${classSemesters}">
+						<option value="${item.classSemesterId}"
+							${item.classSemesterId == classSemesterId ? 'selected="selected"' : ''}>${item.classFPT.code}</option>
+					</c:forEach>
+			</select></td>
+		</tr>
+		<tr>
+			<td><label> <spring:message text="Course" />
 			</label></td>
 			<td><select onchange="selectClassCourseSemester(this)">
 					<c:forEach var="item" items="${classCourseSemesters}">
 						<option value="${item.classCourseSemesterId}"
-							${item.classCourseSemesterId == classCourseSemesterId ? 'selected="selected"' : ''}>${item.classSemester.classFPT.code}
-							- ${item.courseSemester.course.name}</option>
+							${item.classCourseSemesterId == classCourseSemesterId ? 'selected="selected"' : ''}>${item.courseSemester.course.name}</option>
 					</c:forEach>
 			</select></td>
 		</tr>
@@ -99,7 +114,7 @@
 	</form:form>
 	<br>
 	<h3>List of suitable students</h3>
-	<c:if test="${!empty students}">
+	<c:if test="${!empty freeStudents}">
 		<table class="tg">
 			<tr>
 				<th width="80">Student ID</th>
@@ -107,13 +122,33 @@
 				<th width="120">Student Name</th>
 				<th width="200">Add to this class course</th>
 			</tr>
-			<c:forEach items="${students}" var="student">
+			<c:forEach items="${freeStudents}" var="student">
 				<tr>
 					<td>${student.studentId}</td>
 					<td>${student.studentCode}</td>
 					<td>${student.name}</td>
 					<td><a
 						href="<c:url value='/classCourseStudentSemester/add/${student.studentId}' />">Add</a></td>
+				</tr>
+			</c:forEach>
+		</table>
+	</c:if>
+	<h3>List of students in this class course semester</h3>
+	<c:if test="${!empty busyStudents}">
+		<table class="tg">
+			<tr>
+				<th width="80">Student ID</th>
+				<th width="120">Student Code</th>
+				<th width="120">Student Name</th>
+				<th width="200">Remove student from this class course</th>
+			</tr>
+			<c:forEach items="${busyStudents}" var="student">
+				<tr>
+					<td>${student.studentId}</td>
+					<td>${student.studentCode}</td>
+					<td>${student.name}</td>
+					<td><a
+						href="<c:url value='/classCourseStudentSemester/remove/${student.studentId}' />">Remove</a></td>
 				</tr>
 			</c:forEach>
 		</table>

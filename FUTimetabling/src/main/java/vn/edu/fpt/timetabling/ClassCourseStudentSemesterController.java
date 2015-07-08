@@ -1,6 +1,8 @@
 package vn.edu.fpt.timetabling;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -16,11 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassCourseStudentSemester;
 import vn.edu.fpt.timetabling.model.ClassSemester;
+import vn.edu.fpt.timetabling.model.Course;
+import vn.edu.fpt.timetabling.model.CourseSemester;
 import vn.edu.fpt.timetabling.model.Semester;
 import vn.edu.fpt.timetabling.model.Specialized;
 import vn.edu.fpt.timetabling.model.Student;
-import vn.edu.fpt.timetabling.service.ClassCourseSemesterService;
 import vn.edu.fpt.timetabling.service.ClassCourseStudentSemesterService;
+import vn.edu.fpt.timetabling.service.ClassSemesterService;
 import vn.edu.fpt.timetabling.service.SemesterService;
 import vn.edu.fpt.timetabling.service.StudentService;
 import vn.edu.fpt.timetabling.utils.SessionUtils;
@@ -30,8 +34,8 @@ public class ClassCourseStudentSemesterController {
 
 	private ClassCourseStudentSemesterService classCourseStudentSemesterService;
 	private SemesterService semesterService;
-	private ClassCourseSemesterService classCourseSemesterService;
 	private StudentService studentService;
+	private ClassSemesterService classSemesterService;
 
 	@Autowired(required = true)
 	@Qualifier(value = "classCourseStudentSemesterService")
@@ -47,43 +51,30 @@ public class ClassCourseStudentSemesterController {
 	}
 
 	@Autowired(required = true)
-	@Qualifier(value = "classCourseSemesterService")
-	public void setClassCourseSemesterService(ClassCourseSemesterService classCourseSemesterService) {
-		this.classCourseSemesterService = classCourseSemesterService;
-	}
-
-	@Autowired(required = true)
 	@Qualifier(value = "studentService")
 	public void setStudentService(StudentService studentService) {
 		this.studentService = studentService;
 	}
 
-	@RequestMapping(value = "/classCourseStudentSemesters", method = RequestMethod.GET)
-	public String listClassCourseSemester(HttpSession session, Model model,
-			@RequestParam(value = "semesterId", required = false) Integer semesterId,
-			@RequestParam(value = "classCourseSemesterId", required = false) Integer classCourseSemesterId) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
-		List<Semester> semesters = semesterService.listSemesters(false, false, false, false);
-		Semester semester;
-		if (semesterId != null || session.getAttribute("semester") != null) {
-			if (semesterId == null) {
-				semester = (Semester) session.getAttribute("semester");
-			} else {
-				semester = semesterService.getSemesterById(semesterId, false, false, false, false);
-			}
-			if (semester == null) {
-				semester = semesters.get(0);
-			}
-		} else {
-			semester = semesters.get(0);
-		}
-		semesterId = semester.getSemesterId();
-		List<ClassCourseSemester> classCourseSemesters = classCourseSemesterService
-				.listClassCourseSemesterBySemester(semesterId);
+	@Autowired(required = true)
+	@Qualifier(value = "classSemesterService")
+	public void setClassSemesterService(ClassSemesterService classSemesterService) {
+		this.classSemesterService = classSemesterService;
+	}
+
+	private void processClassCourseSemesters(HttpSession session, Model model, ClassSemester classSemester,
+			Integer classCourseSemesterId) {
+		Set<ClassCourseSemester> classCourseSemesters = classSemester.getClassCourseSemester();
 		if (!classCourseSemesters.isEmpty()) {
 			ClassCourseSemester classCourseSemester = null;
+			Course course = new Course();
+			course.setName("All");
+			CourseSemester courseSemester = new CourseSemester();
+			courseSemester.setCourse(course);
+			ClassCourseSemester classCourseSemesterAll = new ClassCourseSemester();
+			classCourseSemesterAll.setClassCourseSemesterId(0);
+			classCourseSemesterAll.setCourseSemester(courseSemester);
+			classCourseSemesters.add(classCourseSemesterAll);
 			if (classCourseSemesterId != null || session.getAttribute("classCourseSemester") != null) {
 				if (classCourseSemesterId == null) {
 					classCourseSemester = (ClassCourseSemester) session.getAttribute("classCourseSemester");
@@ -95,13 +86,12 @@ public class ClassCourseStudentSemesterController {
 					}
 				}
 				if (classCourseSemester == null) {
-					classCourseSemester = classCourseSemesters.get(0);
+					classCourseSemester = classCourseSemesterAll;
 				}
 			} else {
-				classCourseSemester = classCourseSemesters.get(0);
+				classCourseSemester = classCourseSemesterAll;
 			}
 			classCourseSemesterId = classCourseSemester.getClassCourseSemesterId();
-			ClassSemester classSemester = classCourseSemester.getClassSemester();
 			Specialized specialized = classSemester.getClassFPT().getSpecialized();
 			Specialized detailSpecialized = classSemester.getClassFPT().getDetailSpecialized();
 			int detailspecializedId = -1;
@@ -112,10 +102,70 @@ public class ClassCourseStudentSemesterController {
 			session.setAttribute("classCourseSemester", classCourseSemester);
 			model.addAttribute("classCourseSemester", classCourseSemester);
 			model.addAttribute("classCourseSemesterId", classCourseSemesterId);
-			model.addAttribute("students", studentService.listStudentsBySpecializedSemester(
+			int classSemesterId = classSemester.getClassSemesterId();
+			model.addAttribute("freeStudents", studentService.listStudentsCanBeInClassCourseSemester(classSemesterId,
 					specialized.getSpecializedId(), detailspecializedId, semesterNumber, classCourseSemesterId));
+			model.addAttribute("busyStudents",
+					studentService.listStudentsInClassCourseSemester(classSemesterId, classCourseSemesterId));
 		}
 		model.addAttribute("classCourseSemesters", classCourseSemesters);
+	}
+
+	private void processClassSemesters(HttpSession session, Model model, Semester semester, Integer classSemesterId,
+			Integer classCourseSemesterId) {
+		Set<ClassSemester> classSemesters = semester.getClassSemesters();
+		if (!classSemesters.isEmpty()) {
+			ClassSemester classSemester = null;
+			if (classSemesterId != null || session.getAttribute("classSemester") != null) {
+				if (classSemesterId == null) {
+					classSemester = (ClassSemester) session.getAttribute("classSemester");
+				} else {
+					for (ClassSemester classSemesterTemp : classSemesters) {
+						if (classSemesterTemp.getClassSemesterId() == classSemesterId) {
+							classSemester = classSemesterTemp;
+						}
+					}
+				}
+				if (classSemester == null) {
+					classSemester = classSemesters.iterator().next();
+				}
+			} else {
+				classSemester = classSemesters.iterator().next();
+			}
+			classSemesterId = classSemester.getClassSemesterId();
+			classSemester = classSemesterService.getClassSemesterById(classSemesterId, true);
+			session.setAttribute("classSemester", classSemester);
+			model.addAttribute("classSemester", classSemester);
+			model.addAttribute("classSemesterId", classSemesterId);
+			processClassCourseSemesters(session, model, classSemester, classCourseSemesterId);
+		}
+		model.addAttribute("classSemesters", classSemesters);
+	}
+
+	@RequestMapping(value = "/classCourseStudentSemesters", method = RequestMethod.GET)
+	public String listClassCourseSemester(HttpSession session, Model model,
+			@RequestParam(value = "semesterId", required = false) Integer semesterId,
+			@RequestParam(value = "classSemesterId", required = false) Integer classSemesterId,
+			@RequestParam(value = "classCourseSemesterId", required = false) Integer classCourseSemesterId) {
+		if (!SessionUtils.isSessionValid(session)) {
+			return "home";
+		}
+		List<Semester> semesters = semesterService.listSemesters(true, false, false, false);
+		Semester semester;
+		if (semesterId != null || session.getAttribute("semester") != null) {
+			if (semesterId == null) {
+				semester = (Semester) session.getAttribute("semester");
+			} else {
+				semester = semesterService.getSemesterById(semesterId, true, false, false, false);
+			}
+			if (semester == null) {
+				semester = semesters.get(0);
+			}
+		} else {
+			semester = semesters.get(0);
+		}
+		semesterId = semester.getSemesterId();
+		processClassSemesters(session, model, semester, classSemesterId, classCourseSemesterId);
 		model.addAttribute("semesters", semesters);
 		model.addAttribute("semesterId", semesterId);
 		session.setAttribute("semester", semester);
@@ -129,12 +179,54 @@ public class ClassCourseStudentSemesterController {
 			return "home";
 		}
 		Student student = studentService.getStudentById(studentId);
-		if (student != null && session.getAttribute("classCourseSemester") != null) {
-			ClassCourseSemester classCourseSemester = (ClassCourseSemester) session.getAttribute("classCourseSemester");
-			ClassCourseStudentSemester classCourseStudentSemester = new ClassCourseStudentSemester();
-			classCourseStudentSemester.setClassCourseSemester(classCourseSemester);
-			classCourseStudentSemester.setStudent(student);
-			classCourseStudentSemesterService.addClassCourseStudentSemester(classCourseStudentSemester);
+		if (student != null && (session.getAttribute("classCourseSemester") != null
+				|| session.getAttribute("classSemester") != null)) {
+			Set<ClassCourseSemester> classCourseSemesters;
+			if (session.getAttribute("classCourseSemester") != null
+					&& ((ClassCourseSemester) session.getAttribute("classCourseSemester"))
+							.getClassCourseSemesterId() != 0) {
+				classCourseSemesters = new HashSet<ClassCourseSemester>();
+				classCourseSemesters.add((ClassCourseSemester) session.getAttribute("classCourseSemester"));
+			} else {
+				ClassSemester classSemester = (ClassSemester) session.getAttribute("classSemester");
+				classCourseSemesters = classSemester.getClassCourseSemester();
+			}
+			for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
+				if (classCourseSemester.getClassCourseSemesterId() == 0) {
+					continue;
+				}
+				ClassCourseStudentSemester classCourseStudentSemester = new ClassCourseStudentSemester();
+				classCourseStudentSemester.setClassCourseSemester(classCourseSemester);
+				classCourseStudentSemester.setStudent(student);
+				classCourseStudentSemesterService.addClassCourseStudentSemester(classCourseStudentSemester);
+			}
+		}
+		return "redirect:/classCourseStudentSemesters";
+	}
+
+	@RequestMapping("/classCourseStudentSemester/remove/{studentId}")
+	public String removeClassCourseStudentSemester(HttpSession session, @PathVariable("studentId") int studentId,
+			Model model) {
+		if (!SessionUtils.isSessionValid(session)) {
+			return "home";
+		}
+		Student student = studentService.getStudentById(studentId);
+		if (student != null && (session.getAttribute("classCourseSemester") != null
+				|| session.getAttribute("classSemester") != null)) {
+			Set<ClassCourseSemester> classCourseSemesters;
+			if (session.getAttribute("classCourseSemester") != null
+					&& ((ClassCourseSemester) session.getAttribute("classCourseSemester"))
+							.getClassCourseSemesterId() != 0) {
+				classCourseSemesters = new HashSet<ClassCourseSemester>();
+				classCourseSemesters.add((ClassCourseSemester) session.getAttribute("classCourseSemester"));
+			} else {
+				ClassSemester classSemester = (ClassSemester) session.getAttribute("classSemester");
+				classCourseSemesters = classSemester.getClassCourseSemester();
+			}
+			for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
+				classCourseStudentSemesterService.removeStudentFromClassCourseSemester(studentId,
+						classCourseSemester.getClassCourseSemesterId());
+			}
 		}
 		return "redirect:/classCourseStudentSemesters";
 	}

@@ -116,9 +116,16 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	@Transactional
-	public List<Student> listStudentsBySpecializedSemester(int specializedId, int detailspecializedId,
-			int semesterNumber, int classCourseSemesterId) {
-		return studentDAO.listStudentsBySpecializedSemester(specializedId, detailspecializedId, semesterNumber, classCourseSemesterId);
+	public List<Student> listStudentsCanBeInClassCourseSemester(int classSemesterId, int specializedId,
+			int detailspecializedId, int semesterNumber, int classCourseSemesterId) {
+		return studentDAO.listStudentsCanBeInClassCourseSemester(classSemesterId, specializedId, detailspecializedId,
+				semesterNumber, classCourseSemesterId);
+	}
+
+	@Override
+	@Transactional
+	public List<Student> listStudentsInClassCourseSemester(int classSemesterId, int classCourseSemesterId) {
+		return studentDAO.listStudentsInClassCourseSemester(classSemesterId, classCourseSemesterId);
 	}
 
 }

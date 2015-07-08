@@ -24,6 +24,8 @@ public interface StudentService {
 
 	public String getEmail(String account);
 
-	public List<Student> listStudentsBySpecializedSemester(int specializedId, int detailspecializedId,
-			int semesterNumber, int classCourseSemesterId);
+	public List<Student> listStudentsCanBeInClassCourseSemester(int classSemesterId, int specializedId,
+			int detailspecializedId, int semesterNumber, int classCourseSemesterId);
+
+	public List<Student> listStudentsInClassCourseSemester(int classSemesterId, int classCourseSemesterId);
 }

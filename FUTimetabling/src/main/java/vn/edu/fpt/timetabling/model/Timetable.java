@@ -56,8 +56,8 @@ public class Timetable {
 	 * @param room
 	 * @param teacherSemester
 	 */
-	public Timetable(int timeTableId, ClassCourseSemester classCourseSemester,
-			Date date, int slot, Room room, TeacherSemester teacherSemester) {
+	public Timetable(int timeTableId, ClassCourseSemester classCourseSemester, Date date, int slot, Room room,
+			TeacherSemester teacherSemester) {
 		super();
 		this.timeTableId = timeTableId;
 		this.classCourseSemester = classCourseSemester;
@@ -153,9 +153,8 @@ public class Timetable {
 	 */
 	@Override
 	public String toString() {
-		return "TimeTable [timeTableId=" + timeTableId + ", date=" + date
-				+ ", slot=" + slot + ", room=" + room + ", teacher="
-				+ teacherSemester + "]";
+		return "TimeTable [timeTableId=" + timeTableId + ", date=" + date + ", slot=" + slot + ", room=" + room
+				+ ", teacher=" + teacherSemester + "]";
 	}
 
 	/**
@@ -171,6 +170,13 @@ public class Timetable {
 	 */
 	public void setTeacherSemester(TeacherSemester teacherSemester) {
 		this.teacherSemester = teacherSemester;
+	}
+
+	public boolean isSameTime(Timetable timetable) {
+		if (this.date.equals(timetable.getDate()) && this.slot == timetable.getSlot()) {
+			return true;
+		}
+		return false;
 	}
 
 }

@@ -17,6 +17,8 @@ public interface StudentDAO {
 
 	public void deleteStudent(int studentId);
 
-	public List<Student> listStudentsBySpecializedSemester(int specializedId, int detailspecializedId,
-			int semesterNumber, int classCourseSemesterId);
+	public List<Student> listStudentsCanBeInClassCourseSemester(int classSemesterId, int specializedId,
+			int detailspecializedId, int semesterNumber, int classCourseSemesterId);
+
+	public List<Student> listStudentsInClassCourseSemester(int classSemesterId, int classCourseSemesterId);
 }

@@ -36,13 +36,10 @@ public class ClassSemester implements Comparable<ClassSemester> {
 	@Column(name = "semester")
 	private int semesterNumber = 0;
 
-	@Column(name = "students")
-	private int noOfStudents = 0;
-
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "classSemester", orphanRemoval = true)
 	@OrderBy
 	Set<Student> students = new LinkedHashSet<Student>();
-	
+
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "classSemester", orphanRemoval = true)
 	@OrderBy
 	Set<ClassCourseSemester> classCourseSemester = new LinkedHashSet<ClassCourseSemester>();
@@ -55,7 +52,8 @@ public class ClassSemester implements Comparable<ClassSemester> {
 	}
 
 	/**
-	 * @param classCourseSemester the classCourseSemester to set
+	 * @param classCourseSemester
+	 *            the classCourseSemester to set
 	 */
 	public void setClassCourseSemester(Set<ClassCourseSemester> classCourseSemester) {
 		this.classCourseSemester = classCourseSemester;
@@ -104,13 +102,11 @@ public class ClassSemester implements Comparable<ClassSemester> {
 	 * @param semester
 	 * @param students
 	 */
-	public ClassSemester(int classSemesterId, ClassFPT classFPT,
-			Semester semester, int students) {
+	public ClassSemester(int classSemesterId, ClassFPT classFPT, Semester semester) {
 		super();
 		this.classSemesterId = classSemesterId;
 		this.classFPT = classFPT;
 		this.semester = semester;
-		this.noOfStudents = students;
 	}
 
 	/**
@@ -118,11 +114,10 @@ public class ClassSemester implements Comparable<ClassSemester> {
 	 * @param semester
 	 * @param students
 	 */
-	public ClassSemester(ClassFPT classFPT, Semester semester, int students) {
+	public ClassSemester(ClassFPT classFPT, Semester semester) {
 		super();
 		this.classFPT = classFPT;
 		this.semester = semester;
-		this.noOfStudents = students;
 	}
 
 	/**
@@ -170,21 +165,6 @@ public class ClassSemester implements Comparable<ClassSemester> {
 		this.semester = semester;
 	}
 
-	/**
-	 * @return the students
-	 */
-	public int getNoOfStudents() {
-		return noOfStudents;
-	}
-
-	/**
-	 * @param students
-	 *            the students to set
-	 */
-	public void setNoOfStudents(int noOfStudents) {
-		this.noOfStudents = noOfStudents;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -192,16 +172,14 @@ public class ClassSemester implements Comparable<ClassSemester> {
 	 */
 	@Override
 	public String toString() {
-		return "ClassSemester [classSemesterId=" + classSemesterId
-				+ ", classFPT=" + classFPT + ", semester=" + semester
-				+ ", students=" + noOfStudents + "]";
+		return "ClassSemester [classSemesterId=" + classSemesterId + ", classFPT=" + classFPT + ", semester=" + semester
+				+ "]";
 	}
 
 	@Override
 	public int compareTo(ClassSemester classSemester) {
 		if (this.semester.compareTo(classSemester.getSemester()) == 0) {
-			return this.classFPT.getCode().compareTo(
-					classSemester.getClassFPT().getCode());
+			return this.classFPT.getCode().compareTo(classSemester.getClassFPT().getCode());
 		} else if (this.semester.compareTo(classSemester.getSemester()) > 0) {
 			return 1;
 		} else {

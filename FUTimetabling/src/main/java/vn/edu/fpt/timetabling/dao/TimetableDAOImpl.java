@@ -2,25 +2,28 @@ package vn.edu.fpt.timetabling.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
+import vn.edu.fpt.timetabling.model.Student;
 import vn.edu.fpt.timetabling.model.Timetable;
 
 @Repository
 public class TimetableDAOImpl implements TimetableDAO {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(ClassDAOImpl.class);
-	
-	
-	
+	private static final Logger logger = LoggerFactory.getLogger(TimetableDAOImpl.class);
+
+	@Autowired
+	private ClassCourseSemesterDAO classCourseSemesterDAO;
 	private SessionFactory sessionFactory;
 
 	public void setSessionFactory(SessionFactory sessionFactory) {
@@ -33,27 +36,21 @@ public class TimetableDAOImpl implements TimetableDAO {
 
 	@Override
 	public void addTimetable(Timetable timetable) {
-		// TODO Auto-generated method stub
 		getCurrentSession().persist(timetable);
-		logger.info("Timetable was saved successfully, Timetable details="
-				+ timetable);
+		logger.info("Timetable was saved successfully, Timetable details=" + timetable);
 	}
 
 	@Override
 	public void updateTimetable(Timetable timetable) {
-		// TODO Auto-generated method stub
 		getCurrentSession().update(timetable);
-		logger.info("Timetable was updated successfully, Timetable details="
-				+ timetable);
+		logger.info("Timetable was updated successfully, Timetable details=" + timetable);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Timetable> listTimetables() {
-		// TODO Auto-generated method stub
 		List<Timetable> timetables = (List<Timetable>) getCurrentSession()
-				.createQuery("from vn.edu.fpt.timetabling.model.Timetable")
-				.list();
+				.createQuery("from vn.edu.fpt.timetabling.model.Timetable").list();
 		for (Timetable timetable : timetables) {
 			logger.info("Timetable list:" + timetable);
 		}
@@ -62,19 +59,13 @@ public class TimetableDAOImpl implements TimetableDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Timetable> listTimetablesByCCSId(
-			List<ClassCourseSemester> classCourseSemesters) {
-		// TODO Auto-generated method stub
-		List<Timetable> timetables = new ArrayList<Timetable>();
+	public List<Timetable> listTimetablesByCCSId(List<ClassCourseSemester> classCourseSemesters) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T "
-				+ "WHERE T.classCourseSemester = :classCourseSemester";
-		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
-			Query query = getCurrentSession().createQuery(hql);
-			query.setParameter("classCourseSemester",
-					classCourseSemester);
-			timetables.addAll((List<Timetable>) query.list());
-		}
-
+				+ "WHERE T.classCourseSemester IN (:classCourseSemesters)";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameterList("classCourseSemesters", classCourseSemesters);
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<Timetable> timetables = (List<Timetable>) query.list();
 		if (!timetables.isEmpty()) {
 			for (Timetable timetable : timetables) {
 				logger.info("Timetable list:" + timetable);
@@ -85,25 +76,51 @@ public class TimetableDAOImpl implements TimetableDAO {
 
 	@Override
 	public Timetable getTimetableById(int timetableId) {
-		// TODO Auto-generated method stub
-		Timetable timetable = (Timetable) getCurrentSession().get(
-				Timetable.class, new Integer(timetableId));
+		Timetable timetable = (Timetable) getCurrentSession().get(Timetable.class, new Integer(timetableId));
 		if (timetable != null) {
-			logger.info("Timetable was loaded successfully, timetable details="
-					+ timetable);
+			logger.info("Timetable was loaded successfully, timetable details=" + timetable);
 		}
 		return timetable;
 	}
 
 	@Override
 	public void deleteTimetable(int timetableId) {
-		// TODO Auto-generated method stub
 		Timetable timetable = getTimetableById(timetableId);
 		if (timetable != null) {
 			getCurrentSession().delete(timetable);
-			logger.info("Timetable was deleted successfully, timetable details="
-					+ timetable);
+			logger.info("Timetable was deleted successfully, timetable details=" + timetable);
 		}
+	}
+
+	@Override
+	public List<Timetable> listTimetablesByStudent(int semesterId, Student student) {
+		List<ClassCourseSemester> classCourseSemesters = classCourseSemesterDAO
+				.listClassCourseSemesterByStudent(semesterId, student.getStudentId());
+		if (classCourseSemesters.isEmpty()) {
+			return new ArrayList<Timetable>();
+		}
+		List<Timetable> timetables = listTimetablesByCCSId(classCourseSemesters);
+		return timetables;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Timetable> listTimetablesByClassCourseSemesters(Set<ClassCourseSemester> classCourseSemesters) {
+		List<Timetable> timetables = new ArrayList<Timetable>();
+		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T "
+				+ "WHERE T.classCourseSemester = :classCourseSemester";
+		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
+			Query query = getCurrentSession().createQuery(hql);
+			query.setParameter("classCourseSemester", classCourseSemester);
+			timetables.addAll((List<Timetable>) query.list());
+		}
+
+		if (!timetables.isEmpty()) {
+			for (Timetable timetable : timetables) {
+				logger.info("Timetable list:" + timetable);
+			}
+		}
+		return timetables;
 	}
 
 }
