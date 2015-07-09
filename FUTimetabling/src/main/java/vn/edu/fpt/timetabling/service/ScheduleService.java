@@ -25,5 +25,5 @@ public interface ScheduleService {
 	
 	public List<DaySlot> getListDaySlot(int semesterId, int classId, int week);
 
-	public boolean addTimetable(List<DaySlot> daySlots);
+	public boolean saveTimetable(List<DaySlot> daySlots, List<DaySlot> prevDaySlots);
 }

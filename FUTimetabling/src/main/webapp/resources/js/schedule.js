@@ -53,6 +53,8 @@ $(document).ready(function(){
 		$("#dialog-schedule").data("td", $(this));
 		$("#dialog-schedule").data("position", position);
 		$("#dialog-schedule").data("prev-course-selected", $("#set-courses option:selected").text());
+		
+		
 		_setCourseInfoDialog(JSONdata[position].dataSchedule); 
 		_showDialog("dialog-schedule");
 	});
@@ -140,6 +142,8 @@ $(document).ready(function(){
 	
 	
 	function _setDateTimetable() {
+		$("#JSONprev").attr("value", JSON.stringify(JSONdata));
+		console.log($("#JSONprev").val());
 		var start = new Date(startDate);
 		var end = new Date(endDate);
 		start.setDate(start.getDate() - 1);

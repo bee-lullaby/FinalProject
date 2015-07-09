@@ -11,8 +11,6 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,8 +33,10 @@ import vn.edu.fpt.timetabling.utils.TimetableUtils;
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(ScheduleServiceImpl.class);
+//	private static final Logger logger = LoggerFactory
+//			.getLogger(ScheduleServiceImpl.class);
+
+	public static final int MYSQL_DUPLICATE_PK = 1062;
 
 	@Autowired
 	private SemesterDAO semesterDAO;
@@ -49,7 +49,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Autowired
 	private ClassCourseSemesterDAO classCourseSemesterDAO;
-	
+
 	@Autowired
 	private TimetableDAO timetableDAO;
 
@@ -135,7 +135,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 		cal.setTime(date);
 
 		cal.set(Calendar.DATE, cal.get(Calendar.DATE) - 1 + 7 * (week - 1));
-		logger.info(cal.get(Calendar.DATE) + " " + cal.get(Calendar.MONTH));
 
 		// ClassSemester classSemester =
 		// getClassSemesterByClassSemester(semesterId, classId);
@@ -203,24 +202,40 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Transactional
 	@Override
-	public boolean addTimetable(List<DaySlot> daySlots) {
+	public boolean saveTimetable(List<DaySlot> daySlots,
+			List<DaySlot> prevDaySlots) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		for (DaySlot dayslot : daySlots) {
+		for (int i = 0; i < daySlots.size(); i++) {
+			DaySlot dayslot = daySlots.get(i);
+			DaySlot prevDaySlot = prevDaySlots.get(i);
 			if (dayslot.getSetCourseSlot() != -1) {
-				Timetable timetable = new Timetable();
+				Timetable timetable;
 				Date date;
 				try {
 					date = sdf.parse(dayslot.getDate());
-
-					timetable.setClassCourseSemester(classCourseSemesterDAO
+				
+					if (prevDaySlot.getSetCourseSlot() != -1) {
+						if (prevDaySlot.getSetCourseSlot() != dayslot
+								.getSetCourseSlot()) {
+							timetable = timetableDAO.getTimetableByDateSlotClassCourse(date, prevDaySlot.getSlot(), prevDaySlot.getSetCourseSlot());
+							timetable.setClassCourseSemester(classCourseSemesterDAO
 							.getClassCourseSemesterById(dayslot
 									.getSetCourseSlot()));
-					timetable.setDate(date);
-					timetable.setSlot(dayslot.getSlot());
-					Room a = new Room();
-					a.setRoomId(1);
-					timetable.setRoom(a);
-					timetableDAO.addTimetable(timetable);
+							timetableDAO.updateTimetable(timetable);
+						}
+					} else {
+						timetable = new Timetable();
+						timetable.setClassCourseSemester(classCourseSemesterDAO
+								.getClassCourseSemesterById(dayslot
+										.getSetCourseSlot()));
+						timetable.setDate(date);
+						timetable.setSlot(dayslot.getSlot());
+						Room a = new Room();
+						a.setRoomId(1);
+						timetable.setRoom(a);
+
+						timetableDAO.addTimetable(timetable);
+					}
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

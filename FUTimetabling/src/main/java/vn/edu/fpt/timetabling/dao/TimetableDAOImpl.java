@@ -1,6 +1,7 @@
 package vn.edu.fpt.timetabling.dao;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -84,6 +85,25 @@ public class TimetableDAOImpl implements TimetableDAO {
 	}
 
 	@Override
+	public Timetable getTimetableByDateSlotClassCourse(Date date, int slot,
+			int classCourseSemesterId) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T"
+			+ " WHERE T.date = :date AND T.slot = :slot AND T.classCourseSemester = :classCourseSemester";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("date", date);
+		query.setParameter("slot", slot);
+		query.setParameter("classCourseSemester", classCourseSemesterDAO.getClassCourseSemesterById(classCourseSemesterId));
+		Object temp = query.uniqueResult();
+		if (temp != null) {
+			Timetable timetable = (Timetable) temp;
+			logger.info("Timetable was loaded successfully, Timetable details=" + timetable);
+			return timetable;
+		} else {
+			return null;
+		}
+	}
+	
+	@Override
 	public void deleteTimetable(int timetableId) {
 		Timetable timetable = getTimetableById(timetableId);
 		if (timetable != null) {
@@ -122,5 +142,6 @@ public class TimetableDAOImpl implements TimetableDAO {
 		}
 		return timetables;
 	}
+
 
 }

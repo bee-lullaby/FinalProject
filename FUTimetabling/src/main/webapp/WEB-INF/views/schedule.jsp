@@ -112,6 +112,7 @@
 							<span class="mif-download"></span>
 						</button>
 						<div id="JSONdata" style="display: none">${JSONdata}</div>
+						<input type="hidden" type="text" id="JSONprev" name="JSONprev"/>
 						<input type="hidden" type="text" id="JSONToSubmit" name="JSONToSubmit"/>
 					</form:form>
 				</div>

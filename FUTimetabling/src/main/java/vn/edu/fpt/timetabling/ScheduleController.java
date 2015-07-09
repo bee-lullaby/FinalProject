@@ -114,15 +114,18 @@ public class ScheduleController {
 	}
 	
 	@RequestMapping(value = "/schedule/updateTimetable", method = RequestMethod.POST)
-	public String updateTimetable(@RequestParam(value = "JSONToSubmit", required = true) String JSONToSubmit) {
+	public String updateTimetable(@RequestParam(value = "JSONToSubmit", required = true) String JSONToSubmit,
+			@RequestParam(value = "JSONprev", required = true) String JSONprev) {
 		logger.info(JSONToSubmit);
 		
 		ObjectMapper om = new ObjectMapper();
 		TypeFactory typeFactory = om.getTypeFactory();
 		List<DaySlot> daySlots;
+		List<DaySlot> prevDaySlots;
 		try {
 			daySlots = om.readValue(JSONToSubmit, typeFactory.constructCollectionType(List.class, DaySlot.class));
-			boolean result = scheduleService.addTimetable(daySlots);
+			prevDaySlots = om.readValue(JSONprev, typeFactory.constructCollectionType(List.class, DaySlot.class));
+			boolean result = scheduleService.saveTimetable(daySlots, prevDaySlots);
 			if(result) logger.info("hameo");
 		} catch (JsonParseException e) {
 			// TODO Auto-generated catch block

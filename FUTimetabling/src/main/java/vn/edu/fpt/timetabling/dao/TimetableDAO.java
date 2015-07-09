@@ -1,5 +1,6 @@
 package vn.edu.fpt.timetabling.dao;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -20,6 +21,8 @@ public interface TimetableDAO {
 
 	public Timetable getTimetableById(int timetableId);
 
+	public Timetable getTimetableByDateSlotClassCourse(Date date, int slot, int classCourseSemesterId);
+	
 	public void deleteTimetable(int timetableId);
 
 	public List<Timetable> listTimetablesByStudent(int semesterId, Student student);
