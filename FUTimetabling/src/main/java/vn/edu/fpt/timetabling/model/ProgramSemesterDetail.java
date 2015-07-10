@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 @Table(name = "program_semester_detail")
 public class ProgramSemesterDetail {
@@ -25,6 +27,18 @@ public class ProgramSemesterDetail {
 	@JoinColumn(name = "course_semester_id")
 	private CourseSemester courseSemester;
 
+	@Column(name = "is_semester_long", columnDefinition = "TINYINT")
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	private boolean semesterLong;
+
+	public boolean isSemesterLong() {
+		return semesterLong;
+	}
+
+	public void setSemesterLong(boolean semesterLong) {
+		this.semesterLong = semesterLong;
+	}
+
 	/**
 	 * 
 	 */
@@ -37,8 +51,8 @@ public class ProgramSemesterDetail {
 	 * @param programSemester
 	 * @param courseSemester
 	 */
-	public ProgramSemesterDetail(int programSemesterDetailId,
-			ProgramSemester programSemester, CourseSemester courseSemester) {
+	public ProgramSemesterDetail(int programSemesterDetailId, ProgramSemester programSemester,
+			CourseSemester courseSemester) {
 		super();
 		this.programSemesterDetailId = programSemesterDetailId;
 		this.programSemester = programSemester;
@@ -90,7 +104,9 @@ public class ProgramSemesterDetail {
 		this.courseSemester = courseSemester;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

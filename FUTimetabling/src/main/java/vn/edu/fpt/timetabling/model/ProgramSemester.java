@@ -39,9 +39,20 @@ public class ProgramSemester {
 	@JoinColumn(name = "detail_specialized_id")
 	private Specialized detailSpecialized;
 
+	@Column
+	private int batch;
+
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "programSemester", orphanRemoval = true)
 	@OrderBy
 	Set<ProgramSemesterDetail> programSemesterDetails = new LinkedHashSet<ProgramSemesterDetail>();
+
+	public int getBatch() {
+		return batch;
+	}
+
+	public void setBatch(int batch) {
+		this.batch = batch;
+	}
 
 	/**
 	 * @return the detailSpecialized
@@ -69,8 +80,7 @@ public class ProgramSemester {
 	 * @param programSemesterDetails
 	 *            the programSemesterDetails to set
 	 */
-	public void setProgramSemesterDetails(
-			Set<ProgramSemesterDetail> programSemesterDetails) {
+	public void setProgramSemesterDetails(Set<ProgramSemesterDetail> programSemesterDetails) {
 		this.programSemesterDetails = programSemesterDetails;
 	}
 
@@ -87,8 +97,7 @@ public class ProgramSemester {
 	 * @param currentSemester
 	 * @param specialized
 	 */
-	public ProgramSemester(int programSemesterId, Semester semester,
-			int currentSemester, Specialized specialized) {
+	public ProgramSemester(int programSemesterId, Semester semester, int currentSemester, Specialized specialized) {
 		super();
 		this.programSemesterId = programSemesterId;
 		this.semester = semester;

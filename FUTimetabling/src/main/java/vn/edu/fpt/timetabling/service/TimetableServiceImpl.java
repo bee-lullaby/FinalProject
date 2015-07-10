@@ -72,7 +72,7 @@ public class TimetableServiceImpl implements TimetableService {
 
 		Set<ClassCourseSemester> classCourseSemesters = new LinkedHashSet<ClassCourseSemester>();
 		while (classSemester.hasNext()) {
-			classCourseSemesters.addAll(classSemester.next().getClassCourseSemester());
+			classCourseSemesters.addAll(classSemester.next().getClassCourseSemesters());
 		}
 
 		Iterator<ClassCourseSemester> classCourseSemester = classCourseSemesters.iterator();
@@ -91,7 +91,7 @@ public class TimetableServiceImpl implements TimetableService {
 		// TODO Auto-generated method stub
 		ClassSemester classSemester = classSemesterDAO.getClassSemesterByClassSemester(semesterId, classId, true);
 
-		Set<ClassCourseSemester> classCourseSemesters = classSemester.getClassCourseSemester();
+		Set<ClassCourseSemester> classCourseSemesters = classSemester.getClassCourseSemesters();
 		Iterator<ClassCourseSemester> classCourseSemester = classCourseSemesters.iterator();
 
 		Set<Timetable> timetable = new LinkedHashSet<Timetable>();

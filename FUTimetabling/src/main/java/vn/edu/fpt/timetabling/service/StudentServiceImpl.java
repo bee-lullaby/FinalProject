@@ -128,4 +128,9 @@ public class StudentServiceImpl implements StudentService {
 		return studentDAO.listStudentsInClassCourseSemester(classSemesterId, classCourseSemesterId);
 	}
 
+	@Override
+	public List<Student> listStudentsWithoutClass() {
+		return studentDAO.listStudentsWithoutClass();
+	}
+
 }

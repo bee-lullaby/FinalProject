@@ -47,6 +47,7 @@ public class ClassSemesterController {
 			return "home";
 		}
 		model.addAttribute("classSemester", new ClassSemester());
+		model.addAttribute("classSemesterService", classSemesterService);
 		model.addAttribute("classSemesters", classSemesterService.listClassSemesters(false));
 		model.addAttribute("semesters", semesterService.listSemesters(false, false, false, false));
 		model.addAttribute("classes", classService.listClasses());
@@ -100,10 +101,30 @@ public class ClassSemesterController {
 		}
 		model.addAttribute("classSemester", classSemester);
 		model.addAttribute("classSemesters", classSemesterService.listClassSemesters(false));
+		model.addAttribute("classSemesterService", classSemesterService);
 		model.addAttribute("semesters", semesterService.listSemesters(false, false, false, false));
 		model.addAttribute("classes", classService.listClasses());
 		model.addAttribute("semesterId", classSemester.getSemester().getSemesterId());
 		model.addAttribute("classId", classSemester.getClassFPT().getClassId());
 		return "classSemester";
+	}
+
+	@RequestMapping("/classSemester/autoClassSemester/{classSemesterId}")
+	public String autoPutStudentsClassSemester(HttpSession session,
+			@PathVariable("classSemesterId") int classSemesterId) {
+		if (!SessionUtils.isSessionValid(session)) {
+			return "home";
+		}
+		classSemesterService.autoPutStudentsIntoClassSemester(classSemesterId);
+		return "redirect:/classSemesters";
+	}
+
+	@RequestMapping("/classSemester/autoClassSemesters/{semesterId}")
+	public String autoPutStudentsClassSemesters(HttpSession session, @PathVariable("semesterId") int semesterId) {
+		if (!SessionUtils.isSessionValid(session)) {
+			return "home";
+		}
+		classSemesterService.autoPutStudentsIntoClassSemesters(semesterId);
+		return "redirect:/classSemesters";
 	}
 }

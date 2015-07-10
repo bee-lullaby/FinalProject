@@ -42,21 +42,14 @@ public class ClassSemester implements Comparable<ClassSemester> {
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "classSemester", orphanRemoval = true)
 	@OrderBy
-	Set<ClassCourseSemester> classCourseSemester = new LinkedHashSet<ClassCourseSemester>();
+	Set<ClassCourseSemester> classCourseSemesters = new LinkedHashSet<ClassCourseSemester>();
 
-	/**
-	 * @return the classCourseSemester
-	 */
-	public Set<ClassCourseSemester> getClassCourseSemester() {
-		return classCourseSemester;
+	public Set<ClassCourseSemester> getClassCourseSemesters() {
+		return classCourseSemesters;
 	}
 
-	/**
-	 * @param classCourseSemester
-	 *            the classCourseSemester to set
-	 */
-	public void setClassCourseSemester(Set<ClassCourseSemester> classCourseSemester) {
-		this.classCourseSemester = classCourseSemester;
+	public void setClassCourseSemesters(Set<ClassCourseSemester> classCourseSemesters) {
+		this.classCourseSemesters = classCourseSemesters;
 	}
 
 	/**
@@ -186,5 +179,4 @@ public class ClassSemester implements Comparable<ClassSemester> {
 			return -1;
 		}
 	}
-
 }

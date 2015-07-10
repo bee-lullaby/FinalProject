@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 08, 2015 at 10:20 PM
+-- Generation Time: Jul 10, 2015 at 01:26 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `classes` (
   `batch` int(11) DEFAULT NULL,
   `batch_char` varchar(1) NOT NULL,
   `number` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `classes`
@@ -76,7 +76,13 @@ INSERT INTO `classes` (`class_id`, `code`, `type`, `specialized_id`, `detail_spe
 (28, 'COB0903', 'Specialized', 6, 9, NULL, 9, 'C', 3),
 (29, 'COF0903', 'Specialized', 6, 8, NULL, 9, 'C', 3),
 (30, 'FB1001', 'Specialized', 6, NULL, NULL, 10, 'A', 1),
-(31, 'FB1002', 'Specialized', 6, NULL, NULL, 10, 'B', 2);
+(31, 'FB1002', 'Specialized', 6, NULL, NULL, 10, 'B', 2),
+(33, 'SE1014', 'Specialized', 1, NULL, NULL, 10, '\0', 14),
+(34, 'SE1015', 'Specialized', 1, NULL, NULL, 10, '\0', 15),
+(35, 'SE0901', 'Specialized', 1, NULL, NULL, 9, '\0', 1),
+(36, 'SE1016', 'Specialized', 1, NULL, NULL, 10, '\0', 16),
+(37, 'SE1017', 'Specialized', 1, NULL, NULL, 10, '\0', 17),
+(38, 'SE0902', 'Specialized', 1, NULL, NULL, 9, '\0', 2);
 
 -- --------------------------------------------------------
 
@@ -91,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `class_course_semester` (
   `course_semester_id` int(11) NOT NULL,
   `block_condition` int(11) DEFAULT NULL,
   `is_semester_long` tinyint(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=131 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=161 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `class_course_semester`
@@ -240,25 +246,28 @@ CREATE TABLE IF NOT EXISTS `class_course_student_semester` (
 `class_course_student_semester_id` int(11) NOT NULL,
   `class_course_semester_id` int(11) NOT NULL,
   `student_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=150 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `class_course_student_semester`
 --
 
 INSERT INTO `class_course_student_semester` (`class_course_student_semester_id`, `class_course_semester_id`, `student_id`) VALUES
-(43, 1, 23),
-(44, 4, 23),
-(38, 51, 24),
-(39, 52, 24),
-(40, 53, 24),
-(41, 54, 24),
-(42, 55, 24),
-(33, 91, 25),
-(34, 92, 25),
-(35, 93, 25),
-(36, 94, 25),
-(37, 95, 25);
+(135, 1, 23),
+(136, 2, 23),
+(137, 3, 23),
+(138, 4, 23),
+(139, 5, 23),
+(140, 51, 24),
+(141, 52, 24),
+(142, 53, 24),
+(143, 54, 24),
+(144, 55, 24),
+(145, 91, 25),
+(146, 92, 25),
+(147, 93, 25),
+(148, 94, 25),
+(149, 95, 25);
 
 -- --------------------------------------------------------
 
@@ -286,7 +295,7 @@ CREATE TABLE IF NOT EXISTS `class_semester` (
   `class_id` int(11) NOT NULL,
   `semester_id` int(11) NOT NULL,
   `semester` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `class_semester`
@@ -508,35 +517,36 @@ CREATE TABLE IF NOT EXISTS `program_semester` (
   `semester_id` int(11) NOT NULL,
   `current_semester` int(11) NOT NULL,
   `specialized_id` int(11) NOT NULL,
-  `detail_specialized_id` int(11) DEFAULT NULL
+  `detail_specialized_id` int(11) DEFAULT NULL,
+  `batch` int(11) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `program_semester`
 --
 
-INSERT INTO `program_semester` (`program_semester_id`, `semester_id`, `current_semester`, `specialized_id`, `detail_specialized_id`) VALUES
-(1, 1, 1, 1, NULL),
-(2, 1, 1, 2, NULL),
-(3, 1, 1, 3, NULL),
-(4, 1, 1, 4, NULL),
-(5, 1, 2, 1, NULL),
-(6, 1, 2, 2, NULL),
-(7, 1, 2, 3, NULL),
-(8, 1, 2, 4, NULL),
-(9, 1, 2, 5, NULL),
-(10, 1, 2, 6, NULL),
-(11, 1, 3, 1, NULL),
-(12, 1, 3, 2, NULL),
-(13, 1, 3, 3, NULL),
-(14, 1, 3, 5, NULL),
-(21, 1, 3, 5, 10),
-(15, 1, 3, 6, NULL),
-(16, 1, 4, 5, 7),
-(17, 1, 4, 6, 8),
-(18, 1, 4, 6, 9),
-(19, 1, 5, 5, 10),
-(20, 1, 5, 5, 11);
+INSERT INTO `program_semester` (`program_semester_id`, `semester_id`, `current_semester`, `specialized_id`, `detail_specialized_id`, `batch`) VALUES
+(1, 1, 1, 1, NULL, 10),
+(2, 1, 1, 2, NULL, 10),
+(3, 1, 1, 3, NULL, 10),
+(4, 1, 1, 4, NULL, 10),
+(5, 1, 2, 1, NULL, 10),
+(6, 1, 2, 2, NULL, 10),
+(7, 1, 2, 3, NULL, 10),
+(8, 1, 2, 4, NULL, 10),
+(9, 1, 2, 5, NULL, 10),
+(10, 1, 2, 6, NULL, 10),
+(11, 1, 3, 1, NULL, 9),
+(12, 1, 3, 2, NULL, 9),
+(13, 1, 3, 3, NULL, 9),
+(14, 1, 3, 5, NULL, 9),
+(15, 1, 3, 6, NULL, 9),
+(16, 1, 4, 5, 7, 9),
+(17, 1, 4, 6, 8, 9),
+(18, 1, 4, 6, 9, 9),
+(19, 1, 5, 5, 10, 9),
+(20, 1, 5, 5, 11, 9),
+(21, 1, 3, 5, 10, 9);
 
 -- --------------------------------------------------------
 
@@ -548,119 +558,120 @@ DROP TABLE IF EXISTS `program_semester_detail`;
 CREATE TABLE IF NOT EXISTS `program_semester_detail` (
 `program_semester_detail_id` int(11) NOT NULL,
   `program_semester_id` int(11) NOT NULL,
-  `course_semester_id` int(11) NOT NULL
+  `course_semester_id` int(11) NOT NULL,
+  `is_semester_long` tinyint(1) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=106 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `program_semester_detail`
 --
 
-INSERT INTO `program_semester_detail` (`program_semester_detail_id`, `program_semester_id`, `course_semester_id`) VALUES
-(4, 1, 4),
-(1, 1, 11),
-(3, 1, 32),
-(5, 1, 37),
-(2, 1, 41),
-(8, 2, 4),
-(7, 2, 11),
-(6, 2, 32),
-(10, 2, 36),
-(9, 2, 37),
-(14, 3, 4),
-(11, 3, 11),
-(13, 3, 32),
-(15, 3, 37),
-(12, 3, 41),
-(19, 4, 2),
-(18, 4, 15),
-(16, 4, 16),
-(20, 4, 19),
-(17, 4, 25),
-(23, 5, 12),
-(25, 5, 28),
-(24, 5, 32),
-(22, 5, 39),
-(21, 5, 40),
-(29, 6, 5),
-(30, 6, 28),
-(27, 6, 31),
-(28, 6, 39),
-(26, 6, 40),
-(33, 7, 12),
-(35, 7, 28),
-(34, 7, 31),
-(32, 7, 39),
-(31, 7, 40),
-(37, 8, 3),
-(36, 8, 14),
-(40, 8, 20),
-(38, 8, 24),
-(39, 8, 42),
-(41, 9, 1),
-(42, 9, 17),
-(44, 9, 20),
-(43, 9, 30),
-(45, 9, 34),
-(46, 10, 1),
-(47, 10, 17),
-(49, 10, 20),
-(48, 10, 30),
-(50, 10, 34),
-(53, 11, 9),
-(51, 11, 27),
-(55, 11, 29),
-(52, 11, 35),
-(54, 11, 38),
-(58, 12, 9),
-(57, 12, 13),
-(56, 12, 18),
-(59, 12, 27),
-(60, 12, 29),
-(63, 13, 10),
-(61, 13, 26),
-(65, 13, 29),
-(62, 13, 35),
-(64, 13, 38),
-(70, 14, 6),
-(69, 14, 21),
-(66, 14, 22),
-(67, 14, 23),
-(68, 14, 33),
-(75, 15, 6),
-(74, 15, 21),
-(71, 15, 22),
-(72, 15, 23),
-(73, 15, 33),
-(80, 16, 7),
-(76, 16, 43),
-(77, 16, 44),
-(78, 16, 45),
-(79, 16, 46),
-(85, 17, 7),
-(81, 17, 43),
-(82, 17, 44),
-(83, 17, 45),
-(84, 17, 46),
-(90, 18, 7),
-(86, 18, 44),
-(87, 18, 45),
-(88, 18, 46),
-(89, 18, 47),
-(95, 19, 8),
-(94, 19, 20),
-(91, 19, 48),
-(92, 19, 49),
-(93, 19, 50),
-(100, 20, 8),
-(96, 20, 48),
-(97, 20, 49),
-(98, 20, 50),
-(99, 20, 51),
-(105, 21, 6),
-(104, 21, 21),
-(101, 21, 22),
-(102, 21, 23),
-(103, 21, 33);
+INSERT INTO `program_semester_detail` (`program_semester_detail_id`, `program_semester_id`, `course_semester_id`, `is_semester_long`) VALUES
+(1, 1, 11, 0),
+(2, 1, 41, 0),
+(3, 1, 32, 0),
+(4, 1, 4, 0),
+(5, 1, 37, 0),
+(6, 2, 32, 0),
+(7, 2, 11, 0),
+(8, 2, 4, 0),
+(9, 2, 37, 0),
+(10, 2, 36, 0),
+(11, 3, 11, 0),
+(12, 3, 41, 0),
+(13, 3, 32, 0),
+(14, 3, 4, 0),
+(15, 3, 37, 0),
+(16, 4, 16, 0),
+(17, 4, 25, 0),
+(18, 4, 15, 0),
+(19, 4, 2, 0),
+(20, 4, 19, 0),
+(21, 5, 40, 0),
+(22, 5, 39, 0),
+(23, 5, 12, 0),
+(24, 5, 32, 0),
+(25, 5, 28, 0),
+(26, 6, 40, 0),
+(27, 6, 31, 0),
+(28, 6, 39, 0),
+(29, 6, 5, 0),
+(30, 6, 28, 0),
+(31, 7, 40, 0),
+(32, 7, 39, 0),
+(33, 7, 12, 0),
+(34, 7, 31, 0),
+(35, 7, 28, 0),
+(36, 8, 14, 0),
+(37, 8, 3, 0),
+(38, 8, 24, 0),
+(39, 8, 42, 0),
+(40, 8, 20, 0),
+(41, 9, 1, 0),
+(42, 9, 17, 0),
+(43, 9, 30, 0),
+(44, 9, 20, 0),
+(45, 9, 34, 0),
+(46, 10, 1, 0),
+(47, 10, 17, 0),
+(48, 10, 30, 0),
+(49, 10, 20, 0),
+(50, 10, 34, 0),
+(51, 11, 27, 0),
+(52, 11, 35, 0),
+(53, 11, 9, 0),
+(54, 11, 38, 0),
+(55, 11, 29, 0),
+(56, 12, 18, 0),
+(57, 12, 13, 0),
+(58, 12, 9, 0),
+(59, 12, 27, 0),
+(60, 12, 29, 0),
+(61, 13, 26, 0),
+(62, 13, 35, 0),
+(63, 13, 10, 0),
+(64, 13, 38, 0),
+(65, 13, 29, 0),
+(66, 14, 22, 0),
+(67, 14, 23, 0),
+(68, 14, 33, 0),
+(69, 14, 21, 0),
+(70, 14, 6, 0),
+(71, 15, 22, 0),
+(72, 15, 23, 0),
+(73, 15, 33, 0),
+(74, 15, 21, 0),
+(75, 15, 6, 0),
+(76, 16, 43, 0),
+(77, 16, 44, 0),
+(78, 16, 45, 0),
+(79, 16, 46, 0),
+(80, 16, 7, 0),
+(81, 17, 43, 0),
+(82, 17, 44, 0),
+(83, 17, 45, 0),
+(84, 17, 46, 0),
+(85, 17, 7, 0),
+(86, 18, 44, 0),
+(87, 18, 45, 0),
+(88, 18, 46, 0),
+(89, 18, 47, 0),
+(90, 18, 7, 0),
+(91, 19, 48, 0),
+(92, 19, 49, 0),
+(93, 19, 50, 0),
+(94, 19, 20, 0),
+(95, 19, 8, 0),
+(96, 20, 48, 0),
+(97, 20, 49, 0),
+(98, 20, 50, 0),
+(99, 20, 51, 0),
+(100, 20, 8, 0),
+(101, 21, 22, 0),
+(102, 21, 23, 0),
+(103, 21, 33, 0),
+(104, 21, 21, 0),
+(105, 21, 6, 0);
 
 -- --------------------------------------------------------
 
@@ -785,9 +796,9 @@ CREATE TABLE IF NOT EXISTS `students` (
 --
 
 INSERT INTO `students` (`student_id`, `account`, `name`, `email`, `student_code`, `specialized_id`, `detail_specialized_id`, `batch`, `semester`, `class_semester_id`) VALUES
-(23, 'DucHMSE00000', 'Hoàng Minh Đức', 'DucHMSE00000@fpt.edu.vn', 'SE00000', 1, NULL, '7B', 1, NULL),
-(24, 'CongLTSE00001', 'Lưu Thành Công', 'CongLTSE00001@fpt.edu.vn', 'SE00001', 1, NULL, '7B', 2, NULL),
-(25, 'ThanhVCSE00002', 'Vũ Công Thành', 'ThanhVCSE00002@fpt.edu.vn', 'SE00002', 1, NULL, '7B', 3, NULL);
+(23, 'DucHMSE00000', 'Hoàng Minh Đức', 'DucHMSE00000@fpt.edu.vn', 'SE00000', 1, NULL, '7B', 1, 7),
+(24, 'CongLTSE00001', 'Lưu Thành Công', 'CongLTSE00001@fpt.edu.vn', 'SE00001', 1, NULL, '7B', 2, 4),
+(25, 'ThanhVCSE00002', 'Vũ Công Thành', 'ThanhVCSE00002@fpt.edu.vn', 'SE00002', 1, NULL, '7B', 3, 1);
 
 -- --------------------------------------------------------
 
@@ -1128,17 +1139,17 @@ ALTER TABLE `time_table`
 -- AUTO_INCREMENT for table `classes`
 --
 ALTER TABLE `classes`
-MODIFY `class_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=32;
+MODIFY `class_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=39;
 --
 -- AUTO_INCREMENT for table `class_course_semester`
 --
 ALTER TABLE `class_course_semester`
-MODIFY `class_course_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=131;
+MODIFY `class_course_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=161;
 --
 -- AUTO_INCREMENT for table `class_course_student_semester`
 --
 ALTER TABLE `class_course_student_semester`
-MODIFY `class_course_student_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=45;
+MODIFY `class_course_student_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=150;
 --
 -- AUTO_INCREMENT for table `class_course_teacher_semester`
 --
@@ -1148,7 +1159,7 @@ MODIFY `class_course_teacher_semester_id` int(11) NOT NULL AUTO_INCREMENT;
 -- AUTO_INCREMENT for table `class_semester`
 --
 ALTER TABLE `class_semester`
-MODIFY `class_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=32;
+MODIFY `class_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=39;
 --
 -- AUTO_INCREMENT for table `courses`
 --

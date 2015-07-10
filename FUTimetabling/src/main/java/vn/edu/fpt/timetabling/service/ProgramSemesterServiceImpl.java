@@ -45,4 +45,12 @@ public class ProgramSemesterServiceImpl implements ProgramSemesterService {
 	public void deleteProgramSemester(int programSemesterId) {
 		programSemesterDAO.deleteProgramSemester(programSemesterId);
 	}
+
+	@Override
+	@Transactional
+	public ProgramSemester getProgramSemesterBySpecializedSemester(int semesterId, int specializedId,
+			int detailSpecializedId, int semesterNumber) {
+		return programSemesterDAO.getProgramSemesterBySpecializedSemester(semesterId, specializedId,
+				detailSpecializedId, semesterNumber);
+	}
 }

@@ -182,5 +182,4 @@ public class ClassCourseSemester {
 				+ ", courseSemester=" + courseSemester + ", blockCondition=" + blockCondition + ", semesterLong="
 				+ semesterLong + "]";
 	}
-
 }

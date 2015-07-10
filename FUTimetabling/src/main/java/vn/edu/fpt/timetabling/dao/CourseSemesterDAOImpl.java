@@ -1,5 +1,6 @@
 package vn.edu.fpt.timetabling.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -12,11 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import vn.edu.fpt.timetabling.model.CourseSemester;
+import vn.edu.fpt.timetabling.model.Student;
 
 @Repository
 public class CourseSemesterDAOImpl implements CourseSemesterDAO {
-	private static final Logger logger = LoggerFactory
-			.getLogger(CourseSemesterDAO.class);
+	private static final Logger logger = LoggerFactory.getLogger(CourseSemesterDAO.class);
 
 	private SessionFactory sessionFactory;
 
@@ -25,6 +26,9 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 
 	@Autowired
 	private CourseDAO courseDAO;
+
+	@Autowired
+	private StudentDAO studentDAO;
 
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
@@ -37,23 +41,19 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 	@Override
 	public void addCourseSemester(CourseSemester courseSemester) {
 		getCurrentSession().persist(courseSemester);
-		logger.info("CourseSemester was saved successfully, ClassSemester details="
-				+ courseSemester);
+		logger.info("CourseSemester was saved successfully, ClassSemester details=" + courseSemester);
 	}
 
 	@Override
 	public void updateCourseSemester(CourseSemester courseSemester) {
 		getCurrentSession().update(courseSemester);
-		logger.info("CourseSemester was updated successfully, ClassSemester details="
-				+ courseSemester);
+		logger.info("CourseSemester was updated successfully, ClassSemester details=" + courseSemester);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<CourseSemester> listCourseSemesters(
-			boolean jointClassCourseSemester,
-			boolean jointTeacherCourseSemester,
-			boolean jointProgramSemesterDetails) {
+	public List<CourseSemester> listCourseSemesters(boolean jointClassCourseSemester,
+			boolean jointTeacherCourseSemester, boolean jointProgramSemesterDetails) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.CourseSemester C";
 		if (jointClassCourseSemester) {
 			hql += " LEFT OUTER JOIN FETCH C.classCourseSemesters";
@@ -68,8 +68,7 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 
 		Query query = getCurrentSession().createQuery(hql);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		List<CourseSemester> courseSemesters = (List<CourseSemester>) query
-				.list();
+		List<CourseSemester> courseSemesters = (List<CourseSemester>) query.list();
 		for (CourseSemester courseSemester : courseSemesters) {
 			logger.info("CourseSemester list:" + courseSemester);
 		}
@@ -77,10 +76,8 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 	}
 
 	@Override
-	public CourseSemester getCourseSemesterById(int courseSemesterId,
-			boolean jointClassCourseSemester,
-			boolean jointTeacherCourseSemester,
-			boolean jointProgramSemesterDetails) {
+	public CourseSemester getCourseSemesterById(int courseSemesterId, boolean jointClassCourseSemester,
+			boolean jointTeacherCourseSemester, boolean jointProgramSemesterDetails) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.CourseSemester C";
 		if (jointClassCourseSemester) {
 			hql += " LEFT OUTER JOIN FETCH C.classCourseSemesters";
@@ -98,8 +95,7 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 		Object temp = query.uniqueResult();
 		if (temp != null) {
 			CourseSemester courseSemester = (CourseSemester) temp;
-			logger.info("CourseSemester was loaded successfully, CourseSemester="
-					+ courseSemester);
+			logger.info("CourseSemester was loaded successfully, CourseSemester=" + courseSemester);
 			return courseSemester;
 		} else {
 			return null;
@@ -107,10 +103,8 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 	}
 
 	@Override
-	public CourseSemester getCourseSemesterByCode(String code,
-			boolean jointClassCourseSemester,
-			boolean jointTeacherCourseSemester,
-			boolean jointProgramSemesterDetails) {
+	public CourseSemester getCourseSemesterByCode(String code, boolean jointClassCourseSemester,
+			boolean jointTeacherCourseSemester, boolean jointProgramSemesterDetails) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.CourseSemester C";
 		if (jointClassCourseSemester) {
 			hql += " LEFT OUTER JOIN FETCH C.classCourseSemesters";
@@ -128,8 +122,7 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 		Object temp = query.uniqueResult();
 		if (temp != null) {
 			CourseSemester courseSemester = (CourseSemester) temp;
-			logger.info("CourseSemester was loaded successfully, CourseSemester="
-					+ courseSemester);
+			logger.info("CourseSemester was loaded successfully, CourseSemester=" + courseSemester);
 			return courseSemester;
 		} else {
 			return null;
@@ -137,10 +130,8 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 	}
 
 	@Override
-	public CourseSemester getCourseSemesterByCourseSemester(int courseId,
-			int semesterId, boolean jointClassCourseSemester,
-			boolean jointTeacherCourseSemester,
-			boolean jointProgramSemesterDetails) {
+	public CourseSemester getCourseSemesterByCourseSemester(int courseId, int semesterId,
+			boolean jointClassCourseSemester, boolean jointTeacherCourseSemester, boolean jointProgramSemesterDetails) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.CourseSemester C";
 		if (jointClassCourseSemester) {
 			hql += " LEFT OUTER JOIN FETCH C.classCourseSemesters";
@@ -155,13 +146,11 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 		hql += "WHERE C.course = :course AND C.semester = :semester";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("course", courseDAO.getCourseById(courseId));
-		query.setParameter("course", semesterDAO.getSemesterById(semesterId,
-				false, false, false, false));
+		query.setParameter("semester", semesterDAO.getSemesterById(semesterId, false, false, false, false));
 		Object temp = query.uniqueResult();
 		if (temp != null) {
 			CourseSemester courseSemester = (CourseSemester) temp;
-			logger.info("CourseSemester was loaded successfully, CourseSemester="
-					+ courseSemester);
+			logger.info("CourseSemester was loaded successfully, CourseSemester=" + courseSemester);
 			return courseSemester;
 		} else {
 			return null;
@@ -173,8 +162,24 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 		CourseSemester courseSemester = getCourseSemesterById(courseSemesterId, false, false, false);
 		if (courseSemester != null) {
 			getCurrentSession().delete(courseSemester);
-			logger.info("CourseSemester was deleted successfully, CourseSemester details="
-					+ courseSemester);
+			logger.info("CourseSemester was deleted successfully, CourseSemester details=" + courseSemester);
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<CourseSemester> listCourseSemestersByStudent(int studentId) {
+		Student student = studentDAO.getStudentById(studentId);
+		if (student == null) {
+			return new ArrayList<CourseSemester>();
+		}
+		String hql = "FROM vn.edu.fpt.timetabling.model.CourseSemester C"
+				+ " LEFT OUTER JOIN FETCH C.classCourseSemesters CCS"
+				+ " LEFT OUTER JOIN FETCH CCS.classCourseStudentSemesters CCSS" + " WHERE CCSS.student = :student";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("student", student);
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<CourseSemester> courseSemesters = (List<CourseSemester>) query.list();
+		return courseSemesters;
 	}
 }

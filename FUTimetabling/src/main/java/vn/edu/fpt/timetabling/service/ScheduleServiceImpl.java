@@ -76,7 +76,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		ClassSemester classSemester = classSemesterDAO
 				.getClassSemesterByClassSemester(semesterId, classId, true);
 		List<ClassCourseSemester> classCourseSemesters = new ArrayList<ClassCourseSemester>();
-		classCourseSemesters.addAll(classSemester.getClassCourseSemester());
+		classCourseSemesters.addAll(classSemester.getClassCourseSemesters());
 		return classCourseSemesters;
 	}
 
@@ -88,7 +88,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		ClassSemester classSemester = classSemesterDAO
 				.getClassSemesterByClassSemester(semesterId, classId, true);
 		Set<ClassCourseSemester> classCourseSemesters = classSemester
-				.getClassCourseSemester();
+				.getClassCourseSemesters();
 
 		List<CourseSemester> courseSemesters = new ArrayList<CourseSemester>();
 		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {

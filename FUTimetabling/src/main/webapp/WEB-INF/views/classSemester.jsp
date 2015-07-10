@@ -49,6 +49,15 @@
 	background-color: #f9f9f9
 }
 </style>
+<script>
+	auto = function() {
+		var select = document.getElementById('autoSemester');
+		var semesterId = select.options[select.selectedIndex].value;
+		window.location
+				.replace("http://localhost:8080/Timetabling/classSemester/autoClassSemesters/"
+						+ semesterId);
+	}
+</script>
 </head>
 <body>
 	<h1>Add a Class Semester</h1>
@@ -101,11 +110,10 @@
 				<td><form:input path="semesterNumber" /></td>
 			</tr>
 			<tr>
-				<td><form:label path="noOfStudents">
-						<spring:message text="Number of Students" />
-					</form:label></td>
-				<td><form:input path="noOfStudents" readonly="true" size="8"
-						disabled="true" /> <form:hidden path="noOfStudents" /></td>
+				<td><label> <spring:message text="Number of Students" />
+				</label></td>
+				<td><input size="8" disabled="disabled" readonly="readonly"
+					value="${classSemesterService.getNumberOfStudents(classSemester.classSemesterId)}" /></td>
 			</tr>
 			<tr>
 				<td colspan="2"><c:choose>
@@ -121,6 +129,13 @@
 			</tr>
 		</table>
 	</form:form>
+	<h3>Auto put all students into class semester</h3>
+	<select id="autoSemester">
+		<c:forEach var="item" items="${semesters}">
+			<option value="${item.semesterId}">${item.name}</option>
+		</c:forEach>
+	</select>
+	<button onclick="auto()">Process</button>
 	<form:form action="department/addFromFile" method="post"
 		enctype="multipart/form-data">
 		<input
@@ -143,6 +158,7 @@
 				<th width="120">Manage Student</th>
 				<th width="60">Edit</th>
 				<th width="60">Delete</th>
+				<th width="200">Auto put students into</th>
 			</tr>
 			<c:forEach items="${classSemesters}" var="classSemesterTemp">
 				<tr>
@@ -150,13 +166,15 @@
 					<td>${classSemesterTemp.classFPT.code}</td>
 					<td>${classSemesterTemp.semester.name}</td>
 					<td>${classSemesterTemp.semesterNumber}</td>
-					<td>${classSemesterTemp.noOfStudents}</td>
+					<td>${classSemesterService.getNumberOfStudents(classSemesterTemp.classSemesterId)}</td>
 					<td></td>
 					<td></td>
 					<td><a
 						href="<c:url value='/classSemester/edit/${classSemesterTemp.classSemesterId}' />">Edit</a></td>
 					<td><a
 						href="<c:url value='/classSemester/delete/${classSemesterTemp.classSemesterId}' />">Delete</a></td>
+					<td><a
+						href="<c:url value='/classSemester/autoClassSemester/${classSemesterTemp.classSemesterId}' />">Put</a></td>
 				</tr>
 			</c:forEach>
 		</table>

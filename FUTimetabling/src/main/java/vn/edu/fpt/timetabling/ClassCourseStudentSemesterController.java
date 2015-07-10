@@ -64,7 +64,7 @@ public class ClassCourseStudentSemesterController {
 
 	private void processClassCourseSemesters(HttpSession session, Model model, ClassSemester classSemester,
 			Integer classCourseSemesterId) {
-		Set<ClassCourseSemester> classCourseSemesters = classSemester.getClassCourseSemester();
+		Set<ClassCourseSemester> classCourseSemesters = classSemester.getClassCourseSemesters();
 		if (!classCourseSemesters.isEmpty()) {
 			ClassCourseSemester classCourseSemester = null;
 			Course course = new Course();
@@ -78,6 +78,17 @@ public class ClassCourseStudentSemesterController {
 			if (classCourseSemesterId != null || session.getAttribute("classCourseSemester") != null) {
 				if (classCourseSemesterId == null) {
 					classCourseSemester = (ClassCourseSemester) session.getAttribute("classCourseSemester");
+					boolean validClassCourseSemester = false;
+					for (ClassCourseSemester classCourseSemesterTemp : classCourseSemesters) {
+						if (classCourseSemesterTemp.getClassCourseSemesterId() == classCourseSemester
+								.getClassCourseSemesterId()) {
+							validClassCourseSemester = true;
+							break;
+						}
+					}
+					if (!validClassCourseSemester) {
+						classCourseSemester = classCourseSemesterAll;
+					}
 				} else {
 					for (ClassCourseSemester classCourseSemesterTemp : classCourseSemesters) {
 						if (classCourseSemesterTemp.getClassCourseSemesterId() == classCourseSemesterId) {
@@ -119,6 +130,16 @@ public class ClassCourseStudentSemesterController {
 			if (classSemesterId != null || session.getAttribute("classSemester") != null) {
 				if (classSemesterId == null) {
 					classSemester = (ClassSemester) session.getAttribute("classSemester");
+					boolean validClassSemester = false;
+					for (ClassSemester classSemesterTemp : classSemesters) {
+						if (classSemesterTemp.getClassSemesterId() == classSemester.getClassSemesterId()) {
+							validClassSemester = true;
+							break;
+						}
+					}
+					if (!validClassSemester) {
+						classSemester = classSemesters.iterator().next();
+					}
 				} else {
 					for (ClassSemester classSemesterTemp : classSemesters) {
 						if (classSemesterTemp.getClassSemesterId() == classSemesterId) {
@@ -182,14 +203,18 @@ public class ClassCourseStudentSemesterController {
 		if (student != null && (session.getAttribute("classCourseSemester") != null
 				|| session.getAttribute("classSemester") != null)) {
 			Set<ClassCourseSemester> classCourseSemesters;
+			ClassSemester classSemester;
 			if (session.getAttribute("classCourseSemester") != null
 					&& ((ClassCourseSemester) session.getAttribute("classCourseSemester"))
 							.getClassCourseSemesterId() != 0) {
 				classCourseSemesters = new HashSet<ClassCourseSemester>();
-				classCourseSemesters.add((ClassCourseSemester) session.getAttribute("classCourseSemester"));
+				ClassCourseSemester classCourseSemester = (ClassCourseSemester) session
+						.getAttribute("classCourseSemester");
+				classSemester = classCourseSemester.getClassSemester();
+				classCourseSemesters.add(classCourseSemester);
 			} else {
-				ClassSemester classSemester = (ClassSemester) session.getAttribute("classSemester");
-				classCourseSemesters = classSemester.getClassCourseSemester();
+				classSemester = (ClassSemester) session.getAttribute("classSemester");
+				classCourseSemesters = classSemester.getClassCourseSemesters();
 			}
 			for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
 				if (classCourseSemester.getClassCourseSemesterId() == 0) {
@@ -200,6 +225,7 @@ public class ClassCourseStudentSemesterController {
 				classCourseStudentSemester.setStudent(student);
 				classCourseStudentSemesterService.addClassCourseStudentSemester(classCourseStudentSemester);
 			}
+			student.setClassSemester(classSemester);
 		}
 		return "redirect:/classCourseStudentSemesters";
 	}
@@ -214,18 +240,28 @@ public class ClassCourseStudentSemesterController {
 		if (student != null && (session.getAttribute("classCourseSemester") != null
 				|| session.getAttribute("classSemester") != null)) {
 			Set<ClassCourseSemester> classCourseSemesters;
+			ClassSemester classSemester;
 			if (session.getAttribute("classCourseSemester") != null
 					&& ((ClassCourseSemester) session.getAttribute("classCourseSemester"))
 							.getClassCourseSemesterId() != 0) {
 				classCourseSemesters = new HashSet<ClassCourseSemester>();
-				classCourseSemesters.add((ClassCourseSemester) session.getAttribute("classCourseSemester"));
+				ClassCourseSemester classCourseSemester = (ClassCourseSemester) session
+						.getAttribute("classCourseSemester");
+				classCourseSemesters.add(classCourseSemester);
+				classSemester = classCourseSemester.getClassSemester();
 			} else {
-				ClassSemester classSemester = (ClassSemester) session.getAttribute("classSemester");
-				classCourseSemesters = classSemester.getClassCourseSemester();
+				classSemester = (ClassSemester) session.getAttribute("classSemester");
+				classCourseSemesters = classSemester.getClassCourseSemesters();
 			}
 			for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
 				classCourseStudentSemesterService.removeStudentFromClassCourseSemester(studentId,
 						classCourseSemester.getClassCourseSemesterId());
+			}
+			int classSemesterId = classSemester.getClassSemesterId();
+			if (!classSemesterService.isStudentInClassSemester(studentId, classSemesterId)
+					&& student.getClassSemester() != null
+					&& student.getClassSemester().getClassSemesterId() == classSemesterId) {
+				student.setClassSemester(null);
 			}
 		}
 		return "redirect:/classCourseStudentSemesters";

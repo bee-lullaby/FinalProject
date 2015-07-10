@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassSemester;
+import vn.edu.fpt.timetabling.model.CourseSemester;
 import vn.edu.fpt.timetabling.model.Semester;
 import vn.edu.fpt.timetabling.model.Specialized;
 import vn.edu.fpt.timetabling.model.Student;
@@ -35,6 +36,8 @@ public class StudentDAOImpl implements StudentDAO {
 	private ClassSemesterDAO classSemesterDAO;
 	@Autowired
 	private TimetableDAO timetableDAO;
+	@Autowired
+	private CourseSemesterDAO courseSemesterDAO;
 
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
@@ -117,7 +120,7 @@ public class StudentDAOImpl implements StudentDAO {
 		Set<ClassCourseSemester> classCourseSemesters;
 		if (classCourseSemester == null) {
 			semester = classSemester.getSemester();
-			classCourseSemesters = classSemester.getClassCourseSemester();
+			classCourseSemesters = classSemester.getClassCourseSemesters();
 		} else {
 			semester = classCourseSemester.getClassSemester().getSemester();
 			classCourseSemesters = new HashSet<ClassCourseSemester>();
@@ -144,9 +147,27 @@ public class StudentDAOImpl implements StudentDAO {
 		List<Student> studentsWithSuitableSpecialized = (List<Student>) query.list();
 		List<Student> suitableStudents = new ArrayList<Student>();
 		for (Student student : studentsWithSuitableSpecialized) {
+			boolean isSuitable = true;
+			List<CourseSemester> learningCourseSemesters = courseSemesterDAO
+					.listCourseSemestersByStudent(student.getStudentId());
+			for (CourseSemester courseSemester : learningCourseSemesters) {
+				for (ClassCourseSemester classCourseSemesterTemp : classCourseSemesters) {
+					if (classCourseSemesterTemp.getCourseSemester().getCourseSemesterId() == courseSemester
+							.getCourseSemesterId()) {
+						isSuitable = false;
+						break;
+					}
+				}
+				if (!isSuitable) {
+					break;
+				}
+
+			}
+			if (!isSuitable) {
+				continue;
+			}
 			List<Timetable> timetablesOfStudent = timetableDAO.listTimetablesByStudent(semester.getSemesterId(),
 					student);
-			boolean isSuitable = true;
 			for (Timetable timetableOfStudent : timetablesOfStudent) {
 				for (Timetable timetableOfClassSemester : timetablesOfClassSemester) {
 					if (timetableOfStudent.isSameTime(timetableOfClassSemester)) {
@@ -186,6 +207,16 @@ public class StudentDAOImpl implements StudentDAO {
 		} else {
 			query.setParameter("classSemester", classSemester);
 		}
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<Student> students = (List<Student>) query.list();
+		return students;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Student> listStudentsWithoutClass() {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Student S" + " WHERE S.classSemester IS NULL";
+		Query query = getCurrentSession().createQuery(hql);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<Student> students = (List<Student>) query.list();
 		return students;

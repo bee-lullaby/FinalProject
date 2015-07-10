@@ -80,7 +80,6 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 	@Override
 	@Transactional
 	public void addCourseSemester(CourseSemester courseSemester) {
-		// TODO Auto-generated method stub
 		courseSemesterDAO.addCourseSemester(courseSemester);
 	}
 
@@ -88,7 +87,6 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 	@Override
 	@Transactional
 	public void updateCourseSemester(CourseSemester courseSemester) {
-		// TODO Auto-generated method stub
 		courseSemesterDAO.updateCourseSemester(courseSemester);
 	}
 
@@ -99,7 +97,6 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 			boolean jointClassCourseSemester,
 			boolean jointTeacherCourseSemester,
 			boolean jointProgramSemesterDetails) {
-		// TODO Auto-generated method stub
 		return courseSemesterDAO.listCourseSemesters(jointClassCourseSemester, jointTeacherCourseSemester, jointProgramSemesterDetails);
 	}
 
@@ -110,7 +107,6 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 			boolean jointClassCourseSemester,
 			boolean jointTeacherCourseSemester,
 			boolean jointProgramSemesterDetails) {
-		// TODO Auto-generated method stub
 		return courseSemesterDAO.getCourseSemesterById(courseSemesterId, jointClassCourseSemester, jointTeacherCourseSemester, jointProgramSemesterDetails);
 	}
 
@@ -121,25 +117,31 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 			boolean jointClassCourseSemester,
 			boolean jointTeacherCourseSemester,
 			boolean jointProgramSemesterDetails) {
-		// TODO Auto-generated method stub
 		return courseSemesterDAO.getCourseSemesterByCode(code, jointClassCourseSemester, jointTeacherCourseSemester, jointProgramSemesterDetails);
 	}
 
 
 	@Override
+	@Transactional
 	public CourseSemester getCourseSemesterByCourseSemester(int courseId,
 			int semesterId, boolean jointClassCourseSemester,
 			boolean jointTeacherCourseSemester,
 			boolean jointProgramSemesterDetails) {
-		// TODO Auto-generated method stub
 		return courseSemesterDAO.getCourseSemesterByCourseSemester(courseId, semesterId, jointClassCourseSemester, jointTeacherCourseSemester, jointProgramSemesterDetails);
 	}
 
 
 	@Override
+	@Transactional
 	public void deleteCourseSemester(int courseSemesterId) {
-		// TODO Auto-generated method stub
 		courseSemesterDAO.deleteCourseSemester(courseSemesterId);
+	}
+
+
+	@Override
+	@Transactional
+	public List<CourseSemester> listCourseSemestersByStudent(int studentId) {
+		return courseSemesterDAO.listCourseSemestersByStudent(studentId);
 	}
 
 	

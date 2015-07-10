@@ -16,6 +16,7 @@ import vn.edu.fpt.timetabling.service.ClassService;
 import vn.edu.fpt.timetabling.service.CourseService;
 import vn.edu.fpt.timetabling.service.SpecializedService;
 import vn.edu.fpt.timetabling.utils.SessionUtils;
+import vn.edu.fpt.timetabling.utils.Const.ClassType;
 
 @Controller
 public class ClassController {
@@ -48,17 +49,14 @@ public class ClassController {
 		}
 		model.addAttribute("classFPT", new ClassFPT());
 		model.addAttribute("classes", classService.listClasses());
-		model.addAttribute("specializeds",
-				specializedService.listSpecializeds());
+		model.addAttribute("specializeds", specializedService.listSpecializeds());
 		model.addAttribute("courses", courseService.listCourses());
 		return "classManagement";
 	}
 
 	// For add and update person both
 	@RequestMapping(value = "/class/add", method = RequestMethod.POST)
-	public String addClass(
-			HttpSession session,
-			@RequestParam(value = "classId", required = true) Integer classId,
+	public String addClass(HttpSession session, @RequestParam(value = "classId", required = true) Integer classId,
 			@RequestParam(value = "type", required = true) String type,
 			@RequestParam(value = "specialized", required = false) Integer specializedId,
 			@RequestParam(value = "batch", required = false) Integer batch,
@@ -66,7 +64,7 @@ public class ClassController {
 		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
-		if (type.equals("Specialized")) {
+		if (type.equals(ClassType.SPECIALIZED)) {
 			if (specializedId == null || batch == null) {
 				return "redirect:/classes";
 			}
@@ -83,13 +81,11 @@ public class ClassController {
 		}
 		classFPT.setType(type);
 		String classCodePrefix;
-		if (type.equals("Specialized")) {
-			classFPT.setSpecialized(specializedService
-					.getSpecializedById(specializedId));
+		if (type.equals(ClassType.SPECIALIZED)) {
+			classFPT.setSpecialized(specializedService.getSpecializedById(specializedId));
 			classFPT.setBatch(batch);
 			classFPT.setCourse(null);
-			classCodePrefix = classFPT.getSpecialized().getCode()
-					+ String.format("%02d", batch);
+			classCodePrefix = classFPT.getSpecialized().getCode() + String.format("%02d", batch);
 		} else {
 			classFPT.setBatch(null);
 			classFPT.setSpecialized(null);
@@ -97,9 +93,8 @@ public class ClassController {
 			classCodePrefix = classFPT.getCourse().getCode();
 		}
 		classFPT.setNumber(classService.getNextClassNumber(classCodePrefix));
-		if (type.equals("Specialized")) {
-			classFPT.setCode(classCodePrefix
-					+ String.format("%02d", classFPT.getNumber()));
+		if (type.equals(ClassType.SPECIALIZED)) {
+			classFPT.setCode(classCodePrefix + String.format("%02d", classFPT.getNumber()));
 		} else {
 			classFPT.setCode(classCodePrefix + "." + classFPT.getNumber());
 		}
@@ -114,8 +109,7 @@ public class ClassController {
 	}
 
 	@RequestMapping("/class/delete/{classId}")
-	public String deleteClass(HttpSession session,
-			@PathVariable("classId") int classId) {
+	public String deleteClass(HttpSession session, @PathVariable("classId") int classId) {
 		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
@@ -124,8 +118,7 @@ public class ClassController {
 	}
 
 	@RequestMapping("/class/edit/{classId}")
-	public String editClass(HttpSession session,
-			@PathVariable("classId") int classId, Model model) {
+	public String editClass(HttpSession session, @PathVariable("classId") int classId, Model model) {
 		if (!SessionUtils.isSessionValid(session)) {
 			return "home";
 		}
@@ -135,12 +128,10 @@ public class ClassController {
 		}
 		model.addAttribute("classFPT", classFPT);
 		model.addAttribute("classes", classService.listClasses());
-		model.addAttribute("specializeds",
-				specializedService.listSpecializeds());
+		model.addAttribute("specializeds", specializedService.listSpecializeds());
 		model.addAttribute("courses", courseService.listCourses());
-		if (classFPT.getType().equals("Specialized")) {
-			model.addAttribute("specialized", classFPT.getSpecialized()
-					.getSpecializedId());
+		if (classFPT.getType().equals(ClassType.SPECIALIZED)) {
+			model.addAttribute("specialized", classFPT.getSpecialized().getSpecializedId());
 		} else {
 			model.addAttribute("course", classFPT.getCourse().getCourseId());
 		}

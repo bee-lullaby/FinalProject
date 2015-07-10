@@ -71,7 +71,7 @@ public class ScheduleController {
 		
 
 		List<ClassCourseSemester> classCourseSemesters = new ArrayList<ClassCourseSemester>();
-		classCourseSemesters.addAll(classSemester.getClassCourseSemester());
+		classCourseSemesters.addAll(classSemester.getClassCourseSemesters());
 		// Get Start and End Date
 		String startDate = new SimpleDateFormat("yyyy-MM-dd").format(semester
 				.getStartDate());
