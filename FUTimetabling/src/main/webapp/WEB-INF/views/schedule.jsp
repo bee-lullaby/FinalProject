@@ -21,6 +21,21 @@
 
 </head>
 <body>
+	<div style="display: none">
+		<form:form id="generate" method="post">
+			<input type="hidden" type="text" id="semesterId" name="semesterId" />
+			<input type="hidden" type="text" id="classId" name="classId" />
+			<input type="hidden" type="text" id="week" name="week" />
+		</form:form>
+	</div>
+	<div style="display: none">
+		<form:form id="data" method="post">
+			<div id="JSONdata" style="display: none">${JSONdata}</div>
+			<input type="hidden" type="text" id="JSONprev" name="JSONprev" />
+			<input type="hidden" type="text" id="JSONToSubmit"
+				name="JSONToSubmit" />
+		</form:form>
+	</div>
 	<div style="width: 100%; height: 100%">
 		<div style="width: 80%; margin: 0 auto;">
 			<h1>
@@ -29,17 +44,15 @@
 			</h1>
 
 			<div style="width: 100%;">
-
-				<div style="display: inline-block;">
-					<form style="height: 100%">
+				<form id="form-schedule" style="height: 100%">
+					<div style="display: inline-block;">
 						<button id="btn-prev-class" class="button">
 							<span class="mif-arrow-left"></span>
 						</button>
 						<div class="input-control select">
-							<input type="hidden" name="semesterId" value="${semesterId}">
-							<select id="select-classes" name="classId"
-								onchange="this.form.submit()">
-
+							<input type="hidden" id="semesterId" name="semesterId"
+								value="${semesterId}"> <select id="select-classes"
+								name="classId">
 								<c:forEach items="${listClasses}" var="classSemester">
 									<c:choose>
 										<c:when
@@ -53,30 +66,29 @@
 									</c:choose>
 								</c:forEach>
 							</select>
-
 						</div>
 						<button id="btn-next-class" class="button">
 							<span class="mif-arrow-right"></span>
 						</button>
-					</form>
-				</div>
-				<div style="float: right">
-					<button id="btn-prev-week" class="button" data-role="hint"
-						data-hint-background="#1CB7EC" data-hint-color="fg-white"
-						data-hint-position="top" data-hint="Previous Week">
-						<span class="mif-chevron-thin-left"></span>
-					</button>
-					<div class="input-control select">
-						<select id="select-weeks" onchange="_setDateHeader()">
 
-						</select>
 					</div>
-					<button id="btn-next-week" class="button" data-role="hint"
-						data-hint-background="#1CB7EC" data-hint-color="fg-white"
-						data-hint-position="top" data-hint="Next Week">
-						<span class="mif-chevron-thin-right"></span>
-					</button>
-				</div>
+					<div style="float: right">
+						<button id="btn-prev-week" class="button" data-role="hint"
+							data-hint-background="#1CB7EC" data-hint-color="fg-white"
+							data-hint-position="top" data-hint="Previous Week">
+							<span class="mif-chevron-thin-left"></span>
+						</button>
+						<div class="input-control select">
+							<select id="select-weeks" name="week">
+							</select>
+						</div>
+						<button id="btn-next-week" class="button" data-role="hint"
+							data-hint-background="#1CB7EC" data-hint-color="fg-white"
+							data-hint-position="top" data-hint="Next Week">
+							<span class="mif-chevron-thin-right"></span>
+						</button>
+					</div>
+				</form>
 			</div>
 
 			<div style="width: 100%; line-height: 40px; margin: .5rem 0;">
@@ -85,7 +97,8 @@
 					<c:set var="x" value="0" scope="page" />
 					<c:forEach items="${listClassCourses}" var="classCourseSemester">
 						<c:set var="x" value="${x + 1}" scope="page" />
-						<div id="course-${x}" style="cursor: pointer; display: inline-block">
+						<div id="course-${x}"
+							style="cursor: pointer; display: inline-block">
 							<span id="${classCourseSemester.classCourseSemesterId}"
 								class="course-color color-${x}"></span>
 							&nbsp;${classCourseSemester.getCourseSemester().getCourse().code}&nbsp;&nbsp;
@@ -94,27 +107,22 @@
 				</div>
 
 				<div style="float: right;">
-					<form:form action="schedule/updateTimetable" method="post">
-						<button id="btn-generate" class="button" data-role="hint"
-							data-hint-background="#1CB7EC" data-hint-color="fg-white"
-							data-hint-position="top" data-hint="Generate From Previous Week">
-							<span class="mif-table"></span>
-						</button>
-						|
-						<button id="btn-clear" class="button" data-role="hint"
-							data-hint-background="#1CB7EC" data-hint-color="fg-white"
-							data-hint-position="top" data-hint="Clear">
-							<span class="mif-cross"></span>
-						</button>
-						<button id="btn-submit" class="button" data-role="hint"
-							data-hint-background="#1CB7EC" data-hint-color="fg-white"
-							data-hint-position="top" data-hint="Submit">
-							<span class="mif-download"></span>
-						</button>
-						<div id="JSONdata" style="display: none">${JSONdata}</div>
-						<input type="hidden" type="text" id="JSONprev" name="JSONprev"/>
-						<input type="hidden" type="text" id="JSONToSubmit" name="JSONToSubmit"/>
-					</form:form>
+					<button id="btn-generate" class="button" data-role="hint"
+						data-hint-background="#1CB7EC" data-hint-color="fg-white"
+						data-hint-position="top" data-hint="Generate From Previous Week">
+						<span class="mif-table"></span>
+					</button>
+					|
+					<button id="btn-clear" class="button" data-role="hint"
+						data-hint-background="#1CB7EC" data-hint-color="fg-white"
+						data-hint-position="top" data-hint="Clear">
+						<span class="mif-cross"></span>
+					</button>
+					<button id="btn-submit" class="button" data-role="hint"
+						data-hint-background="#1CB7EC" data-hint-color="fg-white"
+						data-hint-position="top" data-hint="Submit">
+						<span class="mif-download"></span>
+					</button>
 				</div>
 			</div>
 			<div id="timetable-container" style="width: 100%; margin-top: 15px">
@@ -193,6 +201,7 @@
 					<h3 id="slot-day">Course:</h3> Course:
 					<div class="input-control select">
 						<select id="set-courses" name="setCourse">
+							<option value="-1">...</option>
 							<c:forEach items="${listClassCourses}" var="classCourseSemester">
 								<option value="${classCourseSemester.classCourseSemesterId}">${classCourseSemester.getCourseSemester().getCourse().code}</option>
 							</c:forEach>
@@ -229,5 +238,19 @@
 			</tr>
 		</table>
 	</div>
+
+	<!-- Dialog Warning Clear -->
+	<div data-role="dialog" id="dialog-warning-clear" class="padding20"
+		data-close-button="true" data-type="warning">
+		<h1>Clear Data In This Week</h1>
+		<p>This action will clear all data in this week of this class. Do
+			you really want to clear?</p>
+		<div style="text-align:center; width:100%">
+			<button class="button" id="btn-accept-clear">Accept</button>
+			<button class="button" id="btn-decline-clear">Decline</button>
+		</div>
+	</div>
+
+
 </body>
 </html>

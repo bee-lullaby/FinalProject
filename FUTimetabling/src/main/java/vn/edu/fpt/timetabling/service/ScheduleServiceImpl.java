@@ -11,6 +11,8 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import vn.edu.fpt.timetabling.dao.ClassSemesterDAO;
 import vn.edu.fpt.timetabling.dao.CourseSemesterDAO;
 import vn.edu.fpt.timetabling.dao.SemesterDAO;
 import vn.edu.fpt.timetabling.dao.TimetableDAO;
+import vn.edu.fpt.timetabling.dao.TimetableDAOImpl;
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassSemester;
 import vn.edu.fpt.timetabling.model.CourseSemester;
@@ -33,10 +36,8 @@ import vn.edu.fpt.timetabling.utils.TimetableUtils;
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
 
-//	private static final Logger logger = LoggerFactory
-//			.getLogger(ScheduleServiceImpl.class);
-
-	public static final int MYSQL_DUPLICATE_PK = 1062;
+	private static final Logger logger = LoggerFactory
+			.getLogger(TimetableDAOImpl.class);
 
 	@Autowired
 	private SemesterDAO semesterDAO;
@@ -61,12 +62,13 @@ public class ScheduleServiceImpl implements ScheduleService {
 				classId, true);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Transactional
 	@Override
 	public List<ClassSemester> listClassBySemester(int semesterId) {
-		return (List<ClassSemester>) semesterDAO.getSemesterById(semesterId,
-				true, false, false, false).getClassSemesters();
+		List<ClassSemester> classSemesters = new ArrayList<ClassSemester>();
+		classSemesters.addAll(semesterDAO.getSemesterById(semesterId, true,
+				false, false, false).getClassSemesters());
+		return classSemesters;
 	}
 
 	@Transactional
@@ -208,20 +210,25 @@ public class ScheduleServiceImpl implements ScheduleService {
 		for (int i = 0; i < daySlots.size(); i++) {
 			DaySlot dayslot = daySlots.get(i);
 			DaySlot prevDaySlot = prevDaySlots.get(i);
-			if (dayslot.getSetCourseSlot() != -1) {
+			if (prevDaySlot.getSetCourseSlot() != dayslot.getSetCourseSlot()) {
 				Timetable timetable;
 				Date date;
 				try {
 					date = sdf.parse(dayslot.getDate());
-				
 					if (prevDaySlot.getSetCourseSlot() != -1) {
-						if (prevDaySlot.getSetCourseSlot() != dayslot
-								.getSetCourseSlot()) {
-							timetable = timetableDAO.getTimetableByDateSlotClassCourse(date, prevDaySlot.getSlot(), prevDaySlot.getSetCourseSlot());
-							timetable.setClassCourseSemester(classCourseSemesterDAO
-							.getClassCourseSemesterById(dayslot
-									.getSetCourseSlot()));
+						timetable = timetableDAO
+								.getTimetableByDateSlotClassCourse(date,
+										prevDaySlot.getSlot(),
+										prevDaySlot.getSetCourseSlot());
+						if (dayslot.getSetCourseSlot() != -1) {
+							timetable
+									.setClassCourseSemester(classCourseSemesterDAO
+											.getClassCourseSemesterById(dayslot
+													.getSetCourseSlot()));
 							timetableDAO.updateTimetable(timetable);
+						} else {
+							timetableDAO.deleteTimetable(timetable
+									.getTimeTableId());
 						}
 					} else {
 						timetable = new Timetable();
@@ -241,6 +248,78 @@ public class ScheduleServiceImpl implements ScheduleService {
 					e.printStackTrace();
 				}
 			}
+		}
+
+		return true;
+	}
+
+	@Transactional
+	@Override
+	public boolean generateFromPreviousWeek(int semesterId, int classId,
+			int week) {
+		// TODO Auto-generated method stub
+		if (week == 1) {
+			return true;
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+		Semester semester = semesterDAO.getSemesterById(semesterId, false,
+				false, false, false);
+		Date startDate = semester.getStartDate();
+
+		Calendar startWeek = Calendar.getInstance();
+		Calendar endWeek = Calendar.getInstance();
+		startWeek.setTime(startDate);
+
+		startWeek.set(Calendar.DATE, startWeek.get(Calendar.DATE) + 7
+				* (week - 2));
+		endWeek.setTime(startWeek.getTime());
+		endWeek.set(Calendar.DATE, endWeek.get(Calendar.DATE) + 6);
+
+		ClassSemester classSemester = classSemesterDAO
+				.getClassSemesterByClassSemester(semesterId, classId, true);
+
+		List<Timetable> timetableOfClassInPrevWeek = timetableDAO
+				.listTimetablesByClassCourseSemestersInWeek(
+						classSemester.getClassCourseSemesters(),
+						startWeek.getTime(), endWeek.getTime());
+		startWeek.set(Calendar.DATE, startWeek.get(Calendar.DATE) + 7);
+		endWeek.set(Calendar.DATE, endWeek.get(Calendar.DATE) + 7);
+		List<Timetable> timetableOfClassInCurrentWeek = timetableDAO
+				.listTimetablesByClassCourseSemestersInWeek(
+						classSemester.getClassCourseSemesters(),
+						startWeek.getTime(), endWeek.getTime());
+		HashMap<String, Timetable> curWeek = new HashMap<String, Timetable>();
+		for(Timetable timetable : timetableOfClassInCurrentWeek) {
+			String key = sdf.format(timetable.getDate()) +"-" +timetable.getSlot();
+			curWeek.put(key, timetable);
+		}
+		
+		for (Timetable timetable : timetableOfClassInPrevWeek) {
+			Timetable t;
+			Calendar c = Calendar.getInstance();
+			c.setTime(timetable.getDate());
+			c.set(Calendar.DATE, c.get(Calendar.DATE) + 7);
+			
+			String key = sdf.format(c.getTime()) +"-" +timetable.getSlot();
+			
+			if(curWeek.containsKey(key)) {
+				logger.info("aaa");
+				t = curWeek.get(key);
+				t.setClassCourseSemester(timetable.getClassCourseSemester());
+				t.setTeacherSemester(timetable.getTeacherSemester());
+				t.setRoom(timetable.getRoom());
+				timetableDAO.updateTimetable(t);
+			} else {
+				t = new Timetable();
+				t.setDate(c.getTime());
+				t.setSlot(timetable.getSlot());
+				t.setRoom(timetable.getRoom());
+				t.setClassCourseSemester(timetable.getClassCourseSemester());
+				t.setTeacherSemester(timetable.getTeacherSemester());
+				timetableDAO.addTimetable(t);
+			}
+			
 		}
 
 		return true;

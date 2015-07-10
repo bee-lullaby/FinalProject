@@ -15,15 +15,23 @@ public interface TimetableDAO {
 
 	public List<Timetable> listTimetables();
 
-	public List<Timetable> listTimetablesByCCSId(List<ClassCourseSemester> classCourseSemesters);
+	public List<Timetable> listTimetablesByCCSId(
+			List<ClassCourseSemester> classCourseSemesters);
 
-	public List<Timetable> listTimetablesByClassCourseSemesters(Set<ClassCourseSemester> classCourseSemesters);
+	public List<Timetable> listTimetablesByClassCourseSemesters(
+			Set<ClassCourseSemester> classCourseSemesters);
 
 	public Timetable getTimetableById(int timetableId);
 
-	public Timetable getTimetableByDateSlotClassCourse(Date date, int slot, int classCourseSemesterId);
-	
+	public Timetable getTimetableByDateSlotClassCourse(Date date, int slot,
+			int classCourseSemesterId);
+
 	public void deleteTimetable(int timetableId);
 
-	public List<Timetable> listTimetablesByStudent(int semesterId, Student student);
+	public List<Timetable> listTimetablesByStudent(int semesterId,
+			Student student);
+
+	public List<Timetable> listTimetablesByClassCourseSemestersInWeek(
+			Set<ClassCourseSemester> classCourseSemesters, Date startWeek,
+			Date endWeek);
 }

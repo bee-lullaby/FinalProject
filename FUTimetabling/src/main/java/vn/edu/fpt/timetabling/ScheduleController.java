@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,14 +56,14 @@ public class ScheduleController {
 		List<ClassSemester> list = scheduleService
 				.listClassBySemester(semesterId);
 		return "redirect:/schedule?semesterId=" + semesterId + "&classId="
-				+ list.get(0).getClassFPT().getClassId();
+				+ list.get(0).getClassFPT().getClassId() +"&week=1";
 	}
 
 	
 	@RequestMapping(value = "/schedule", method = RequestMethod.GET, params = {
-			"semesterId", "classId" })
+			"semesterId", "classId", "week"})
 	public void scheduleSemesterClass(@RequestParam int semesterId,
-			@RequestParam int classId, Model model) {
+			@RequestParam int classId, @RequestParam int week, Model model) {
 		//Get Semesters
 		Semester semester = semesterService.getSemesterById(semesterId, true,
 				false, false, false);
@@ -93,7 +95,11 @@ public class ScheduleController {
 		StringWriter sw = new StringWriter();
 		
 		try {
-			om.writeValue(sw, scheduleService.getListDaySlot(semesterId, classId, 1));
+//			if(generate == 0) {
+				om.writeValue(sw, scheduleService.getListDaySlot(semesterId, classId, week));
+//			} else if (generate == 1 && week > 1) {
+//				om.writeValue(sw, scheduleService.getListDaySlot(semesterId, classId, week - 1));
+//			}
 			model.addAttribute("JSONdata", sw);
 		} catch (JsonGenerationException e) {
 			// TODO Auto-generated catch block
@@ -109,13 +115,12 @@ public class ScheduleController {
 		
 //		logger.info(startDate);
 //		logger.info(endDate);
-		
 		return;
 	}
 	
 	@RequestMapping(value = "/schedule/updateTimetable", method = RequestMethod.POST)
 	public String updateTimetable(@RequestParam(value = "JSONToSubmit", required = true) String JSONToSubmit,
-			@RequestParam(value = "JSONprev", required = true) String JSONprev) {
+			@RequestParam(value = "JSONprev", required = true) String JSONprev, HttpServletRequest request) {
 		logger.info(JSONToSubmit);
 		
 		ObjectMapper om = new ObjectMapper();
@@ -137,8 +142,16 @@ public class ScheduleController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		return "redirect:/schedule";
+		String referer = request.getHeader("Referer");
+		return "redirect:"+ referer;
 	}
 	
+	@RequestMapping(value = "/schedule/generateFromPreviousWeek", method = RequestMethod.POST, params = {
+			"semesterId", "classId", "week"})
+	public String generateFromPreviousWeek(@RequestParam int semesterId,
+			@RequestParam int classId, @RequestParam int week, HttpServletRequest request) {
+		scheduleService.generateFromPreviousWeek(semesterId, classId, week);
+		String referer = request.getHeader("Referer");
+		return "redirect:"+ referer;
+	}
 }

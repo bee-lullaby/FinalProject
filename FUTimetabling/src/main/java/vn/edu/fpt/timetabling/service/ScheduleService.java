@@ -26,4 +26,7 @@ public interface ScheduleService {
 	public List<DaySlot> getListDaySlot(int semesterId, int classId, int week);
 
 	public boolean saveTimetable(List<DaySlot> daySlots, List<DaySlot> prevDaySlots);
+	
+	public boolean generateFromPreviousWeek(int semesterId, int classId,
+			int week);
 }

@@ -10,11 +10,7 @@ $(document).ready(function(){
 	
 	var JSONdata = JSON.parse(JSONdataSchedule);
 	
-	_setDateTimetable();
-	
-	_setDateHeader();
-	
-	_setTimetable();
+	_init ();
 	
 	$("div[id^='course-']").on("click", function() {
 		var course;
@@ -61,7 +57,11 @@ $(document).ready(function(){
 	
 
 	$("#select-weeks").on("change", function(){
-		_setDateHeader();
+		this.form.submit();	
+	});
+	
+	$("#select-classes").on("change", function(){
+		this.form.submit();	
 	});
 	
 	$("#btn-next-week").on("click", function() {
@@ -70,7 +70,7 @@ $(document).ready(function(){
 			$("#select-weeks option:selected").removeAttr("selected");
 			nextOption.attr("selected", "selected");
 		}
-		_setDateHeader();
+		this.form.submit();
 	});
 	
 	$("#btn-prev-week").on("click", function() {
@@ -79,7 +79,7 @@ $(document).ready(function(){
 			$("#select-weeks option:selected").removeAttr("selected");
 			prevOption.attr("selected", "selected");
 		}
-		_setDateHeader();
+		this.form.submit();
 	});
 	
 	$("#btn-next-class").on("click", function() {
@@ -88,7 +88,8 @@ $(document).ready(function(){
 			$("#select-classes option:selected").removeAttr("selected");
 			nextOption.attr("selected", "selected");
 		}
-		$(this).form.submit();	
+		_setAction(this, 0);
+		this.form.submit();	
 	});
 	
 	$("#btn-prev-class").on("click", function() {
@@ -108,7 +109,7 @@ $(document).ready(function(){
 		_showDialog("dialog-schedule");
 		
 		var courseSelected = $("#set-courses option:selected").val();
-		var color = $("span[id='" +courseSelected +"'] ").attr("class").split(" ")[1];
+		
 		var td = $("#dialog-schedule").data("td");
 		var position = $("#dialog-schedule").data("position");
 		var prevCourse = $("#dialog-schedule").data("prev-course-selected");
@@ -116,21 +117,65 @@ $(document).ready(function(){
 			td.removeClass(td.attr("class"));
 			JSONdata[position].dataSchedule[prevCourse].classInSlot -= 1;
 		}
-		
-		td.addClass(color);
-
-		var courseSelectedName = $("#set-courses option:selected").text();
+		if(courseSelected != -1) {
+			var color = $("span[id='" +courseSelected +"'] ").attr("class").split(" ")[1];
+			td.addClass(color);
+			var courseSelectedName = $("#set-courses option:selected").text();
+			JSONdata[position].dataSchedule[courseSelectedName].classInSlot += 1;
+		}	
 		JSONdata[position].setCourseSlot = courseSelected;
-		JSONdata[position].dataSchedule[courseSelectedName].classInSlot += 1;
-		
 		$("#dialog-schedule").removeData("prev-course-selected");
 	});
 	
 	$("#btn-submit").on("click", function(){
 		JSONToSubmit.attr("value", JSON.stringify(JSONdata));
-		$(this).form.submit();
+		$("#data").attr("action", "schedule/updateTimetable");
+		$("#data").submit();
 	});
 	
+	$("#btn-clear").on("click", function(){
+		_showDialog("dialog-warning-clear");
+	});
+	
+	$("#btn-generate").on("click", function() {
+		$("#generate #semesterId").attr("value", _urlParam("semesterId"));
+		$("#generate #classId").attr("value", _urlParam("classId"));
+		$("#generate #week").attr("value", _urlParam("week"));
+		$("#generate").attr("action", "schedule/generateFromPreviousWeek");
+		$("#generate").submit();
+	});
+	
+	$("#dialog-warning-clear #btn-accept-clear").on("click", function() {
+		_clearData();
+		console.log("asd");
+		JSONToSubmit.attr("value", JSON.stringify(JSONdata));
+		$("#data").attr("action", "schedule/updateTimetable");
+		$("#data").submit();
+	});
+	
+	$("#dialog-warning-clear #btn-decline-clear").on("click", function() {
+		_showDialog("dialog-warning-clear");
+	});
+	
+	
+	
+	
+	function _init () {
+		_setDateTimetable();
+		_setDateHeader();
+		_setTimetable();
+	}
+//	
+//	function _setAction(child, generate) {
+//		var semesterId = $("#form-class-week #semesterId").val();
+//		var classId = $("#form-class-week #select-classes option:selected").val();
+//		var week = $("#form-class-week #select-weeks option:selected").val();
+//		var action = "schedule?semesterId=" +semesterId +"&classId=" +classId +"&week=" +week;
+//		if(generate === 1)
+//		var form = child.closest("form");
+//		form.attr("action", action);
+//	}
+//	
 	function _showDialog(id) {
 		var dialog = $("#" + id).data('dialog');
 		if (!dialog.element.data('opened')) {
@@ -140,10 +185,21 @@ $(document).ready(function(){
 		}
 	}
 	
+	function _urlParam(param) {
+	    var url = $(location).attr('search').substring(1);
+	    var parameters = url.split('&');
+	    for (var i = 0; i < parameters.length; i++) 
+	    {
+	        var parameter = parameters[i].split('=');
+	        if (parameter[0] == param) 
+	        {
+	            return parameter[1];
+	        }
+	    }
+	}
 	
 	function _setDateTimetable() {
 		$("#JSONprev").attr("value", JSON.stringify(JSONdata));
-		console.log($("#JSONprev").val());
 		var start = new Date(startDate);
 		var end = new Date(endDate);
 		start.setDate(start.getDate() - 1);
@@ -162,18 +218,21 @@ $(document).ready(function(){
 			textDay += day +"/" +month;
 			
 			$('#select-weeks').append($("<option></option>")
-					.attr("value", "week-" + ++count)
+					.attr("value", ++count)
 					.text(textDay));
 			date.setDate(date.getDate() + 1);
 		}
+		
+		var week = _urlParam("week");
+		$('#select-weeks option:nth-child(' + week +')').attr("selected", "selected");
 	}
 	
 	function _setDateHeader() {
 		var start = new Date(startDate);
 		start.setDate(start.getDate() - 1);
-		var week = $("#select-weeks option:selected").index();
+		var week = _urlParam("week");
 		
-		start.setDate(start.getDate() + 7*(week));
+		start.setDate(start.getDate() + 7*(week - 1));
 		var $counter= 0;
 		$("#timetable #header th").each(function() {
 			var day = start.getDate();
@@ -186,12 +245,21 @@ $(document).ready(function(){
 	}
 	
 	function _setCourseInfoDialog(dataSchedule) {
-		var courseSelected = $("#set-courses option:selected").text();
-		$("#course-info-to-set #course-code").text(courseSelected);
-		var data = dataSchedule[courseSelected];
-		$("#course-info-to-set #classes").text(data.numOfClasses);
-		$("#course-info-to-set #slot").text(data.classInSlot);
-		$("#course-info-to-set #teachers").text(data.numOfTeachers);
+		if($("#set-courses option:selected").val() != -1) {
+			var courseSelected = $("#set-courses option:selected").text();
+			$("#course-info-to-set #course-code").text(courseSelected);
+			var data = dataSchedule[courseSelected];
+			$("#course-info-to-set #classes").text(data.numOfClasses);
+			$("#course-info-to-set #slot").text(data.classInSlot);
+			$("#course-info-to-set #teachers").text(data.numOfTeachers);
+		} else {
+			$("#course-info-to-set #course-code").text("N/A");
+			$("#course-info-to-set #remains_slot").text("N/A");
+			$("#course-info-to-set #classes").text("N/A");
+			$("#course-info-to-set #classes-code").text("N/A");
+			$("#course-info-to-set #slot").text("N/A");
+			$("#course-info-to-set #teachers").text("N/A");
+		}
 	};
 	
 	function _setTimetable() {
@@ -209,6 +277,16 @@ $(document).ready(function(){
 			}
 				
 		}
-		
+	}
+	
+	function _clearData() {
+		for(var i = 0; i < JSONdata.length; i++) {
+			if(JSONdata[i].setCourseSlot != -1) {
+				var courseSelectedName = $("span[id='"+JSONdata[i].setCourseSlot +"']").parent().closest('div').text().trim();
+				JSONdata[i].dataSchedule[courseSelectedName].classInSlot -= 1;
+
+			}
+			JSONdata[i].setCourseSlot = -1;
+		}
 	}
 });
