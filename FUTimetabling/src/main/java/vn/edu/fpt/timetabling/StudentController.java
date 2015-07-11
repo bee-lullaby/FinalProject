@@ -1,5 +1,8 @@
 package vn.edu.fpt.timetabling;
 
+import java.io.File;
+import java.io.IOException;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import vn.edu.fpt.timetabling.model.Specialized;
 import vn.edu.fpt.timetabling.model.Student;
@@ -86,6 +90,28 @@ public class StudentController {
 		}
 		return "redirect:/students";
 	}
+	
+	// For add and update person both
+		@RequestMapping(value = "/student/addFromFile", method = RequestMethod.POST)
+		public String addSpecializedFromFile(
+				@RequestParam("file") MultipartFile file, @RequestParam("semesterId") int semesterId) {
+			if (!file.isEmpty()) {
+				File students = new File(
+						"D:\\FU\\Do an tot nghiep\\Data\\ServerData\\"
+								+ file.getOriginalFilename());
+				try {
+					file.transferTo(students);
+					studentService.addStudentsFromFile(semesterId, students);
+				} catch (IllegalStateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			return "redirect:/specializeds";
+		}
 
 	@RequestMapping("/student/delete/{studentId}")
 	public String deleteStudent(HttpSession session, @PathVariable("studentId") int studentId) {

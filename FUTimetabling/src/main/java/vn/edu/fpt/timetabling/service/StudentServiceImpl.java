@@ -1,14 +1,24 @@
 package vn.edu.fpt.timetabling.service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.text.Normalizer;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import vn.edu.fpt.timetabling.dao.ProgramSemesterDAO;
+import vn.edu.fpt.timetabling.dao.SpecializedDAO;
 import vn.edu.fpt.timetabling.dao.StudentDAO;
 import vn.edu.fpt.timetabling.model.Specialized;
 import vn.edu.fpt.timetabling.model.Student;
@@ -18,6 +28,12 @@ public class StudentServiceImpl implements StudentService {
 
 	private StudentDAO studentDAO;
 
+	@Autowired
+	private ProgramSemesterDAO programSemesterDAO;
+
+	@Autowired
+	private SpecializedDAO specializedDAO;
+
 	public void setStudentDAO(StudentDAO studentDAO) {
 		this.studentDAO = studentDAO;
 	}
@@ -26,6 +42,45 @@ public class StudentServiceImpl implements StudentService {
 	@Transactional
 	public void addStudent(Student student) {
 		studentDAO.addStudent(student);
+	}
+
+	@Override
+	@Transactional
+	public void addStudentsFromFile(int semesterId, File students) {
+		try {
+			FileInputStream file = new FileInputStream(students);
+			XSSFWorkbook workbook = new XSSFWorkbook(file);
+			XSSFSheet sheet = workbook.getSheetAt(0);
+
+			Iterator<Row> rowIterator = sheet.iterator();
+
+			rowIterator.next();
+
+			while (rowIterator.hasNext()) {
+				Row row = rowIterator.next();
+				String studentCode = row.getCell(0).getStringCellValue().trim();
+				String name = row.getCell(1).getStringCellValue().trim();
+				String specializedCode = row.getCell(2).getStringCellValue().trim();
+				String account = getAccount(name, studentCode);
+				Double currentSemester = row.getCell(3).getNumericCellValue();
+				Specialized specialized = specializedDAO.getSpecializedByCode(specializedCode);
+				Student s = new Student();
+				s.setStudentCode(studentCode);
+				s.setName(name);
+				s.setAccount(account);
+				s.setEmail(account += "@fpt.edu.vn");
+				s.setBatch("hameo");
+				s.setSpecialized(specialized);
+				s.setSemester(currentSemester.intValue());
+				studentDAO.addStudent(s);
+			}
+
+			workbook.close();
+			file.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -89,8 +144,9 @@ public class StudentServiceImpl implements StudentService {
 	public String getAccount(String name, String studentCode) {
 		String temp = Normalizer.normalize(name, Normalizer.Form.NFD);
 		Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-		StringTokenizer stringTokenizer = new StringTokenizer(
-				pattern.matcher(temp).replaceAll("").replaceAll("Đ", "D").replaceAll("đ", "d"));
+		StringTokenizer stringTokenizer = new StringTokenizer(pattern
+				.matcher(temp).replaceAll("").replaceAll("Đ", "D")
+				.replaceAll("đ", "d"));
 		String account = "";
 		if (stringTokenizer.hasMoreTokens()) {
 			while (true) {
@@ -116,16 +172,20 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	@Transactional
-	public List<Student> listStudentsCanBeInClassCourseSemester(int classSemesterId, int specializedId,
-			int detailspecializedId, int semesterNumber, int classCourseSemesterId) {
-		return studentDAO.listStudentsCanBeInClassCourseSemester(classSemesterId, specializedId, detailspecializedId,
+	public List<Student> listStudentsCanBeInClassCourseSemester(
+			int classSemesterId, int specializedId, int detailspecializedId,
+			int semesterNumber, int classCourseSemesterId) {
+		return studentDAO.listStudentsCanBeInClassCourseSemester(
+				classSemesterId, specializedId, detailspecializedId,
 				semesterNumber, classCourseSemesterId);
 	}
 
 	@Override
 	@Transactional
-	public List<Student> listStudentsInClassCourseSemester(int classSemesterId, int classCourseSemesterId) {
-		return studentDAO.listStudentsInClassCourseSemester(classSemesterId, classCourseSemesterId);
+	public List<Student> listStudentsInClassCourseSemester(int classSemesterId,
+			int classCourseSemesterId) {
+		return studentDAO.listStudentsInClassCourseSemester(classSemesterId,
+				classCourseSemesterId);
 	}
 
 	@Override
