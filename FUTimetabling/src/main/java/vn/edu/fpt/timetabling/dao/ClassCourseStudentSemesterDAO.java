@@ -15,5 +15,5 @@ public interface ClassCourseStudentSemesterDAO {
 
 	public void deleteClassCourseStudentSemester(int classCourseStudentSemesterId);
 
-	public void removeStudentFromClassCourseSemester(int studentId, int classCourseSemesterId);
+	public int removeStudentFromClassCourseSemester(int studentId, int classCourseSemesterId);
 }

@@ -16,39 +16,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import vn.edu.fpt.timetabling.dao.CourseSemesterDAO;
 import vn.edu.fpt.timetabling.dao.TeacherCourseSemesterDAO;
-import vn.edu.fpt.timetabling.dao.TeacherSemesterDAO;
 import vn.edu.fpt.timetabling.model.TeacherCourseSemester;
 
 @Service
-public class TeacherCourseSemesterSeviceImpl implements
-		TeacherCourseSemesterService {
+public class TeacherCourseSemesterSeviceImpl implements TeacherCourseSemesterService {
 
 	private TeacherCourseSemesterDAO teacherCourseSemesterDAO;
-	
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(ClassCourseSemesterServiceImpl.class);
-	
+	private static final Logger logger = LoggerFactory.getLogger(ClassCourseSemesterServiceImpl.class);
+
 	@Autowired
-	private CourseSemesterDAO courseSemesterDAO;
-	
+	private CourseSemesterService courseSemesterService;
+
 	@Autowired
-	private TeacherSemesterDAO teacherSemesterDAO;
-	
-	public void setTeacherCourseSemesterDAO(
-			TeacherCourseSemesterDAO teacherCourseSemesterDAO) {
+	private TeacherSemesterService teacherSemesterService;
+
+	public void setTeacherCourseSemesterDAO(TeacherCourseSemesterDAO teacherCourseSemesterDAO) {
 		this.teacherCourseSemesterDAO = teacherCourseSemesterDAO;
 	}
 
 	@Override
 	@Transactional
-	public void addTeacherCourseSemester(
-			TeacherCourseSemester teacherCourseSemester) {
+	public void addTeacherCourseSemester(TeacherCourseSemester teacherCourseSemester) {
 		// TODO Auto-generated method stub
-		teacherCourseSemesterDAO
-				.addTeacherCourseSemester(teacherCourseSemester);
+		teacherCourseSemesterDAO.addTeacherCourseSemester(teacherCourseSemester);
 	}
 
 	@Override
@@ -67,20 +59,21 @@ public class TeacherCourseSemesterSeviceImpl implements
 				Row row = rowIterator.next();
 				Iterator<Cell> cellIterator = row.cellIterator();
 				String courseCode = "";
-				if(cellIterator.hasNext()) {
+				if (cellIterator.hasNext()) {
 					courseCode = cellIterator.next().getStringCellValue().trim();
 					cellIterator.next();
 				}
-				while(cellIterator.hasNext()) {
+				while (cellIterator.hasNext()) {
 					TeacherCourseSemester tcs = new TeacherCourseSemester();
-					tcs.setCourseSemester(courseSemesterDAO.getCourseSemesterByCode(courseCode, false, false, false));
-					
+					tcs.setCourseSemester(
+							courseSemesterService.getCourseSemesterByCode(courseCode, false, false, false));
+
 					String teacherAccount = cellIterator.next().getStringCellValue().trim();
-					logger.info(courseCode +" " +teacherAccount);
-					tcs.setTeacherSemester(teacherSemesterDAO.getTeacherSemesterByAccount(teacherAccount));
+					logger.info(courseCode + " " + teacherAccount);
+					tcs.setTeacherSemester(teacherSemesterService.getTeacherSemesterByAccount(teacherAccount));
 					teacherCourseSemesterDAO.addTeacherCourseSemester(tcs);
 				}
-				
+
 			}
 
 			workbook.close();
@@ -93,35 +86,26 @@ public class TeacherCourseSemesterSeviceImpl implements
 
 	@Override
 	@Transactional
-	public void updateTeacherCourseSemester(
-			TeacherCourseSemester teacherCourseSemester) {
-		// TODO Auto-generated method stub
-		teacherCourseSemesterDAO
-				.updateTeacherCourseSemester(teacherCourseSemester);
+	public void updateTeacherCourseSemester(TeacherCourseSemester teacherCourseSemester) {
+		teacherCourseSemesterDAO.updateTeacherCourseSemester(teacherCourseSemester);
 	}
 
 	@Override
 	@Transactional
 	public List<TeacherCourseSemester> listTeacherCourseSemesters() {
-		// TODO Auto-generated method stub
 		return teacherCourseSemesterDAO.listTeacherCourseSemesters();
 	}
 
 	@Override
 	@Transactional
-	public TeacherCourseSemester getTeacherCourseSemesterById(
-			int teacherCourseSemesterId) {
-		// TODO Auto-generated method stub
-		return teacherCourseSemesterDAO
-				.getTeacherCourseSemesterById(teacherCourseSemesterId);
+	public TeacherCourseSemester getTeacherCourseSemesterById(int teacherCourseSemesterId) {
+		return teacherCourseSemesterDAO.getTeacherCourseSemesterById(teacherCourseSemesterId);
 	}
 
 	@Override
 	@Transactional
 	public void deleteTeacherCourseSemester(int teacherCourseSemesterId) {
-		// TODO Auto-generated method stub
-		teacherCourseSemesterDAO
-				.deleteTeacherCourseSemester(teacherCourseSemesterId);
+		teacherCourseSemesterDAO.deleteTeacherCourseSemester(teacherCourseSemesterId);
 	}
 
 }

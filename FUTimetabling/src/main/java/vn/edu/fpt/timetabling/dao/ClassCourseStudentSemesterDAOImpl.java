@@ -8,23 +8,14 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassCourseStudentSemester;
-import vn.edu.fpt.timetabling.model.Student;
 
 @Repository
 public class ClassCourseStudentSemesterDAOImpl implements ClassCourseStudentSemesterDAO {
 
 	private static final Logger logger = LoggerFactory.getLogger(ClassCourseStudentSemesterDAOImpl.class);
-
-	@Autowired
-	private ClassCourseSemesterDAO classCourseSemesterDAO;
-
-	@Autowired
-	private StudentDAO studentDAO;
 
 	private SessionFactory sessionFactory;
 
@@ -86,19 +77,14 @@ public class ClassCourseStudentSemesterDAOImpl implements ClassCourseStudentSeme
 	}
 
 	@Override
-	public void removeStudentFromClassCourseSemester(int studentId, int classCourseSemesterId) {
-		Student student = studentDAO.getStudentById(studentId);
-		ClassCourseSemester classCourseSemester = classCourseSemesterDAO
-				.getClassCourseSemesterById(classCourseSemesterId);
-		if (student == null || classCourseSemester == null) {
-			return;
-		}
+	public int removeStudentFromClassCourseSemester(int studentId, int classCourseSemesterId) {
 		String hql = "DELETE vn.edu.fpt.timetabling.model.ClassCourseStudentSemester CCSS"
-				+ " WHERE CCSS.classCourseSemester = :classCourseSemester" + " AND CCSS.student = :student";
+				+ " WHERE CCSS.classCourseSemester.classCourseSemesterId = :classCourseSemesterId"
+				+ " AND CCSS.student.studentId = :studentId";
 		Query query = getCurrentSession().createQuery(hql);
-		query.setParameter("classCourseSemester", classCourseSemester);
-		query.setParameter("student", student);
-		query.executeUpdate();
+		query.setParameter("classCourseSemesterId", classCourseSemesterId);
+		query.setParameter("studentId", studentId);
+		return query.executeUpdate();
 	}
 
 }

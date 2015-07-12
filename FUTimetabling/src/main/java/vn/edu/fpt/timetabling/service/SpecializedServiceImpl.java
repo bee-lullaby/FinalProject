@@ -33,7 +33,6 @@ public class SpecializedServiceImpl implements SpecializedService {
 	@Override
 	@Transactional
 	public void addSpecializedFromFile(File specializeds) {
-		// TODO Auto-generated method stub
 		try {
 			FileInputStream file = new FileInputStream(specializeds);
 			XSSFWorkbook workbook = new XSSFWorkbook(file);

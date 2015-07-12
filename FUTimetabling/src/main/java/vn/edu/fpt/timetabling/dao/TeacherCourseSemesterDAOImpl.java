@@ -7,24 +7,16 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import vn.edu.fpt.timetabling.model.TeacherCourseSemester;
 
 @Repository
 public class TeacherCourseSemesterDAOImpl implements TeacherCourseSemesterDAO {
-	private static final Logger logger = LoggerFactory
-			.getLogger(TeacherCourseSemesterDAO.class);
+	private static final Logger logger = LoggerFactory.getLogger(TeacherCourseSemesterDAO.class);
 
 	private SessionFactory sessionFactory;
 
-	@Autowired
-	private TeacherSemesterDAO teacherSemesterDAO;
-	
-	@Autowired
-	private CourseSemesterDAO courseSemesterDAO;
-	
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
@@ -34,16 +26,14 @@ public class TeacherCourseSemesterDAOImpl implements TeacherCourseSemesterDAO {
 	}
 
 	@Override
-	public void addTeacherCourseSemester(
-			TeacherCourseSemester teacherCourseSemester) {
+	public void addTeacherCourseSemester(TeacherCourseSemester teacherCourseSemester) {
 		getCurrentSession().persist(teacherCourseSemester);
-		logger.info("TeacherCourseSemester was saved successfully, TeacherCourseSemester details="
-				+ teacherCourseSemester);
+		logger.info(
+				"TeacherCourseSemester was saved successfully, TeacherCourseSemester details=" + teacherCourseSemester);
 	}
 
 	@Override
-	public void updateTeacherCourseSemester(
-			TeacherCourseSemester teacherCourseSemester) {
+	public void updateTeacherCourseSemester(TeacherCourseSemester teacherCourseSemester) {
 		getCurrentSession().update(teacherCourseSemester);
 		logger.info("TeacherCourseSemester was updated successfully, TeacherCourseSemester details="
 				+ teacherCourseSemester);
@@ -53,9 +43,7 @@ public class TeacherCourseSemesterDAOImpl implements TeacherCourseSemesterDAO {
 	@Override
 	public List<TeacherCourseSemester> listTeacherCourseSemesters() {
 		List<TeacherCourseSemester> teacherCourseSemesters = (List<TeacherCourseSemester>) getCurrentSession()
-				.createQuery(
-						"from vn.edu.fpt.timetabling.model.TeacherSemester")
-				.list();
+				.createQuery("from vn.edu.fpt.timetabling.model.TeacherSemester").list();
 		for (TeacherCourseSemester teacherCourseSemester : teacherCourseSemesters) {
 			logger.info("TeacherCourseSemester list:" + teacherCourseSemester);
 		}
@@ -64,14 +52,12 @@ public class TeacherCourseSemesterDAOImpl implements TeacherCourseSemesterDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<TeacherCourseSemester> listTeacherCourseSemestersByCourse(
-			int courseSemesterId) {
-		// TODO Auto-generated method stub
-		String hql = "FROM vn.edu.fpt.timetabling.model.TeacherCourseSemester C WHERE C.courseSemester = :courseSemester";
+	public List<TeacherCourseSemester> listTeacherCourseSemestersByCourse(int courseSemesterId) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.TeacherCourseSemester TCS"
+				+ " WHERE TCS.courseSemester.courseSemesterId = :courseSemesterId";
 		Query query = getCurrentSession().createQuery(hql);
-		query.setParameter("courseSemester", courseSemesterDAO.getCourseSemesterById(courseSemesterId, false, false, false));
-		List<TeacherCourseSemester> teacherCourseSemesters = (List<TeacherCourseSemester>) query
-				.list();
+		query.setParameter("courseSemesterId", courseSemesterId);
+		List<TeacherCourseSemester> teacherCourseSemesters = (List<TeacherCourseSemester>) query.list();
 		for (TeacherCourseSemester teacherCourseSemester : teacherCourseSemesters) {
 			logger.info("TeacherCourseSemester list:" + teacherCourseSemester);
 		}
@@ -80,14 +66,12 @@ public class TeacherCourseSemesterDAOImpl implements TeacherCourseSemesterDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<TeacherCourseSemester> listTeacherCourseSemestersByTeacher(
-			int teacherSemesterId) {
-		// TODO Auto-generated method stub
-		String hql = "FROM vn.edu.fpt.timetabling.model.TeacherCourseSemester C WHERE C.teacherSemester = :teacherSemester";
+	public List<TeacherCourseSemester> listTeacherCourseSemestersByTeacher(int teacherSemesterId) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.TeacherCourseSemester TCS"
+				+ " WHERE TCS.teacherSemester.teacherSemesterId = :teacherSemesterId";
 		Query query = getCurrentSession().createQuery(hql);
-		query.setParameter("teacherSemester", teacherSemesterDAO.getTeacherSemesterById(teacherSemesterId));
-		List<TeacherCourseSemester> teacherCourseSemesters = (List<TeacherCourseSemester>) query
-				.list();
+		query.setParameter("teacherSemesterId", teacherSemesterId);
+		List<TeacherCourseSemester> teacherCourseSemesters = (List<TeacherCourseSemester>) query.list();
 		for (TeacherCourseSemester teacherCourseSemester : teacherCourseSemesters) {
 			logger.info("TeacherCourseSemester list:" + teacherCourseSemester);
 		}
@@ -95,11 +79,9 @@ public class TeacherCourseSemesterDAOImpl implements TeacherCourseSemesterDAO {
 	}
 
 	@Override
-	public TeacherCourseSemester getTeacherCourseSemesterById(
-			int teacherCourseSemesterId) {
+	public TeacherCourseSemester getTeacherCourseSemesterById(int teacherCourseSemesterId) {
 		TeacherCourseSemester teacherCourseSemester = (TeacherCourseSemester) getCurrentSession()
-				.get(TeacherCourseSemester.class,
-						new Integer(teacherCourseSemesterId));
+				.get(TeacherCourseSemester.class, new Integer(teacherCourseSemesterId));
 		if (teacherCourseSemester != null) {
 			logger.info("TeacherCourseSemester was loaded successfully, TeacherCourseSemester details="
 					+ teacherCourseSemester);

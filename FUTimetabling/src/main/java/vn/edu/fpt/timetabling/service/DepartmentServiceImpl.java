@@ -59,35 +59,30 @@ public class DepartmentServiceImpl implements DepartmentService {
 	@Override
 	@Transactional
 	public void updateDepartment(Department department) {
-		// TODO Auto-generated method stub
 		departmentDAO.updateDepartment(department);
 	}
 
 	@Override
 	@Transactional
 	public List<Department> listDepartments() {
-		// TODO Auto-generated method stub
 		return departmentDAO.listDepartments();
 	}
 
 	@Override
 	@Transactional
 	public Department getDepartmentById(int departmentId) {
-		// TODO Auto-generated method stub
 		return departmentDAO.getDepartmentById(departmentId);
 	}
 
 	@Override
 	@Transactional
 	public Department getDepartmentByCode(String code) {
-		// TODO Auto-generated method stub
 		return getDepartmentByCode(code);
 	}
 
 	@Override
 	@Transactional
 	public void deleteDepartment(int departmentId) {
-		// TODO Auto-generated method stub
 		departmentDAO.deleteDepartment(departmentId);
 	}
 

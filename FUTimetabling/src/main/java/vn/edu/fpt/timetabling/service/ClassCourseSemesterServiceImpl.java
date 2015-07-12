@@ -16,8 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import vn.edu.fpt.timetabling.dao.ClassCourseSemesterDAO;
-import vn.edu.fpt.timetabling.dao.ClassSemesterDAO;
-import vn.edu.fpt.timetabling.dao.CourseSemesterDAO;
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassSemester;
 
@@ -29,10 +27,10 @@ public class ClassCourseSemesterServiceImpl implements ClassCourseSemesterServic
 	private ClassCourseSemesterDAO classCourseSemesterDAO;
 
 	@Autowired
-	private ClassSemesterDAO classSemesterDAO;
+	private ClassSemesterService classSemesterService;
 
 	@Autowired
-	private CourseSemesterDAO courseSemesterDAO;
+	private CourseSemesterService courseSemesterService;
 
 	public void setClassCourseSemesterDAO(ClassCourseSemesterDAO classCourseSemesterDAO) {
 		this.classCourseSemesterDAO = classCourseSemesterDAO;
@@ -63,11 +61,12 @@ public class ClassCourseSemesterServiceImpl implements ClassCourseSemesterServic
 				int i = 0;
 				while (i <= 4) {
 					ClassCourseSemester ccs = new ClassCourseSemester();
-					ClassSemester cs = classSemesterDAO.getClassSemesterByCode(classCode, semesterId, true);
+					ClassSemester cs = classSemesterService.getClassSemesterByCode(classCode, semesterId, true);
 					ccs.setClassSemester(cs);
 					logger.info("CLASS: " + String.valueOf(ccs.getClassSemester().getClassSemesterId()));
 					String courseCode = row.getCell(i + 1).getStringCellValue().trim();
-					ccs.setCourseSemester(courseSemesterDAO.getCourseSemesterByCode(courseCode, false, false, false));
+					ccs.setCourseSemester(
+							courseSemesterService.getCourseSemesterByCode(courseCode, false, false, false));
 					logger.info("COURSE: " + String.valueOf(ccs.getCourseSemester().getCourseSemesterId()));
 					if (i == 4) {
 						ccs.setSemesterLong(true);

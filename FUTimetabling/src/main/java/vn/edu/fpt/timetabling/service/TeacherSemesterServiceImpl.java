@@ -19,36 +19,37 @@ public class TeacherSemesterServiceImpl implements TeacherSemesterService {
 	@Override
 	@Transactional
 	public void addTeacherSemester(TeacherSemester teacherSemester) {
-		// TODO Auto-generated method stub
 		teacherSemesterDAO.addTeacherSemester(teacherSemester);
 	}
 
 	@Override
 	@Transactional
 	public void updateTeacherSemester(TeacherSemester teacherSemester) {
-		// TODO Auto-generated method stub
 		teacherSemesterDAO.updateTeacherSemester(teacherSemester);
 	}
 
 	@Override
 	@Transactional
 	public List<TeacherSemester> listTeacherSemesters() {
-		// TODO Auto-generated method stub
 		return teacherSemesterDAO.listTeacherSemesters();
 	}
 
 	@Override
 	@Transactional
 	public TeacherSemester getTeacherSemesterById(int teacherSemesterId) {
-		// TODO Auto-generated method stub
 		return teacherSemesterDAO.getTeacherSemesterById(teacherSemesterId);
 	}
 
 	@Override
 	@Transactional
 	public void deleteTeacherSemester(int teacherSemesterId) {
-		// TODO Auto-generated method stub
 		teacherSemesterDAO.deleteTeacherSemester(teacherSemesterId);
+	}
+
+	@Override
+	@Transactional
+	public TeacherSemester getTeacherSemesterByAccount(String account) {
+		return teacherSemesterDAO.getTeacherSemesterByAccount(account);
 	}
 
 }

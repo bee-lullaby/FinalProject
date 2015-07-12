@@ -1,8 +1,10 @@
 package vn.edu.fpt.timetabling.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.Timetable;
 
 public interface TimetableService {
@@ -13,12 +15,19 @@ public interface TimetableService {
 	public List<Timetable> listTimetables();
 
 	public Set<Timetable> listTimetablesBySemester(int semesterId);
-	
+
 	public Set<Timetable> listTimetablesByClass(int classId, int semesterId);
 
 	public Set<Timetable> listTimetablesByClassCourse(int classCourseSemesterId);
-	
+
 	public Timetable getTimetableById(int timetableId);
-	
+
 	public void deleteTimetable(int timetableId);
+
+	public List<Timetable> listTimetablesByCCSId(List<ClassCourseSemester> classCourseSemesters);
+
+	public Timetable getTimetableByDateSlotClassCourse(Date date, int slot, int classCourseSemesterId);
+
+	public List<Timetable> listTimetablesByClassCourseSemestersInWeek(Set<ClassCourseSemester> classCourseSemesters,
+			Date startWeek, Date endWeek);
 }

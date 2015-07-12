@@ -16,11 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import vn.edu.fpt.timetabling.dao.ClassCourseSemesterDAO;
-import vn.edu.fpt.timetabling.dao.ClassSemesterDAO;
-import vn.edu.fpt.timetabling.dao.CourseSemesterDAO;
-import vn.edu.fpt.timetabling.dao.SemesterDAO;
-import vn.edu.fpt.timetabling.dao.TimetableDAO;
 import vn.edu.fpt.timetabling.dao.TimetableDAOImpl;
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassSemester;
@@ -36,47 +31,36 @@ import vn.edu.fpt.timetabling.utils.TimetableUtils;
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(TimetableDAOImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(TimetableDAOImpl.class);
 
 	@Autowired
-	private SemesterDAO semesterDAO;
+	private SemesterService semesterService;
 
 	@Autowired
-	private ClassSemesterDAO classSemesterDAO;
+	private ClassSemesterService classSemesterService;
 
 	@Autowired
-	private CourseSemesterDAO courseSemesterDAO;
+	private CourseSemesterService courseSemesterService;
 
 	@Autowired
-	private ClassCourseSemesterDAO classCourseSemesterDAO;
+	private ClassCourseSemesterService classCourseSemesterService;
 
 	@Autowired
-	private TimetableDAO timetableDAO;
-
-	@Transactional
-	@Override
-	public ClassSemester getClassSemesterByClassSemester(int semesterId,
-			int classId) {
-		return classSemesterDAO.getClassSemesterByClassSemester(semesterId,
-				classId, true);
-	}
+	private TimetableService timetableService;
 
 	@Transactional
 	@Override
 	public List<ClassSemester> listClassBySemester(int semesterId) {
 		List<ClassSemester> classSemesters = new ArrayList<ClassSemester>();
-		classSemesters.addAll(semesterDAO.getSemesterById(semesterId, true,
-				false, false, false).getClassSemesters());
+		classSemesters
+				.addAll(semesterService.getSemesterById(semesterId, true, false, false, false).getClassSemesters());
 		return classSemesters;
 	}
 
 	@Transactional
 	@Override
-	public List<ClassCourseSemester> listClassCourseSemesterByClassSemester(
-			int classId, int semesterId) {
-		ClassSemester classSemester = classSemesterDAO
-				.getClassSemesterByClassSemester(semesterId, classId, true);
+	public List<ClassCourseSemester> listClassCourseSemesterByClassSemester(int classId, int semesterId) {
+		ClassSemester classSemester = classSemesterService.getClassSemesterByClassSemester(semesterId, classId, true);
 		List<ClassCourseSemester> classCourseSemesters = new ArrayList<ClassCourseSemester>();
 		classCourseSemesters.addAll(classSemester.getClassCourseSemesters());
 		return classCourseSemesters;
@@ -84,19 +68,14 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Transactional
 	@Override
-	public List<CourseSemester> listCourseSemesterByClass(int classId,
-			int semesterId) {
-		// TODO Auto-generated method stub
-		ClassSemester classSemester = classSemesterDAO
-				.getClassSemesterByClassSemester(semesterId, classId, true);
-		Set<ClassCourseSemester> classCourseSemesters = classSemester
-				.getClassCourseSemesters();
+	public List<CourseSemester> listCourseSemesterByClass(int classId, int semesterId) {
+		ClassSemester classSemester = classSemesterService.getClassSemesterByClassSemester(semesterId, classId, true);
+		Set<ClassCourseSemester> classCourseSemesters = classSemester.getClassCourseSemesters();
 
 		List<CourseSemester> courseSemesters = new ArrayList<CourseSemester>();
 		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
-			courseSemesters.add(courseSemesterDAO.getCourseSemesterById(
-					classCourseSemester.getCourseSemester()
-							.getCourseSemesterId(), true, true, false));
+			courseSemesters.add(courseSemesterService.getCourseSemesterById(
+					classCourseSemester.getCourseSemester().getCourseSemesterId(), true, true, false));
 		}
 
 		return courseSemesters;
@@ -104,34 +83,22 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Transactional
 	@Override
-	public List<TeacherCourseSemester> listTeacherByCourseSemester(int classId,
-			int semesterId) {
+	public List<TeacherCourseSemester> listTeacherByCourseSemester(int classId, int semesterId) {
 		// TODO Auto-generated method stub
 
-		List<CourseSemester> courseSemesters = listCourseSemesterByClass(
-				classId, semesterId);
+		List<CourseSemester> courseSemesters = listCourseSemesterByClass(classId, semesterId);
 		List<TeacherCourseSemester> teacherCourseSemesters = new ArrayList<TeacherCourseSemester>();
 		for (CourseSemester courseSemester : courseSemesters) {
-			teacherCourseSemesters.addAll(courseSemester
-					.getTeacherCourseSemesters());
+			teacherCourseSemesters.addAll(courseSemester.getTeacherCourseSemesters());
 		}
 		return teacherCourseSemesters;
 	}
 
 	@Transactional
 	@Override
-	public List<Timetable> listTimetableOfClassCourseSemester(
-			List<ClassCourseSemester> classCourseSemesters) {
-		// TODO Auto-generated method stub
-		return timetableDAO.listTimetablesByCCSId(classCourseSemesters);
-	}
-
-	@Transactional
-	@Override
 	public List<DaySlot> getListDaySlot(int semesterId, int classId, int week) {
 
-		Semester semester = semesterDAO.getSemesterById(semesterId, false,
-				false, false, false);
+		Semester semester = semesterService.getSemesterById(semesterId, false, false, false, false);
 		Date date = semester.getStartDate();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
@@ -142,17 +109,15 @@ public class ScheduleServiceImpl implements ScheduleService {
 		// getClassSemesterByClassSemester(semesterId, classId);
 
 		// Get List Class Course Semester based on Class//
-		List<ClassCourseSemester> classCourseSemesters = listClassCourseSemesterByClassSemester(
-				classId, semesterId);
+		List<ClassCourseSemester> classCourseSemesters = listClassCourseSemesterByClassSemester(classId, semesterId);
 		// Get List Timetable based on Class //
-		List<Timetable> timetables = listTimetableOfClassCourseSemester(classCourseSemesters);
+		List<Timetable> timetables = timetableService.listTimetablesByCCSId(classCourseSemesters);
 
 		// Create List Course Semester of Class //
 		List<CourseSemester> courseSemesters = new ArrayList<CourseSemester>();
 		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
-			courseSemesters.add(courseSemesterDAO.getCourseSemesterById(
-					classCourseSemester.getCourseSemester()
-							.getCourseSemesterId(), true, true, false));
+			courseSemesters.add(courseSemesterService.getCourseSemesterById(
+					classCourseSemester.getCourseSemester().getCourseSemesterId(), true, true, false));
 		}
 
 		// Create Map between course and timetable //
@@ -160,8 +125,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		for (CourseSemester courseSemester : courseSemesters) {
 			List<ClassCourseSemester> list = new ArrayList<ClassCourseSemester>();
 			list.addAll(courseSemester.getClassCourseSemesters());
-			mapCourseTimetable.put(courseSemester,
-					timetableDAO.listTimetablesByCCSId(list));
+			mapCourseTimetable.put(courseSemester, timetableService.listTimetablesByCCSId(list));
 		}
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -175,12 +139,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 				ds.setDate(sdf.format(cal.getTime()));
 				ds.setSlot(j);
-				Object o = TimetableUtils.containsTimetable(timetables,
-						cal.getTime(), j);
+				Object o = TimetableUtils.containsTimetable(timetables, cal.getTime(), j);
 				if (o != null) {
 					Timetable t = (Timetable) o;
-					ds.setSetCourseSlot(t.getClassCourseSemester()
-							.getClassCourseSemesterId());
+					ds.setSetCourseSlot(t.getClassCourseSemester().getClassCourseSemesterId());
 				} else {
 					ds.setSetCourseSlot(-1);
 				}
@@ -188,10 +150,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 				for (CourseSemester cs : courseSemesters) {
 					DataSchedule dataS = new DataSchedule();
 					dataS.setNumOfClasses(cs.getClassCourseSemesters().size());
-					dataS.setClassInSlot(TimetableUtils.findNumberSameDaySlot(
-							mapCourseTimetable.get(cs), cal.getTime(), j));
-					dataS.setNumOfTeachers(cs.getTeacherCourseSemesters()
-							.size());
+					dataS.setClassInSlot(
+							TimetableUtils.findNumberSameDaySlot(mapCourseTimetable.get(cs), cal.getTime(), j));
+					dataS.setNumOfTeachers(cs.getTeacherCourseSemesters().size());
 					dataSchedule.put(cs.getCourse().getCode(), dataS);
 				}
 				ds.setDataSchedule(dataSchedule);
@@ -204,8 +165,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Transactional
 	@Override
-	public boolean saveTimetable(List<DaySlot> daySlots,
-			List<DaySlot> prevDaySlots) {
+	public boolean saveTimetable(List<DaySlot> daySlots, List<DaySlot> prevDaySlots) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		for (int i = 0; i < daySlots.size(); i++) {
 			DaySlot dayslot = daySlots.get(i);
@@ -216,32 +176,26 @@ public class ScheduleServiceImpl implements ScheduleService {
 				try {
 					date = sdf.parse(dayslot.getDate());
 					if (prevDaySlot.getSetCourseSlot() != -1) {
-						timetable = timetableDAO
-								.getTimetableByDateSlotClassCourse(date,
-										prevDaySlot.getSlot(),
-										prevDaySlot.getSetCourseSlot());
+						timetable = timetableService.getTimetableByDateSlotClassCourse(date, prevDaySlot.getSlot(),
+								prevDaySlot.getSetCourseSlot());
 						if (dayslot.getSetCourseSlot() != -1) {
-							timetable
-									.setClassCourseSemester(classCourseSemesterDAO
-											.getClassCourseSemesterById(dayslot
-													.getSetCourseSlot()));
-							timetableDAO.updateTimetable(timetable);
+							timetable.setClassCourseSemester(
+									classCourseSemesterService.getClassCourseSemesterById(dayslot.getSetCourseSlot()));
+							timetableService.updateTimetable(timetable);
 						} else {
-							timetableDAO.deleteTimetable(timetable
-									.getTimeTableId());
+							timetableService.deleteTimetable(timetable.getTimeTableId());
 						}
 					} else {
 						timetable = new Timetable();
-						timetable.setClassCourseSemester(classCourseSemesterDAO
-								.getClassCourseSemesterById(dayslot
-										.getSetCourseSlot()));
+						timetable.setClassCourseSemester(
+								classCourseSemesterService.getClassCourseSemesterById(dayslot.getSetCourseSlot()));
 						timetable.setDate(date);
 						timetable.setSlot(dayslot.getSlot());
 						Room a = new Room();
 						a.setRoomId(1);
 						timetable.setRoom(a);
 
-						timetableDAO.addTimetable(timetable);
+						timetableService.addTimetable(timetable);
 					}
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
@@ -255,61 +209,53 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Transactional
 	@Override
-	public boolean generateFromPreviousWeek(int semesterId, int classId,
-			int week) {
+	public boolean generateFromPreviousWeek(int semesterId, int classId, int week) {
 		// TODO Auto-generated method stub
 		if (week == 1) {
 			return true;
 		}
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-		Semester semester = semesterDAO.getSemesterById(semesterId, false,
-				false, false, false);
+		Semester semester = semesterService.getSemesterById(semesterId, false, false, false, false);
 		Date startDate = semester.getStartDate();
 
 		Calendar startWeek = Calendar.getInstance();
 		Calendar endWeek = Calendar.getInstance();
 		startWeek.setTime(startDate);
 
-		startWeek.set(Calendar.DATE, startWeek.get(Calendar.DATE) + 7
-				* (week - 2));
+		startWeek.set(Calendar.DATE, startWeek.get(Calendar.DATE) + 7 * (week - 2));
 		endWeek.setTime(startWeek.getTime());
 		endWeek.set(Calendar.DATE, endWeek.get(Calendar.DATE) + 6);
 
-		ClassSemester classSemester = classSemesterDAO
-				.getClassSemesterByClassSemester(semesterId, classId, true);
+		ClassSemester classSemester = classSemesterService.getClassSemesterByClassSemester(semesterId, classId, true);
 
-		List<Timetable> timetableOfClassInPrevWeek = timetableDAO
-				.listTimetablesByClassCourseSemestersInWeek(
-						classSemester.getClassCourseSemesters(),
-						startWeek.getTime(), endWeek.getTime());
+		List<Timetable> timetableOfClassInPrevWeek = timetableService.listTimetablesByClassCourseSemestersInWeek(
+				classSemester.getClassCourseSemesters(), startWeek.getTime(), endWeek.getTime());
 		startWeek.set(Calendar.DATE, startWeek.get(Calendar.DATE) + 7);
 		endWeek.set(Calendar.DATE, endWeek.get(Calendar.DATE) + 7);
-		List<Timetable> timetableOfClassInCurrentWeek = timetableDAO
-				.listTimetablesByClassCourseSemestersInWeek(
-						classSemester.getClassCourseSemesters(),
-						startWeek.getTime(), endWeek.getTime());
+		List<Timetable> timetableOfClassInCurrentWeek = timetableService.listTimetablesByClassCourseSemestersInWeek(
+				classSemester.getClassCourseSemesters(), startWeek.getTime(), endWeek.getTime());
 		HashMap<String, Timetable> curWeek = new HashMap<String, Timetable>();
-		for(Timetable timetable : timetableOfClassInCurrentWeek) {
-			String key = sdf.format(timetable.getDate()) +"-" +timetable.getSlot();
+		for (Timetable timetable : timetableOfClassInCurrentWeek) {
+			String key = sdf.format(timetable.getDate()) + "-" + timetable.getSlot();
 			curWeek.put(key, timetable);
 		}
-		
+
 		for (Timetable timetable : timetableOfClassInPrevWeek) {
 			Timetable t;
 			Calendar c = Calendar.getInstance();
 			c.setTime(timetable.getDate());
 			c.set(Calendar.DATE, c.get(Calendar.DATE) + 7);
-			
-			String key = sdf.format(c.getTime()) +"-" +timetable.getSlot();
-			
-			if(curWeek.containsKey(key)) {
+
+			String key = sdf.format(c.getTime()) + "-" + timetable.getSlot();
+
+			if (curWeek.containsKey(key)) {
 				logger.info("aaa");
 				t = curWeek.get(key);
 				t.setClassCourseSemester(timetable.getClassCourseSemester());
 				t.setTeacherSemester(timetable.getTeacherSemester());
 				t.setRoom(timetable.getRoom());
-				timetableDAO.updateTimetable(t);
+				timetableService.updateTimetable(t);
 			} else {
 				t = new Timetable();
 				t.setDate(c.getTime());
@@ -317,9 +263,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 				t.setRoom(timetable.getRoom());
 				t.setClassCourseSemester(timetable.getClassCourseSemester());
 				t.setTeacherSemester(timetable.getTeacherSemester());
-				timetableDAO.addTimetable(t);
+				timetableService.addTimetable(t);
 			}
-			
 		}
 
 		return true;

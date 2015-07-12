@@ -17,8 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import vn.edu.fpt.timetabling.dao.ProgramSemesterDAO;
-import vn.edu.fpt.timetabling.dao.SpecializedDAO;
 import vn.edu.fpt.timetabling.dao.StudentDAO;
 import vn.edu.fpt.timetabling.model.Specialized;
 import vn.edu.fpt.timetabling.model.Student;
@@ -29,10 +27,7 @@ public class StudentServiceImpl implements StudentService {
 	private StudentDAO studentDAO;
 
 	@Autowired
-	private ProgramSemesterDAO programSemesterDAO;
-
-	@Autowired
-	private SpecializedDAO specializedDAO;
+	private SpecializedService specializedService;
 
 	public void setStudentDAO(StudentDAO studentDAO) {
 		this.studentDAO = studentDAO;
@@ -63,7 +58,7 @@ public class StudentServiceImpl implements StudentService {
 				String specializedCode = row.getCell(2).getStringCellValue().trim();
 				String account = getAccount(name, studentCode);
 				Double currentSemester = row.getCell(3).getNumericCellValue();
-				Specialized specialized = specializedDAO.getSpecializedByCode(specializedCode);
+				Specialized specialized = specializedService.getSpecializedByCode(specializedCode);
 				Student s = new Student();
 				s.setStudentCode(studentCode);
 				s.setName(name);
@@ -144,9 +139,8 @@ public class StudentServiceImpl implements StudentService {
 	public String getAccount(String name, String studentCode) {
 		String temp = Normalizer.normalize(name, Normalizer.Form.NFD);
 		Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-		StringTokenizer stringTokenizer = new StringTokenizer(pattern
-				.matcher(temp).replaceAll("").replaceAll("Đ", "D")
-				.replaceAll("đ", "d"));
+		StringTokenizer stringTokenizer = new StringTokenizer(
+				pattern.matcher(temp).replaceAll("").replaceAll("Đ", "D").replaceAll("đ", "d"));
 		String account = "";
 		if (stringTokenizer.hasMoreTokens()) {
 			while (true) {
@@ -172,20 +166,16 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	@Transactional
-	public List<Student> listStudentsCanBeInClassCourseSemester(
-			int classSemesterId, int specializedId, int detailspecializedId,
-			int semesterNumber, int classCourseSemesterId) {
-		return studentDAO.listStudentsCanBeInClassCourseSemester(
-				classSemesterId, specializedId, detailspecializedId,
+	public List<Student> listStudentsCanBeInClassCourseSemester(int classSemesterId, int specializedId,
+			int detailspecializedId, int semesterNumber, int classCourseSemesterId) {
+		return studentDAO.listStudentsCanBeInClassCourseSemester(classSemesterId, specializedId, detailspecializedId,
 				semesterNumber, classCourseSemesterId);
 	}
 
 	@Override
 	@Transactional
-	public List<Student> listStudentsInClassCourseSemester(int classSemesterId,
-			int classCourseSemesterId) {
-		return studentDAO.listStudentsInClassCourseSemester(classSemesterId,
-				classCourseSemesterId);
+	public List<Student> listStudentsInClassCourseSemester(int classSemesterId, int classCourseSemesterId) {
+		return studentDAO.listStudentsInClassCourseSemester(classSemesterId, classCourseSemesterId);
 	}
 
 	@Override

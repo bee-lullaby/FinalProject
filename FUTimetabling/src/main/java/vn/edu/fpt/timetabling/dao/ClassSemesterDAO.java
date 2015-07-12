@@ -21,12 +21,8 @@ public interface ClassSemesterDAO {
 
 	public long getNumberOfStudents(int classSemesterId);
 
-	public void autoPutStudentsIntoClassSemester(int classSemesterId);
-
 	public List<ClassSemester> listClassSemestersBySpecializedSemester(int semesterId, int specializedId,
 			int detailSpecializedId, int semesterNumber);
-
-	public void autoPutStudentsIntoClassSemesters(int semesterId);
 
 	public boolean isStudentInClassSemester(int studentId, int classSemesterId);
 

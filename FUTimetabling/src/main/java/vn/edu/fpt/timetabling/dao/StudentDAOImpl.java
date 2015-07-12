@@ -18,7 +18,6 @@ import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassSemester;
 import vn.edu.fpt.timetabling.model.CourseSemester;
 import vn.edu.fpt.timetabling.model.Semester;
-import vn.edu.fpt.timetabling.model.Specialized;
 import vn.edu.fpt.timetabling.model.Student;
 import vn.edu.fpt.timetabling.model.Timetable;
 
@@ -27,9 +26,6 @@ public class StudentDAOImpl implements StudentDAO {
 	private static final Logger logger = LoggerFactory.getLogger(StudentDAOImpl.class);
 
 	private SessionFactory sessionFactory;
-
-	@Autowired
-	private SpecializedDAO specializedDAO;
 	@Autowired
 	private ClassCourseSemesterDAO classCourseSemesterDAO;
 	@Autowired
@@ -107,18 +103,17 @@ public class StudentDAOImpl implements StudentDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Student> listStudentsCanBeInClassCourseSemester(int classSemesterId, int specializedId,
-			int detailspecializedId, int semesterNumber, int classCourseSemesterId) {
+			int detailSpecializedId, int semesterNumber, int classCourseSemesterId) {
 		ClassSemester classSemester = classSemesterDAO.getClassSemesterById(classSemesterId, true);
-		Specialized specialized = specializedDAO.getSpecializedById(specializedId);
-		Specialized detailSpecialized = specializedDAO.getSpecializedById(detailspecializedId);
 		ClassCourseSemester classCourseSemester = classCourseSemesterDAO
 				.getClassCourseSemesterById(classCourseSemesterId);
-		if ((classSemester == null && classCourseSemester == null) || specialized == null) {
+		if (classSemester == null && classCourseSemester == null) {
 			return null;
 		}
 		Semester semester;
 		Set<ClassCourseSemester> classCourseSemesters;
 		if (classCourseSemester == null) {
+			// get all classCourseSemesters of classSemester
 			semester = classSemester.getSemester();
 			classCourseSemesters = classSemester.getClassCourseSemesters();
 		} else {
@@ -126,31 +121,35 @@ public class StudentDAOImpl implements StudentDAO {
 			classCourseSemesters = new HashSet<ClassCourseSemester>();
 			classCourseSemesters.add(classCourseSemester);
 		}
+		// get all timetable of all classCourseSemesters
 		List<Timetable> timetablesOfClassSemester = timetableDAO
 				.listTimetablesByClassCourseSemesters(classCourseSemesters);
+		// select student not in this class
 		String hql = "FROM vn.edu.fpt.timetabling.model.Student S"
-				+ " WHERE S.specialized = :specialized AND S.semester = :semester";
-		if (detailSpecialized != null) {
-			hql += " AND S.detailSpecialized = :detailSpecialized";
+				+ " WHERE S.specialized.specializedId = :specializedId AND S.semester = :semester";
+		if (detailSpecializedId != 0) {
+			hql += " AND S.detailSpecialized.specializedId = :detailSpecializedId";
 		}
 		hql += " AND S NOT IN (SELECT CCSS.student"
 				+ " FROM vn.edu.fpt.timetabling.model.ClassCourseStudentSemester CCSS"
 				+ " WHERE CCSS.classCourseSemester IN (:classCourseSemesters))";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("semester", semesterNumber);
-		query.setParameter("specialized", specialized);
+		query.setParameter("specializedId", specializedId);
 		query.setParameterList("classCourseSemesters", classCourseSemesters);
-		if (detailSpecialized != null) {
-			query.setParameter("detailSpecialized", detailSpecialized);
+		if (detailSpecializedId != 0) {
+			query.setParameter("detailSpecializedId", detailSpecializedId);
 		}
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<Student> studentsWithSuitableSpecialized = (List<Student>) query.list();
 		List<Student> suitableStudents = new ArrayList<Student>();
 		for (Student student : studentsWithSuitableSpecialized) {
+			// validate each student
 			boolean isSuitable = true;
 			List<CourseSemester> learningCourseSemesters = courseSemesterDAO
 					.listCourseSemestersByStudent(student.getStudentId());
 			for (CourseSemester courseSemester : learningCourseSemesters) {
+				// check if student learning same courseSemester already
 				for (ClassCourseSemester classCourseSemesterTemp : classCourseSemesters) {
 					if (classCourseSemesterTemp.getCourseSemester().getCourseSemesterId() == courseSemester
 							.getCourseSemesterId()) {
@@ -166,9 +165,12 @@ public class StudentDAOImpl implements StudentDAO {
 			if (!isSuitable) {
 				continue;
 			}
+			// get all timetables of this student
 			List<Timetable> timetablesOfStudent = timetableDAO.listTimetablesByStudent(semester.getSemesterId(),
 					student);
 			for (Timetable timetableOfStudent : timetablesOfStudent) {
+				// check if student's timetable not override timetable of
+				// classSemester
 				for (Timetable timetableOfClassSemester : timetablesOfClassSemester) {
 					if (timetableOfStudent.isSameTime(timetableOfClassSemester)) {
 						isSuitable = false;
@@ -179,6 +181,7 @@ public class StudentDAOImpl implements StudentDAO {
 					break;
 				}
 			}
+			// this student is suitable
 			if (isSuitable) {
 				suitableStudents.add(student);
 			}
@@ -189,23 +192,17 @@ public class StudentDAOImpl implements StudentDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Student> listStudentsInClassCourseSemester(int classSemesterId, int classCourseSemesterId) {
-		ClassSemester classSemester = classSemesterDAO.getClassSemesterById(classSemesterId, false);
-		ClassCourseSemester classCourseSemester = classCourseSemesterDAO
-				.getClassCourseSemesterById(classCourseSemesterId);
-		if (classCourseSemester == null && classSemester == null) {
-			return new ArrayList<Student>();
-		}
 		String hql = "SELECT CCSS.student FROM vn.edu.fpt.timetabling.model.ClassCourseStudentSemester CCSS";
-		if (classCourseSemester != null) {
-			hql += " WHERE CCSS.classCourseSemester = :classCourseSemester";
+		if (classCourseSemesterId != 0) {
+			hql += " WHERE CCSS.classCourseSemester.classCourseSemesterId = :classCourseSemesterId";
 		} else {
-			hql += " WHERE CCSS.classCourseSemester.classSemester = :classSemester";
+			hql += " WHERE CCSS.classCourseSemester.classSemester.classSemesterId = :classSemesterId";
 		}
 		Query query = getCurrentSession().createQuery(hql);
-		if (classCourseSemester != null) {
-			query.setParameter("classCourseSemester", classCourseSemester);
+		if (classCourseSemesterId != 0) {
+			query.setParameter("classCourseSemesterId", classCourseSemesterId);
 		} else {
-			query.setParameter("classSemester", classSemester);
+			query.setParameter("classSemesterId", classSemesterId);
 		}
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<Student> students = (List<Student>) query.list();

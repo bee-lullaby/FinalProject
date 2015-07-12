@@ -21,8 +21,7 @@ import vn.edu.fpt.timetabling.model.Timetable;
 @Repository
 public class TimetableDAOImpl implements TimetableDAO {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(TimetableDAOImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(TimetableDAOImpl.class);
 
 	@Autowired
 	private ClassCourseSemesterDAO classCourseSemesterDAO;
@@ -39,23 +38,20 @@ public class TimetableDAOImpl implements TimetableDAO {
 	@Override
 	public void addTimetable(Timetable timetable) {
 		getCurrentSession().persist(timetable);
-		logger.info("Timetable was saved successfully, Timetable details="
-				+ timetable);
+		logger.info("Timetable was saved successfully, Timetable details=" + timetable);
 	}
 
 	@Override
 	public void updateTimetable(Timetable timetable) {
 		getCurrentSession().update(timetable);
-		logger.info("Timetable was updated successfully, Timetable details="
-				+ timetable);
+		logger.info("Timetable was updated successfully, Timetable details=" + timetable);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Timetable> listTimetables() {
 		List<Timetable> timetables = (List<Timetable>) getCurrentSession()
-				.createQuery("from vn.edu.fpt.timetabling.model.Timetable")
-				.list();
+				.createQuery("from vn.edu.fpt.timetabling.model.Timetable").list();
 		for (Timetable timetable : timetables) {
 			logger.info("Timetable list:" + timetable);
 		}
@@ -64,8 +60,7 @@ public class TimetableDAOImpl implements TimetableDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Timetable> listTimetablesByCCSId(
-			List<ClassCourseSemester> classCourseSemesters) {
+	public List<Timetable> listTimetablesByCCSId(List<ClassCourseSemester> classCourseSemesters) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T "
 				+ "WHERE T.classCourseSemester IN (:classCourseSemesters)";
 		Query query = getCurrentSession().createQuery(hql);
@@ -82,30 +77,25 @@ public class TimetableDAOImpl implements TimetableDAO {
 
 	@Override
 	public Timetable getTimetableById(int timetableId) {
-		Timetable timetable = (Timetable) getCurrentSession().get(
-				Timetable.class, new Integer(timetableId));
+		Timetable timetable = (Timetable) getCurrentSession().get(Timetable.class, new Integer(timetableId));
 		if (timetable != null) {
-			logger.info("Timetable was loaded successfully, timetable details="
-					+ timetable);
+			logger.info("Timetable was loaded successfully, timetable details=" + timetable);
 		}
 		return timetable;
 	}
 
 	@Override
-	public Timetable getTimetableByDateSlotClassCourse(Date date, int slot,
-			int classCourseSemesterId) {
-		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T"
-				+ " WHERE T.date = :date AND T.slot = :slot AND T.classCourseSemester = :classCourseSemester";
+	public Timetable getTimetableByDateSlotClassCourse(Date date, int slot, int classCourseSemesterId) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T" + " WHERE T.date = :date AND T.slot = :slot"
+				+ " AND T.classCourseSemester.classCourseSemesterId = :classCourseSemesterId";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("date", date);
 		query.setParameter("slot", slot);
-		query.setParameter("classCourseSemester", classCourseSemesterDAO
-				.getClassCourseSemesterById(classCourseSemesterId));
+		query.setParameter("classCourseSemesterId", classCourseSemesterId);
 		Object temp = query.uniqueResult();
 		if (temp != null) {
 			Timetable timetable = (Timetable) temp;
-			logger.info("Timetable was loaded successfully, Timetable details="
-					+ timetable);
+			logger.info("Timetable was loaded successfully, Timetable details=" + timetable);
 			return timetable;
 		} else {
 			return null;
@@ -117,17 +107,14 @@ public class TimetableDAOImpl implements TimetableDAO {
 		Timetable timetable = getTimetableById(timetableId);
 		if (timetable != null) {
 			getCurrentSession().delete(timetable);
-			logger.info("Timetable was deleted successfully, timetable details="
-					+ timetable);
+			logger.info("Timetable was deleted successfully, timetable details=" + timetable);
 		}
 	}
 
 	@Override
-	public List<Timetable> listTimetablesByStudent(int semesterId,
-			Student student) {
+	public List<Timetable> listTimetablesByStudent(int semesterId, Student student) {
 		List<ClassCourseSemester> classCourseSemesters = classCourseSemesterDAO
-				.listClassCourseSemesterByStudent(semesterId,
-						student.getStudentId());
+				.listClassCourseSemesterByStudent(semesterId, student.getStudentId());
 		if (classCourseSemesters.isEmpty()) {
 			return new ArrayList<Timetable>();
 		}
@@ -137,17 +124,12 @@ public class TimetableDAOImpl implements TimetableDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Timetable> listTimetablesByClassCourseSemesters(
-			Set<ClassCourseSemester> classCourseSemesters) {
-		List<Timetable> timetables = new ArrayList<Timetable>();
-		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T "
-				+ "WHERE T.classCourseSemester = :classCourseSemester";
-		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
-			Query query = getCurrentSession().createQuery(hql);
-			query.setParameter("classCourseSemester", classCourseSemester);
-			timetables.addAll((List<Timetable>) query.list());
-		}
-
+	public List<Timetable> listTimetablesByClassCourseSemesters(Set<ClassCourseSemester> classCourseSemesters) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T"
+				+ " WHERE T.classCourseSemester IN (:classCourseSemesters)";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("classCourseSemesters", classCourseSemesters);
+		List<Timetable> timetables = (List<Timetable>) query.list();
 		if (!timetables.isEmpty()) {
 			for (Timetable timetable : timetables) {
 				logger.info("Timetable list:" + timetable);
@@ -158,21 +140,16 @@ public class TimetableDAOImpl implements TimetableDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Timetable> listTimetablesByClassCourseSemestersInWeek(
-			Set<ClassCourseSemester> classCourseSemesters, Date startWeek,
-			Date endWeek) {
-		List<Timetable> timetables = new ArrayList<Timetable>();
+	public List<Timetable> listTimetablesByClassCourseSemestersInWeek(Set<ClassCourseSemester> classCourseSemesters,
+			Date startWeek, Date endWeek) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T "
-				+ "WHERE T.classCourseSemester = :classCourseSemester "
-				+ "AND T.date >= :startWeek AND T.date <= :endWeek ";
-		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
-			Query query = getCurrentSession().createQuery(hql);
-			query.setParameter("classCourseSemester", classCourseSemester);
-			query.setParameter("startWeek", startWeek);
-			query.setParameter("endWeek", endWeek);
-			timetables.addAll((List<Timetable>) query.list());
-		}
-
+				+ " WHERE T.classCourseSemester IN (:classCourseSemesters)"
+				+ " AND T.date >= :startWeek AND T.date <= :endWeek";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("classCourseSemesters", classCourseSemesters);
+		query.setParameter("startWeek", startWeek);
+		query.setParameter("endWeek", endWeek);
+		List<Timetable> timetables = (List<Timetable>) query.list();
 		if (!timetables.isEmpty()) {
 			for (Timetable timetable : timetables) {
 				logger.info("Timetable list:" + timetable);

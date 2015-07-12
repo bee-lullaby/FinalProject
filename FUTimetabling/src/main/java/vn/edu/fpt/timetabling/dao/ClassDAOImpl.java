@@ -13,8 +13,7 @@ import vn.edu.fpt.timetabling.model.ClassFPT;
 
 @Repository
 public class ClassDAOImpl implements ClassDAO {
-	private static final Logger logger = LoggerFactory
-			.getLogger(ClassDAOImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(ClassDAOImpl.class);
 
 	private SessionFactory sessionFactory;
 
@@ -42,8 +41,7 @@ public class ClassDAOImpl implements ClassDAO {
 	@Override
 	public List<ClassFPT> listClasses() {
 		List<ClassFPT> classFPTs = (List<ClassFPT>) getCurrentSession()
-				.createQuery("from vn.edu.fpt.timetabling.model.ClassFPT")
-				.list();
+				.createQuery("FROM vn.edu.fpt.timetabling.model.ClassFPT").list();
 		for (ClassFPT classFPT : classFPTs) {
 			logger.info("Class list:" + classFPT);
 		}
@@ -52,26 +50,23 @@ public class ClassDAOImpl implements ClassDAO {
 
 	@Override
 	public ClassFPT getClassById(int classId) {
-		ClassFPT classFPT = (ClassFPT) getCurrentSession().get(ClassFPT.class,
-				new Integer(classId));
+		ClassFPT classFPT = (ClassFPT) getCurrentSession().get(ClassFPT.class, new Integer(classId));
 		if (classFPT != null) {
-			logger.info("Class was loaded successfully, class details="
-					+ classFPT);
+			logger.info("Class was loaded successfully, class details=" + classFPT);
 		}
 		return classFPT;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public ClassFPT getClassByCode(String code) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.ClassFPT C WHERE C.code = :code";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("code", code);
-		List<ClassFPT> classFPT = (List<ClassFPT>) query.list();
-		if (!classFPT.isEmpty()) {
-			logger.info("Class was loaded successfully, class details="
-					+ classFPT.get(0));
-			return classFPT.get(0);
+		Object temp = query.uniqueResult();
+		if (temp != null) {
+			ClassFPT classFPT = (ClassFPT) temp;
+			logger.info("Class was loaded successfully, class details=" + classFPT);
+			return classFPT;
 		} else {
 			return null;
 		}
@@ -82,8 +77,7 @@ public class ClassDAOImpl implements ClassDAO {
 		ClassFPT classFPT = getClassById(classId);
 		if (classFPT != null) {
 			getCurrentSession().delete(classFPT);
-			logger.info("Class was deleted successfully, class details="
-					+ classFPT);
+			logger.info("Class was deleted successfully, class details=" + classFPT);
 		}
 	}
 

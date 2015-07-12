@@ -1,6 +1,5 @@
 package vn.edu.fpt.timetabling.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -9,18 +8,14 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import vn.edu.fpt.timetabling.model.ProgramSemesterDetail;
-import vn.edu.fpt.timetabling.model.Semester;
 
 @Repository
 public class ProgramSemesterDetailDAOImpl implements ProgramSemesterDetailDAO {
 	private static final Logger logger = LoggerFactory.getLogger(ProgramSemesterDetailDAO.class);
 
-	@Autowired
-	private SemesterDAO semesterDAO;
 	private SessionFactory sessionFactory;
 
 	public void setSessionFactory(SessionFactory sessionFactory) {
@@ -89,16 +84,11 @@ public class ProgramSemesterDetailDAOImpl implements ProgramSemesterDetailDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ProgramSemesterDetail> listProgramSemesterDetailsBySemester(int semesterId) {
-		Semester semester = semesterDAO.getSemesterById(semesterId, false, false, false, false);
-		if (semester == null) {
-			ArrayList<ProgramSemesterDetail> temp = new ArrayList<ProgramSemesterDetail>();
-			return temp;
-		}
 		String hql = "FROM vn.edu.fpt.timetabling.model.ProgramSemesterDetail PSD";
-		hql += " WHERE PSD.programSemester.semester = :semester";
+		hql += " WHERE PSD.programSemester.semester.semesterId = :semesterId";
 		hql += " ORDER BY PSD.programSemesterDetailId";
 		Query query = getCurrentSession().createQuery(hql);
-		query.setParameter("semester", semester);
+		query.setParameter("semesterId", semesterId);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<ProgramSemesterDetail> programSemesterDetails = (List<ProgramSemesterDetail>) query.list();
 		for (ProgramSemesterDetail programSemesterDetail : programSemesterDetails) {

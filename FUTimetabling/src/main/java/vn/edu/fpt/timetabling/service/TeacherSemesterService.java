@@ -14,4 +14,6 @@ public interface TeacherSemesterService {
 	public TeacherSemester getTeacherSemesterById(int teacherSemesterId);
 
 	public void deleteTeacherSemester(int teacherSemesterId);
+
+	public TeacherSemester getTeacherSemesterByAccount(String account);
 }

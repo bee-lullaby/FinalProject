@@ -8,17 +8,14 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import vn.edu.fpt.timetabling.model.ProgramSemester;
-import vn.edu.fpt.timetabling.model.Specialized;
 
 @Repository
 public class ProgramSemesterDAOImpl implements ProgramSemesterDAO {
 	private static final Logger logger = LoggerFactory.getLogger(ProgramSemesterDAO.class);
-	@Autowired
-	private SpecializedDAO specializedDAO;
+
 	private SessionFactory sessionFactory;
 
 	public void setSessionFactory(SessionFactory sessionFactory) {
@@ -87,16 +84,15 @@ public class ProgramSemesterDAOImpl implements ProgramSemesterDAO {
 		String hql = "FROM vn.edu.fpt.timetabling.model.ProgramSemester PS"
 				+ " WHERE PS.semester.semesterId = :semesterId" + " AND PS.specialized.specializedId = :specializedId"
 				+ " AND PS.currentSemester = :semesterNumber";
-		Specialized detailSpecialized = specializedDAO.getSpecializedById(detailSpecializedId);
-		if (detailSpecialized != null) {
-			hql += " AND PS.detailSpecialized= :detailSpecialized";
+		if (detailSpecializedId != 0) {
+			hql += " AND PS.detailSpecialized.specializedId = :detailSpecialized";
 		}
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("semesterId", semesterId);
 		query.setParameter("specializedId", specializedId);
 		query.setParameter("semesterNumber", semesterNumber);
-		if (detailSpecialized != null) {
-			query.setParameter("detailSpecialized", detailSpecialized);
+		if (detailSpecializedId != 0) {
+			query.setParameter("detailSpecialized", detailSpecializedId);
 		}
 		Object temp = query.uniqueResult();
 		if (temp != null) {

@@ -14,21 +14,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import vn.edu.fpt.timetabling.dao.CourseDAO;
-import vn.edu.fpt.timetabling.dao.DepartmentDAO;
 import vn.edu.fpt.timetabling.model.Course;
 
 @Service
 public class CourseServiceImpl implements CourseService {
 
-	@Autowired
 	private CourseDAO courseDAO;
 
 	@Autowired
-	private DepartmentDAO departmentDAO;
-
-	public void setDepartmentDAO(DepartmentDAO departmentDAO) {
-		this.departmentDAO = departmentDAO;
-	}
+	private DepartmentService departmentService;
 
 	public void setCourseDAO(CourseDAO courseDAO) {
 		this.courseDAO = courseDAO;
@@ -57,7 +51,7 @@ public class CourseServiceImpl implements CourseService {
 				Course course = new Course();
 
 				String code = row.getCell(0).getStringCellValue().trim();
-				course.setDepartment(departmentDAO.getDepartmentByCode(code));
+				course.setDepartment(departmentService.getDepartmentByCode(code));
 				course.setCode(row.getCell(1).getStringCellValue().trim());
 				course.setName(row.getCell(2).getStringCellValue().trim());
 				courseDAO.addCourse(course);

@@ -1,6 +1,5 @@
 package vn.edu.fpt.timetabling.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -9,26 +8,15 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import vn.edu.fpt.timetabling.model.CourseSemester;
-import vn.edu.fpt.timetabling.model.Student;
 
 @Repository
 public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 	private static final Logger logger = LoggerFactory.getLogger(CourseSemesterDAO.class);
 
 	private SessionFactory sessionFactory;
-
-	@Autowired
-	private SemesterDAO semesterDAO;
-
-	@Autowired
-	private CourseDAO courseDAO;
-
-	@Autowired
-	private StudentDAO studentDAO;
 
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
@@ -116,9 +104,9 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 		if (jointProgramSemesterDetails) {
 			hql += " LEFT OUTER JOIN FETCH C.programSemesterDetails";
 		}
-		hql += " WHERE C.course = :course";
+		hql += " WHERE C.course.code = :code";
 		Query query = getCurrentSession().createQuery(hql);
-		query.setParameter("course", courseDAO.getCourseByCode(code));
+		query.setParameter("code", code);
 		Object temp = query.uniqueResult();
 		if (temp != null) {
 			CourseSemester courseSemester = (CourseSemester) temp;
@@ -143,10 +131,10 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 		if (jointProgramSemesterDetails) {
 			hql += " LEFT OUTER JOIN FETCH C.programSemesterDetails";
 		}
-		hql += "WHERE C.course = :course AND C.semester = :semester";
+		hql += "WHERE C.course.courseId = :courseId AND C.semester.semesterId = :semesterId";
 		Query query = getCurrentSession().createQuery(hql);
-		query.setParameter("course", courseDAO.getCourseById(courseId));
-		query.setParameter("semester", semesterDAO.getSemesterById(semesterId, false, false, false, false));
+		query.setParameter("courseId", courseId);
+		query.setParameter("semesterId", semesterId);
 		Object temp = query.uniqueResult();
 		if (temp != null) {
 			CourseSemester courseSemester = (CourseSemester) temp;
@@ -169,15 +157,12 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<CourseSemester> listCourseSemestersByStudent(int studentId) {
-		Student student = studentDAO.getStudentById(studentId);
-		if (student == null) {
-			return new ArrayList<CourseSemester>();
-		}
 		String hql = "FROM vn.edu.fpt.timetabling.model.CourseSemester C"
 				+ " LEFT OUTER JOIN FETCH C.classCourseSemesters CCS"
-				+ " LEFT OUTER JOIN FETCH CCS.classCourseStudentSemesters CCSS" + " WHERE CCSS.student = :student";
+				+ " LEFT OUTER JOIN FETCH CCS.classCourseStudentSemesters CCSS"
+				+ " WHERE CCSS.student.studentId = :studentId";
 		Query query = getCurrentSession().createQuery(hql);
-		query.setParameter("student", student);
+		query.setParameter("studentId", studentId);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<CourseSemester> courseSemesters = (List<CourseSemester>) query.list();
 		return courseSemesters;

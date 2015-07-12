@@ -14,8 +14,7 @@ import vn.edu.fpt.timetabling.model.Course;
 @Repository
 public class CourseDAOImpl implements CourseDAO {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(CourseDAOImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(CourseDAOImpl.class);
 
 	private SessionFactory sessionFactory;
 
@@ -42,8 +41,8 @@ public class CourseDAOImpl implements CourseDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Course> listCourses() {
-		List<Course> courses = (List<Course>) getCurrentSession().createQuery(
-				"from vn.edu.fpt.timetabling.model.Course").list();
+		List<Course> courses = (List<Course>) getCurrentSession()
+				.createQuery("from vn.edu.fpt.timetabling.model.Course").list();
 		for (Course course : courses) {
 			logger.info("Course list:" + course);
 		}
@@ -52,27 +51,24 @@ public class CourseDAOImpl implements CourseDAO {
 
 	@Override
 	public Course getCourseById(int courseId) {
-		Course course = (Course) getCurrentSession().get(Course.class,
-				new Integer(courseId));
+		Course course = (Course) getCurrentSession().get(Course.class, new Integer(courseId));
 		if (course != null) {
-			logger.info("Course was loaded successfully, course details="
-					+ course);
+			logger.info("Course was loaded successfully, course details=" + course);
 		}
 		return course;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Course getCourseByCode(String code) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.Course C WHERE C.code = :code";
 
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("code", code);
-		List<Course> course = (List<Course>) query.list();
-		if (!course.isEmpty()) {
-			logger.info("Course was loaded successfully, course details="
-					+ course.get(0));
-			return course.get(0);
+		Object temp = query.uniqueResult();
+		if (temp != null) {
+			Course course = (Course) temp;
+			logger.info("Course was loaded successfully, course details=" + course);
+			return course;
 		} else {
 			return null;
 		}
@@ -83,8 +79,7 @@ public class CourseDAOImpl implements CourseDAO {
 		Course course = getCourseById(courseId);
 		if (course != null) {
 			getCurrentSession().delete(course);
-			logger.info("Course was deleted successfully, course details="
-					+ course);
+			logger.info("Course was deleted successfully, course details=" + course);
 		}
 	}
 

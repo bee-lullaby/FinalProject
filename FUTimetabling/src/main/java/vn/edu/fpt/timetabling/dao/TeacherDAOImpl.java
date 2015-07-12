@@ -14,8 +14,7 @@ import vn.edu.fpt.timetabling.model.Teacher;
 @Repository
 public class TeacherDAOImpl implements TeacherDAO {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(TeacherDAOImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(TeacherDAOImpl.class);
 
 	private SessionFactory sessionFactory;
 
@@ -43,8 +42,7 @@ public class TeacherDAOImpl implements TeacherDAO {
 	@Override
 	public List<Teacher> listTeachers() {
 		List<Teacher> teachers = (List<Teacher>) getCurrentSession()
-				.createQuery("FROM vn.edu.fpt.timetabling.model.Teacher")
-				.list();
+				.createQuery("FROM vn.edu.fpt.timetabling.model.Teacher").list();
 		for (Teacher teacherTemp : teachers) {
 			logger.info("Teacher list:" + teacherTemp);
 		}
@@ -53,43 +51,41 @@ public class TeacherDAOImpl implements TeacherDAO {
 
 	@Override
 	public Teacher getTeacherById(int teacherId) {
-		Teacher teacher = (Teacher) getCurrentSession().get(Teacher.class,
-				new Integer(teacherId));
+		Teacher teacher = (Teacher) getCurrentSession().get(Teacher.class, new Integer(teacherId));
 		if (teacher != null) {
-			logger.info("Teacher loaded successfully, teacher details="
-					+ teacher);
+			logger.info("Teacher loaded successfully, teacher details=" + teacher);
 		}
 		return teacher;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Teacher getTeacherByEmail(String email) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.Teacher S WHERE S.email = :email";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("email", email);
-		List<Teacher> teacher = (List<Teacher>) query.list();
-		if (teacher != null && !teacher.isEmpty()) {
-			return teacher.get(0);
+		Object temp = query.uniqueResult();
+		if (temp != null) {
+			Teacher teacher = (Teacher) temp;
+			return teacher;
 		} else {
 			return null;
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Teacher getTeacherByAccount(String account) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.Teacher S WHERE S.account = :account";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("account", account);
-		List<Teacher> teacher = (List<Teacher>) query.list();
-		if (teacher != null && !teacher.isEmpty()) {
-			return teacher.get(0);
+		Object temp = query.uniqueResult();
+		if (temp != null) {
+			Teacher teacher = (Teacher) temp;
+			return teacher;
 		} else {
 			return null;
 		}
 	}
-	
+
 	@Override
 	public void deleteTeacher(int teacherId) {
 		Teacher teacher = getTeacherById(teacherId);

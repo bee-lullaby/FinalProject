@@ -14,8 +14,7 @@ import vn.edu.fpt.timetabling.model.Staff;
 @Repository
 public class StaffDAOImpl implements StaffDAO {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(StaffDAOImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(StaffDAOImpl.class);
 
 	private SessionFactory sessionFactory;
 
@@ -42,8 +41,8 @@ public class StaffDAOImpl implements StaffDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Staff> listStaffs() {
-		List<Staff> staff = (List<Staff>) getCurrentSession().createQuery(
-				"FROM vn.edu.fpt.timetabling.model.Staff").list();
+		List<Staff> staff = (List<Staff>) getCurrentSession().createQuery("FROM vn.edu.fpt.timetabling.model.Staff")
+				.list();
 		for (Staff staffTemp : staff) {
 			logger.info("Staff list:" + staffTemp);
 		}
@@ -52,23 +51,22 @@ public class StaffDAOImpl implements StaffDAO {
 
 	@Override
 	public Staff getStaffById(int staffId) {
-		Staff staff = (Staff) getCurrentSession().get(Staff.class,
-				new Integer(staffId));
+		Staff staff = (Staff) getCurrentSession().get(Staff.class, new Integer(staffId));
 		if (staff != null) {
 			logger.info("Staff loaded successfully, staff details=" + staff);
 		}
 		return staff;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Staff getStaffByEmail(String email) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.Staff S WHERE S.email = :email";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("email", email);
-		List<Staff> staff = (List<Staff>) query.list();
-		if (staff != null && !staff.isEmpty()) {
-			return staff.get(0);
+		Object temp = query.uniqueResult();
+		if (temp != null) {
+			Staff staff = (Staff) temp;
+			return staff;
 		} else {
 			return null;
 		}
