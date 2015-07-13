@@ -53,7 +53,26 @@ public class ClassSemesterDAOImpl implements ClassSemesterDAO {
 		}
 		return classSemesters;
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ClassSemester> listClassSemestersBySemester(int semesterId, boolean jointClassCourseSemester) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.ClassSemester C";
+		if (jointClassCourseSemester) {
+			hql += " LEFT OUTER JOIN FETCH C.classCourseSemesters";
+		}
+		hql += " WHERE C.semester.semesterId = :semesterId";
+		
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("semesterId", semesterId);
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<ClassSemester> classSemesters = (List<ClassSemester>) query.list();
+		for (ClassSemester classSemester : classSemesters) {
+			logger.info("ClassSemester list:" + classSemester);
+		}
+		return classSemesters;
+	}
+	
 	@Override
 	public ClassSemester getClassSemesterById(int classSemesterId, boolean jointClassCourseSemester) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.ClassSemester C";

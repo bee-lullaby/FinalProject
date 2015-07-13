@@ -10,7 +10,9 @@ public interface ClassSemesterDAO {
 	public void updateClassSemester(ClassSemester classSemester);
 
 	public List<ClassSemester> listClassSemesters(boolean jointClassCourseSemester);
-
+	
+	public List<ClassSemester> listClassSemestersBySemester(int semesterId, boolean jointClassCourseSemester);
+	
 	public ClassSemester getClassSemesterById(int classSemesterId, boolean jointClassCourseSemester);
 
 	public ClassSemester getClassSemesterByClassSemester(int semesterId, int classId, boolean jointClassCourseSemester);

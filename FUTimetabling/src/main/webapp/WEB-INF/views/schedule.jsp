@@ -192,8 +192,7 @@
 
 
 	<div id="dialog-schedule" data-role="dialog" class="padding20"
-		data-close-button="true" data-overlay="true"
-		data-overlay-color="op-dark">
+		data-overlay="true" data-overlay-color="op-dark">
 
 		<table class="bordered">
 			<tr>
@@ -207,7 +206,13 @@
 							</c:forEach>
 						</select>
 					</div> <br>
-					<button id="btn-set-course" class="button">SET</button>
+					<div id="warning-set-course" class="fg-red"
+						style="padding-top: 15px;"></div>
+					<div style="padding-top:15px">
+						<button id="btn-set-course" class="button" style="width: 100px">SET</button>
+						<button id="btn-cancel-set-course" class="button"
+							style="width: 100px;">CANCEL</button>
+					</div>
 				</td>
 				<td style="border-left: thin solid #999999; padding: 10px;">
 					<table id="course-info-to-set">
@@ -218,7 +223,7 @@
 						</tr>
 						<tr>
 							<th style="text-align: left; padding: 5px;">Remain Slots:</th>
-							<td id="remains_slot">30</td>
+							<td id="remains_slot"></td>
 						</tr>
 						<tr>
 							<th style="text-align: left; padding: 5px;">Classes:</th>
@@ -241,11 +246,12 @@
 
 	<!-- Dialog Warning Clear -->
 	<div data-role="dialog" id="dialog-warning-clear" class="padding20"
-		data-close-button="true" data-type="warning">
+		data-close-button="true" data-overlay="true"
+		data-overlay-color="op-dark">
 		<h1>Clear Data In This Week</h1>
 		<p>This action will clear all data in this week of this class. Do
 			you really want to clear?</p>
-		<div style="text-align:center; width:100%">
+		<div style="text-align: center; width: 100%">
 			<button class="button" id="btn-accept-clear">Accept</button>
 			<button class="button" id="btn-decline-clear">Decline</button>
 		</div>

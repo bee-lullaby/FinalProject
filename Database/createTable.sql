@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 10, 2015 at 01:26 PM
+-- Generation Time: Jul 13, 2015 at 06:53 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `class_course_semester` (
   `course_semester_id` int(11) NOT NULL,
   `block_condition` int(11) DEFAULT NULL,
   `is_semester_long` tinyint(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=161 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=131 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `class_semester` (
   `class_id` int(11) NOT NULL,
   `semester_id` int(11) NOT NULL,
   `semester` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -178,10 +178,10 @@ CREATE TABLE IF NOT EXISTS `program_semester_detail` (
 DROP TABLE IF EXISTS `rooms`;
 CREATE TABLE IF NOT EXISTS `rooms` (
 `room_id` int(11) NOT NULL,
-  `code` varchar(10) NOT NULL,
-  `room_type` varchar(100) NOT NULL,
+  `code` varchar(20) NOT NULL,
+  `classes` varchar(100) DEFAULT NULL,
   `capacity` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -226,7 +226,7 @@ CREATE TABLE IF NOT EXISTS `staff` (
   `name` varchar(100) NOT NULL,
   `email` varchar(50) NOT NULL,
   `account_type` varchar(20) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -246,7 +246,7 @@ CREATE TABLE IF NOT EXISTS `students` (
   `batch` varchar(10) CHARACTER SET latin1 NOT NULL,
   `semester` int(11) NOT NULL,
   `class_semester_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 COLLATE=utf8_vietnamese_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=284 DEFAULT CHARSET=utf8 COLLATE=utf8_vietnamese_ci;
 
 -- --------------------------------------------------------
 
@@ -389,7 +389,7 @@ ALTER TABLE `program_semester_detail`
 -- Indexes for table `rooms`
 --
 ALTER TABLE `rooms`
- ADD PRIMARY KEY (`room_id`), ADD UNIQUE KEY `code` (`code`);
+ ADD PRIMARY KEY (`room_id`), ADD UNIQUE KEY `code` (`code`), ADD FULLTEXT KEY `classes` (`classes`);
 
 --
 -- Indexes for table `semesters`
@@ -458,7 +458,7 @@ MODIFY `class_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=39;
 -- AUTO_INCREMENT for table `class_course_semester`
 --
 ALTER TABLE `class_course_semester`
-MODIFY `class_course_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=161;
+MODIFY `class_course_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=131;
 --
 -- AUTO_INCREMENT for table `class_course_student_semester`
 --
@@ -473,7 +473,7 @@ MODIFY `class_course_teacher_semester_id` int(11) NOT NULL AUTO_INCREMENT;
 -- AUTO_INCREMENT for table `class_semester`
 --
 ALTER TABLE `class_semester`
-MODIFY `class_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=39;
+MODIFY `class_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=32;
 --
 -- AUTO_INCREMENT for table `courses`
 --
@@ -503,7 +503,7 @@ MODIFY `program_semester_detail_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREME
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=51;
 --
 -- AUTO_INCREMENT for table `semesters`
 --
@@ -518,12 +518,12 @@ MODIFY `specialized_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
 -- AUTO_INCREMENT for table `staff`
 --
 ALTER TABLE `staff`
-MODIFY `staff_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+MODIFY `staff_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=26;
+MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=284;
 --
 -- AUTO_INCREMENT for table `student_course`
 --

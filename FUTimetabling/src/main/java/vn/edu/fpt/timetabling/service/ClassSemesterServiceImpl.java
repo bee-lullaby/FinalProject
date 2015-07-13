@@ -70,7 +70,13 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 	public List<ClassSemester> listClassSemesters(boolean jointClassCourseSemester) {
 		return classSemesterDAO.listClassSemesters(jointClassCourseSemester);
 	}
-
+	
+	@Override
+	@Transactional
+	public List<ClassSemester> listClassSemestersBySemester(int semesterId, boolean jointClassCourseSemester) {
+		return classSemesterDAO.listClassSemestersBySemester(semesterId, jointClassCourseSemester);
+	}
+	
 	@Override
 	@Transactional
 	public ClassSemester getClassSemesterById(int classSemesterId, boolean jointClassCourseSemester) {

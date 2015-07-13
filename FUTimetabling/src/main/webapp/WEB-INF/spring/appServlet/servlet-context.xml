@@ -179,6 +179,11 @@
 		<beans:property name="sessionFactory"
 			ref="hibernate4AnnotatedSessionFactory" />
 	</beans:bean>
+	<beans:bean id="roomDAO"
+		class="vn.edu.fpt.timetabling.dao.RoomDAOImpl">
+		<beans:property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
 	<!-- Service Beans -->
 	<beans:bean id="courseService"
 		class="vn.edu.fpt.timetabling.service.CourseServiceImpl">
@@ -251,6 +256,14 @@
 		class="vn.edu.fpt.timetabling.service.ClassCourseStudentSemesterServiceImpl">
 		<beans:property name="classCourseStudentSemesterDAO"
 			ref="classCourseStudentSemesterDAO"></beans:property>
+	</beans:bean>
+	<beans:bean id="roomService"
+		class="vn.edu.fpt.timetabling.service.RoomServiceImpl">
+		<beans:property name="roomDAO"
+			ref="roomDAO"></beans:property>
+	</beans:bean>
+	<beans:bean id="roomArrangementService"
+		class="vn.edu.fpt.timetabling.service.RoomArrangementServiceImpl">
 	</beans:bean>
 	<context:component-scan base-package="vn.edu.fpt.timetabling" />
 

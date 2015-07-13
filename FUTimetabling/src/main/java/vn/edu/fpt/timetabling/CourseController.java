@@ -57,7 +57,7 @@ public class CourseController {
 		return "redirect:/courses";
 	}
 
-	// For add and update person both
+	
 	@RequestMapping(value = "/courses/addFromFile", method = RequestMethod.POST)
 	public String addCourseFromFile(@RequestParam("file") MultipartFile file) {
 		if (!file.isEmpty()) {

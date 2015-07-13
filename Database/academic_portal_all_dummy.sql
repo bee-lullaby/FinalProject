@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 12, 2015 at 03:49 PM
+-- Generation Time: Jul 13, 2015 at 07:02 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -1968,17 +1968,66 @@ INSERT INTO `program_semester_detail` (`program_semester_detail_id`, `program_se
 DROP TABLE IF EXISTS `rooms`;
 CREATE TABLE IF NOT EXISTS `rooms` (
 `room_id` int(11) NOT NULL,
-  `code` varchar(10) NOT NULL,
-  `room_type` varchar(100) NOT NULL,
+  `code` varchar(20) NOT NULL,
+  `classes` varchar(100) DEFAULT NULL,
   `capacity` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `rooms`
 --
 
-INSERT INTO `rooms` (`room_id`, `code`, `room_type`, `capacity`) VALUES
-(1, 'room1', 'room', 30);
+INSERT INTO `rooms` (`room_id`, `code`, `classes`, `capacity`) VALUES
+(1, 'room1', 'room', 30),
+(2, 'P201', 'SSG101, SSC102, SSC101', 30),
+(3, 'P202', 'SSG101, SSC102, SSC101', 30),
+(4, 'P203', 'SSG101, SSC102, SSC101', 30),
+(5, 'P204', '', 30),
+(6, 'P205', '', 30),
+(7, 'P209', '', 30),
+(8, 'P211', '', 30),
+(9, 'P212', '', 30),
+(10, 'P215', '', 30),
+(11, 'P216', '', 30),
+(12, 'P217', '', 30),
+(13, 'P218', '', 30),
+(14, 'P219', '', 30),
+(15, 'P220', '', 30),
+(16, 'P221', '', 30),
+(17, 'P301', NULL, 30),
+(18, 'P302', NULL, 30),
+(19, 'P303', NULL, 30),
+(20, 'P304', NULL, 30),
+(21, 'P305', NULL, 30),
+(22, 'P306', NULL, 30),
+(23, 'P307', NULL, 30),
+(24, 'P308', NULL, 30),
+(25, 'P309', NULL, 30),
+(26, 'P310', NULL, 30),
+(27, 'P311', NULL, 31),
+(28, 'P312', NULL, 32),
+(29, 'P313', NULL, 30),
+(30, 'P314', NULL, 30),
+(31, 'P315', NULL, 30),
+(32, 'P316', NULL, 30),
+(33, 'P317', '', 30),
+(34, 'P318', '', 30),
+(35, 'P319', '', 30),
+(36, 'P320', '', 31),
+(37, 'P321', '', 0),
+(38, 'P411', '', 32),
+(39, 'HB/201L', '', 33),
+(40, 'HB/203L', '', 30),
+(41, 'HB/204L', '', 30),
+(42, 'HB/205L', '', 30),
+(43, 'HB/206L', '', 30),
+(44, 'HB/207L', '', 30),
+(45, 'HB/301R', '', 30),
+(46, 'HB/302R', '', 30),
+(47, 'HB/303R-305R', '', 70),
+(48, 'HB/304R', '', 30),
+(49, 'HB/307R', NULL, 30),
+(50, 'HB/309R', NULL, 30);
 
 -- --------------------------------------------------------
 
@@ -2734,7 +2783,7 @@ MODIFY `program_semester_detail_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREME
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=51;
 --
 -- AUTO_INCREMENT for table `semesters`
 --

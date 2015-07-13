@@ -19,8 +19,8 @@ public class Room {
 	@Column(name = "code")
 	private String code;
 
-	@Column(name = "room_type")
-	private String roomType;
+	@Column(name = "classes")
+	private String classes;
 
 	@Column(name = "capacity")
 	private int capacity;
@@ -38,11 +38,11 @@ public class Room {
 	 * @param roomType
 	 * @param capacity
 	 */
-	public Room(int roomId, String code, String roomType, int capacity) {
+	public Room(int roomId, String code, String classes, int capacity) {
 		super();
 		this.roomId = roomId;
 		this.code = code;
-		this.roomType = roomType;
+		this.classes = classes;
 		this.capacity = capacity;
 	}
 
@@ -79,16 +79,16 @@ public class Room {
 	/**
 	 * @return the roomType
 	 */
-	public String getRoomType() {
-		return roomType;
+	public String getClasses() {
+		return classes;
 	}
 
 	/**
 	 * @param roomType
-	 *            the roomType to set
+	 *            the roomType to sets
 	 */
-	public void setRoomType(String roomType) {
-		this.roomType = roomType;
+	public void setClasses(String classes) {
+		this.classes = classes;
 	}
 
 	/**
@@ -111,8 +111,8 @@ public class Room {
 	 */
 	@Override
 	public String toString() {
-		return "Room [roomId=" + roomId + ", code=" + code + ", roomType="
-				+ roomType + ", capacity=" + capacity + "]";
+		return "Room [roomId=" + roomId + ", code=" + code + ", classes="
+				+ classes + ", capacity=" + capacity + "]";
 	}
 	
 	
