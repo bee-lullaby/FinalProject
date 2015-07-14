@@ -11,12 +11,9 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import vn.edu.fpt.timetabling.dao.TimetableDAOImpl;
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassSemester;
 import vn.edu.fpt.timetabling.model.CourseSemester;
@@ -31,7 +28,7 @@ import vn.edu.fpt.timetabling.utils.TimetableUtils;
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
 
-	private static final Logger logger = LoggerFactory.getLogger(TimetableDAOImpl.class);
+//	private static final Logger logger = LoggerFactory.getLogger(TimetableDAOImpl.class);
 
 	@Autowired
 	private SemesterService semesterService;
@@ -250,7 +247,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 			String key = sdf.format(c.getTime()) + "-" + timetable.getSlot();
 
 			if (curWeek.containsKey(key)) {
-				logger.info("aaa");
 				t = curWeek.get(key);
 				t.setClassCourseSemester(timetable.getClassCourseSemester());
 				t.setTeacherSemester(timetable.getTeacherSemester());
