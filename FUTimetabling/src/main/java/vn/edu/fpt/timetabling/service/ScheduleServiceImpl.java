@@ -9,12 +9,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import vn.edu.fpt.timetabling.dao.TimetableDAOImpl;
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassSemester;
 import vn.edu.fpt.timetabling.model.CourseSemester;
@@ -29,7 +27,6 @@ import vn.edu.fpt.timetabling.utils.TimetableUtils;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class ScheduleServiceImpl implements ScheduleService {
-	private static final Logger logger = Logger.getLogger(TimetableDAOImpl.class);
 	@Autowired
 	private SemesterService semesterService;
 	@Autowired
@@ -205,7 +202,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 			c.set(Calendar.DATE, c.get(Calendar.DATE) + 7);
 			String key = sdf.format(c.getTime()) + "-" + timetable.getSlot();
 			if (curWeek.containsKey(key)) {
-				logger.info("aaa");
 				t = curWeek.get(key);
 				t.setClassCourseSemester(timetable.getClassCourseSemester());
 				t.setTeacherSemester(timetable.getTeacherSemester());
