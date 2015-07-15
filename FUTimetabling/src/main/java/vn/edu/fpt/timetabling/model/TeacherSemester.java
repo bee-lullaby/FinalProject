@@ -36,12 +36,28 @@ public class TeacherSemester {
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "teacherSemester", orphanRemoval = true)
 	@OrderBy
-	Set<TeacherCourseSemester> teacherCourseSemester = new LinkedHashSet<TeacherCourseSemester>();
-	
+	Set<TeacherCourseSemester> teacherCourseSemesters = new LinkedHashSet<TeacherCourseSemester>();
+
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "teacherSemester", orphanRemoval = true)
 	@OrderBy
-	Set<Timetable> timetable = new LinkedHashSet<Timetable>();
-	
+	Set<Timetable> timetables = new LinkedHashSet<Timetable>();
+
+	public Set<TeacherCourseSemester> getTeacherCourseSemesters() {
+		return teacherCourseSemesters;
+	}
+
+	public void setTeacherCourseSemesters(Set<TeacherCourseSemester> teacherCourseSemesters) {
+		this.teacherCourseSemesters = teacherCourseSemesters;
+	}
+
+	public Set<Timetable> getTimetables() {
+		return timetables;
+	}
+
+	public void setTimetables(Set<Timetable> timetables) {
+		this.timetables = timetables;
+	}
+
 	/**
 	 * 
 	 */
@@ -54,8 +70,7 @@ public class TeacherSemester {
 	 * @param teacher
 	 * @param semester
 	 */
-	public TeacherSemester(int teacherSemesterId, Teacher teacher,
-			Semester semester) {
+	public TeacherSemester(int teacherSemesterId, Teacher teacher, Semester semester) {
 		super();
 		this.teacherSemesterId = teacherSemesterId;
 		this.teacher = teacher;
@@ -107,25 +122,9 @@ public class TeacherSemester {
 		this.semester = semester;
 	}
 
-	/**
-	 * @return the teacherCourseSemester
-	 */
-	public Set<TeacherCourseSemester> getTeacherCourseSemester() {
-		return teacherCourseSemester;
-	}
-
-	/**
-	 * @param teacherCourseSemester
-	 *            the teacherCourseSemester to set
-	 */
-	public void setTeacherCourseSemester(
-			Set<TeacherCourseSemester> teacherCourseSemester) {
-		this.teacherCourseSemester = teacherCourseSemester;
-	}
-
 	public List<Course> getListCoursesOfTeacher() {
 		List<Course> courses = new ArrayList<Course>();
-		for (TeacherCourseSemester tcs : getTeacherCourseSemester()) {
+		for (TeacherCourseSemester tcs : getTeacherCourseSemesters()) {
 			courses.add(tcs.getCourseSemester().getCourse());
 		}
 		return courses;
@@ -138,8 +137,8 @@ public class TeacherSemester {
 	 */
 	@Override
 	public String toString() {
-		return "TeacherSemester [teacherSemesterId=" + teacherSemesterId
-				+ ", teacher=" + teacher + ", semester=" + semester + "]";
+		return "TeacherSemester [teacherSemesterId=" + teacherSemesterId + ", teacher=" + teacher + ", semester="
+				+ semester + "]";
 	}
 
 }

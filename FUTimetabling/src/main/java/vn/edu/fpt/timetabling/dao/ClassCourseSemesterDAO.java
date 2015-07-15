@@ -16,7 +16,7 @@ public interface ClassCourseSemesterDAO {
 	public List<ClassCourseSemester> listClassCourseSemesterByCourse(int courseSemesterId);
 
 	public List<ClassCourseSemester> listClassCourseSemesterBySemester(int semesterId);
-	
+
 	public List<ClassCourseSemester> listClassCourseSemesterByStudent(int semesterId, int studentId);
 
 	public ClassCourseSemester getClassCourseSemesterById(int classCourseSemesterId);

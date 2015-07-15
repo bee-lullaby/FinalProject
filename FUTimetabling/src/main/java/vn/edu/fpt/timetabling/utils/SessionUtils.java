@@ -4,6 +4,9 @@ import javax.servlet.http.HttpSession;
 
 public class SessionUtils {
 	public static boolean isSessionValid(HttpSession session) {
+		if (session == null) {
+			return false;
+		}
 		Object idToken = session.getAttribute("idToken");
 		Object accessToken = session.getAttribute("accessToken");
 		Object email = session.getAttribute("email");

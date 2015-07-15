@@ -24,28 +24,21 @@ import vn.edu.fpt.timetabling.utils.Const;
 import vn.edu.fpt.timetabling.utils.Const.ClassType;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class ClassSemesterServiceImpl implements ClassSemesterService {
-
 	private ClassSemesterDAO classSemesterDAO;
-
 	@Autowired
 	private SemesterService semesterService;
-
 	@Autowired
 	private StudentService studentService;
-
 	@Autowired
 	private ProgramSemesterService programSemesterService;
-
 	@Autowired
 	private ClassService classService;
-
 	@Autowired
 	private ClassSemesterService classSemesterService;
-
 	@Autowired
 	private ClassCourseSemesterService classCourseSemesterService;
-
 	@Autowired
 	private ClassCourseStudentSemesterService classCourseStudentSemesterService;
 
@@ -54,62 +47,52 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 	}
 
 	@Override
-	@Transactional
 	public void addClassSemester(ClassSemester classSemester) {
 		classSemesterDAO.addClassSemester(classSemester);
 	}
 
 	@Override
-	@Transactional
 	public void updateClassSemester(ClassSemester classSemester) {
 		classSemesterDAO.updateClassSemester(classSemester);
 	}
 
 	@Override
-	@Transactional
 	public List<ClassSemester> listClassSemesters(boolean jointClassCourseSemester) {
 		return classSemesterDAO.listClassSemesters(jointClassCourseSemester);
 	}
-	
+
 	@Override
-	@Transactional
 	public List<ClassSemester> listClassSemestersBySemester(int semesterId, boolean jointClassCourseSemester) {
 		return classSemesterDAO.listClassSemestersBySemester(semesterId, jointClassCourseSemester);
 	}
-	
+
 	@Override
-	@Transactional
 	public ClassSemester getClassSemesterById(int classSemesterId, boolean jointClassCourseSemester) {
 		return classSemesterDAO.getClassSemesterById(classSemesterId, jointClassCourseSemester);
 	}
 
 	@Override
-	@Transactional
 	public ClassSemester getClassSemesterByClassSemester(int semesterId, int classId,
 			boolean jointClassCourseSemester) {
 		return classSemesterDAO.getClassSemesterByClassSemester(semesterId, classId, jointClassCourseSemester);
 	}
 
 	@Override
-	@Transactional
 	public ClassSemester getClassSemesterByCode(String classCode, int semesterId, boolean jointClassCourseSemester) {
 		return classSemesterDAO.getClassSemesterByCode(classCode, semesterId, jointClassCourseSemester);
 	}
 
 	@Override
-	@Transactional
 	public void deleteClassSemester(int classSemesterId) {
 		classSemesterDAO.deleteClassSemester(classSemesterId);
 	}
 
 	@Override
-	@Transactional
 	public long getNumberOfStudents(int classSemesterId) {
 		return classSemesterDAO.getNumberOfStudents(classSemesterId);
 	}
 
 	@Override
-	@Transactional
 	public void autoPutStudentsIntoClassSemester(int classSemesterId) {
 		ClassSemester classSemester = getClassSemesterById(classSemesterId, true);
 		if (classSemester == null) {
@@ -142,14 +125,12 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 	}
 
 	@Override
-	@Transactional
 	public List<ClassSemester> listClassSemestersBySpecializedSemester(int semesterId, int specializedId,
 			int detailSpecializedId, int semesterNumber) {
 		return classSemesterDAO.listClassSemestersBySpecializedSemester(semesterId, specializedId, detailSpecializedId,
 				semesterNumber);
 	}
 
-	@Transactional
 	private void createNewClass(Specialized specialized, Specialized detailSpecialized, Semester semester,
 			int semesterNumber, Student student) {
 		int specializedId = specialized.getSpecializedId();
@@ -244,7 +225,6 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 	}
 
 	@Override
-	@Transactional
 	public void autoPutStudentsIntoClassSemesters(int semesterId) {
 		Semester semester = semesterService.getSemesterById(semesterId, false, false, false, false);
 		if (semester == null) {
@@ -283,9 +263,7 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 	}
 
 	@Override
-	@Transactional
 	public boolean isStudentInClassSemester(int studentId, int classSemesterId) {
 		return classSemesterDAO.isStudentInClassSemester(studentId, classSemesterId);
 	}
-
 }

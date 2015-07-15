@@ -54,8 +54,8 @@ public class ProgramSemesterController {
 		model.addAttribute("programSemester", new ProgramSemester());
 		model.addAttribute("programSemesters", programSemesterService.listProgramSemesters());
 		model.addAttribute("semesters", semesterService.listSemesters(false, false, false, false));
-		model.addAttribute("specializeds", specializedService.listSpecializeds());
-		List<Specialized> detailSpecializeds = specializedService.listDetailSpecializeds();
+		model.addAttribute("specializeds", specializedService.listSpecializeds(false, false));
+		List<Specialized> detailSpecializeds = specializedService.listDetailSpecializeds(false, false);
 		detailSpecializeds.add(0, new Specialized());
 		model.addAttribute("detailSpecializeds", detailSpecializeds);
 		return "programSemester";
@@ -76,12 +76,12 @@ public class ProgramSemesterController {
 			programSemester = new ProgramSemester();
 		}
 		Semester semester = semesterService.getSemesterById(semesterId, false, false, false, false);
-		Specialized specialized = specializedService.getSpecializedById(specializedId);
+		Specialized specialized = specializedService.getSpecializedById(specializedId, false, false);
 		if (semester == null || specialized == null) {
 			return "redirect:/programSemesters";
 		}
 		if (detailSpecializedId != null) {
-			Specialized detailSpecialized = specializedService.getSpecializedById(detailSpecializedId);
+			Specialized detailSpecialized = specializedService.getSpecializedById(detailSpecializedId, false, false);
 			if (detailSpecialized != null) {
 				programSemester.setDetailSpecialized(detailSpecialized);
 			}
@@ -121,8 +121,8 @@ public class ProgramSemesterController {
 		model.addAttribute("programSemester", programSemester);
 		model.addAttribute("programSemesters", programSemesterService.listProgramSemesters());
 		model.addAttribute("semesters", semesterService.listSemesters(false, false, false, false));
-		model.addAttribute("specializeds", specializedService.listSpecializeds());
-		List<Specialized> detailSpecializeds = specializedService.listDetailSpecializeds();
+		model.addAttribute("specializeds", specializedService.listSpecializeds(false, false));
+		List<Specialized> detailSpecializeds = specializedService.listDetailSpecializeds(false, false);
 		detailSpecializeds.add(0, new Specialized());
 		model.addAttribute("detailSpecializeds", detailSpecializeds);
 		model.addAttribute("semesterId", programSemester.getSemester().getSemesterId());

@@ -6,17 +6,12 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 
 @Repository
 public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
-
-	private static final Logger logger = LoggerFactory.getLogger(ClassCourseSemesterDAOImpl.class);
-
 	private SessionFactory sessionFactory;
 
 	public void setSessionFactory(SessionFactory sessionFactory) {
@@ -30,13 +25,11 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 	@Override
 	public void addClassCourseSemester(ClassCourseSemester classCourseSemester) {
 		getCurrentSession().persist(classCourseSemester);
-		logger.info("ClassCourseSemester was saved successfully, ClassCourseSemester details=" + classCourseSemester);
 	}
 
 	@Override
 	public void updateClassCourseSemester(ClassCourseSemester classCourseSemester) {
 		getCurrentSession().update(classCourseSemester);
-		logger.info("ClassCourseSemester was updated successfully, class details=" + classCourseSemester);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -47,9 +40,6 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 		Query query = getCurrentSession().createQuery(hql);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<ClassCourseSemester> classCourseSemesters = (List<ClassCourseSemester>) query.list();
-		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
-			logger.info("ClassCourseSemester list:" + classCourseSemester);
-		}
 		return classCourseSemesters;
 	}
 
@@ -62,9 +52,6 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 		query.setParameter("classSemesterId", classSemesterId);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<ClassCourseSemester> classCourseSemesters = (List<ClassCourseSemester>) query.list();
-		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
-			logger.info("ClassCourseSemester list:" + classCourseSemester);
-		}
 		return classCourseSemesters;
 	}
 
@@ -77,9 +64,6 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 		query.setParameter("courseSemesterId", courseSemesterId);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<ClassCourseSemester> classCourseSemesters = (List<ClassCourseSemester>) query.list();
-		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
-			logger.info("ClassCourseSemester list:" + classCourseSemester);
-		}
 		return classCourseSemesters;
 	}
 
@@ -87,21 +71,13 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 	public ClassCourseSemester getClassCourseSemesterById(int classCourseSemesterId) {
 		ClassCourseSemester classCourseSemester = (ClassCourseSemester) getCurrentSession()
 				.get(ClassCourseSemester.class, new Integer(classCourseSemesterId));
-		if (classCourseSemester != null) {
-			logger.info(
-					"ClassCourseSemester was loaded successfully, ClassCourseSemester details=" + classCourseSemester);
-		}
 		return classCourseSemester;
 	}
 
 	@Override
 	public void deleteClassCourseSemester(int classCourseSemesterId) {
 		ClassCourseSemester classCourseSemester = getClassCourseSemesterById(classCourseSemesterId);
-		if (classCourseSemester != null) {
-			getCurrentSession().delete(classCourseSemester);
-			logger.info(
-					"ClassCourseSemester was deleted successfully, classCourseSemester details=" + classCourseSemester);
-		}
+		getCurrentSession().delete(classCourseSemester);
 
 	}
 
@@ -114,9 +90,6 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 		query.setParameter("semesterId", semesterId);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<ClassCourseSemester> classCourseSemesters = (List<ClassCourseSemester>) query.list();
-		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
-			logger.info("ClassCourseSemester list:" + classCourseSemester);
-		}
 		return classCourseSemesters;
 	}
 
@@ -134,5 +107,4 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 		List<ClassCourseSemester> classCourseSemesters = (List<ClassCourseSemester>) query.list();
 		return classCourseSemesters;
 	}
-
 }

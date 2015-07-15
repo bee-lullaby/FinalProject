@@ -22,8 +22,8 @@ import vn.edu.fpt.timetabling.model.Specialized;
 import vn.edu.fpt.timetabling.model.Student;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class StudentServiceImpl implements StudentService {
-
 	private StudentDAO studentDAO;
 
 	@Autowired
@@ -34,82 +34,65 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	@Transactional
 	public void addStudent(Student student) {
 		studentDAO.addStudent(student);
 	}
 
 	@Override
-	@Transactional
-	public void addStudentsFromFile(int semesterId, File students) {
-		try {
-			FileInputStream file = new FileInputStream(students);
-			XSSFWorkbook workbook = new XSSFWorkbook(file);
-			XSSFSheet sheet = workbook.getSheetAt(0);
-
-			Iterator<Row> rowIterator = sheet.iterator();
-
-			rowIterator.next();
-
-			while (rowIterator.hasNext()) {
-				Row row = rowIterator.next();
-				String studentCode = row.getCell(0).getStringCellValue().trim();
-				String name = row.getCell(1).getStringCellValue().trim();
-				String specializedCode = row.getCell(2).getStringCellValue().trim();
-				String account = getAccount(name, studentCode);
-				Double currentSemester = row.getCell(3).getNumericCellValue();
-				Specialized specialized = specializedService.getSpecializedByCode(specializedCode);
-				Student s = new Student();
-				s.setStudentCode(studentCode);
-				s.setName(name);
-				s.setAccount(account);
-				s.setEmail(account += "@fpt.edu.vn");
-				s.setBatch("hameo");
-				s.setSpecialized(specialized);
-				s.setSemester(currentSemester.intValue());
-				studentDAO.addStudent(s);
-			}
-
-			workbook.close();
-			file.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public void addStudentsFromFile(int semesterId, File students) throws IOException {
+		FileInputStream file = new FileInputStream(students);
+		XSSFWorkbook workbook = new XSSFWorkbook(file);
+		XSSFSheet sheet = workbook.getSheetAt(0);
+		Iterator<Row> rowIterator = sheet.iterator();
+		rowIterator.next();
+		while (rowIterator.hasNext()) {
+			Row row = rowIterator.next();
+			String studentCode = row.getCell(0).getStringCellValue().trim();
+			String name = row.getCell(1).getStringCellValue().trim();
+			String specializedCode = row.getCell(2).getStringCellValue().trim();
+			String account = getAccount(name, studentCode);
+			Double currentSemester = row.getCell(3).getNumericCellValue();
+			Specialized specialized = specializedService.getSpecializedByCode(specializedCode, false, false);
+			Student s = new Student();
+			s.setStudentCode(studentCode);
+			s.setName(name);
+			s.setAccount(account);
+			s.setEmail(account += "@fpt.edu.vn");
+			s.setBatch("hameo");
+			s.setSpecialized(specialized);
+			s.setSemester(currentSemester.intValue());
+			studentDAO.addStudent(s);
 		}
+		workbook.close();
+		file.close();
 	}
 
 	@Override
-	@Transactional
 	public void updateStudent(Student student) {
 		studentDAO.updateStudent(student);
 	}
 
 	@Override
-	@Transactional
 	public List<Student> listStudents() {
 		return studentDAO.listStudents();
 	}
 
 	@Override
-	@Transactional
 	public Student getStudentById(int studentId) {
 		return studentDAO.getStudentById(studentId);
 	}
 
 	@Override
-	@Transactional
 	public Student getStudentByCode(String code) {
 		return studentDAO.getStudentByCode(code);
 	}
 
 	@Override
-	@Transactional
 	public void deleteStudent(int studentId) {
 		studentDAO.deleteStudent(studentId);
 	}
 
 	@Override
-	@Transactional
 	public String getNextStudentCode(Specialized specialized) {
 		Set<Student> students = specialized.getStudents();
 		System.out.println(students.size());
@@ -135,7 +118,6 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	@Transactional
 	public String getAccount(String name, String studentCode) {
 		String temp = Normalizer.normalize(name, Normalizer.Form.NFD);
 		Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
@@ -158,14 +140,12 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	@Transactional
 	public String getEmail(String account) {
 		String email = account + "@fpt.edu.vn";
 		return email;
 	}
 
 	@Override
-	@Transactional
 	public List<Student> listStudentsCanBeInClassCourseSemester(int classSemesterId, int specializedId,
 			int detailspecializedId, int semesterNumber, int classCourseSemesterId) {
 		return studentDAO.listStudentsCanBeInClassCourseSemester(classSemesterId, specializedId, detailspecializedId,
@@ -173,7 +153,6 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	@Transactional
 	public List<Student> listStudentsInClassCourseSemester(int classSemesterId, int classCourseSemesterId) {
 		return studentDAO.listStudentsInClassCourseSemester(classSemesterId, classCourseSemesterId);
 	}
@@ -182,5 +161,4 @@ public class StudentServiceImpl implements StudentService {
 	public List<Student> listStudentsWithoutClass() {
 		return studentDAO.listStudentsWithoutClass();
 	}
-
 }

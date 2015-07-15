@@ -49,7 +49,7 @@ public class ClassController {
 		}
 		model.addAttribute("classFPT", new ClassFPT());
 		model.addAttribute("classes", classService.listClasses());
-		model.addAttribute("specializeds", specializedService.listSpecializeds());
+		model.addAttribute("specializeds", specializedService.listSpecializeds(false, false));
 		model.addAttribute("courses", courseService.listCourses());
 		return "classManagement";
 	}
@@ -82,7 +82,7 @@ public class ClassController {
 		classFPT.setType(type);
 		String classCodePrefix;
 		if (type.equals(ClassType.SPECIALIZED)) {
-			classFPT.setSpecialized(specializedService.getSpecializedById(specializedId));
+			classFPT.setSpecialized(specializedService.getSpecializedById(specializedId, false, false));
 			classFPT.setBatch(batch);
 			classFPT.setCourse(null);
 			classCodePrefix = classFPT.getSpecialized().getCode() + String.format("%02d", batch);
@@ -128,7 +128,7 @@ public class ClassController {
 		}
 		model.addAttribute("classFPT", classFPT);
 		model.addAttribute("classes", classService.listClasses());
-		model.addAttribute("specializeds", specializedService.listSpecializeds());
+		model.addAttribute("specializeds", specializedService.listSpecializeds(false, false));
 		model.addAttribute("courses", courseService.listCourses());
 		if (classFPT.getType().equals(ClassType.SPECIALIZED)) {
 			model.addAttribute("specialized", classFPT.getSpecialized().getSpecializedId());

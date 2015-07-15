@@ -9,6 +9,7 @@ import vn.edu.fpt.timetabling.dao.TeacherSemesterDAO;
 import vn.edu.fpt.timetabling.model.TeacherSemester;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class TeacherSemesterServiceImpl implements TeacherSemesterService {
 	private TeacherSemesterDAO teacherSemesterDAO;
 
@@ -17,39 +18,35 @@ public class TeacherSemesterServiceImpl implements TeacherSemesterService {
 	}
 
 	@Override
-	@Transactional
 	public void addTeacherSemester(TeacherSemester teacherSemester) {
 		teacherSemesterDAO.addTeacherSemester(teacherSemester);
 	}
 
 	@Override
-	@Transactional
 	public void updateTeacherSemester(TeacherSemester teacherSemester) {
 		teacherSemesterDAO.updateTeacherSemester(teacherSemester);
 	}
 
 	@Override
-	@Transactional
-	public List<TeacherSemester> listTeacherSemesters() {
-		return teacherSemesterDAO.listTeacherSemesters();
+	public List<TeacherSemester> listTeacherSemesters(boolean jointTeacherCourseSemesters, boolean jointTimetables) {
+		return teacherSemesterDAO.listTeacherSemesters(jointTeacherCourseSemesters, jointTimetables);
 	}
 
 	@Override
-	@Transactional
-	public TeacherSemester getTeacherSemesterById(int teacherSemesterId) {
-		return teacherSemesterDAO.getTeacherSemesterById(teacherSemesterId);
+	public TeacherSemester getTeacherSemesterById(int teacherSemesterId, boolean jointTeacherCourseSemesters,
+			boolean jointTimetables) {
+		return teacherSemesterDAO.getTeacherSemesterById(teacherSemesterId, jointTeacherCourseSemesters,
+				jointTimetables);
 	}
 
 	@Override
-	@Transactional
 	public void deleteTeacherSemester(int teacherSemesterId) {
 		teacherSemesterDAO.deleteTeacherSemester(teacherSemesterId);
 	}
 
 	@Override
-	@Transactional
-	public TeacherSemester getTeacherSemesterByAccount(String account) {
-		return teacherSemesterDAO.getTeacherSemesterByAccount(account);
+	public TeacherSemester getTeacherSemesterByAccount(String account, boolean jointTeacherCourseSemesters,
+			boolean jointTimetables) {
+		return teacherSemesterDAO.getTeacherSemesterByAccount(account, jointTeacherCourseSemesters, jointTimetables);
 	}
-
 }

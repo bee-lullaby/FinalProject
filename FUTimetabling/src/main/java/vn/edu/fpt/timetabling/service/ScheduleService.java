@@ -1,5 +1,6 @@
 package vn.edu.fpt.timetabling.service;
 
+import java.text.ParseException;
 import java.util.List;
 
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
@@ -9,7 +10,6 @@ import vn.edu.fpt.timetabling.model.DaySlot;
 import vn.edu.fpt.timetabling.model.TeacherCourseSemester;
 
 public interface ScheduleService {
-
 	public List<ClassSemester> listClassBySemester(int semesterId);
 
 	public List<ClassCourseSemester> listClassCourseSemesterByClassSemester(int classId, int semesterId);
@@ -20,7 +20,7 @@ public interface ScheduleService {
 
 	public List<DaySlot> getListDaySlot(int semesterId, int classId, int week);
 
-	public boolean saveTimetable(List<DaySlot> daySlots, List<DaySlot> prevDaySlots);
+	public boolean saveTimetable(List<DaySlot> daySlots, List<DaySlot> prevDaySlots) throws ParseException;
 
 	public boolean generateFromPreviousWeek(int semesterId, int classId, int week);
 }

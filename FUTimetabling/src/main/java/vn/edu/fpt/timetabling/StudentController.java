@@ -46,7 +46,7 @@ public class StudentController {
 		}
 		model.addAttribute("student", new Student());
 		model.addAttribute("students", studentService.listStudents());
-		model.addAttribute("specializeds", specializedService.listSpecializeds());
+		model.addAttribute("specializeds", specializedService.listSpecializeds(false, false));
 		return "student";
 	}
 
@@ -66,7 +66,7 @@ public class StudentController {
 			update = false;
 		}
 		student.setName(name);
-		Specialized specialized = specializedService.getSpecializedById(specializedId);
+		Specialized specialized = specializedService.getSpecializedById(specializedId, false, false);
 		student.setSpecialized(specialized);
 		String studentCode;
 		if (update) {
@@ -90,28 +90,26 @@ public class StudentController {
 		}
 		return "redirect:/students";
 	}
-	
+
 	// For add and update person both
-		@RequestMapping(value = "/student/addFromFile", method = RequestMethod.POST)
-		public String addSpecializedFromFile(
-				@RequestParam("file") MultipartFile file, @RequestParam("semesterId") int semesterId) {
-			if (!file.isEmpty()) {
-				File students = new File(
-						"D:\\FU\\Do an tot nghiep\\Data\\ServerData\\"
-								+ file.getOriginalFilename());
-				try {
-					file.transferTo(students);
-					studentService.addStudentsFromFile(semesterId, students);
-				} catch (IllegalStateException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+	@RequestMapping(value = "/student/addFromFile", method = RequestMethod.POST)
+	public String addSpecializedFromFile(@RequestParam("file") MultipartFile file,
+			@RequestParam("semesterId") int semesterId) {
+		if (!file.isEmpty()) {
+			File students = new File("D:\\FU\\Do an tot nghiep\\Data\\ServerData\\" + file.getOriginalFilename());
+			try {
+				file.transferTo(students);
+				studentService.addStudentsFromFile(semesterId, students);
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			return "redirect:/specializeds";
 		}
+		return "redirect:/specializeds";
+	}
 
 	@RequestMapping("/student/delete/{studentId}")
 	public String deleteStudent(HttpSession session, @PathVariable("studentId") int studentId) {
@@ -133,7 +131,7 @@ public class StudentController {
 		}
 		model.addAttribute("student", student);
 		model.addAttribute("students", studentService.listStudents());
-		model.addAttribute("specializeds", specializedService.listSpecializeds());
+		model.addAttribute("specializeds", specializedService.listSpecializeds(false, false));
 		return "student";
 	}
 }

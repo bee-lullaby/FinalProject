@@ -17,13 +17,11 @@ import vn.edu.fpt.timetabling.dao.CourseSemesterDAO;
 import vn.edu.fpt.timetabling.model.CourseSemester;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class CourseSemesterServiceImpl implements CourseSemesterService {
-
 	private CourseSemesterDAO courseSemesterDAO;
-
 	@Autowired
 	private CourseService courseService;
-
 	@Autowired
 	private SemesterService semesterService;
 
@@ -33,59 +31,44 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 
 	@Override
 	@Transactional
-	public void addCourseSemesterFromFile(File courseSemesters, int semesterId) {
-		try {
-			FileInputStream file = new FileInputStream(courseSemesters);
-			XSSFWorkbook workbook = new XSSFWorkbook(file);
-			XSSFSheet sheet = workbook.getSheetAt(0);
-
-			Iterator<Row> rowIterator = sheet.iterator();
-
-			rowIterator.next();
-
-			while (rowIterator.hasNext()) {
-				Row row = rowIterator.next();
-				CourseSemester courseSemester = new CourseSemester();
-
-				String codeCourse = row.getCell(1).getStringCellValue().trim();
-				Double slots = row.getCell(3).getNumericCellValue();
-
-				String codeConditionCourse = "";
-				if (row.getCell(4) != null) {
-					codeConditionCourse = row.getCell(4).getStringCellValue();
-				}
-				courseSemester.setCourse(courseService.getCourseByCode(codeCourse));
-				courseSemester.setSemester(semesterService.getSemesterById(semesterId, false, false, false, false));
-				courseSemester.setSlots(slots.intValue());
-				if (codeConditionCourse.compareTo("") != 0) {
-					courseSemester.setCourseCondition(courseService.getCourseByCode(codeConditionCourse));
-				}
-				courseSemesterDAO.addCourseSemester(courseSemester);
-
+	public void addCourseSemesterFromFile(File courseSemesters, int semesterId) throws IOException {
+		FileInputStream file = new FileInputStream(courseSemesters);
+		XSSFWorkbook workbook = new XSSFWorkbook(file);
+		XSSFSheet sheet = workbook.getSheetAt(0);
+		Iterator<Row> rowIterator = sheet.iterator();
+		rowIterator.next();
+		while (rowIterator.hasNext()) {
+			Row row = rowIterator.next();
+			CourseSemester courseSemester = new CourseSemester();
+			String codeCourse = row.getCell(1).getStringCellValue().trim();
+			Double slots = row.getCell(3).getNumericCellValue();
+			String codeConditionCourse = "";
+			if (row.getCell(4) != null) {
+				codeConditionCourse = row.getCell(4).getStringCellValue();
 			}
-
-			workbook.close();
-			file.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			courseSemester.setCourse(courseService.getCourseByCode(codeCourse));
+			courseSemester.setSemester(semesterService.getSemesterById(semesterId, false, false, false, false));
+			courseSemester.setSlots(slots.intValue());
+			if (codeConditionCourse.compareTo("") != 0) {
+				courseSemester.setCourseCondition(courseService.getCourseByCode(codeConditionCourse));
+			}
+			courseSemesterDAO.addCourseSemester(courseSemester);
 		}
+		workbook.close();
+		file.close();
 	}
 
 	@Override
-	@Transactional
 	public void addCourseSemester(CourseSemester courseSemester) {
 		courseSemesterDAO.addCourseSemester(courseSemester);
 	}
 
 	@Override
-	@Transactional
 	public void updateCourseSemester(CourseSemester courseSemester) {
 		courseSemesterDAO.updateCourseSemester(courseSemester);
 	}
 
 	@Override
-	@Transactional
 	public List<CourseSemester> listCourseSemesters(boolean jointClassCourseSemester,
 			boolean jointTeacherCourseSemester, boolean jointProgramSemesterDetails) {
 		return courseSemesterDAO.listCourseSemesters(jointClassCourseSemester, jointTeacherCourseSemester,
@@ -93,7 +76,6 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 	}
 
 	@Override
-	@Transactional
 	public CourseSemester getCourseSemesterById(int courseSemesterId, boolean jointClassCourseSemester,
 			boolean jointTeacherCourseSemester, boolean jointProgramSemesterDetails) {
 		return courseSemesterDAO.getCourseSemesterById(courseSemesterId, jointClassCourseSemester,
@@ -101,7 +83,6 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 	}
 
 	@Override
-	@Transactional
 	public CourseSemester getCourseSemesterByCode(String code, boolean jointClassCourseSemester,
 			boolean jointTeacherCourseSemester, boolean jointProgramSemesterDetails) {
 		return courseSemesterDAO.getCourseSemesterByCode(code, jointClassCourseSemester, jointTeacherCourseSemester,
@@ -109,7 +90,6 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 	}
 
 	@Override
-	@Transactional
 	public CourseSemester getCourseSemesterByCourseSemester(int courseId, int semesterId,
 			boolean jointClassCourseSemester, boolean jointTeacherCourseSemester, boolean jointProgramSemesterDetails) {
 		return courseSemesterDAO.getCourseSemesterByCourseSemester(courseId, semesterId, jointClassCourseSemester,
@@ -117,15 +97,12 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 	}
 
 	@Override
-	@Transactional
 	public void deleteCourseSemester(int courseSemesterId) {
 		courseSemesterDAO.deleteCourseSemester(courseSemesterId);
 	}
 
 	@Override
-	@Transactional
 	public List<CourseSemester> listCourseSemestersByStudent(int studentId) {
 		return courseSemesterDAO.listCourseSemestersByStudent(studentId);
 	}
-
 }

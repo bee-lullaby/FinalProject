@@ -1,6 +1,7 @@
 package vn.edu.fpt.timetabling.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import vn.edu.fpt.timetabling.model.Specialized;
@@ -8,9 +9,9 @@ import vn.edu.fpt.timetabling.model.Student;
 
 public interface StudentService {
 	public void addStudent(Student student);
-	
-	public void addStudentsFromFile(int semesterId, File students);
-	
+
+	public void addStudentsFromFile(int semesterId, File students) throws IOException;
+
 	public void updateStudent(Student student);
 
 	public List<Student> listStudents();

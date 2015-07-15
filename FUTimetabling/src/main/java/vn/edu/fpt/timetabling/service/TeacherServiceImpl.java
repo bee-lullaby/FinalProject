@@ -9,8 +9,8 @@ import vn.edu.fpt.timetabling.dao.TeacherDAO;
 import vn.edu.fpt.timetabling.model.Teacher;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class TeacherServiceImpl implements TeacherService {
-	
 	private TeacherDAO teacherDAO;
 
 	public void setTeacherDAO(TeacherDAO teacherDAO) {
@@ -18,39 +18,32 @@ public class TeacherServiceImpl implements TeacherService {
 	}
 
 	@Override
-	@Transactional
 	public void addTeacher(Teacher teacher) {
 		teacherDAO.addTeacher(teacher);
 	}
 
 	@Override
-	@Transactional
 	public void updateTeacher(Teacher teacher) {
 		teacherDAO.updateTeacher(teacher);
 	}
 
 	@Override
-	@Transactional
 	public List<Teacher> listTeachers() {
 		return teacherDAO.listTeachers();
 	}
 
 	@Override
-	@Transactional
 	public Teacher getTeacherById(int teacherId) {
 		return teacherDAO.getTeacherById(teacherId);
 	}
 
 	@Override
-	@Transactional
 	public Teacher getTeacherByEmail(String email) {
 		return teacherDAO.getTeacherByEmail(email);
 	}
 
 	@Override
-	@Transactional
 	public void deleteTeacher(int teacherId) {
 		teacherDAO.deleteTeacher(teacherId);
 	}
-
 }

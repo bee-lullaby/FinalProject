@@ -9,8 +9,6 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -23,8 +21,6 @@ import vn.edu.fpt.timetabling.model.Timetable;
 
 @Repository
 public class StudentDAOImpl implements StudentDAO {
-	private static final Logger logger = LoggerFactory.getLogger(StudentDAOImpl.class);
-
 	private SessionFactory sessionFactory;
 	@Autowired
 	private ClassCourseSemesterDAO classCourseSemesterDAO;
@@ -46,58 +42,40 @@ public class StudentDAOImpl implements StudentDAO {
 	@Override
 	public void addStudent(Student student) {
 		getCurrentSession().persist(student);
-		logger.info("student was saved successfully, student details=" + student);
 	}
 
 	@Override
 	public void updateStudent(Student student) {
 		getCurrentSession().update(student);
-		logger.info("student was updated successfully, student details=" + student);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Student> listStudents() {
 		List<Student> students = (List<Student>) getCurrentSession()
-				.createQuery("from vn.edu.fpt.timetabling.model.Student").list();
-		for (Student student : students) {
-			logger.info("student list:" + student);
-		}
+				.createQuery("FROM vn.edu.fpt.timetabling.model.Student").list();
 		return students;
 	}
 
 	@Override
 	public Student getStudentById(int studentId) {
 		Student student = (Student) getCurrentSession().get(Student.class, new Integer(studentId));
-		if (student != null) {
-			logger.info("student was loaded successfully, student details=" + student);
-		}
 		return student;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Student getStudentByCode(String code) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.Student S WHERE S.studentCode = :code";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("code", code);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		List<Student> student = (List<Student>) query.list();
-		if (!student.isEmpty()) {
-			logger.info("student was loaded successfully, student details=" + student.get(0));
-			return student.get(0);
-		} else {
-			return null;
-		}
+		return (Student) query.uniqueResult();
 	}
 
 	@Override
 	public void deleteStudent(int studentId) {
 		Student student = getStudentById(studentId);
-		if (student != null) {
-			getCurrentSession().delete(student);
-			logger.info("student was deleted successfully, student details=" + student);
-		}
+		getCurrentSession().delete(student);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -160,7 +138,6 @@ public class StudentDAOImpl implements StudentDAO {
 				if (!isSuitable) {
 					break;
 				}
-
 			}
 			if (!isSuitable) {
 				continue;
@@ -218,5 +195,4 @@ public class StudentDAOImpl implements StudentDAO {
 		List<Student> students = (List<Student>) query.list();
 		return students;
 	}
-
 }

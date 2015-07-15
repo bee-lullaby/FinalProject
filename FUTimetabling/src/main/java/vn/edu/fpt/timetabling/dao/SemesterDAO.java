@@ -16,5 +16,4 @@ public interface SemesterDAO {
 			boolean jointProgramSemester, boolean jointTeacherSemester);
 
 	public void deleteSemester(int semesterId);
-
 }

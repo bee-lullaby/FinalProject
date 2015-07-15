@@ -9,8 +9,8 @@ import vn.edu.fpt.timetabling.dao.ClassCourseStudentSemesterDAO;
 import vn.edu.fpt.timetabling.model.ClassCourseStudentSemester;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class ClassCourseStudentSemesterServiceImpl implements ClassCourseStudentSemesterService {
-
 	private ClassCourseStudentSemesterDAO classCourseStudentSemesterDAO;
 
 	public void setClassCourseStudentSemesterDAO(ClassCourseStudentSemesterDAO classCourseStudentSemesterDAO) {
@@ -18,39 +18,32 @@ public class ClassCourseStudentSemesterServiceImpl implements ClassCourseStudent
 	}
 
 	@Override
-	@Transactional
 	public void addClassCourseStudentSemester(ClassCourseStudentSemester classCourseStudentSemester) {
 		classCourseStudentSemesterDAO.addClassCourseStudentSemester(classCourseStudentSemester);
 	}
 
 	@Override
-	@Transactional
 	public void updateClassCourseStudentSemester(ClassCourseStudentSemester classCourseStudentSemester) {
 		classCourseStudentSemesterDAO.updateClassCourseStudentSemester(classCourseStudentSemester);
 	}
 
 	@Override
-	@Transactional
 	public List<ClassCourseStudentSemester> listClassCourseStudentSemesters() {
 		return classCourseStudentSemesterDAO.listClassCourseStudentSemesters();
 	}
 
 	@Override
-	@Transactional
 	public ClassCourseStudentSemester getClassCourseStudentSemesterById(int classCourseStudentSemesterId) {
 		return classCourseStudentSemesterDAO.getClassCourseStudentSemesterById(classCourseStudentSemesterId);
 	}
 
 	@Override
-	@Transactional
 	public void deleteClassCourseStudentSemester(int classCourseStudentSemesterId) {
 		classCourseStudentSemesterDAO.deleteClassCourseStudentSemester(classCourseStudentSemesterId);
 	}
 
 	@Override
-	@Transactional
-	public void removeStudentFromClassCourseSemester(int studentId, int classCourseSemesterId) {
-		classCourseStudentSemesterDAO.removeStudentFromClassCourseSemester(studentId, classCourseSemesterId);
+	public int removeStudentFromClassCourseSemester(int studentId, int classCourseSemesterId) {
+		return classCourseStudentSemesterDAO.removeStudentFromClassCourseSemester(studentId, classCourseSemesterId);
 	}
-
 }

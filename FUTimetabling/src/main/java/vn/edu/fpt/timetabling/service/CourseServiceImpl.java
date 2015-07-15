@@ -17,10 +17,9 @@ import vn.edu.fpt.timetabling.dao.CourseDAO;
 import vn.edu.fpt.timetabling.model.Course;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class CourseServiceImpl implements CourseService {
-
 	private CourseDAO courseDAO;
-
 	@Autowired
 	private DepartmentService departmentService;
 
@@ -29,72 +28,52 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	@Transactional
 	public void addCourse(Course course) {
 		courseDAO.addCourse(course);
 	}
 
 	@Override
-	@Transactional
-	public void addCourseFromFile(File courses) {
-		try {
-			FileInputStream file = new FileInputStream(courses);
-			XSSFWorkbook workbook = new XSSFWorkbook(file);
-			XSSFSheet sheet = workbook.getSheetAt(0);
-
-			Iterator<Row> rowIterator = sheet.iterator();
-
-			rowIterator.next();
-
-			while (rowIterator.hasNext()) {
-				Row row = rowIterator.next();
-				Course course = new Course();
-
-				String code = row.getCell(0).getStringCellValue().trim();
-				course.setDepartment(departmentService.getDepartmentByCode(code));
-				course.setCode(row.getCell(1).getStringCellValue().trim());
-				course.setName(row.getCell(2).getStringCellValue().trim());
-				courseDAO.addCourse(course);
-
-			}
-
-			workbook.close();
-			file.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public void addCourseFromFile(File courses) throws IOException {
+		FileInputStream file = new FileInputStream(courses);
+		XSSFWorkbook workbook = new XSSFWorkbook(file);
+		XSSFSheet sheet = workbook.getSheetAt(0);
+		Iterator<Row> rowIterator = sheet.iterator();
+		rowIterator.next();
+		while (rowIterator.hasNext()) {
+			Row row = rowIterator.next();
+			Course course = new Course();
+			String code = row.getCell(0).getStringCellValue().trim();
+			course.setDepartment(departmentService.getDepartmentByCode(code));
+			course.setCode(row.getCell(1).getStringCellValue().trim());
+			course.setName(row.getCell(2).getStringCellValue().trim());
+			courseDAO.addCourse(course);
 		}
-
+		workbook.close();
+		file.close();
 	}
 
 	@Override
-	@Transactional
 	public void updateCourse(Course course) {
 		courseDAO.updateCourse(course);
 	}
 
 	@Override
-	@Transactional
 	public List<Course> listCourses() {
 		return courseDAO.listCourses();
 	}
 
 	@Override
-	@Transactional
 	public Course getCourseById(int courseId) {
 		return courseDAO.getCourseById(courseId);
 	}
 
 	@Override
-	@Transactional
 	public Course getCourseByCode(String code) {
 		return courseDAO.getCourseByCode(code);
 	}
 
 	@Override
-	@Transactional
 	public void deleteCourse(int courseId) {
 		courseDAO.deleteCourse(courseId);
 	}
-
 }

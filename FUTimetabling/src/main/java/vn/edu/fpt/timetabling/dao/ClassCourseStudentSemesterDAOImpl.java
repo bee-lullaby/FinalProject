@@ -6,17 +6,12 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import vn.edu.fpt.timetabling.model.ClassCourseStudentSemester;
 
 @Repository
 public class ClassCourseStudentSemesterDAOImpl implements ClassCourseStudentSemesterDAO {
-
-	private static final Logger logger = LoggerFactory.getLogger(ClassCourseStudentSemesterDAOImpl.class);
-
 	private SessionFactory sessionFactory;
 
 	public void setSessionFactory(SessionFactory sessionFactory) {
@@ -30,15 +25,11 @@ public class ClassCourseStudentSemesterDAOImpl implements ClassCourseStudentSeme
 	@Override
 	public void addClassCourseStudentSemester(ClassCourseStudentSemester classCourseStudentSemester) {
 		getCurrentSession().persist(classCourseStudentSemester);
-		logger.info("ClassCourseStudentSemester was saved successfully, ClassCourseStudentSemester details="
-				+ classCourseStudentSemester);
 	}
 
 	@Override
 	public void updateClassCourseStudentSemester(ClassCourseStudentSemester classCourseStudentSemester) {
 		getCurrentSession().update(classCourseStudentSemester);
-		logger.info("ClassCourseStudentSemester was saved successfully, ClassCourseStudentSemester details="
-				+ classCourseStudentSemester);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -48,9 +39,6 @@ public class ClassCourseStudentSemesterDAOImpl implements ClassCourseStudentSeme
 		Query query = getCurrentSession().createQuery(hql);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<ClassCourseStudentSemester> classCourseStudentSemesters = (List<ClassCourseStudentSemester>) query.list();
-		for (ClassCourseStudentSemester classCourseStudentSemester : classCourseStudentSemesters) {
-			logger.info("ClassCourseSemester list:" + classCourseStudentSemester);
-		}
 		return classCourseStudentSemesters;
 	}
 
@@ -58,10 +46,6 @@ public class ClassCourseStudentSemesterDAOImpl implements ClassCourseStudentSeme
 	public ClassCourseStudentSemester getClassCourseStudentSemesterById(int classCourseStudentSemesterId) {
 		ClassCourseStudentSemester classCourseStudentSemester = (ClassCourseStudentSemester) getCurrentSession()
 				.get(ClassCourseStudentSemester.class, new Integer(classCourseStudentSemesterId));
-		if (classCourseStudentSemester != null) {
-			logger.info("ClassCourseStudentSemester was loaded successfully, ClassCourseStudentSemester details="
-					+ classCourseStudentSemester);
-		}
 		return classCourseStudentSemester;
 	}
 
@@ -69,11 +53,7 @@ public class ClassCourseStudentSemesterDAOImpl implements ClassCourseStudentSeme
 	public void deleteClassCourseStudentSemester(int classCourseStudentSemesterId) {
 		ClassCourseStudentSemester classCourseStudentSemester = getClassCourseStudentSemesterById(
 				classCourseStudentSemesterId);
-		if (classCourseStudentSemester != null) {
-			getCurrentSession().delete(classCourseStudentSemester);
-			logger.info("ClassCourseSemester was deleted successfully, classCourseSemester details="
-					+ classCourseStudentSemester);
-		}
+		getCurrentSession().delete(classCourseStudentSemester);
 	}
 
 	@Override
@@ -86,5 +66,4 @@ public class ClassCourseStudentSemesterDAOImpl implements ClassCourseStudentSeme
 		query.setParameter("studentId", studentId);
 		return query.executeUpdate();
 	}
-
 }

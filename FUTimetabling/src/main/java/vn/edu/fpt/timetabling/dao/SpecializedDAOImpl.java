@@ -6,16 +6,12 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import vn.edu.fpt.timetabling.model.Specialized;
 
 @Repository
 public class SpecializedDAOImpl implements SpecializedDAO {
-	private static final Logger logger = LoggerFactory.getLogger(SpecializedDAOImpl.class);
-
 	private SessionFactory sessionFactory;
 
 	public void setSessionFactory(SessionFactory sessionFactory) {
@@ -29,82 +25,80 @@ public class SpecializedDAOImpl implements SpecializedDAO {
 	@Override
 	public void addSpecialized(Specialized specialized) {
 		getCurrentSession().persist(specialized);
-		logger.info("Specialized was saved successfully, specialized=" + specialized);
 	}
 
 	@Override
 	public void updateSpecialized(Specialized specialized) {
 		getCurrentSession().update(specialized);
-		logger.info("Specialized was saved successfully, specialized=" + specialized);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Specialized> listSpecializeds() {
-		String hql = "FROM vn.edu.fpt.timetabling.model.Specialized S" + " LEFT OUTER JOIN FETCH S.classes"
-				+ " LEFT OUTER JOIN FETCH S.students" + " WHERE S.detailSpecialized IS FALSE";
+	public List<Specialized> listSpecializeds(boolean jointClasses, boolean jointStudents) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Specialized S";
+		if (jointClasses) {
+			hql += " LEFT OUTER JOIN FETCH S.classes";
+		}
+		if (jointStudents) {
+			hql += " LEFT OUTER JOIN FETCH S.students";
+		}
+		hql += " WHERE S.detailSpecialized IS FALSE";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<Specialized> specializeds = (List<Specialized>) query.list();
-		for (Specialized specialized : specializeds) {
-			logger.info("Specialized list:" + specialized);
-		}
 		return specializeds;
 	}
 
 	@Override
-	public Specialized getSpecializedById(int specializedId) {
-		String hql = "FROM vn.edu.fpt.timetabling.model.Specialized S" + " LEFT OUTER JOIN FETCH S.classes"
-				+ " LEFT OUTER JOIN FETCH S.students" + " WHERE S.specializedId = :specializedId";
+	public Specialized getSpecializedById(int specializedId, boolean jointClasses, boolean jointStudents) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Specialized S";
+		if (jointClasses) {
+			hql += " LEFT OUTER JOIN FETCH S.classes";
+		}
+		if (jointStudents) {
+			hql += " LEFT OUTER JOIN FETCH S.students";
+		}
+		hql += " WHERE S.specializedId = :specializedId";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("specializedId", specializedId);
-		Object temp = query.uniqueResult();
-		if (temp != null) {
-			Specialized specialized = (Specialized) temp;
-			logger.info("Specialized was loaded successfully, specialized=" + specialized);
-			return specialized;
-		} else {
-			return null;
-		}
+		return (Specialized) query.uniqueResult();
 	}
 
 	@Override
-	public Specialized getSpecializedByCode(String code) {
-		String hql = "FROM vn.edu.fpt.timetabling.model.Specialized S" + " LEFT OUTER JOIN FETCH S.classes"
-				+ " LEFT OUTER JOIN FETCH S.students" + " WHERE S.code = :code";
+	public Specialized getSpecializedByCode(String code, boolean jointClasses, boolean jointStudents) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Specialized S";
+		if (jointClasses) {
+			hql += " LEFT OUTER JOIN FETCH S.classes";
+		}
+		if (jointStudents) {
+			hql += " LEFT OUTER JOIN FETCH S.students";
+		}
+		hql += " WHERE S.code = :code";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("code", code);
-		Object temp = query.uniqueResult();
-		if (temp != null) {
-			Specialized specialized = (Specialized) temp;
-			logger.info("Specialized was loaded successfully, specialized=" + specialized);
-			return specialized;
-		} else {
-			return null;
-		}
+		return (Specialized) query.uniqueResult();
 	}
 
 	@Override
 	public void deleteSpecialized(int specializedId) {
-		Specialized specialized = getSpecializedById(specializedId);
-		if (specialized != null) {
-			getCurrentSession().delete(specialized);
-			logger.info("Specialized was deleted successfully, specialized=" + specialized);
-		}
+		Specialized specialized = getSpecializedById(specializedId, false, false);
+		getCurrentSession().delete(specialized);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Specialized> listDetailSpecializeds() {
-		String hql = "FROM vn.edu.fpt.timetabling.model.Specialized S" + " LEFT OUTER JOIN FETCH S.classes"
-				+ " LEFT OUTER JOIN FETCH S.students" + " WHERE S.detailSpecialized IS TRUE";
+	public List<Specialized> listDetailSpecializeds(boolean jointClasses, boolean jointStudents) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Specialized S";
+		if (jointClasses) {
+			hql += " LEFT OUTER JOIN FETCH S.classes";
+		}
+		if (jointStudents) {
+			hql += " LEFT OUTER JOIN FETCH S.students";
+		}
+		hql += " WHERE S.detailSpecialized IS TRUE";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<Specialized> specializeds = (List<Specialized>) query.list();
-		for (Specialized specialized : specializeds) {
-			logger.info("Specialized list:" + specialized);
-		}
 		return specializeds;
 	}
-
 }

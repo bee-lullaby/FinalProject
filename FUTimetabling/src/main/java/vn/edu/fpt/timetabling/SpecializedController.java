@@ -31,15 +31,13 @@ public class SpecializedController {
 	@RequestMapping(value = "/specializeds", method = RequestMethod.GET)
 	public String listSpecialized(Model model) {
 		model.addAttribute("specialized", new Specialized());
-		model.addAttribute("listSpecializeds",
-				specializedService.listSpecializeds());
+		model.addAttribute("listSpecializeds", specializedService.listSpecializeds(false, false));
 		return "specialized";
 	}
 
 	// For add and update person both
 	@RequestMapping(value = "/specialized/add", method = RequestMethod.POST)
-	public String addSpecialized(
-			@ModelAttribute("specialized") Specialized specialized) {
+	public String addSpecialized(@ModelAttribute("specialized") Specialized specialized) {
 		if (specialized.getSpecializedId() == 0) {
 			specializedService.addSpecialized(specialized);
 		} else {
@@ -50,12 +48,9 @@ public class SpecializedController {
 
 	// For add and update person both
 	@RequestMapping(value = "/specialized/addFromFile", method = RequestMethod.POST)
-	public String addSpecializedFromFile(
-			@RequestParam("file") MultipartFile file) {
+	public String addSpecializedFromFile(@RequestParam("file") MultipartFile file) {
 		if (!file.isEmpty()) {
-			File specializeds = new File(
-					"D:\\FU\\Do an tot nghiep\\Data\\ServerData\\"
-							+ file.getOriginalFilename());
+			File specializeds = new File("D:\\FU\\Do an tot nghiep\\Data\\ServerData\\" + file.getOriginalFilename());
 			try {
 				file.transferTo(specializeds);
 				specializedService.addSpecializedFromFile(specializeds);
@@ -71,19 +66,15 @@ public class SpecializedController {
 	}
 
 	@RequestMapping("/specialized/delete/{specializedId}")
-	public String deleteSpecialized(
-			@PathVariable("specializedId") int specializedId) {
+	public String deleteSpecialized(@PathVariable("specializedId") int specializedId) {
 		specializedService.deleteSpecialized(specializedId);
 		return "redirect:/specializeds";
 	}
 
 	@RequestMapping("/specialized/edit/{specializedId}")
-	public String editSpecialized(
-			@PathVariable("specializedId") int specializedId, Model model) {
-		model.addAttribute("specialized",
-				specializedService.getSpecializedById(specializedId));
-		model.addAttribute("listSpecializeds",
-				specializedService.listSpecializeds());
+	public String editSpecialized(@PathVariable("specializedId") int specializedId, Model model) {
+		model.addAttribute("specialized", specializedService.getSpecializedById(specializedId, false, false));
+		model.addAttribute("listSpecializeds", specializedService.listSpecializeds(false, false));
 		return "specialized";
 	}
 
