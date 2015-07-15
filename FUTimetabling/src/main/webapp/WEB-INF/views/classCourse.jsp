@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="t"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ page session="false"%>
@@ -59,6 +60,7 @@
 </script>
 </head>
 <body>
+	<t:header />
 	<select onchange="selectSemester(this)">
 		<c:forEach var="item" items="${semesters}">
 			<option value="${item.semesterId}"

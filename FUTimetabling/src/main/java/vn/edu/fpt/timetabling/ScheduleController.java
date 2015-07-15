@@ -32,7 +32,7 @@ import vn.edu.fpt.timetabling.service.ScheduleService;
 import vn.edu.fpt.timetabling.service.SemesterService;
 
 @Controller
-public class ScheduleController {
+public class ScheduleController extends GeneralController {
 	private static final Logger logger = LoggerFactory.getLogger(ScheduleController.class);
 	private ScheduleService scheduleService;
 	private SemesterService semesterService;

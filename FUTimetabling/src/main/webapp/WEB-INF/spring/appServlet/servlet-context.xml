@@ -38,6 +38,12 @@
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
+	<interceptors>
+		<interceptor>
+			<mapping path="/*" />
+			<beans:bean class="vn.edu.fpt.timetabling.Interceptor" />
+		</interceptor>
+	</interceptors>
 
 	<!-- MySQL Datasource with Commons DBCP connection pooling -->
 	<beans:bean class="org.apache.commons.dbcp.BasicDataSource"
@@ -179,8 +185,7 @@
 		<beans:property name="sessionFactory"
 			ref="hibernate4AnnotatedSessionFactory" />
 	</beans:bean>
-	<beans:bean id="roomDAO"
-		class="vn.edu.fpt.timetabling.dao.RoomDAOImpl">
+	<beans:bean id="roomDAO" class="vn.edu.fpt.timetabling.dao.RoomDAOImpl">
 		<beans:property name="sessionFactory"
 			ref="hibernate4AnnotatedSessionFactory" />
 	</beans:bean>
@@ -259,8 +264,7 @@
 	</beans:bean>
 	<beans:bean id="roomService"
 		class="vn.edu.fpt.timetabling.service.RoomServiceImpl">
-		<beans:property name="roomDAO"
-			ref="roomDAO"></beans:property>
+		<beans:property name="roomDAO" ref="roomDAO"></beans:property>
 	</beans:bean>
 	<beans:bean id="roomArrangementService"
 		class="vn.edu.fpt.timetabling.service.RoomArrangementServiceImpl">

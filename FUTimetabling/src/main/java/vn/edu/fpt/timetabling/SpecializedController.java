@@ -3,10 +3,13 @@ package vn.edu.fpt.timetabling;
 import java.io.File;
 import java.io.IOException;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +21,7 @@ import vn.edu.fpt.timetabling.model.Specialized;
 import vn.edu.fpt.timetabling.service.SpecializedService;
 
 @Controller
-public class SpecializedController {
-
+public class SpecializedController extends GeneralController {
 	private SpecializedService specializedService;
 
 	@Autowired(required = true)
@@ -29,9 +31,10 @@ public class SpecializedController {
 	}
 
 	@RequestMapping(value = "/specializeds", method = RequestMethod.GET)
-	public String listSpecialized(Model model) {
+	public String listSpecialized(HttpSession httpSession, Model model) {
 		model.addAttribute("specialized", new Specialized());
-		model.addAttribute("listSpecializeds", specializedService.listSpecializeds(false, false));
+		model.addAttribute("listSpecializeds", specializedService.listSpecializeds(true, false));
+		checkError(httpSession, model);
 		return "specialized";
 	}
 
@@ -73,9 +76,14 @@ public class SpecializedController {
 
 	@RequestMapping("/specialized/edit/{specializedId}")
 	public String editSpecialized(@PathVariable("specializedId") int specializedId, Model model) {
-		model.addAttribute("specialized", specializedService.getSpecializedById(specializedId, false, false));
-		model.addAttribute("listSpecializeds", specializedService.listSpecializeds(false, false));
+		model.addAttribute("specialized", specializedService.getSpecializedById(specializedId, true, false));
+		model.addAttribute("listSpecializeds", specializedService.listSpecializeds(true, false));
 		return "specialized";
 	}
 
+	@ExceptionHandler(Exception.class)
+	public String handleException(HttpSession httpSession, Exception e) {
+		httpSession.setAttribute("error", "Error, please try again.");
+		return "redirect:/specializeds";
+	}
 }

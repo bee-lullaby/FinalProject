@@ -3,10 +3,13 @@ package vn.edu.fpt.timetabling;
 import java.io.File;
 import java.io.IOException;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +22,12 @@ import vn.edu.fpt.timetabling.service.TeacherCourseSemesterService;
 import vn.edu.fpt.timetabling.service.TeacherService;
 
 @Controller
-public class TeacherController {
+public class TeacherController extends GeneralController {
 	private TeacherService teacherService;
-	
+
 	@Autowired
 	private TeacherCourseSemesterService teacherCourseSemesterService;
-	
+
 	@Autowired(required = true)
 	@Qualifier(value = "teacherService")
 	public void setTeacherService(TeacherService teacherService) {
@@ -32,9 +35,10 @@ public class TeacherController {
 	}
 
 	@RequestMapping(value = "/teachers", method = RequestMethod.GET)
-	public String listCourse(Model model) {
+	public String listCourse(HttpSession httpSession, Model model) {
 		model.addAttribute("teacher", new Teacher());
 		model.addAttribute("listTeachers", teacherService.listTeachers());
+		checkError(httpSession, model);
 		return "teacher";
 	}
 
@@ -63,18 +67,14 @@ public class TeacherController {
 		model.addAttribute("listTeachers", teacherService.listTeachers());
 		return "teacher";
 	}
-	
+
 	@RequestMapping("/teacherCourse/addFromFile")
-	public String addTeacherCourseFromFile(
-			@RequestParam("file") MultipartFile file) {
+	public String addTeacherCourseFromFile(@RequestParam("file") MultipartFile file) {
 		if (!file.isEmpty()) {
-			File teacherCourses = new File(
-					"D:\\FU\\Do an tot nghiep\\Data\\ServerData\\"
-							+ file.getOriginalFilename());
+			File teacherCourses = new File("D:\\FU\\Do an tot nghiep\\Data\\ServerData\\" + file.getOriginalFilename());
 			try {
 				file.transferTo(teacherCourses);
-				teacherCourseSemesterService
-				.addTeacherCourseSemesterFromFile(teacherCourses);
+				teacherCourseSemesterService.addTeacherCourseSemesterFromFile(teacherCourses);
 			} catch (IllegalStateException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -83,6 +83,12 @@ public class TeacherController {
 				e.printStackTrace();
 			}
 		}
+		return "redirect:/teachers";
+	}
+
+	@ExceptionHandler(Exception.class)
+	public String handleException(HttpSession httpSession, Exception e) {
+		httpSession.setAttribute("error", "Error, please try again.");
 		return "redirect:/teachers";
 	}
 }

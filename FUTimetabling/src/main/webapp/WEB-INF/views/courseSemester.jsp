@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="t"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ page session="false"%>
@@ -47,6 +48,7 @@
 </style>
 </head>
 <body>
+	<t:header />
 	<h1>Add a Course Semester</h1>
 	<c:url var="addAction" value="/courseSemester/add"></c:url>
 
@@ -59,12 +61,14 @@
 								<spring:message text="Course Semester ID" />
 							</form:label></td>
 						<td><form:input path="courseSemesterId" readonly="true"
-								size="8" disabled="true" /> <form:hidden path="courseSemesterId" /></td>
+								size="8" disabled="true" /> <form:hidden
+								path="courseSemesterId" /></td>
 					</tr>
 				</c:when>
 				<c:otherwise>
 					<tr>
-						<td colspan="2"><form:hidden path="courseSemesterId" value="0" /></td>
+						<td colspan="2"><form:hidden path="courseSemesterId"
+								value="0" /></td>
 					</tr>
 				</c:otherwise>
 			</c:choose>
@@ -121,35 +125,42 @@
 			</tr>
 		</table>
 	</form:form>
-	<form:form action="courseSemester/addFromFile" method="post" enctype="multipart/form-data">
-		<input name="semesterId" type="text"/>
-		<input accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" name="file" type="file" style="margin-bottom:20px" />
-        <input type="submit" name="addFile" value="AddFile" class="button primary" style="margin-right:5px" />
+	<form:form action="courseSemester/addFromFile" method="post"
+		enctype="multipart/form-data">
+		<input name="semesterId" type="text" />
+		<input
+			accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+			name="file" type="file" style="margin-bottom: 20px" />
+		<input type="submit" name="addFile" value="AddFile"
+			class="button primary" style="margin-right: 5px" />
 	</form:form>
 	<br>
-		<h3>Course Semester List</h3> <c:if test="${!empty listCourseSemesters}">
-			<table class="tg">
+	<h3>Course Semester List</h3>
+	<c:if test="${!empty listCourseSemesters}">
+		<table class="tg">
+			<tr>
+				<th width="80">Course Semester ID</th>
+				<th width="120">Course</th>
+				<th width="120">Semester</th>
+				<th width="120">Slots</th>
+				<th width="120">Course Condition</th>
+				<th width="60">Edit</th>
+				<th width="60">Delete</th>
+			</tr>
+			<c:forEach items="${listCourseSemesters}" var="courseSemester">
 				<tr>
-					<th width="80">Course Semester ID</th>
-					<th width="120">Course</th>
-					<th width="120">Semester</th>
-					<th width="120">Slots</th>
-					<th width="120">Course Condition</th>
-					<th width="60">Edit</th>
-					<th width="60">Delete</th>
+					<td>${courseSemester.courseSemesterId}</td>
+					<td>${courseSemester.course.name}</td>
+					<td>${courseSemester.semester.name}</td>
+					<td>${courseSemester.slots}</td>
+					<td>${courseSemester.courseCondition.name}</td>
+					<td><a
+						href="<c:url value='/courseSemester/edit/${courseSemester.courseSemesterId}' />">Edit</a></td>
+					<td><a
+						href="<c:url value='/courseSemester/delete/${courseSemester.courseSemesterId}' />">Delete</a></td>
 				</tr>
-				<c:forEach items="${listCourseSemesters}" var="courseSemester">
-					<tr>
-						<td>${courseSemester.courseSemesterId}</td>
-						<td>${courseSemester.course.name}</td>
-						<td>${courseSemester.semester.name}</td>
-						<td>${courseSemester.slots}</td>
-						<td>${courseSemester.courseCondition.name}</td>
-						<td><a href="<c:url value='/courseSemester/edit/${courseSemester.courseSemesterId}' />">Edit</a></td>
-						<td><a href="<c:url value='/courseSemester/delete/${courseSemester.courseSemesterId}' />">Delete</a></td>
-					</tr>
-				</c:forEach>
-			</table>
-		</c:if>
+			</c:forEach>
+		</table>
+	</c:if>
 </body>
 </html>

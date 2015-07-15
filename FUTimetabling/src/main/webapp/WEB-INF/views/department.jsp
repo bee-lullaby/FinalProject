@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="t"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ page session="false"%>
@@ -47,6 +48,7 @@
 </style>
 </head>
 <body>
+	<t:header />
 	<h1>Add a Department</h1>
 
 	<c:url var="addAction" value="/department/add"></c:url>
@@ -76,39 +78,48 @@
 			</tr>
 			<tr>
 				<td colspan="2"><c:if test="${!empty department.name}">
-						<input type="submit" value="<spring:message text="Edit Department"/>" />
+						<input type="submit"
+							value="<spring:message text="Edit Department"/>" />
 					</c:if> <c:if test="${empty department.name}">
-						<input type="submit" value="<spring:message text="Add Department"/>" />
+						<input type="submit"
+							value="<spring:message text="Add Department"/>" />
 					</c:if></td>
 			</tr>
 		</table>
 	</form:form>
-	<form:form action="department/addFromFile" method="post" enctype="multipart/form-data">
-		<input accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" name="file" type="file" style="margin-bottom:20px" />
-        <input type="submit" name="addFile" value="AddFile" class="button primary" style="margin-right:5px" />
+	<form:form action="department/addFromFile" method="post"
+		enctype="multipart/form-data">
+		<input
+			accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+			name="file" type="file" style="margin-bottom: 20px" />
+		<input type="submit" name="addFile" value="AddFile"
+			class="button primary" style="margin-right: 5px" />
 	</form:form>
 	<br>
-		<h3>Department List</h3> <c:if test="${!empty listDepartments}">
-			<table class="tg">
+	<h3>Department List</h3>
+	<c:if test="${!empty listDepartments}">
+		<table class="tg">
+			<tr>
+				<th width="80">Department ID</th>
+				<th width="120">Department Code</th>
+				<th width="120">Department Name</th>
+				<th width="120">Courses</th>
+				<th width="60">Edit</th>
+				<th width="60">Delete</th>
+			</tr>
+			<c:forEach items="${listDepartments}" var="department">
 				<tr>
-					<th width="80">Department ID</th>
-					<th width="120">Department Code</th>
-					<th width="120">Department Name</th>
-					<th width="120">Courses</th>
-					<th width="60">Edit</th>
-					<th width="60">Delete</th>
+					<td>${department.departmentId}</td>
+					<td>${department.code}</td>
+					<td>${department.name}</td>
+					<td>${department.coursesToString()}</td>
+					<td><a
+						href="<c:url value='/department/edit/${department.departmentId}' />">Edit</a></td>
+					<td><a
+						href="<c:url value='/department/delete/${department.departmentId}' />">Delete</a></td>
 				</tr>
-				<c:forEach items="${listDepartments}" var="department">
-					<tr>
-						<td>${department.departmentId}</td>
-						<td>${department.code}</td>
-						<td>${department.name}</td>
-						<td>${department.coursesToString()}</td>
-						<td><a href="<c:url value='/department/edit/${department.departmentId}' />">Edit</a></td>
-						<td><a href="<c:url value='/department/delete/${department.departmentId}' />">Delete</a></td>
-					</tr>
-				</c:forEach>
-			</table>
-		</c:if>
+			</c:forEach>
+		</table>
+	</c:if>
 </body>
 </html>

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,11 +20,9 @@ import vn.edu.fpt.timetabling.model.Specialized;
 import vn.edu.fpt.timetabling.model.Student;
 import vn.edu.fpt.timetabling.service.SpecializedService;
 import vn.edu.fpt.timetabling.service.StudentService;
-import vn.edu.fpt.timetabling.utils.SessionUtils;
 
 @Controller
-public class StudentController {
-
+public class StudentController extends GeneralController {
 	private StudentService studentService;
 	private SpecializedService specializedService;
 
@@ -40,25 +39,20 @@ public class StudentController {
 	}
 
 	@RequestMapping(value = "/students", method = RequestMethod.GET)
-	public String listStudents(HttpSession session, Model model) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
+	public String listStudents(HttpSession httpSession, Model model) {
 		model.addAttribute("student", new Student());
 		model.addAttribute("students", studentService.listStudents());
 		model.addAttribute("specializeds", specializedService.listSpecializeds(false, false));
+		checkError(httpSession, model);
 		return "student";
 	}
 
 	@RequestMapping(value = "/student/add", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-	public String addStudent(HttpSession session, @RequestParam(value = "studentId", required = true) int studentId,
+	public String addStudent(@RequestParam(value = "studentId", required = true) int studentId,
 			@RequestParam(value = "name", required = true) String name,
 			@RequestParam(value = "specialized", required = true) int specializedId,
 			@RequestParam(value = "batch", required = true) String batch,
 			@RequestParam(value = "semester", required = true) int semester) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
 		Student student = studentService.getStudentById(studentId);
 		boolean update = true;
 		if (student == null) {
@@ -66,7 +60,7 @@ public class StudentController {
 			update = false;
 		}
 		student.setName(name);
-		Specialized specialized = specializedService.getSpecializedById(specializedId, false, false);
+		Specialized specialized = specializedService.getSpecializedById(specializedId, false, true);
 		student.setSpecialized(specialized);
 		String studentCode;
 		if (update) {
@@ -112,19 +106,13 @@ public class StudentController {
 	}
 
 	@RequestMapping("/student/delete/{studentId}")
-	public String deleteStudent(HttpSession session, @PathVariable("studentId") int studentId) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
+	public String deleteStudent(@PathVariable("studentId") int studentId) {
 		studentService.deleteStudent(studentId);
 		return "redirect:/students";
 	}
 
 	@RequestMapping("/student/edit/{studentId}")
-	public String editStudent(HttpSession session, @PathVariable("studentId") int studentId, Model model) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
+	public String editStudent(@PathVariable("studentId") int studentId, Model model) {
 		Student student = studentService.getStudentById(studentId);
 		if (student == null) {
 			return "home";
@@ -133,5 +121,11 @@ public class StudentController {
 		model.addAttribute("students", studentService.listStudents());
 		model.addAttribute("specializeds", specializedService.listSpecializeds(false, false));
 		return "student";
+	}
+
+	@ExceptionHandler(Exception.class)
+	public String handleException(HttpSession httpSession, Exception e) {
+		httpSession.setAttribute("error", "Error, please try again.");
+		return "redirect:/students";
 	}
 }

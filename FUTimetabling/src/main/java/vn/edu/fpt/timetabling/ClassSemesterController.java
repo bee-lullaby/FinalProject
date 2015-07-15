@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,10 +16,9 @@ import vn.edu.fpt.timetabling.model.ClassSemester;
 import vn.edu.fpt.timetabling.service.ClassSemesterService;
 import vn.edu.fpt.timetabling.service.ClassService;
 import vn.edu.fpt.timetabling.service.SemesterService;
-import vn.edu.fpt.timetabling.utils.SessionUtils;
 
 @Controller
-public class ClassSemesterController {
+public class ClassSemesterController extends GeneralController {
 	private ClassSemesterService classSemesterService;
 	private SemesterService semesterService;
 	private ClassService classService;
@@ -42,27 +42,21 @@ public class ClassSemesterController {
 	}
 
 	@RequestMapping(value = "/classSemesters", method = RequestMethod.GET)
-	public String listClassSemester(HttpSession session, Model model) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
+	public String listClassSemester(HttpSession httpSession, Model model) {
 		model.addAttribute("classSemester", new ClassSemester());
 		model.addAttribute("classSemesterService", classSemesterService);
 		model.addAttribute("classSemesters", classSemesterService.listClassSemesters(false));
 		model.addAttribute("semesters", semesterService.listSemesters(false, false, false, false));
 		model.addAttribute("classes", classService.listClasses());
+		checkError(httpSession, model);
 		return "classSemester";
 	}
 
 	@RequestMapping(value = "/classSemester/add", method = RequestMethod.POST)
-	public String addClassSemester(HttpSession session,
-			@RequestParam(value = "classSemesterId", required = true) int classSemesterId,
+	public String addClassSemester(@RequestParam(value = "classSemesterId", required = true) int classSemesterId,
 			@RequestParam(value = "classFPT", required = true) int classId,
 			@RequestParam(value = "semester", required = true) int semesterId,
 			@RequestParam(value = "semesterNumber", required = true) int semesterNumber) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
 		ClassSemester classSemester = classSemesterService.getClassSemesterById(classSemesterId, false);
 		if (classSemester == null) {
 			classSemester = new ClassSemester();
@@ -81,20 +75,13 @@ public class ClassSemesterController {
 	}
 
 	@RequestMapping("/classSemester/delete/{classSemesterId}")
-	public String deleteClassSemester(HttpSession session, @PathVariable("classSemesterId") int classSemesterId) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
+	public String deleteClassSemester(@PathVariable("classSemesterId") int classSemesterId) {
 		classSemesterService.deleteClassSemester(classSemesterId);
 		return "redirect:/classSemesters";
 	}
 
 	@RequestMapping("/classSemester/edit/{classSemesterId}")
-	public String editClassSemester(HttpSession session, @PathVariable("classSemesterId") int classSemesterId,
-			Model model) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
+	public String editClassSemester(@PathVariable("classSemesterId") int classSemesterId, Model model) {
 		ClassSemester classSemester = classSemesterService.getClassSemesterById(classSemesterId, false);
 		if (classSemester == null) {
 			return "redirect:/classSemesters";
@@ -110,21 +97,20 @@ public class ClassSemesterController {
 	}
 
 	@RequestMapping("/classSemester/autoClassSemester/{classSemesterId}")
-	public String autoPutStudentsClassSemester(HttpSession session,
-			@PathVariable("classSemesterId") int classSemesterId) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
+	public String autoPutStudentsClassSemester(@PathVariable("classSemesterId") int classSemesterId) {
 		classSemesterService.autoPutStudentsIntoClassSemester(classSemesterId);
 		return "redirect:/classSemesters";
 	}
 
 	@RequestMapping("/classSemester/autoClassSemesters/{semesterId}")
-	public String autoPutStudentsClassSemesters(HttpSession session, @PathVariable("semesterId") int semesterId) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
+	public String autoPutStudentsClassSemesters(@PathVariable("semesterId") int semesterId) {
 		classSemesterService.autoPutStudentsIntoClassSemesters(semesterId);
+		return "redirect:/classSemesters";
+	}
+
+	@ExceptionHandler(Exception.class)
+	public String handleException(HttpSession httpSession, Exception e) {
+		httpSession.setAttribute("error", "Error, please try again.");
 		return "redirect:/classSemesters";
 	}
 }

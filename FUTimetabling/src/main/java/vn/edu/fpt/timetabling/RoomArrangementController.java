@@ -20,8 +20,7 @@ import vn.edu.fpt.timetabling.model.Timetable;
 import vn.edu.fpt.timetabling.service.RoomArrangementService;
 
 @Controller
-public class RoomArrangementController {
-
+public class RoomArrangementController extends GeneralController {
 	private RoomArrangementService roomArrangementService;
 
 	@Autowired(required = true)

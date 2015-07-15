@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import vn.edu.fpt.timetabling.model.Staff;
 import vn.edu.fpt.timetabling.service.StaffService;
+import vn.edu.fpt.timetabling.utils.SessionUtils;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
@@ -35,8 +36,7 @@ import com.google.api.services.oauth2.model.Userinfoplus;
 @Controller
 public class HomeController {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(HomeController.class);
+	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	private static final String CLIENT_ID = "938120756299-8u3vpmb12jptc4jn8h5bdqftlurbfll9.apps.googleusercontent.com";
 	private static final String CLIENT_SECRET = "dj70o3tz4Qeu42qL0oDhV7Nm";
 	private static final String REDIRECT_URI = "postmessage";
@@ -57,33 +57,34 @@ public class HomeController {
 	public String home(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG,
-				DateFormat.LONG, locale);
-
+		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
 		String formattedDate = dateFormat.format(date);
-
 		model.addAttribute("serverTime", formattedDate);
+		return "home";
+	}
 
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public String logout(HttpSession session) {
+		session.removeAttribute("idToken");
+		session.removeAttribute("accessToken");
+		session.removeAttribute("email");
 		return "home";
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public String login(HttpSession session, @RequestBody String code)
-			throws IOException {
-		logger.info("code: " + code);
+	public String login(HttpSession session, @RequestBody String code) throws IOException {
+		if (SessionUtils.isSessionValid(session)) {
+			return "redirect:/staff";
+		}
 		HttpTransport netTransport = new NetHttpTransport();
 		JacksonFactory jsonFactory = new JacksonFactory();
-		GoogleTokenResponse token = new GoogleAuthorizationCodeTokenRequest(
-				netTransport, jsonFactory, CLIENT_ID, CLIENT_SECRET, code,
-				REDIRECT_URI).execute();
+		GoogleTokenResponse token = new GoogleAuthorizationCodeTokenRequest(netTransport, jsonFactory, CLIENT_ID,
+				CLIENT_SECRET, code, REDIRECT_URI).execute();
 		System.out.println("Valid access token " + token.getAccessToken());
-		GoogleCredential googleCredential = new GoogleCredential()
-				.setAccessToken(token.getAccessToken());
-		Oauth2 userInfoService = new Oauth2.Builder(netTransport, jsonFactory,
-				googleCredential).setApplicationName("Oauth2").build();
+		GoogleCredential googleCredential = new GoogleCredential().setAccessToken(token.getAccessToken());
+		Oauth2 userInfoService = new Oauth2.Builder(netTransport, jsonFactory, googleCredential)
+				.setApplicationName("Oauth2").build();
 		Userinfoplus userinfo = userInfoService.userinfo().get().execute();
-		logger.info("id_token: " + token.getIdToken());
-		logger.info("access_token: " + token.getAccessToken());
 		String email = userinfo.getEmail();
 		String hd = userinfo.getHd();
 		if (hd != null && hd.equalsIgnoreCase(FPT_DOMAIN)) {
@@ -107,11 +108,9 @@ public class HomeController {
 	@RequestMapping(value = "/fpt", method = RequestMethod.GET)
 	public String getFPTPage() {
 		logger.debug("Go to fpt page");
-
 		// Do your work here. Whatever you like
 		// i.e call a custom service to do your business
 		// Prepare a model to be used by the JSP page
-
 		// This will resolve to /WEB-INF/jsp/adminpage.jsp
 		return "fpt";
 	}
@@ -119,11 +118,9 @@ public class HomeController {
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
 	public String getAdminPage() {
 		logger.debug("Received request to show admin page");
-
 		// Do your work here. Whatever you like
 		// i.e call a custom service to do your business
 		// Prepare a model to be used by the JSP page
-
 		// This will resolve to /WEB-INF/jsp/adminpage.jsp
 		return "adminpage";
 	}

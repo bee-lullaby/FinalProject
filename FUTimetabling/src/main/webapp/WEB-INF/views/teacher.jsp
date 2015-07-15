@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="t"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ page session="false"%>
@@ -45,6 +46,7 @@
 </style>
 </head>
 <body>
+	<t:header />
 	<h1>Add a Teacher</h1>
 
 	<c:url var="addAction" value="/teacher/add"></c:url>
@@ -72,7 +74,7 @@
 					</form:label></td>
 				<td><form:input path="email" /></td>
 			</tr>
-			
+
 			<tr>
 				<td colspan="2"><c:if test="${!empty teacher.account}">
 						<input type="submit" value="<spring:message text="Edit Teacher"/>" />
@@ -82,7 +84,7 @@
 			</tr>
 		</table>
 	</form:form>
-	
+
 	<form:form action="teacherCourse/addFromFile" method="post"
 		enctype="multipart/form-data">
 		<input
@@ -91,29 +93,32 @@
 		<input type="submit" name="addFile" value="AddFile"
 			class="button primary" style="margin-right: 5px" />
 	</form:form>
-	
+
 	<br>
-		<h3>Teachers List</h3> <c:if test="${!empty listTeachers}">
-			<table class="tg">
+	<h3>Teachers List</h3>
+	<c:if test="${!empty listTeachers}">
+		<table class="tg">
+			<tr>
+				<th width="80">Teacher ID</th>
+				<th width="120">Account</th>
+				<th width="120">Name</th>
+				<th width="120">Email</th>
+				<th width="60">Edit</th>
+				<th width="60">Delete</th>
+			</tr>
+			<c:forEach items="${listTeachers}" var="teacher">
 				<tr>
-					<th width="80">Teacher ID</th>
-					<th width="120">Account</th>
-					<th width="120">Name</th>
-					<th width="120">Email</th>
-					<th width="60">Edit</th>
-					<th width="60">Delete</th>
+					<td>${teacher.teacherId}</td>
+					<td>${teacher.account}</td>
+					<td>${teacher.name}</td>
+					<td>${teacher.email}</td>
+					<td><a
+						href="<c:url value='/teacher/edit/${teacher.teacherId}' />">Edit</a></td>
+					<td><a
+						href="<c:url value='/teacher/delete/${teacher.teacherId}' />">Delete</a></td>
 				</tr>
-				<c:forEach items="${listTeachers}" var="teacher">
-					<tr>
-						<td>${teacher.teacherId}</td>
-						<td>${teacher.account}</td>
-						<td>${teacher.name}</td>
-						<td>${teacher.email}</td>
-						<td><a href="<c:url value='/teacher/edit/${teacher.teacherId}' />">Edit</a></td>
-						<td><a href="<c:url value='/teacher/delete/${teacher.teacherId}' />">Delete</a></td>
-					</tr>
-				</c:forEach>
-			</table>
-		</c:if>
+			</c:forEach>
+		</table>
+	</c:if>
 </body>
 </html>

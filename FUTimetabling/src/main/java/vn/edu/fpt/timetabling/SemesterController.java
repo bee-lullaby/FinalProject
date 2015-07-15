@@ -1,9 +1,12 @@
 package vn.edu.fpt.timetabling;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,8 +17,7 @@ import vn.edu.fpt.timetabling.model.Semester;
 import vn.edu.fpt.timetabling.service.SemesterService;
 
 @Controller
-public class SemesterController {
-
+public class SemesterController extends GeneralController {
 	private SemesterService semesterService;
 
 	@Autowired(required = true)
@@ -25,9 +27,10 @@ public class SemesterController {
 	}
 
 	@RequestMapping(value = "/semesters", method = RequestMethod.GET)
-	public String listSemester(Model model) {
+	public String listSemester(HttpSession httpSession, Model model) {
 		model.addAttribute("semester", new Course());
 		model.addAttribute("listSemesters", semesterService.listSemesters(false, false, false, false));
+		checkError(httpSession, model);
 		return "semester";
 	}
 
@@ -55,5 +58,11 @@ public class SemesterController {
 		model.addAttribute("semester", semesterService.getSemesterById(semesterId, false, false, false, false));
 		model.addAttribute("listSemesters", semesterService.listSemesters(false, false, false, false));
 		return "semester";
+	}
+
+	@ExceptionHandler(Exception.class)
+	public String handleException(HttpSession httpSession, Exception e) {
+		httpSession.setAttribute("error", "Error, please try again.");
+		return "redirect:/semesters";
 	}
 }

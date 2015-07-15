@@ -3,10 +3,13 @@ package vn.edu.fpt.timetabling;
 import java.io.File;
 import java.io.IOException;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,10 +21,9 @@ import vn.edu.fpt.timetabling.model.Department;
 import vn.edu.fpt.timetabling.service.DepartmentService;
 
 @Controller
-public class DepartmentController {
-
+public class DepartmentController extends GeneralController {
 	private DepartmentService departmentService;
-	
+
 	@Autowired(required = true)
 	@Qualifier(value = "departmentService")
 	public void setDepartmentService(DepartmentService departmentService) {
@@ -29,9 +31,10 @@ public class DepartmentController {
 	}
 
 	@RequestMapping(value = "/departments", method = RequestMethod.GET)
-	public String listDepartment(Model model) {
+	public String listDepartment(HttpSession httpSession, Model model) {
 		model.addAttribute("department", new Department());
 		model.addAttribute("listDepartments", departmentService.listDepartments());
+		checkError(httpSession, model);
 		return "department";
 	}
 
@@ -51,8 +54,8 @@ public class DepartmentController {
 	// For add and update person both
 	@RequestMapping(value = "/department/addFromFile", method = RequestMethod.POST)
 	public String addDepartmentFromFile(@RequestParam("file") MultipartFile file) {
-		if(!file.isEmpty()){
-			File departments = new File("D:\\FU\\Do an tot nghiep\\Data\\ServerData\\" +file.getOriginalFilename());
+		if (!file.isEmpty()) {
+			File departments = new File("D:\\FU\\Do an tot nghiep\\Data\\ServerData\\" + file.getOriginalFilename());
 			try {
 				file.transferTo(departments);
 				departmentService.addDepartmentFromFile(departments);
@@ -67,7 +70,6 @@ public class DepartmentController {
 		return "redirect:/departments";
 	}
 
-	
 	@RequestMapping("/department/delete/{departmentId}")
 	public String deleteDepartment(@PathVariable("departmentId") int departmentId) {
 		departmentService.deleteDepartment(departmentId);
@@ -79,5 +81,11 @@ public class DepartmentController {
 		model.addAttribute("department", departmentService.getDepartmentById(departmentId));
 		model.addAttribute("listDepartments", departmentService.listDepartments());
 		return "department";
+	}
+
+	@ExceptionHandler(Exception.class)
+	public String handleException(HttpSession httpSession, Exception e) {
+		httpSession.setAttribute("error", "Error, please try again.");
+		return "redirect:/departments";
 	}
 }

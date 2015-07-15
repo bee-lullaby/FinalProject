@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,10 +22,9 @@ import vn.edu.fpt.timetabling.service.ClassCourseSemesterService;
 import vn.edu.fpt.timetabling.service.ClassSemesterService;
 import vn.edu.fpt.timetabling.service.CourseSemesterService;
 import vn.edu.fpt.timetabling.service.SemesterService;
-import vn.edu.fpt.timetabling.utils.SessionUtils;
 
 @Controller
-public class ClassCourseSemesterController {
+public class ClassCourseSemesterController extends GeneralController {
 	private ClassCourseSemesterService classCourseSemesterService;
 	private SemesterService semesterService;
 	private ClassSemesterService classSemesterService;
@@ -57,9 +57,6 @@ public class ClassCourseSemesterController {
 	@RequestMapping(value = "/classCourseSemesters", method = RequestMethod.GET)
 	public String listClassCourseSemester(HttpSession session, Model model,
 			@RequestParam(value = "semesterId", required = false) Integer semesterId) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
 		List<Semester> semesters = semesterService.listSemesters(true, true, false, false);
 		Semester semester;
 		if (semesterId != null || session.getAttribute("semester") != null) {
@@ -83,19 +80,16 @@ public class ClassCourseSemesterController {
 		model.addAttribute("semesterId", semesterId);
 		model.addAttribute("semesters", semesters);
 		session.setAttribute("semester", semester);
+		checkError(session, model);
 		return "classCourse";
 	}
 
 	@RequestMapping(value = "/classCourseSemester/add", method = RequestMethod.POST)
-	public String addClassCourseSemester(HttpSession session,
-			@RequestParam(value = "classCourseSemesterId") int classCourseSemesterId,
+	public String addClassCourseSemester(@RequestParam(value = "classCourseSemesterId") int classCourseSemesterId,
 			@RequestParam(value = "classSemester") int classSemesterId,
 			@RequestParam(value = "courseSemester") int courseSemesterId,
 			@RequestParam(value = "blockCondition", required = false) Integer blockCondition,
 			@RequestParam(value = "semesterLong", required = false) Boolean semesterLong) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
 		// change
 		ClassSemester classSemester = classSemesterService.getClassSemesterById(classSemesterId, false);
 		CourseSemester courseSemester = courseSemesterService.getCourseSemesterById(courseSemesterId, false, false,
@@ -128,11 +122,7 @@ public class ClassCourseSemesterController {
 	}
 
 	@RequestMapping("/classCourseSemester/delete/{classCourseSemesterId}")
-	public String deleteCourseSemester(HttpSession session,
-			@PathVariable("classCourseSemesterId") int classCourseSemesterId) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
+	public String deleteCourseSemester(@PathVariable("classCourseSemesterId") int classCourseSemesterId) {
 		classCourseSemesterService.deleteClassCourseSemester(classCourseSemesterId);
 		return "redirect:/classCourseSemesters";
 	}
@@ -140,9 +130,6 @@ public class ClassCourseSemesterController {
 	@RequestMapping("/classCourseSemester/edit/{classCourseSemesterId}")
 	public String editCourseSemester(HttpSession session,
 			@PathVariable("classCourseSemesterId") int classCourseSemesterId, Model model) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
 		ClassCourseSemester classCourseSemester = classCourseSemesterService
 				.getClassCourseSemesterById(classCourseSemesterId);
 		if (classCourseSemester == null) {
@@ -175,5 +162,11 @@ public class ClassCourseSemesterController {
 		model.addAttribute("semesterId", semesterId);
 		session.setAttribute("semester", semester);
 		return "classCourse";
+	}
+
+	@ExceptionHandler(Exception.class)
+	public String handleException(HttpSession httpSession, Exception e) {
+		httpSession.setAttribute("error", "Error, please try again.");
+		return "redirect:/classCourseSemesters";
 	}
 }

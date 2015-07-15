@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="t"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ page session="false"%>
@@ -43,9 +44,9 @@
 	background-color: #f9f9f9
 }
 </style>
-
 </head>
 <body>
+	<t:header />
 	<h1>Add a Semester</h1>
 
 	<c:url var="addAction" value="/semester/add"></c:url>
@@ -75,7 +76,8 @@
 			</tr>
 			<tr>
 				<td colspan="2"><c:if test="${!empty semester.name}">
-						<input type="submit" value="<spring:message text="Edit Semester"/>" />
+						<input type="submit"
+							value="<spring:message text="Edit Semester"/>" />
 					</c:if> <c:if test="${empty semester.name}">
 						<input type="submit" value="<spring:message text="Add Semester"/>" />
 					</c:if></td>
@@ -83,31 +85,34 @@
 		</table>
 	</form:form>
 	<br>
-		<h3>Semester List</h3> <c:if test="${!empty listSemesters}">
-			<table class="tg">
+	<h3>Semester List</h3>
+	<c:if test="${!empty listSemesters}">
+		<table class="tg">
+			<tr>
+				<th width="80">Semester ID</th>
+				<th width="120">Semester Code</th>
+				<th width="120">Semester Name</th>
+				<th width="120">Semester Year</th>
+				<th width="120">Semester Start Date</th>
+				<th width="120">Semester End Date</th>
+				<th width="60">Edit</th>
+				<th width="60">Delete</th>
+			</tr>
+			<c:forEach items="${listSemesters}" var="semester">
 				<tr>
-					<th width="80">Semester ID</th>
-					<th width="120">Semester Code</th>
-					<th width="120">Semester Name</th>
-					<th width="120">Semester Year</th>
-					<th width="120">Semester Start Date</th>
-					<th width="120">Semester End Date</th>
-					<th width="60">Edit</th>
-					<th width="60">Delete</th>
+					<td>${semester.semesterId}</td>
+					<td>${semester.code}</td>
+					<td>${semester.name}</td>
+					<td>${semester.semesterYear}</td>
+					<td>${semester.startDate}</td>
+					<td>${semester.endDate}</td>
+					<td><a
+						href="<c:url value='/semester/edit/${semester.semesterId}' />">Edit</a></td>
+					<td><a
+						href="<c:url value='/semester/delete/${semester.semesterId}' />">Delete</a></td>
 				</tr>
-				<c:forEach items="${listSemesters}" var="semester">
-					<tr>
-						<td>${semester.semesterId}</td>
-						<td>${semester.code}</td>
-						<td>${semester.name}</td>
-						<td>${semester.semesterYear}</td>
-						<td>${semester.startDate}</td>
-						<td>${semester.endDate}</td>
-						<td><a href="<c:url value='/semester/edit/${semester.semesterId}' />">Edit</a></td>
-						<td><a href="<c:url value='/semester/delete/${semester.semesterId}' />">Delete</a></td>
-					</tr>
-				</c:forEach>
-			</table>
-		</c:if>
+			</c:forEach>
+		</table>
+	</c:if>
 </body>
 </html>

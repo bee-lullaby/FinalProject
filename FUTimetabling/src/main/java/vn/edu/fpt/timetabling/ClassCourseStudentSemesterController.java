@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,11 +28,9 @@ import vn.edu.fpt.timetabling.service.ClassCourseStudentSemesterService;
 import vn.edu.fpt.timetabling.service.ClassSemesterService;
 import vn.edu.fpt.timetabling.service.SemesterService;
 import vn.edu.fpt.timetabling.service.StudentService;
-import vn.edu.fpt.timetabling.utils.SessionUtils;
 
 @Controller
-public class ClassCourseStudentSemesterController {
-
+public class ClassCourseStudentSemesterController extends GeneralController {
 	private ClassCourseStudentSemesterService classCourseStudentSemesterService;
 	private SemesterService semesterService;
 	private StudentService studentService;
@@ -168,9 +167,6 @@ public class ClassCourseStudentSemesterController {
 			@RequestParam(value = "semesterId", required = false) Integer semesterId,
 			@RequestParam(value = "classSemesterId", required = false) Integer classSemesterId,
 			@RequestParam(value = "classCourseSemesterId", required = false) Integer classCourseSemesterId) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
 		List<Semester> semesters = semesterService.listSemesters(true, false, false, false);
 		Semester semester;
 		if (semesterId != null || session.getAttribute("semester") != null) {
@@ -190,15 +186,13 @@ public class ClassCourseStudentSemesterController {
 		model.addAttribute("semesters", semesters);
 		model.addAttribute("semesterId", semesterId);
 		session.setAttribute("semester", semester);
+		checkError(session, model);
 		return "classCourseStudentSemester";
 	}
 
 	@RequestMapping("/classCourseStudentSemester/add/{studentId}")
 	public String addClassCourseStudentSemester(HttpSession session, @PathVariable("studentId") int studentId,
 			Model model) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
 		Student student = studentService.getStudentById(studentId);
 		if (student != null && (session.getAttribute("classCourseSemester") != null
 				|| session.getAttribute("classSemester") != null)) {
@@ -233,9 +227,6 @@ public class ClassCourseStudentSemesterController {
 	@RequestMapping("/classCourseStudentSemester/remove/{studentId}")
 	public String removeClassCourseStudentSemester(HttpSession session, @PathVariable("studentId") int studentId,
 			Model model) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
 		Student student = studentService.getStudentById(studentId);
 		if (student != null && (session.getAttribute("classCourseSemester") != null
 				|| session.getAttribute("classSemester") != null)) {
@@ -264,6 +255,12 @@ public class ClassCourseStudentSemesterController {
 				student.setClassSemester(null);
 			}
 		}
+		return "redirect:/classCourseStudentSemesters";
+	}
+
+	@ExceptionHandler(Exception.class)
+	public String handleException(HttpSession httpSession, Exception e) {
+		httpSession.setAttribute("error", "Error, please try again.");
 		return "redirect:/classCourseStudentSemesters";
 	}
 }

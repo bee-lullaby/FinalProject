@@ -12,10 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-public class StaffController {
-
-	private static final Logger logger = LoggerFactory
-			.getLogger(StaffController.class);
+public class StaffController extends GeneralController {
+	private static final Logger logger = LoggerFactory.getLogger(StaffController.class);
 
 	@RequestMapping(value = "/staff", method = RequestMethod.GET)
 	public String home(HttpSession session, Locale locale, Model model) {

@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="t"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ page session="false"%>
@@ -47,8 +48,7 @@
 </style>
 </head>
 <body>
-
-
+	<t:header />
 	<form:form action="rooms/addFromFile" method="post"
 		enctype="multipart/form-data">
 		<input
@@ -57,7 +57,7 @@
 		<input type="submit" name="addFile" value="AddFile"
 			class="button primary" style="margin-right: 5px" />
 	</form:form>
-	
+
 	<br>
 	<h3>Room List</h3>
 	<c:if test="${!empty listRooms}">
@@ -76,10 +76,8 @@
 					<td>${room.code}</td>
 					<td>${room.capacity}</td>
 					<td>${room.classes}</td>
-					<td><a
-						href="<c:url value='/room/edit/${room.roomId}' />">Edit</a></td>
-					<td><a
-						href="<c:url value='/room/delete/${room.roomId}' />">Delete</a></td>
+					<td><a href="<c:url value='/room/edit/${room.roomId}' />">Edit</a></td>
+					<td><a href="<c:url value='/room/delete/${room.roomId}' />">Delete</a></td>
 				</tr>
 			</c:forEach>
 		</table>

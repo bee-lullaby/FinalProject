@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,11 +20,9 @@ import vn.edu.fpt.timetabling.service.CourseSemesterService;
 import vn.edu.fpt.timetabling.service.ProgramSemesterDetailService;
 import vn.edu.fpt.timetabling.service.ProgramSemesterService;
 import vn.edu.fpt.timetabling.service.SemesterService;
-import vn.edu.fpt.timetabling.utils.SessionUtils;
 
 @Controller
-public class ProgramSemesterDetailController {
-
+public class ProgramSemesterDetailController extends GeneralController {
 	private ProgramSemesterDetailService programSemesterDetailService;
 	private ProgramSemesterService programSemesterService;
 	private CourseSemesterService courseSemesterService;
@@ -56,9 +55,6 @@ public class ProgramSemesterDetailController {
 	@RequestMapping(value = "/programSemesterDetails", method = RequestMethod.GET)
 	public String listProgramSemesterDetail(HttpSession session, Model model,
 			@RequestParam(value = "semesterId", required = false) Integer semesterId) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
 		Semester semester;
 		if (semesterId != null || session.getAttribute("semester") != null) {
 			if (semesterId == null) {
@@ -81,17 +77,15 @@ public class ProgramSemesterDetailController {
 		model.addAttribute("semesters", semesterService.listSemesters(false, false, false, false));
 		model.addAttribute("semesterId", semesterId);
 		session.setAttribute("semester", semester);
+		checkError(session, model);
 		return "programSemesterDetail";
 	}
 
 	@RequestMapping(value = "/programSemesterDetail/add", method = RequestMethod.POST)
-	public String addProgramSemesterDetail(HttpSession session,
+	public String addProgramSemesterDetail(
 			@RequestParam(value = "programSemesterDetailId", required = true) int programSemesterDetailId,
 			@RequestParam(value = "programSemester", required = true) int programSemesterId,
 			@RequestParam(value = "courseSemester", required = true) int courseSemesterId) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
 		ProgramSemesterDetail programSemesterDetail = programSemesterDetailService
 				.getProgramSemesterDetailById(programSemesterDetailId);
 		if (programSemesterDetail == null) {
@@ -116,11 +110,7 @@ public class ProgramSemesterDetailController {
 	}
 
 	@RequestMapping("/programSemesterDetail/delete/{programSemesterDetailId}")
-	public String deleteProgramSemesterDetail(HttpSession session,
-			@PathVariable("programSemesterDetailId") int programSemesterDetailId) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
+	public String deleteProgramSemesterDetail(@PathVariable("programSemesterDetailId") int programSemesterDetailId) {
 		programSemesterDetailService.deleteProgramSemesterDetail(programSemesterDetailId);
 		return "redirect:/programSemesterDetails";
 	}
@@ -128,9 +118,6 @@ public class ProgramSemesterDetailController {
 	@RequestMapping("/programSemesterDetail/edit/{programSemesterDetailId}")
 	public String editProgramSemester(HttpSession session,
 			@PathVariable("programSemesterDetailId") int programSemesterDetailId, Model model) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
 		ProgramSemesterDetail programSemesterDetail = programSemesterDetailService
 				.getProgramSemesterDetailById(programSemesterDetailId);
 		if (programSemesterDetail == null) {
@@ -155,5 +142,11 @@ public class ProgramSemesterDetailController {
 		model.addAttribute("courseSemesterId", programSemesterDetail.getCourseSemester().getCourseSemesterId());
 		model.addAttribute("semesterId", semesterId);
 		return "programSemesterDetail";
+	}
+
+	@ExceptionHandler(Exception.class)
+	public String handleException(HttpSession httpSession, Exception e) {
+		httpSession.setAttribute("error", "Error, please try again.");
+		return "redirect:/programSemesterDetails";
 	}
 }

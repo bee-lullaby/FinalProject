@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,11 +20,9 @@ import vn.edu.fpt.timetabling.model.Specialized;
 import vn.edu.fpt.timetabling.service.ProgramSemesterService;
 import vn.edu.fpt.timetabling.service.SemesterService;
 import vn.edu.fpt.timetabling.service.SpecializedService;
-import vn.edu.fpt.timetabling.utils.SessionUtils;
 
 @Controller
-public class ProgramSemesterController {
-
+public class ProgramSemesterController extends GeneralController {
 	private ProgramSemesterService programSemesterService;
 	private SemesterService semesterService;
 	private SpecializedService specializedService;
@@ -47,10 +46,7 @@ public class ProgramSemesterController {
 	}
 
 	@RequestMapping(value = "/programSemesters", method = RequestMethod.GET)
-	public String listProgramSemester(HttpSession session, Model model) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
+	public String listProgramSemester(HttpSession httpSession, Model model) {
 		model.addAttribute("programSemester", new ProgramSemester());
 		model.addAttribute("programSemesters", programSemesterService.listProgramSemesters());
 		model.addAttribute("semesters", semesterService.listSemesters(false, false, false, false));
@@ -58,19 +54,16 @@ public class ProgramSemesterController {
 		List<Specialized> detailSpecializeds = specializedService.listDetailSpecializeds(false, false);
 		detailSpecializeds.add(0, new Specialized());
 		model.addAttribute("detailSpecializeds", detailSpecializeds);
+		checkError(httpSession, model);
 		return "programSemester";
 	}
 
 	@RequestMapping(value = "/programSemester/add", method = RequestMethod.POST)
-	public String addProgramSemester(HttpSession session,
-			@RequestParam(value = "programSemesterId", required = true) int programSemesterId,
+	public String addProgramSemester(@RequestParam(value = "programSemesterId", required = true) int programSemesterId,
 			@RequestParam(value = "semester", required = true) int semesterId,
 			@RequestParam(value = "currentSemester", required = true) int currentSemester,
 			@RequestParam(value = "specialized", required = true) int specializedId,
 			@RequestParam(value = "detailSpecialized", required = false) Integer detailSpecializedId) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
 		ProgramSemester programSemester = programSemesterService.getProgramSemesterById(programSemesterId);
 		if (programSemester == null) {
 			programSemester = new ProgramSemester();
@@ -100,20 +93,13 @@ public class ProgramSemesterController {
 	}
 
 	@RequestMapping("/programSemester/delete/{programSemesterId}")
-	public String deleteProgramSemester(HttpSession session, @PathVariable("programSemesterId") int programSemesterId) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
+	public String deleteProgramSemester(@PathVariable("programSemesterId") int programSemesterId) {
 		programSemesterService.deleteProgramSemester(programSemesterId);
 		return "redirect:/programSemesters";
 	}
 
 	@RequestMapping("/programSemester/edit/{programSemesterId}")
-	public String editProgramSemester(HttpSession session, @PathVariable("programSemesterId") int programSemesterId,
-			Model model) {
-		if (!SessionUtils.isSessionValid(session)) {
-			return "home";
-		}
+	public String editProgramSemester(@PathVariable("programSemesterId") int programSemesterId, Model model) {
 		ProgramSemester programSemester = programSemesterService.getProgramSemesterById(programSemesterId);
 		if (programSemester == null) {
 			return "redirect:/programSemesters";
@@ -129,5 +115,11 @@ public class ProgramSemesterController {
 		model.addAttribute("specializedId", programSemester.getSpecialized().getSpecializedId());
 		model.addAttribute("detailSpecializedId", programSemester.getDetailSpecialized().getSpecializedId());
 		return "programSemester";
+	}
+
+	@ExceptionHandler(Exception.class)
+	public String handleException(HttpSession httpSession, Exception e) {
+		httpSession.setAttribute("error", "Error, please try again.");
+		return "redirect:/programSemesters";
 	}
 }
