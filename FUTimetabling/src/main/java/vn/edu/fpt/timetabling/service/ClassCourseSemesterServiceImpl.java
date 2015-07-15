@@ -33,7 +33,6 @@ public class ClassCourseSemesterServiceImpl implements ClassCourseSemesterServic
 	}
 
 	@Override
-	@Transactional
 	public void addClassCourseSemester(ClassCourseSemester classCourseSemester) {
 		classCourseSemesterDAO.addClassCourseSemester(classCourseSemester);
 	}

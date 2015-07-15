@@ -30,7 +30,6 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 	}
 
 	@Override
-	@Transactional
 	public void addCourseSemesterFromFile(File courseSemesters, int semesterId) throws IOException {
 		FileInputStream file = new FileInputStream(courseSemesters);
 		XSSFWorkbook workbook = new XSSFWorkbook(file);

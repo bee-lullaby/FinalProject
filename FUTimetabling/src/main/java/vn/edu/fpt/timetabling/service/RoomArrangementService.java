@@ -9,10 +9,9 @@ import vn.edu.fpt.timetabling.model.Room;
 import vn.edu.fpt.timetabling.model.Timetable;
 
 public interface RoomArrangementService {
-	
 	public List<ClassSemester> getListClassesCoursesOfSemester(int semesterId);
-	
+
 	public List<DataRoomArrangement> getDataRoomArrangement(int semesterId, int classId);
-	
+
 	public HashMap<Room, List<Timetable>> getListRoomsOfSemester(int semesterId);
 }

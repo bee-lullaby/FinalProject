@@ -10,7 +10,6 @@ import org.hibernate.SessionFactory;
 import vn.edu.fpt.timetabling.model.Room;
 
 public class RoomDAOImpl implements RoomDAO {
-
 	private SessionFactory sessionFactory;
 
 	public void setSessionFactory(SessionFactory sessionFactory) {
