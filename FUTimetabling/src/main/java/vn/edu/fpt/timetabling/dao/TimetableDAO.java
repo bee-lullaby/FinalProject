@@ -15,7 +15,7 @@ public interface TimetableDAO {
 
 	public List<Timetable> listTimetables();
 
-	public List<Timetable> listTimetablesByCCSId(List<ClassCourseSemester> classCourseSemesters);
+	public List<Timetable> listTimetablesByCCSs(List<ClassCourseSemester> classCourseSemesters);
 
 	public List<Timetable> listTimetablesByClassCourseSemesters(Set<ClassCourseSemester> classCourseSemesters);
 

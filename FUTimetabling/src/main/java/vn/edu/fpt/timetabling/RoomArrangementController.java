@@ -2,6 +2,7 @@ package vn.edu.fpt.timetabling;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import vn.edu.fpt.timetabling.model.ClassSemester;
 import vn.edu.fpt.timetabling.model.Room;
+import vn.edu.fpt.timetabling.model.Timetable;
 import vn.edu.fpt.timetabling.service.RoomArrangementService;
 import vn.edu.fpt.timetabling.service.RoomService;
 
@@ -45,14 +47,15 @@ public class RoomArrangementController {
 	@RequestMapping(value = "/roomArrangement", method = RequestMethod.GET)
 	public void roomArrangement(@RequestParam(value = "semesterId", required = true) int semesterId, Model model) {
 		List<ClassSemester> JSONccs = roomArrangementService.getListClassesCoursesOfSemester(semesterId);
-		List<Room> rooms = roomService.listRooms();
+		HashMap<Room, List<Timetable>> JSONmapRoomTimetable = roomArrangementService.getListRoomsOfSemester(semesterId);
 		
 		ObjectMapper om = new ObjectMapper();
 		StringWriter classesCoursesJSON = new StringWriter();
 		StringWriter roomsJSON = new StringWriter();
 		try {
 			om.writeValue(classesCoursesJSON, JSONccs);
-			om.writeValue(roomsJSON, rooms);
+//			om.writeValue(roomsJSON, roomService.listRooms(false));
+			om.writeValue(roomsJSON, JSONmapRoomTimetable);
 			model.addAttribute("classesCourses", classesCoursesJSON);
 			model.addAttribute("rooms", roomsJSON);
 		} catch (JsonGenerationException e) {

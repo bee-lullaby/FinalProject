@@ -88,7 +88,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		// Get List Class Course Semester based on Class//
 		List<ClassCourseSemester> classCourseSemesters = listClassCourseSemesterByClassSemester(classId, semesterId);
 		// Get List Timetable based on Class //
-		List<Timetable> timetables = timetableService.listTimetablesByCCSId(classCourseSemesters);
+		List<Timetable> timetables = timetableService.listTimetablesByCCSs(classCourseSemesters);
 		// Create List Course Semester of Class //
 		List<CourseSemester> courseSemesters = new ArrayList<CourseSemester>();
 		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
@@ -100,7 +100,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		for (CourseSemester courseSemester : courseSemesters) {
 			List<ClassCourseSemester> list = new ArrayList<ClassCourseSemester>();
 			list.addAll(courseSemester.getClassCourseSemesters());
-			mapCourseTimetable.put(courseSemester, timetableService.listTimetablesByCCSId(list));
+			mapCourseTimetable.put(courseSemester, timetableService.listTimetablesByCCSs(list));
 		}
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		List<DaySlot> list = new ArrayList<DaySlot>();

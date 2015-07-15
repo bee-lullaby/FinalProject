@@ -9,9 +9,9 @@ public interface RoomDAO {
 
 	public void updateRoom(Room room);
 
-	public List<Room> listRooms();
+	public List<Room> listRooms(boolean jointTimetable);
 
-	public Room getRoomById(int roomId);
+	public Room getRoomById(int roomId, boolean jointTimetable);
 
 	public void deleteRoom(int roomId);
 }

@@ -193,7 +193,6 @@
 
 	<div id="dialog-schedule" data-role="dialog" class="padding20"
 		data-overlay="true" data-overlay-color="op-dark">
-
 		<table class="bordered">
 			<tr>
 				<td style="padding: 10px; vertical-align: top;">
@@ -207,8 +206,8 @@
 						</select>
 					</div> <br>
 					<div id="warning-set-course" class="fg-red"
-						style="padding-top: 15px;"></div>
-					<div style="padding-top:15px">
+						style="padding-top: 15px;">Don't have enough teacher to set.</div>
+					<div style="padding-top: 15px">
 						<button id="btn-set-course" class="button" style="width: 100px">SET</button>
 						<button id="btn-cancel-set-course" class="button"
 							style="width: 100px;">CANCEL</button>

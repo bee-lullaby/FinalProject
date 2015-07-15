@@ -24,7 +24,7 @@ $(document).ready(function(){
 	function _init() {
 		
 		$("#btn-num-classes").text(classesCoursesJSON.length);
-		$("#btn-num-rooms").text(roomsJSON.length);
+		$("#btn-num-rooms").text(roomsJSON.Room.length);
 		
 		_setOptionSelectClasses();
 		
@@ -32,7 +32,7 @@ $(document).ready(function(){
 		
 		_setCoursesClass();
 		
-		_setTextNote()
+		_setTextNote();
 	}
 	
 	function _setOptionSelectClasses() {
@@ -47,7 +47,7 @@ $(document).ready(function(){
 		for(var i = 0; i < classesCoursesJSON.length; i++) {
 			$('#' +id).append($("<option></option>")
 					.attr("value", i)
-					.text(roomsJSON[i].code));
+					.text(roomsJSON[i].Room.code));
 		}
 	}
 	

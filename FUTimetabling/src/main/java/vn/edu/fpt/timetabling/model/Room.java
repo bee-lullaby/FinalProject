@@ -1,10 +1,17 @@
 package vn.edu.fpt.timetabling.model;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 @Entity
@@ -24,6 +31,10 @@ public class Room {
 
 	@Column(name = "capacity")
 	private int capacity;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "room", orphanRemoval = true)
+	@OrderBy
+	Set<Timetable> timetables = new LinkedHashSet<Timetable>();
 
 	/**
 	 * 
@@ -106,7 +117,24 @@ public class Room {
 		this.capacity = capacity;
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * @return the timetables
+	 */
+	public Set<Timetable> getTimetables() {
+		return timetables;
+	}
+
+	/**
+	 * @param timetables
+	 *            the timetables to set
+	 */
+	public void setTimetables(Set<Timetable> timetables) {
+		this.timetables = timetables;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -114,6 +142,5 @@ public class Room {
 		return "Room [roomId=" + roomId + ", code=" + code + ", classes="
 				+ classes + ", capacity=" + capacity + "]";
 	}
-	
-	
+
 }

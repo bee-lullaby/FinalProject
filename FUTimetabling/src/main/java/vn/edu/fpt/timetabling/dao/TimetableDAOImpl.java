@@ -49,7 +49,7 @@ public class TimetableDAOImpl implements TimetableDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Timetable> listTimetablesByCCSId(List<ClassCourseSemester> classCourseSemesters) {
+	public List<Timetable> listTimetablesByCCSs(List<ClassCourseSemester> classCourseSemesters) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T "
 				+ "WHERE T.classCourseSemester IN (:classCourseSemesters)";
 		Query query = getCurrentSession().createQuery(hql);
@@ -86,7 +86,7 @@ public class TimetableDAOImpl implements TimetableDAO {
 	public List<Timetable> listTimetablesByStudent(int semesterId, Student student) {
 		List<ClassCourseSemester> classCourseSemesters = classCourseSemesterDAO
 				.listClassCourseSemesterByStudent(semesterId, student.getStudentId());
-		List<Timetable> timetables = listTimetablesByCCSId(classCourseSemesters);
+		List<Timetable> timetables = listTimetablesByCCSs(classCourseSemesters);
 		return timetables;
 	}
 
@@ -96,7 +96,7 @@ public class TimetableDAOImpl implements TimetableDAO {
 		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T"
 				+ " WHERE T.classCourseSemester IN (:classCourseSemesters)";
 		Query query = getCurrentSession().createQuery(hql);
-		query.setParameter("classCourseSemesters", classCourseSemesters);
+		query.setParameterList("classCourseSemesters", classCourseSemesters);
 		List<Timetable> timetables = (List<Timetable>) query.list();
 		return timetables;
 	}
@@ -109,7 +109,7 @@ public class TimetableDAOImpl implements TimetableDAO {
 				+ " WHERE T.classCourseSemester IN (:classCourseSemesters)"
 				+ " AND T.date >= :startWeek AND T.date <= :endWeek";
 		Query query = getCurrentSession().createQuery(hql);
-		query.setParameter("classCourseSemesters", classCourseSemesters);
+		query.setParameterList("classCourseSemesters", classCourseSemesters);
 		query.setParameter("startWeek", startWeek);
 		query.setParameter("endWeek", endWeek);
 		List<Timetable> timetables = (List<Timetable>) query.list();

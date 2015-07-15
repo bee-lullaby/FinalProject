@@ -28,7 +28,7 @@ public class RoomController {
 	@RequestMapping(value = "/rooms", method = RequestMethod.GET)
 	public String listRoom(Model model) {
 		model.addAttribute("room", new Room());
-		model.addAttribute("listRooms", roomService.listRooms());
+		model.addAttribute("listRooms", roomService.listRooms(true));
 		return "room";
 	}
 	

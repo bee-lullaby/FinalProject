@@ -24,7 +24,9 @@ public interface TimetableService {
 
 	public void deleteTimetable(int timetableId);
 
-	public List<Timetable> listTimetablesByCCSId(List<ClassCourseSemester> classCourseSemesters);
+	public List<Timetable> listTimetablesByClassCourseSemesters(Set<ClassCourseSemester> classCourseSemesters);
+	
+	public List<Timetable> listTimetablesByCCSs(List<ClassCourseSemester> classCourseSemesters);
 
 	public Timetable getTimetableByDateSlotClassCourse(Date date, int slot, int classCourseSemesterId);
 
