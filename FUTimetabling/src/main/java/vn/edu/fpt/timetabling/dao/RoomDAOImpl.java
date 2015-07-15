@@ -2,12 +2,15 @@ package vn.edu.fpt.timetabling.dao;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import vn.edu.fpt.timetabling.model.Room;
 
 public class RoomDAOImpl implements RoomDAO {
+
 	private SessionFactory sessionFactory;
 
 	public void setSessionFactory(SessionFactory sessionFactory) {
@@ -30,21 +33,40 @@ public class RoomDAOImpl implements RoomDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Room> listRooms() {
-		List<Room> rooms = (List<Room>) getCurrentSession().createQuery("FROM vn.edu.fpt.timetabling.model.Room")
-				.list();
+	public List<Room> listRooms(boolean jointTimetable) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Room R";
+		if (jointTimetable) {
+			hql += " LEFT OUTER JOIN FETCH R.timetables";
+		}
+		Query query = getCurrentSession().createQuery(hql);
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<Room> rooms = (List<Room>) query.list();
 		return rooms;
 	}
 
 	@Override
-	public Room getRoomById(int roomId) {
-		Room room = (Room) getCurrentSession().get(Room.class, new Integer(roomId));
-		return room;
+	public Room getRoomById(int roomId, boolean jointTimetable) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Room R";
+		if (jointTimetable) {
+			hql += " LEFT OUTER JOIN FETCH R.timetables";
+		}
+		hql += " WHERE R.roomId = :roomId";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("roomId", roomId);
+		Object temp = query.uniqueResult();
+		if (temp != null) {
+			Room room = (Room) temp;
+			return room;
+		} else {
+			return null;
+		}
 	}
 
 	@Override
 	public void deleteRoom(int roomId) {
-		Room room = getRoomById(roomId);
-		getCurrentSession().delete(room);
+		Room room = getRoomById(roomId, false);
+		if (room != null) {
+			getCurrentSession().delete(room);
+		}
 	}
 }
