@@ -42,7 +42,7 @@ public class ClassController extends GeneralController {
 		this.courseService = courseService;
 	}
 
-	@RequestMapping(value = "/classes", method = RequestMethod.GET)
+	@RequestMapping(value = "/staff/classes", method = RequestMethod.GET)
 	public String listClasses(HttpSession httpSession, Model model) {
 		model.addAttribute("classFPT", new ClassFPT());
 		model.addAttribute("classes", classService.listClasses());
@@ -53,7 +53,7 @@ public class ClassController extends GeneralController {
 	}
 
 	// For add and update person both
-	@RequestMapping(value = "/class/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/staff/class/add", method = RequestMethod.POST)
 	public String addClass(@RequestParam(value = "classId", required = true) Integer classId,
 			@RequestParam(value = "type", required = true) String type,
 			@RequestParam(value = "specialized", required = false) Integer specializedId,
@@ -61,14 +61,14 @@ public class ClassController extends GeneralController {
 			@RequestParam(value = "course", required = false) Integer courseId) {
 		if (type.equals(ClassType.SPECIALIZED)) {
 			if (specializedId == null || batch == null) {
-				return "redirect:/classes";
+				return "redirect:/staff/classes";
 			}
 		} else if (type.equals("Course")) {
 			if (courseId == null) {
-				return "redirect:/classes";
+				return "redirect:/staff/classes";
 			}
 		} else {
-			return "redirect:/classes";
+			return "redirect:/staff/classes";
 		}
 		ClassFPT classFPT = classService.getClassById(classId);
 		if (classFPT == null) {
@@ -100,20 +100,20 @@ public class ClassController extends GeneralController {
 			// existing class, call update
 			classService.updateClass(classFPT);
 		}
-		return "redirect:/classes";
+		return "redirect:/staff/classes";
 	}
 
-	@RequestMapping("/class/delete/{classId}")
+	@RequestMapping("/staff/class/delete/{classId}")
 	public String deleteClass(@PathVariable("classId") int classId) {
 		classService.deleteClass(classId);
-		return "redirect:/classes";
+		return "redirect:/staff/classes";
 	}
 
-	@RequestMapping("/class/edit/{classId}")
+	@RequestMapping("/staff/class/edit/{classId}")
 	public String editClass(@PathVariable("classId") int classId, Model model) {
 		ClassFPT classFPT = classService.getClassById(classId);
 		if (classFPT == null) {
-			return "redirect:/classes";
+			return "redirect:/staff/classes";
 		}
 		model.addAttribute("classFPT", classFPT);
 		model.addAttribute("classes", classService.listClasses());
@@ -130,6 +130,6 @@ public class ClassController extends GeneralController {
 	@ExceptionHandler(Exception.class)
 	public String handleException(HttpSession httpSession, Exception e) {
 		httpSession.setAttribute("error", "Error, please try again.");
-		return "redirect:/classes";
+		return "redirect:/staff/classes";
 	}
 }

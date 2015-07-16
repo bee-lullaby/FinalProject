@@ -40,16 +40,16 @@
 				// Send the code to the server
 				$
 
-		.ajax({
-							type : 'POST',
-							url : 'http://localhost:8080/Timetabling/',
-							contentType : 'application/octet-stream; charset=utf-8',
-							success : function(result) {
-								window.location = 'http://localhost:8080/Timetabling/staff';
-							},
-							processData : false,
-							data : authResult['code']
-						});
+				.ajax({
+					type : 'POST',
+					url : 'http://localhost:8080/Timetabling/',
+					contentType : 'application/octet-stream; charset=utf-8',
+					success : function(result) {
+						window.location = 'http://localhost:8080/Timetabling/' + result;
+					},
+					processData : false,
+					data : authResult['code']
+				});
 			} else {
 				// There was an error.
 			}

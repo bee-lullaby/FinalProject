@@ -47,7 +47,7 @@ public class StaffDAOImpl implements StaffDAO {
 
 	@Override
 	public Staff getStaffByEmail(String email) {
-		String hql = "FROM vn.edu.fpt.timetabling.model.Staff S WHERE S.email = :email";
+		String hql = "FROM vn.edu.fpt.timetabling.model.Staff S WHERE lower(S.email) = lower(:email)";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("email", email);
 		return (Staff) query.uniqueResult();

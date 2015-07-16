@@ -26,7 +26,7 @@ public class SemesterController extends GeneralController {
 		this.semesterService = semesterService;
 	}
 
-	@RequestMapping(value = "/semesters", method = RequestMethod.GET)
+	@RequestMapping(value = "/staff/semesters", method = RequestMethod.GET)
 	public String listSemester(HttpSession httpSession, Model model) {
 		model.addAttribute("semester", new Course());
 		model.addAttribute("listSemesters", semesterService.listSemesters(false, false, false, false));
@@ -35,7 +35,7 @@ public class SemesterController extends GeneralController {
 	}
 
 	// For add and update person both
-	@RequestMapping(value = "/semester/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/staff/semester/add", method = RequestMethod.POST)
 	public String addSemester(@ModelAttribute("semester") Semester semester) {
 		if (semester.getSemesterId() == 0) {
 			// new course, add it
@@ -44,16 +44,16 @@ public class SemesterController extends GeneralController {
 			// existing course, call update
 			semesterService.updateSemester(semester);
 		}
-		return "redirect:/semesters";
+		return "redirect:/staff/semesters";
 	}
 
-	@RequestMapping("/semester/delete/{semesterId}")
+	@RequestMapping("/staff/semester/delete/{semesterId}")
 	public String deleteSemester(@PathVariable("semesterId") int semesterId) {
 		semesterService.deleteSemester(semesterId);
-		return "redirect:/semesters";
+		return "redirect:/staff/semesters";
 	}
 
-	@RequestMapping("/semester/edit/{semesterId}")
+	@RequestMapping("/staff/semester/edit/{semesterId}")
 	public String editSemester(@PathVariable("semesterId") int semesterId, Model model) {
 		model.addAttribute("semester", semesterService.getSemesterById(semesterId, false, false, false, false));
 		model.addAttribute("listSemesters", semesterService.listSemesters(false, false, false, false));
@@ -63,6 +63,6 @@ public class SemesterController extends GeneralController {
 	@ExceptionHandler(Exception.class)
 	public String handleException(HttpSession httpSession, Exception e) {
 		httpSession.setAttribute("error", "Error, please try again.");
-		return "redirect:/semesters";
+		return "redirect:/staff/semesters";
 	}
 }

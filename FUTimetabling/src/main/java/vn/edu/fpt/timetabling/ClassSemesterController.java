@@ -41,7 +41,7 @@ public class ClassSemesterController extends GeneralController {
 		this.classService = classService;
 	}
 
-	@RequestMapping(value = "/classSemesters", method = RequestMethod.GET)
+	@RequestMapping(value = "/staff/classSemesters", method = RequestMethod.GET)
 	public String listClassSemester(HttpSession httpSession, Model model) {
 		model.addAttribute("classSemester", new ClassSemester());
 		model.addAttribute("classSemesterService", classSemesterService);
@@ -52,7 +52,7 @@ public class ClassSemesterController extends GeneralController {
 		return "classSemester";
 	}
 
-	@RequestMapping(value = "/classSemester/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/staff/classSemester/add", method = RequestMethod.POST)
 	public String addClassSemester(@RequestParam(value = "classSemesterId", required = true) int classSemesterId,
 			@RequestParam(value = "classFPT", required = true) int classId,
 			@RequestParam(value = "semester", required = true) int semesterId,
@@ -71,20 +71,20 @@ public class ClassSemesterController extends GeneralController {
 			// existing class semester, call update
 			classSemesterService.updateClassSemester(classSemester);
 		}
-		return "redirect:/classSemesters";
+		return "redirect:/staff/classSemesters";
 	}
 
-	@RequestMapping("/classSemester/delete/{classSemesterId}")
+	@RequestMapping("/staff/classSemester/delete/{classSemesterId}")
 	public String deleteClassSemester(@PathVariable("classSemesterId") int classSemesterId) {
 		classSemesterService.deleteClassSemester(classSemesterId);
-		return "redirect:/classSemesters";
+		return "redirect:/staff/classSemesters";
 	}
 
-	@RequestMapping("/classSemester/edit/{classSemesterId}")
+	@RequestMapping("/staff/classSemester/edit/{classSemesterId}")
 	public String editClassSemester(@PathVariable("classSemesterId") int classSemesterId, Model model) {
 		ClassSemester classSemester = classSemesterService.getClassSemesterById(classSemesterId, false);
 		if (classSemester == null) {
-			return "redirect:/classSemesters";
+			return "redirect:/staff/classSemesters";
 		}
 		model.addAttribute("classSemester", classSemester);
 		model.addAttribute("classSemesters", classSemesterService.listClassSemesters(false));
@@ -96,21 +96,21 @@ public class ClassSemesterController extends GeneralController {
 		return "classSemester";
 	}
 
-	@RequestMapping("/classSemester/autoClassSemester/{classSemesterId}")
+	@RequestMapping("/staff/classSemester/autoClassSemester/{classSemesterId}")
 	public String autoPutStudentsClassSemester(@PathVariable("classSemesterId") int classSemesterId) {
 		classSemesterService.autoPutStudentsIntoClassSemester(classSemesterId);
-		return "redirect:/classSemesters";
+		return "redirect:/staff/classSemesters";
 	}
 
-	@RequestMapping("/classSemester/autoClassSemesters/{semesterId}")
+	@RequestMapping("/staff/classSemester/autoClassSemesters/{semesterId}")
 	public String autoPutStudentsClassSemesters(@PathVariable("semesterId") int semesterId) {
 		classSemesterService.autoPutStudentsIntoClassSemesters(semesterId);
-		return "redirect:/classSemesters";
+		return "redirect:/staff/classSemesters";
 	}
 
 	@ExceptionHandler(Exception.class)
 	public String handleException(HttpSession httpSession, Exception e) {
 		httpSession.setAttribute("error", "Error, please try again.");
-		return "redirect:/classSemesters";
+		return "redirect:/staff/classSemesters";
 	}
 }

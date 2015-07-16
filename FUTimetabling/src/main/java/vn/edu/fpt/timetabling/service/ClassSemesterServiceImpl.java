@@ -94,8 +94,8 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 
 	private boolean isMaxStudent(Set<ClassCourseSemester> classCourseSemesters) {
 		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
-			if (classCourseSemesterService.getNumberOfStudents(
-					classCourseSemester.getClassCourseSemesterId()) >= Const.OPTIMAL_NUMBER_OF_STUDENTS_IN_CLASS) {
+			if (classCourseSemesterService.getNumberOfStudents(classCourseSemester
+					.getClassCourseSemesterId()) >= Const.StudentNumber.OPTIMAL_NUMBER_OF_STUDENTS_IN_CLASS) {
 				return true;
 			}
 		}

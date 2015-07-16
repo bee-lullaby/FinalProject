@@ -51,7 +51,7 @@
 	<t:header />
 	<h1>Add a Course</h1>
 
-	<c:url var="addAction" value="/course/add"></c:url>
+	<c:url var="addAction" value="/staff/course/add"></c:url>
 
 	<form:form action="${addAction}" commandName="course">
 		<table>
@@ -121,9 +121,9 @@
 					<td>${course.name}</td>
 					<td>${course.department.code}</td>
 					<td><a
-						href="<c:url value='/course/edit/${course.courseId}' />">Edit</a></td>
+						href="<c:url value='/staff/course/edit/${course.courseId}' />">Edit</a></td>
 					<td><a
-						href="<c:url value='/course/delete/${course.courseId}' />">Delete</a></td>
+						href="<c:url value='/staff/course/delete/${course.courseId}' />">Delete</a></td>
 				</tr>
 			</c:forEach>
 		</table>

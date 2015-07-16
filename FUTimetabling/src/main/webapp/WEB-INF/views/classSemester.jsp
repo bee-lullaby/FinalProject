@@ -55,7 +55,7 @@
 		var select = document.getElementById('autoSemester');
 		var semesterId = select.options[select.selectedIndex].value;
 		window.location
-				.replace("http://localhost:8080/Timetabling/classSemester/autoClassSemesters/"
+				.replace("http://localhost:8080/Timetabling/staff/classSemester/autoClassSemesters/"
 						+ semesterId);
 	}
 </script>
@@ -63,7 +63,7 @@
 <body>
 	<t:header />
 	<h1>Add a Class Semester</h1>
-	<c:url var="addAction" value="/classSemester/add"></c:url>
+	<c:url var="addAction" value="/staff/classSemester/add"></c:url>
 
 	<form:form action="${addAction}" commandName="classSemester">
 		<table>
@@ -172,11 +172,11 @@
 					<td></td>
 					<td></td>
 					<td><a
-						href="<c:url value='/classSemester/edit/${classSemesterTemp.classSemesterId}' />">Edit</a></td>
+						href="<c:url value='/staff/classSemester/edit/${classSemesterTemp.classSemesterId}' />">Edit</a></td>
 					<td><a
-						href="<c:url value='/classSemester/delete/${classSemesterTemp.classSemesterId}' />">Delete</a></td>
+						href="<c:url value='/staff/classSemester/delete/${classSemesterTemp.classSemesterId}' />">Delete</a></td>
 					<td><a
-						href="<c:url value='/classSemester/autoClassSemester/${classSemesterTemp.classSemesterId}' />">Put</a></td>
+						href="<c:url value='/staff/classSemester/autoClassSemester/${classSemesterTemp.classSemesterId}' />">Put</a></td>
 				</tr>
 			</c:forEach>
 		</table>

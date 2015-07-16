@@ -50,7 +50,7 @@
 <body>
 	<t:header />
 	<h1>Add a Course Semester</h1>
-	<c:url var="addAction" value="/courseSemester/add"></c:url>
+	<c:url var="addAction" value="/staff/courseSemester/add"></c:url>
 
 	<form:form action="${addAction}" commandName="courseSemester">
 		<table>
@@ -155,9 +155,9 @@
 					<td>${courseSemester.slots}</td>
 					<td>${courseSemester.courseCondition.name}</td>
 					<td><a
-						href="<c:url value='/courseSemester/edit/${courseSemester.courseSemesterId}' />">Edit</a></td>
+						href="<c:url value='/staff/courseSemester/edit/${courseSemester.courseSemesterId}' />">Edit</a></td>
 					<td><a
-						href="<c:url value='/courseSemester/delete/${courseSemester.courseSemesterId}' />">Delete</a></td>
+						href="<c:url value='/staff/courseSemester/delete/${courseSemester.courseSemesterId}' />">Delete</a></td>
 				</tr>
 			</c:forEach>
 		</table>

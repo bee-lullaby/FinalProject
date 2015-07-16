@@ -28,7 +28,7 @@ public class RoomController extends GeneralController {
 		this.roomService = roomService;
 	}
 
-	@RequestMapping(value = "/rooms", method = RequestMethod.GET)
+	@RequestMapping(value = "/staff/rooms", method = RequestMethod.GET)
 	public String listRoom(HttpSession httpSession, Model model) {
 		model.addAttribute("room", new Room());
 		model.addAttribute("listRooms", roomService.listRooms(true));
@@ -36,7 +36,7 @@ public class RoomController extends GeneralController {
 		return "room";
 	}
 
-	@RequestMapping(value = "/rooms/addFromFile", method = RequestMethod.POST)
+	@RequestMapping(value = "/staff/rooms/addFromFile", method = RequestMethod.POST)
 	public String addCourseFromFile(@RequestParam("file") MultipartFile file) {
 		if (!file.isEmpty()) {
 
@@ -52,12 +52,12 @@ public class RoomController extends GeneralController {
 				e.printStackTrace();
 			}
 		}
-		return "redirect:/rooms";
+		return "redirect:/staff/rooms";
 	}
 
 	@ExceptionHandler(Exception.class)
 	public String handleException(HttpSession httpSession, Exception e) {
 		httpSession.setAttribute("error", "Error, please try again.");
-		return "redirect:/rooms";
+		return "redirect:/staff/rooms";
 	}
 }

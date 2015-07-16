@@ -49,7 +49,7 @@
 </head>
 <body>
 	<t:header />
-	<form:form action="rooms/addFromFile" method="post"
+	<form:form action="/staff/rooms/addFromFile" method="post"
 		enctype="multipart/form-data">
 		<input
 			accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -76,8 +76,10 @@
 					<td>${room.code}</td>
 					<td>${room.capacity}</td>
 					<td>${room.classes}</td>
-					<td><a href="<c:url value='/room/edit/${room.roomId}' />">Edit</a></td>
-					<td><a href="<c:url value='/room/delete/${room.roomId}' />">Delete</a></td>
+					<td><a
+						href="<c:url value='/staff/room/edit/${room.roomId}' />">Edit</a></td>
+					<td><a
+						href="<c:url value='/staff/room/delete/${room.roomId}' />">Delete</a></td>
 				</tr>
 			</c:forEach>
 		</table>

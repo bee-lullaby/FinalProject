@@ -172,7 +172,7 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 		model.addAttribute("classSemesters", classSemesters);
 	}
 
-	@RequestMapping(value = "/classCourseStudentSemesters", method = RequestMethod.GET)
+	@RequestMapping(value = "/staff/classCourseStudentSemesters", method = RequestMethod.GET)
 	public String listClassCourseSemester(HttpSession session, Model model,
 			@RequestParam(value = "semesterId", required = false) Integer semesterId,
 			@RequestParam(value = "classSemesterId", required = false) Integer classSemesterId,
@@ -201,7 +201,7 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 		return "classCourseStudentSemester";
 	}
 
-	@RequestMapping("/classCourseStudentSemester/add/{studentId}")
+	@RequestMapping("/staff/classCourseStudentSemester/add/{studentId}")
 	public String addClassCourseStudentSemester(HttpSession session, @PathVariable("studentId") int studentId,
 			Model model) throws MaxStudentException {
 		Student student = studentService.getStudentById(studentId);
@@ -223,8 +223,8 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 			}
 			boolean maxStudent = false;
 			for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
-				if (classCourseSemesterService.getNumberOfStudents(
-						classCourseSemester.getClassCourseSemesterId()) >= Const.MAX_NUMBER_OF_STUDENTS_IN_CLASS) {
+				if (classCourseSemesterService.getNumberOfStudents(classCourseSemester
+						.getClassCourseSemesterId()) >= Const.StudentNumber.MAX_NUMBER_OF_STUDENTS_IN_CLASS) {
 					maxStudent = true;
 					break;
 				}
@@ -244,10 +244,10 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 				throw new MaxStudentException();
 			}
 		}
-		return "redirect:/classCourseStudentSemesters";
+		return "redirect:/staff/classCourseStudentSemesters";
 	}
 
-	@RequestMapping("/classCourseStudentSemester/remove/{studentId}")
+	@RequestMapping("/staff/classCourseStudentSemester/remove/{studentId}")
 	public String removeClassCourseStudentSemester(HttpSession session, @PathVariable("studentId") int studentId,
 			Model model) {
 		Student student = studentService.getStudentById(studentId);
@@ -278,16 +278,17 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 				student.setClassSemester(null);
 			}
 		}
-		return "redirect:/classCourseStudentSemesters";
+		return "redirect:/staff/classCourseStudentSemesters";
 	}
 
 	@ExceptionHandler(Exception.class)
 	public String handleException(HttpSession httpSession, Exception e) {
 		if (e instanceof MaxStudentException) {
-			httpSession.setAttribute("error", "Student number exceeds " + Const.MAX_NUMBER_OF_STUDENTS_IN_CLASS);
+			httpSession.setAttribute("error",
+					"Student number exceeds " + Const.StudentNumber.MAX_NUMBER_OF_STUDENTS_IN_CLASS);
 		} else {
 			httpSession.setAttribute("error", "Error, please try again.");
 		}
-		return "redirect:/classCourseStudentSemesters";
+		return "redirect:/staff/classCourseStudentSemesters";
 	}
 }

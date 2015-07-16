@@ -54,7 +54,7 @@
 	selectSemester = function(semester) {
 		var semesterId = semester.value;
 		window.location
-				.replace("http://localhost:8080/Timetabling/classCourseSemesters?semesterId="
+				.replace("http://localhost:8080/Timetabling/staff/classCourseSemesters?semesterId="
 						+ semesterId);
 	};
 </script>
@@ -68,7 +68,7 @@
 		</c:forEach>
 	</select>
 	<h1>Add a Class Course</h1>
-	<c:url var="addAction" value="/classCourseSemester/add"></c:url>
+	<c:url var="addAction" value="/staff/classCourseSemester/add"></c:url>
 
 	<form:form action="${addAction}" commandName="classCourseSemester">
 		<table>
@@ -168,9 +168,9 @@
 					<td>${classCourseSemesterTemp.blockCondition}</td>
 					<td>${classCourseSemesterTemp.semesterLong}</td>
 					<td><a
-						href="<c:url value='/classCourseSemester/edit/${classCourseSemesterTemp.classCourseSemesterId}' />">Edit</a></td>
+						href="<c:url value='/staff/classCourseSemester/edit/${classCourseSemesterTemp.classCourseSemesterId}' />">Edit</a></td>
 					<td><a
-						href="<c:url value='/classCourseSemester/delete/${classCourseSemesterTemp.classCourseSemesterId}' />">Delete</a></td>
+						href="<c:url value='/staff/classCourseSemester/delete/${classCourseSemesterTemp.classCourseSemesterId}' />">Delete</a></td>
 				</tr>
 			</c:forEach>
 		</table>

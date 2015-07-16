@@ -51,7 +51,7 @@
 	<t:header />
 	<h1>Add a Specialized</h1>
 
-	<c:url var="addAction" value="/specialized/add"></c:url>
+	<c:url var="addAction" value="/staff/specialized/add"></c:url>
 
 	<form:form action="${addAction}" commandName="specialized">
 		<table>
@@ -114,9 +114,9 @@
 					<td>${specialized.name}</td>
 					<td>${specialized.classesToString()}</td>
 					<td><a
-						href="<c:url value='/specialized/edit/${specialized.specializedId}' />">Edit</a></td>
+						href="<c:url value='/staff/specialized/edit/${specialized.specializedId}' />">Edit</a></td>
 					<td><a
-						href="<c:url value='/specialized/delete/${specialized.specializedId}' />">Delete</a></td>
+						href="<c:url value='/staff/specialized/delete/${specialized.specializedId}' />">Delete</a></td>
 				</tr>
 			</c:forEach>
 		</table>

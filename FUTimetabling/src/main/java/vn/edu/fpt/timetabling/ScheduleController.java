@@ -8,8 +8,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -33,7 +32,7 @@ import vn.edu.fpt.timetabling.service.SemesterService;
 
 @Controller
 public class ScheduleController extends GeneralController {
-	private static final Logger logger = LoggerFactory.getLogger(ScheduleController.class);
+	private static final Logger logger = Logger.getLogger(ScheduleController.class);
 	private ScheduleService scheduleService;
 	private SemesterService semesterService;
 	private ClassSemesterService classSemesterService;
@@ -56,14 +55,14 @@ public class ScheduleController extends GeneralController {
 		this.classSemesterService = classSemesterService;
 	}
 
-	@RequestMapping(value = "/schedule", method = RequestMethod.GET)
+	@RequestMapping(value = "/staff/schedule", method = RequestMethod.GET)
 	public String schedule(@RequestParam(value = "semesterId", required = true) int semesterId, Model model) {
 		List<ClassSemester> list = scheduleService.listClassBySemester(semesterId);
-		return "redirect:/schedule?semesterId=" + semesterId + "&classId=" + list.get(0).getClassFPT().getClassId()
-				+ "&week=1";
+		return "redirect:/staff/schedule?semesterId=" + semesterId + "&classId="
+				+ list.get(0).getClassFPT().getClassId() + "&week=1";
 	}
 
-	@RequestMapping(value = "/schedule", method = RequestMethod.GET, params = { "semesterId", "classId", "week" })
+	@RequestMapping(value = "/staff/schedule", method = RequestMethod.GET, params = { "semesterId", "classId", "week" })
 	public void scheduleSemesterClass(@RequestParam int semesterId, @RequestParam int classId, @RequestParam int week,
 			Model model) {
 		// Get Semesters
@@ -114,7 +113,7 @@ public class ScheduleController extends GeneralController {
 		return;
 	}
 
-	@RequestMapping(value = "/schedule/updateTimetable", method = RequestMethod.POST)
+	@RequestMapping(value = "/staff/schedule/updateTimetable", method = RequestMethod.POST)
 	public String updateTimetable(@RequestParam(value = "JSONToSubmit", required = true) String JSONToSubmit,
 			@RequestParam(value = "JSONprev", required = true) String JSONprev, HttpServletRequest request) {
 		logger.info(JSONToSubmit);
@@ -137,8 +136,8 @@ public class ScheduleController extends GeneralController {
 		return "redirect:" + referer;
 	}
 
-	@RequestMapping(value = "/schedule/generateFromPreviousWeek", method = RequestMethod.POST, params = { "semesterId",
-			"classId", "week" })
+	@RequestMapping(value = "/staff/schedule/generateFromPreviousWeek", method = RequestMethod.POST, params = {
+			"semesterId", "classId", "week" })
 	public String generateFromPreviousWeek(@RequestParam int semesterId, @RequestParam int classId,
 			@RequestParam int week, HttpServletRequest request) {
 		scheduleService.generateFromPreviousWeek(semesterId, classId, week);

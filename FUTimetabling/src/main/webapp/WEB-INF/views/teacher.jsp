@@ -49,7 +49,7 @@
 	<t:header />
 	<h1>Add a Teacher</h1>
 
-	<c:url var="addAction" value="/teacher/add"></c:url>
+	<c:url var="addAction" value="/staff/teacher/add"></c:url>
 
 	<form:form action="${addAction}" commandName="teacher">
 		<table>
@@ -113,9 +113,9 @@
 					<td>${teacher.name}</td>
 					<td>${teacher.email}</td>
 					<td><a
-						href="<c:url value='/teacher/edit/${teacher.teacherId}' />">Edit</a></td>
+						href="<c:url value='/staff/teacher/edit/${teacher.teacherId}' />">Edit</a></td>
 					<td><a
-						href="<c:url value='/teacher/delete/${teacher.teacherId}' />">Delete</a></td>
+						href="<c:url value='/staff/teacher/delete/${teacher.teacherId}' />">Delete</a></td>
 				</tr>
 			</c:forEach>
 		</table>

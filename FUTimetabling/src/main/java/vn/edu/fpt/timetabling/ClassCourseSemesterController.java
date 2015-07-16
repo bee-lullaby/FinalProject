@@ -54,7 +54,7 @@ public class ClassCourseSemesterController extends GeneralController {
 		this.courseSemesterService = courseSemesterService;
 	}
 
-	@RequestMapping(value = "/classCourseSemesters", method = RequestMethod.GET)
+	@RequestMapping(value = "/staff/classCourseSemesters", method = RequestMethod.GET)
 	public String listClassCourseSemester(HttpSession session, Model model,
 			@RequestParam(value = "semesterId", required = false) Integer semesterId) {
 		List<Semester> semesters = semesterService.listSemesters(true, true, false, false);
@@ -85,7 +85,7 @@ public class ClassCourseSemesterController extends GeneralController {
 		return "classCourse";
 	}
 
-	@RequestMapping(value = "/classCourseSemester/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/staff/classCourseSemester/add", method = RequestMethod.POST)
 	public String addClassCourseSemester(@RequestParam(value = "classCourseSemesterId") int classCourseSemesterId,
 			@RequestParam(value = "classSemester") int classSemesterId,
 			@RequestParam(value = "courseSemester") int courseSemesterId,
@@ -97,7 +97,7 @@ public class ClassCourseSemesterController extends GeneralController {
 				false);
 		if (classSemester == null || courseSemester == null
 				|| classSemester.getSemester().compareTo(courseSemester.getSemester()) != 0) {
-			return "redirect:/classCourseSemesters";
+			return "redirect:/staff/classCourseSemesters";
 		}
 		ClassCourseSemester classCourseSemester = classCourseSemesterService
 				.getClassCourseSemesterById(classCourseSemesterId);
@@ -110,6 +110,7 @@ public class ClassCourseSemesterController extends GeneralController {
 			classCourseSemester.setSemesterLong(semesterLong);
 			classCourseSemester.setBlockCondition(0);
 		} else if (blockCondition != null) {
+			classCourseSemester.setSemesterLong(false);
 			classCourseSemester.setBlockCondition(blockCondition);
 		}
 		if (classCourseSemester.getClassCourseSemesterId() == 0) {
@@ -119,22 +120,22 @@ public class ClassCourseSemesterController extends GeneralController {
 			// existing class semester, call update
 			classCourseSemesterService.updateClassCourseSemester(classCourseSemester);
 		}
-		return "redirect:/classCourseSemesters";
+		return "redirect:/staff/classCourseSemesters";
 	}
 
-	@RequestMapping("/classCourseSemester/delete/{classCourseSemesterId}")
+	@RequestMapping("/staff/classCourseSemester/delete/{classCourseSemesterId}")
 	public String deleteCourseSemester(@PathVariable("classCourseSemesterId") int classCourseSemesterId) {
 		classCourseSemesterService.deleteClassCourseSemester(classCourseSemesterId);
-		return "redirect:/classCourseSemesters";
+		return "redirect:/staff/classCourseSemesters";
 	}
 
-	@RequestMapping("/classCourseSemester/edit/{classCourseSemesterId}")
+	@RequestMapping("/staff/classCourseSemester/edit/{classCourseSemesterId}")
 	public String editCourseSemester(HttpSession session,
 			@PathVariable("classCourseSemesterId") int classCourseSemesterId, Model model) {
 		ClassCourseSemester classCourseSemester = classCourseSemesterService
 				.getClassCourseSemesterById(classCourseSemesterId);
 		if (classCourseSemester == null) {
-			return "redirect:/classCourseSemesters";
+			return "redirect:/staff/classCourseSemesters";
 		}
 		ClassSemester classSemester = classCourseSemester.getClassSemester();
 		CourseSemester courseSemester = classCourseSemester.getCourseSemester();
@@ -169,6 +170,6 @@ public class ClassCourseSemesterController extends GeneralController {
 	@ExceptionHandler(Exception.class)
 	public String handleException(HttpSession httpSession, Exception e) {
 		httpSession.setAttribute("error", "Error, please try again.");
-		return "redirect:/classCourseSemesters";
+		return "redirect:/staff/classCourseSemesters";
 	}
 }

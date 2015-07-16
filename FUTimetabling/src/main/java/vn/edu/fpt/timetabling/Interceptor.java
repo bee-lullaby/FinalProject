@@ -14,8 +14,18 @@ public class Interceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		HttpSession httpSession = request.getSession();
-		if (SessionUtils.isSessionValid(httpSession) || request.getRequestURL().toString().equals(Const.URL)) {
+		String url = request.getRequestURL().toString();
+		if (url.equals(Const.URL) || url.contains("logout") || url.equals("http://localhost:8080/Timetabling/back")) {
 			return true;
+		} else if (SessionUtils.isSessionValid(httpSession)) {
+			if (url.contains("/staff") && SessionUtils.isStaff(httpSession)) {
+				return true;
+			} else if (url.contains("/studentPage") && SessionUtils.isStudent(httpSession)) {
+				return true;
+			} else {
+				response.sendRedirect(Const.URL);
+				return false;
+			}
 		} else {
 			response.sendRedirect(Const.URL);
 			return false;

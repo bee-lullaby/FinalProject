@@ -38,7 +38,7 @@ public class CourseController extends GeneralController {
 		this.classCourseSemesterService = classCourseSemesterService;
 	}
 
-	@RequestMapping(value = "/courses", method = RequestMethod.GET)
+	@RequestMapping(value = "/staff/courses", method = RequestMethod.GET)
 	public String listCourse(HttpSession httpSession, Model model) {
 		model.addAttribute("course", new Course());
 		model.addAttribute("listCourses", courseService.listCourses());
@@ -47,7 +47,7 @@ public class CourseController extends GeneralController {
 	}
 
 	// For add and update person both
-	@RequestMapping(value = "/course/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/staff/course/add", method = RequestMethod.POST)
 	public String addCourse(@ModelAttribute("course") Course course) {
 		if (course.getCourseId() == 0) {
 			// new course, add it
@@ -56,10 +56,10 @@ public class CourseController extends GeneralController {
 			// existing course, call update
 			courseService.updateCourse(course);
 		}
-		return "redirect:/courses";
+		return "redirect:/staff/courses";
 	}
 
-	@RequestMapping(value = "/courses/addFromFile", method = RequestMethod.POST)
+	@RequestMapping(value = "/staff/courses/addFromFile", method = RequestMethod.POST)
 	public String addCourseFromFile(@RequestParam("file") MultipartFile file) {
 		if (!file.isEmpty()) {
 
@@ -75,10 +75,10 @@ public class CourseController extends GeneralController {
 				e.printStackTrace();
 			}
 		}
-		return "redirect:/courses";
+		return "redirect:/staff/courses";
 	}
 
-	@RequestMapping(value = "/classCourse/addFromFile", method = RequestMethod.POST)
+	@RequestMapping(value = "/staff/classCourse/addFromFile", method = RequestMethod.POST)
 	public String addClassCourseFromFile(@RequestParam("file") MultipartFile file,
 			@RequestParam("semesterId") int semesterId) {
 		if (!file.isEmpty()) {
@@ -94,16 +94,16 @@ public class CourseController extends GeneralController {
 				e.printStackTrace();
 			}
 		}
-		return "redirect:/courses";
+		return "redirect:/staff/courses";
 	}
 
-	@RequestMapping("/course/delete/{courseId}")
+	@RequestMapping("/staff/course/delete/{courseId}")
 	public String deleteCourse(@PathVariable("courseId") int courseId) {
 		courseService.deleteCourse(courseId);
-		return "redirect:/courses";
+		return "redirect:/staff/courses";
 	}
 
-	@RequestMapping("/course/edit/{courseId}")
+	@RequestMapping("/staff/course/edit/{courseId}")
 	public String editCourse(@PathVariable("courseId") int courseId, Model model) {
 		model.addAttribute("course", courseService.getCourseById(courseId));
 		model.addAttribute("listCourses", courseService.listCourses());
@@ -113,6 +113,6 @@ public class CourseController extends GeneralController {
 	@ExceptionHandler(Exception.class)
 	public String handleException(HttpSession httpSession, Exception e) {
 		httpSession.setAttribute("error", "Error, please try again.");
-		return "redirect:/courses";
+		return "redirect:/staff/courses";
 	}
 }

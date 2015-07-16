@@ -54,19 +54,19 @@
 	selectSemester = function(semester) {
 		var semesterId = semester.value;
 		window.location
-				.replace("http://localhost:8080/Timetabling/classCourseStudentSemesters?semesterId="
+				.replace("http://localhost:8080/Timetabling/staff/classCourseStudentSemesters?semesterId="
 						+ semesterId);
 	};
 	selectClassSemester = function(classSemester) {
 		var classSemesterId = classSemester.value;
 		window.location
-				.replace("http://localhost:8080/Timetabling/classCourseStudentSemesters?classSemesterId="
+				.replace("http://localhost:8080/Timetabling/staff/classCourseStudentSemesters?classSemesterId="
 						+ classSemesterId);
 	};
 	selectClassCourseSemester = function(classCourseSemester) {
 		var classCourseSemesterId = classCourseSemester.value;
 		window.location
-				.replace("http://localhost:8080/Timetabling/classCourseStudentSemesters?classCourseSemesterId="
+				.replace("http://localhost:8080/Timetabling/staff/classCourseStudentSemesters?classCourseSemesterId="
 						+ classCourseSemesterId);
 	};
 </script>
@@ -130,7 +130,7 @@
 					<td>${student.studentCode}</td>
 					<td>${student.name}</td>
 					<td><a
-						href="<c:url value='/classCourseStudentSemester/add/${student.studentId}' />">Add</a></td>
+						href="<c:url value='/staff/classCourseStudentSemester/add/${student.studentId}' />">Add</a></td>
 				</tr>
 			</c:forEach>
 		</table>
@@ -150,7 +150,7 @@
 					<td>${student.studentCode}</td>
 					<td>${student.name}</td>
 					<td><a
-						href="<c:url value='/classCourseStudentSemester/remove/${student.studentId}' />">Remove</a></td>
+						href="<c:url value='/staff/classCourseStudentSemester/remove/${student.studentId}' />">Remove</a></td>
 				</tr>
 			</c:forEach>
 		</table>

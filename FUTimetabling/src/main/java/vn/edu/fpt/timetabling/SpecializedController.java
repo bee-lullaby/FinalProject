@@ -30,7 +30,7 @@ public class SpecializedController extends GeneralController {
 		this.specializedService = specializedService;
 	}
 
-	@RequestMapping(value = "/specializeds", method = RequestMethod.GET)
+	@RequestMapping(value = "/staff/specializeds", method = RequestMethod.GET)
 	public String listSpecialized(HttpSession httpSession, Model model) {
 		model.addAttribute("specialized", new Specialized());
 		model.addAttribute("listSpecializeds", specializedService.listSpecializeds(true, false));
@@ -39,18 +39,18 @@ public class SpecializedController extends GeneralController {
 	}
 
 	// For add and update person both
-	@RequestMapping(value = "/specialized/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/staff/specialized/add", method = RequestMethod.POST)
 	public String addSpecialized(@ModelAttribute("specialized") Specialized specialized) {
 		if (specialized.getSpecializedId() == 0) {
 			specializedService.addSpecialized(specialized);
 		} else {
 			specializedService.updateSpecialized(specialized);
 		}
-		return "redirect:/specializeds";
+		return "redirect:/staff/specializeds";
 	}
 
 	// For add and update person both
-	@RequestMapping(value = "/specialized/addFromFile", method = RequestMethod.POST)
+	@RequestMapping(value = "/staff/specialized/addFromFile", method = RequestMethod.POST)
 	public String addSpecializedFromFile(@RequestParam("file") MultipartFile file) {
 		if (!file.isEmpty()) {
 			File specializeds = new File("D:\\FU\\Do an tot nghiep\\Data\\ServerData\\" + file.getOriginalFilename());
@@ -65,16 +65,16 @@ public class SpecializedController extends GeneralController {
 				e.printStackTrace();
 			}
 		}
-		return "redirect:/specializeds";
+		return "redirect:/staff/specializeds";
 	}
 
-	@RequestMapping("/specialized/delete/{specializedId}")
+	@RequestMapping("/staff/specialized/delete/{specializedId}")
 	public String deleteSpecialized(@PathVariable("specializedId") int specializedId) {
 		specializedService.deleteSpecialized(specializedId);
-		return "redirect:/specializeds";
+		return "redirect:/staff/specializeds";
 	}
 
-	@RequestMapping("/specialized/edit/{specializedId}")
+	@RequestMapping("/staff/specialized/edit/{specializedId}")
 	public String editSpecialized(@PathVariable("specializedId") int specializedId, Model model) {
 		model.addAttribute("specialized", specializedService.getSpecializedById(specializedId, true, false));
 		model.addAttribute("listSpecializeds", specializedService.listSpecializeds(true, false));
@@ -84,6 +84,6 @@ public class SpecializedController extends GeneralController {
 	@ExceptionHandler(Exception.class)
 	public String handleException(HttpSession httpSession, Exception e) {
 		httpSession.setAttribute("error", "Error, please try again.");
-		return "redirect:/specializeds";
+		return "redirect:/staff/specializeds";
 	}
 }

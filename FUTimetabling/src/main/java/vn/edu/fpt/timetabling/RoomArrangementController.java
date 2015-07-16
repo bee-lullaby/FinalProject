@@ -29,7 +29,7 @@ public class RoomArrangementController extends GeneralController {
 		this.roomArrangementService = roomArrangementService;
 	}
 
-	@RequestMapping(value = "/roomArrangement", method = RequestMethod.GET)
+	@RequestMapping(value = "/staff/roomArrangement", method = RequestMethod.GET)
 	public void roomArrangement(@RequestParam(value = "semesterId", required = true) int semesterId, Model model) {
 		List<ClassSemester> JSONccs = roomArrangementService.getListClassesCoursesOfSemester(semesterId);
 		HashMap<Room, List<Timetable>> JSONmapRoomTimetable = roomArrangementService.getListRoomsOfSemester(semesterId);

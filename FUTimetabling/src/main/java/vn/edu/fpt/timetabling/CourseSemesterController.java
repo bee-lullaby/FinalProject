@@ -47,7 +47,7 @@ public class CourseSemesterController extends GeneralController {
 		this.courseService = courseService;
 	}
 
-	@RequestMapping(value = "/courseSemesters", method = RequestMethod.GET)
+	@RequestMapping(value = "/staff/courseSemesters", method = RequestMethod.GET)
 	public String listCourseSemesters(HttpSession httpSession, Model model) {
 		model.addAttribute("courseSemester", new CourseSemester());
 		model.addAttribute("listCourseSemesters", courseSemesterService.listCourseSemesters(false, false, false));
@@ -64,7 +64,7 @@ public class CourseSemesterController extends GeneralController {
 	}
 
 	// For add and update person both
-	@RequestMapping(value = "/courseSemester/addFromFile", method = RequestMethod.POST)
+	@RequestMapping(value = "/staff/courseSemester/addFromFile", method = RequestMethod.POST)
 	public String addCourseSemesterFromFile(@RequestParam("file") MultipartFile file,
 			@RequestParam("semesterId") int semesterId) {
 		if (!file.isEmpty()) {
@@ -82,17 +82,17 @@ public class CourseSemesterController extends GeneralController {
 				e.printStackTrace();
 			}
 		}
-		return "redirect:/courseSemesters";
+		return "redirect:/staff/courseSemesters";
 	}
 
-	@RequestMapping(value = "/courseSemester/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/staff/courseSemester/add", method = RequestMethod.POST)
 	public String addCourseSemester(@RequestParam(value = "courseSemesterId", required = true) int courseSemesterId,
 			@RequestParam(value = "course", required = true) int courseId,
 			@RequestParam(value = "semester", required = true) int semesterId,
 			@RequestParam(value = "slots", required = true) int slots,
 			@RequestParam(value = "courseCondition", required = false) Integer courseConditionId) {
 		if (courseId == courseConditionId) {
-			return "redirect:/courseSemesters";
+			return "redirect:/staff/courseSemesters";
 		}
 		CourseSemester courseSemester = courseSemesterService.getCourseSemesterById(courseSemesterId, false, false,
 				false);
@@ -114,24 +114,24 @@ public class CourseSemesterController extends GeneralController {
 			// existing class semester, call update
 			courseSemesterService.updateCourseSemester(courseSemester);
 		}
-		return "redirect:/courseSemesters";
+		return "redirect:/staff/courseSemesters";
 	}
 
-	@RequestMapping("/courseSemester/delete/{courseSemesterId}")
+	@RequestMapping("/staff/courseSemester/delete/{courseSemesterId}")
 	public String deleteCourseSemester(@PathVariable("courseSemesterId") int courseSemesterId) {
 		courseSemesterService.deleteCourseSemester(courseSemesterId);
-		return "redirect:/courseSemesters";
+		return "redirect:/staff/courseSemesters";
 	}
 
-	@RequestMapping("/courseSemester/edit/{courseSemesterId}")
+	@RequestMapping("/staff/courseSemester/edit/{courseSemesterId}")
 	public String editCourseSemester(@PathVariable("courseSemesterId") int courseSemesterId, Model model) {
 		CourseSemester courseSemester = courseSemesterService.getCourseSemesterById(courseSemesterId, false, false,
 				false);
 		if (courseSemester == null) {
-			return "redirect:/courseSemesters";
+			return "redirect:/staff/courseSemesters";
 		}
 		model.addAttribute("courseSemester", courseSemester);
-		model.addAttribute("courseSemesters", courseSemesterService.listCourseSemesters(false, false, false));
+		model.addAttribute("listCourseSemesters", courseSemesterService.listCourseSemesters(false, false, false));
 		model.addAttribute("semesters", semesterService.listSemesters(false, false, false, false));
 		model.addAttribute("courses", courseService.listCourses());
 		Course course = new Course();
@@ -150,6 +150,6 @@ public class CourseSemesterController extends GeneralController {
 	@ExceptionHandler(Exception.class)
 	public String handleException(HttpSession httpSession, Exception e) {
 		httpSession.setAttribute("error", "Error, please try again.");
-		return "redirect:/courseSemesters";
+		return "redirect:/staff/courseSemesters";
 	}
 }

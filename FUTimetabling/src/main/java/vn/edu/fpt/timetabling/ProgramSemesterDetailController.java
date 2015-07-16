@@ -52,7 +52,7 @@ public class ProgramSemesterDetailController extends GeneralController {
 		this.semesterService = semesterService;
 	}
 
-	@RequestMapping(value = "/programSemesterDetails", method = RequestMethod.GET)
+	@RequestMapping(value = "/staff/programSemesterDetails", method = RequestMethod.GET)
 	public String listProgramSemesterDetail(HttpSession session, Model model,
 			@RequestParam(value = "semesterId", required = false) Integer semesterId) {
 		Semester semester;
@@ -82,7 +82,7 @@ public class ProgramSemesterDetailController extends GeneralController {
 		return "programSemesterDetail";
 	}
 
-	@RequestMapping(value = "/programSemesterDetail/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/staff/programSemesterDetail/add", method = RequestMethod.POST)
 	public String addProgramSemesterDetail(
 			@RequestParam(value = "programSemesterDetailId", required = true) int programSemesterDetailId,
 			@RequestParam(value = "programSemester", required = true) int programSemesterId,
@@ -96,7 +96,7 @@ public class ProgramSemesterDetailController extends GeneralController {
 		CourseSemester courseSemester = courseSemesterService.getCourseSemesterById(courseSemesterId, false, false,
 				false);
 		if (programSemester == null || courseSemester == null) {
-			return "redirect:/programSemesterDetails";
+			return "redirect:/staff/programSemesterDetails";
 		}
 		programSemesterDetail.setProgramSemester(programSemester);
 		programSemesterDetail.setCourseSemester(courseSemester);
@@ -107,22 +107,22 @@ public class ProgramSemesterDetailController extends GeneralController {
 			// existing program semester, call update
 			programSemesterDetailService.updateProgramSemesterDetail(programSemesterDetail);
 		}
-		return "redirect:/programSemesterDetails";
+		return "redirect:/staff/programSemesterDetails";
 	}
 
-	@RequestMapping("/programSemesterDetail/delete/{programSemesterDetailId}")
+	@RequestMapping("/staff/programSemesterDetail/delete/{programSemesterDetailId}")
 	public String deleteProgramSemesterDetail(@PathVariable("programSemesterDetailId") int programSemesterDetailId) {
 		programSemesterDetailService.deleteProgramSemesterDetail(programSemesterDetailId);
-		return "redirect:/programSemesterDetails";
+		return "redirect:/staff/programSemesterDetails";
 	}
 
-	@RequestMapping("/programSemesterDetail/edit/{programSemesterDetailId}")
+	@RequestMapping("/staff/programSemesterDetail/edit/{programSemesterDetailId}")
 	public String editProgramSemester(HttpSession session,
 			@PathVariable("programSemesterDetailId") int programSemesterDetailId, Model model) {
 		ProgramSemesterDetail programSemesterDetail = programSemesterDetailService
 				.getProgramSemesterDetailById(programSemesterDetailId);
 		if (programSemesterDetail == null) {
-			return "redirect:/programSemesterDetails";
+			return "redirect:/staff/programSemesterDetails";
 		}
 		Semester semester;
 		int semesterId;
@@ -149,6 +149,6 @@ public class ProgramSemesterDetailController extends GeneralController {
 	@ExceptionHandler(Exception.class)
 	public String handleException(HttpSession httpSession, Exception e) {
 		httpSession.setAttribute("error", "Error, please try again.");
-		return "redirect:/programSemesterDetails";
+		return "redirect:/staff/programSemesterDetails";
 	}
 }

@@ -34,7 +34,7 @@ public class TeacherController extends GeneralController {
 		this.teacherService = teacherService;
 	}
 
-	@RequestMapping(value = "/teachers", method = RequestMethod.GET)
+	@RequestMapping(value = "/staff/teachers", method = RequestMethod.GET)
 	public String listCourse(HttpSession httpSession, Model model) {
 		model.addAttribute("teacher", new Teacher());
 		model.addAttribute("listTeachers", teacherService.listTeachers());
@@ -43,7 +43,7 @@ public class TeacherController extends GeneralController {
 	}
 
 	// For add and update person both
-	@RequestMapping(value = "/teacher/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/staff/teacher/add", method = RequestMethod.POST)
 	public String addCourse(@ModelAttribute("teacher") Teacher teacher) {
 		if (teacher.getTeacherId() == 0) {
 			// new course, add it
@@ -52,23 +52,23 @@ public class TeacherController extends GeneralController {
 			// existing course, call update
 			teacherService.updateTeacher(teacher);
 		}
-		return "redirect:/teachers";
+		return "redirect:/staff/teachers";
 	}
 
-	@RequestMapping("/teacher/delete/{teacherId}")
+	@RequestMapping("/staff/teacher/delete/{teacherId}")
 	public String deleteCourse(@PathVariable("teacherId") int teacherId) {
 		teacherService.deleteTeacher(teacherId);
-		return "redirect:/teachers";
+		return "redirect:/staff/teachers";
 	}
 
-	@RequestMapping("/teacher/edit/{teacherId}")
+	@RequestMapping("/staff/teacher/edit/{teacherId}")
 	public String editCourse(@PathVariable("teacherId") int teacherId, Model model) {
 		model.addAttribute("teacher", teacherService.getTeacherById(teacherId));
 		model.addAttribute("listTeachers", teacherService.listTeachers());
 		return "teacher";
 	}
 
-	@RequestMapping("/teacherCourse/addFromFile")
+	@RequestMapping("/staff/teacherCourse/addFromFile")
 	public String addTeacherCourseFromFile(@RequestParam("file") MultipartFile file) {
 		if (!file.isEmpty()) {
 			File teacherCourses = new File("D:\\FU\\Do an tot nghiep\\Data\\ServerData\\" + file.getOriginalFilename());
@@ -83,12 +83,12 @@ public class TeacherController extends GeneralController {
 				e.printStackTrace();
 			}
 		}
-		return "redirect:/teachers";
+		return "redirect:/staff/teachers";
 	}
 
 	@ExceptionHandler(Exception.class)
 	public String handleException(HttpSession httpSession, Exception e) {
 		httpSession.setAttribute("error", "Error, please try again.");
-		return "redirect:/teachers";
+		return "redirect:/staff/teachers";
 	}
 }

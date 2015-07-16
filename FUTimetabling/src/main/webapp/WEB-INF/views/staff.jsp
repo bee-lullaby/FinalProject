@@ -17,36 +17,38 @@
 	<p>idToken: ${idToken}</p>
 	<p>accessToken: ${accessToken}</p>
 	<p>email: ${email}</p>
-	<a href="<c:url value='/semesters' />">Manage Semesters</a>
+	<a href="<c:url value='/staff/semesters' />">Manage Semesters</a>
 	<br />
-	<a href="<c:url value='/rooms' />">Manage Rooms</a>
+	<a href="<c:url value='/staff/rooms' />">Manage Rooms</a>
 	<br />
-	<a href="<c:url value='/departments' />">Manage Departments</a>
+	<a href="<c:url value='/staff/departments' />">Manage Departments</a>
 	<br />
-	<a href="<c:url value='/specializeds' />">Manage Specialized</a>
+	<a href="<c:url value='/staff/specializeds' />">Manage Specialized</a>
 	<br />
-	<a href="<c:url value='/teachers' />">Manage Teachers</a>
+	<a href="<c:url value='/staff/teachers' />">Manage Teachers</a>
 	<br />
-	<a href="<c:url value='/students' />">Manage Students</a>
+	<a href="<c:url value='/staff/students' />">Manage Students</a>
 	<br />
-	<a href="<c:url value='/courses' />">Manage Courses</a>
+	<a href="<c:url value='/staff/courses' />">Manage Courses</a>
 	<br />
-	<a href="<c:url value='/classes' />">Manage Classes</a>
+	<a href="<c:url value='/staff/classes' />">Manage Classes</a>
 	<br />
-	<a href="<c:url value='/programSemesters' />">Manage
+	<a href="<c:url value='/staff/programSemesters' />">Manage
 		ProgramSemesters</a>
 	<br />
-	<a href="<c:url value='/programSemesterDetails' />">Manage
+	<a href="<c:url value='/staff/programSemesterDetails' />">Manage
 		ProgramSemesterDetails</a>
 	<br />
-	<a href="<c:url value='/classSemesters' />">Manage ClassSemesters</a>
+	<a href="<c:url value='/staff/classSemesters' />">Manage
+		ClassSemesters</a>
 	<br />
-	<a href="<c:url value='/courseSemesters' />">Manage CourseSemesters</a>
+	<a href="<c:url value='/staff/courseSemesters' />">Manage
+		CourseSemesters</a>
 	<br />
-	<a href="<c:url value='/classCourseSemesters' />">Manage
+	<a href="<c:url value='/staff/classCourseSemesters' />">Manage
 		ClassCourseSemesters</a>
 	<br />
-	<a href="<c:url value='/classCourseStudentSemesters' />">Manage
+	<a href="<c:url value='/staff/classCourseStudentSemesters' />">Manage
 		ClassCourseStudentSemesters</a>
 	<br />
 </body>

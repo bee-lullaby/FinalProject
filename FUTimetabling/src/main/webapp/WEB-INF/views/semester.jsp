@@ -49,7 +49,7 @@
 	<t:header />
 	<h1>Add a Semester</h1>
 
-	<c:url var="addAction" value="/semester/add"></c:url>
+	<c:url var="addAction" value="/staff/semester/add"></c:url>
 
 	<form:form action="${addAction}" commandName="semester">
 		<table>
@@ -107,9 +107,9 @@
 					<td>${semester.startDate}</td>
 					<td>${semester.endDate}</td>
 					<td><a
-						href="<c:url value='/semester/edit/${semester.semesterId}' />">Edit</a></td>
+						href="<c:url value='/staff/semester/edit/${semester.semesterId}' />">Edit</a></td>
 					<td><a
-						href="<c:url value='/semester/delete/${semester.semesterId}' />">Delete</a></td>
+						href="<c:url value='/staff/semester/delete/${semester.semesterId}' />">Delete</a></td>
 				</tr>
 			</c:forEach>
 		</table>

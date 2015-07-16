@@ -54,7 +54,7 @@
 <body>
 	<t:header />
 	<h1>Add a Program Semester</h1>
-	<c:url var="addAction" value="/programSemester/add"></c:url>
+	<c:url var="addAction" value="/staff/programSemester/add"></c:url>
 
 	<form:form action="${addAction}" commandName="programSemester">
 		<table>
@@ -160,9 +160,9 @@
 					<td>${programSemesterTemp.detailSpecialized.name}</td>
 					<td>${programSemesterTemp.programSemesterDetails}</td>
 					<td><a
-						href="<c:url value='/programSemester/edit/${programSemesterTemp.programSemesterId}' />">Edit</a></td>
+						href="<c:url value='/staff/programSemester/edit/${programSemesterTemp.programSemesterId}' />">Edit</a></td>
 					<td><a
-						href="<c:url value='/programSemester/delete/${programSemesterTemp.programSemesterId}' />">Delete</a></td>
+						href="<c:url value='/staff/programSemester/delete/${programSemesterTemp.programSemesterId}' />">Delete</a></td>
 				</tr>
 			</c:forEach>
 		</table>

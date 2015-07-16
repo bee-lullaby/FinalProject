@@ -65,7 +65,7 @@ public class StudentDAOImpl implements StudentDAO {
 
 	@Override
 	public Student getStudentByCode(String code) {
-		String hql = "FROM vn.edu.fpt.timetabling.model.Student S WHERE S.studentCode = :code";
+		String hql = "FROM vn.edu.fpt.timetabling.model.Student S WHERE lower(S.studentCode) = lower(:code)";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("code", code);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -196,5 +196,14 @@ public class StudentDAOImpl implements StudentDAO {
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<Student> students = (List<Student>) query.list();
 		return students;
+	}
+
+	@Override
+	public Student getStudentByEmail(String email) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Student S WHERE lower(S.email) = lower(:email)";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("email", email);
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		return (Student) query.uniqueResult();
 	}
 }

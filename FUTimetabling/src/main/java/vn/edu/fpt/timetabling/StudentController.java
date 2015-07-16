@@ -38,7 +38,7 @@ public class StudentController extends GeneralController {
 		this.specializedService = specializedService;
 	}
 
-	@RequestMapping(value = "/students", method = RequestMethod.GET)
+	@RequestMapping(value = "/staff/students", method = RequestMethod.GET)
 	public String listStudents(HttpSession httpSession, Model model) {
 		model.addAttribute("student", new Student());
 		model.addAttribute("students", studentService.listStudents());
@@ -47,7 +47,7 @@ public class StudentController extends GeneralController {
 		return "student";
 	}
 
-	@RequestMapping(value = "/student/add", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value = "/staff/student/add", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
 	public String addStudent(@RequestParam(value = "studentId", required = true) int studentId,
 			@RequestParam(value = "name", required = true) String name,
 			@RequestParam(value = "specialized", required = true) int specializedId,
@@ -82,11 +82,11 @@ public class StudentController extends GeneralController {
 			// existing class semester, call update
 			studentService.updateStudent(student);
 		}
-		return "redirect:/students";
+		return "redirect:/staff/students";
 	}
 
 	// For add and update person both
-	@RequestMapping(value = "/student/addFromFile", method = RequestMethod.POST)
+	@RequestMapping(value = "/staff/student/addFromFile", method = RequestMethod.POST)
 	public String addSpecializedFromFile(@RequestParam("file") MultipartFile file,
 			@RequestParam("semesterId") int semesterId) {
 		if (!file.isEmpty()) {
@@ -102,16 +102,16 @@ public class StudentController extends GeneralController {
 				e.printStackTrace();
 			}
 		}
-		return "redirect:/specializeds";
+		return "redirect:/staff/students";
 	}
 
-	@RequestMapping("/student/delete/{studentId}")
+	@RequestMapping("/staff/student/delete/{studentId}")
 	public String deleteStudent(@PathVariable("studentId") int studentId) {
 		studentService.deleteStudent(studentId);
-		return "redirect:/students";
+		return "redirect:/staff/students";
 	}
 
-	@RequestMapping("/student/edit/{studentId}")
+	@RequestMapping("/staff/student/edit/{studentId}")
 	public String editStudent(@PathVariable("studentId") int studentId, Model model) {
 		Student student = studentService.getStudentById(studentId);
 		if (student == null) {
@@ -126,6 +126,6 @@ public class StudentController extends GeneralController {
 	@ExceptionHandler(Exception.class)
 	public String handleException(HttpSession httpSession, Exception e) {
 		httpSession.setAttribute("error", "Error, please try again.");
-		return "redirect:/students";
+		return "redirect:/staff/students";
 	}
 }

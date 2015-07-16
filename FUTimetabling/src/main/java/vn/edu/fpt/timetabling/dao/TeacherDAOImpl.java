@@ -47,7 +47,7 @@ public class TeacherDAOImpl implements TeacherDAO {
 
 	@Override
 	public Teacher getTeacherByEmail(String email) {
-		String hql = "FROM vn.edu.fpt.timetabling.model.Teacher S WHERE S.email = :email";
+		String hql = "FROM vn.edu.fpt.timetabling.model.Teacher S WHERE lower(S.email) = lower(:email)";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("email", email);
 		return (Teacher) query.uniqueResult();
@@ -55,7 +55,7 @@ public class TeacherDAOImpl implements TeacherDAO {
 
 	@Override
 	public Teacher getTeacherByAccount(String account) {
-		String hql = "FROM vn.edu.fpt.timetabling.model.Teacher S WHERE S.account = :account";
+		String hql = "FROM vn.edu.fpt.timetabling.model.Teacher S WHERE lower(S.account) = lower(:account)";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("account", account);
 		return (Teacher) query.uniqueResult();

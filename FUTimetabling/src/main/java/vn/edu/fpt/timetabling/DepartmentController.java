@@ -30,7 +30,7 @@ public class DepartmentController extends GeneralController {
 		this.departmentService = departmentService;
 	}
 
-	@RequestMapping(value = "/departments", method = RequestMethod.GET)
+	@RequestMapping(value = "/staff/departments", method = RequestMethod.GET)
 	public String listDepartment(HttpSession httpSession, Model model) {
 		model.addAttribute("department", new Department());
 		model.addAttribute("listDepartments", departmentService.listDepartments());
@@ -39,7 +39,7 @@ public class DepartmentController extends GeneralController {
 	}
 
 	// For add and update person both
-	@RequestMapping(value = "/department/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/staff/department/add", method = RequestMethod.POST)
 	public String addDepartment(@ModelAttribute("department") Department department) {
 		if (department.getDepartmentId() == 0) {
 			// new course, add it
@@ -48,11 +48,11 @@ public class DepartmentController extends GeneralController {
 			// existing course, call update
 			departmentService.updateDepartment(department);
 		}
-		return "redirect:/departments";
+		return "redirect:/staff/departments";
 	}
 
 	// For add and update person both
-	@RequestMapping(value = "/department/addFromFile", method = RequestMethod.POST)
+	@RequestMapping(value = "/staff/department/addFromFile", method = RequestMethod.POST)
 	public String addDepartmentFromFile(@RequestParam("file") MultipartFile file) {
 		if (!file.isEmpty()) {
 			File departments = new File("D:\\FU\\Do an tot nghiep\\Data\\ServerData\\" + file.getOriginalFilename());
@@ -67,16 +67,16 @@ public class DepartmentController extends GeneralController {
 				e.printStackTrace();
 			}
 		}
-		return "redirect:/departments";
+		return "redirect:/staff/departments";
 	}
 
-	@RequestMapping("/department/delete/{departmentId}")
+	@RequestMapping("/staff/department/delete/{departmentId}")
 	public String deleteDepartment(@PathVariable("departmentId") int departmentId) {
 		departmentService.deleteDepartment(departmentId);
-		return "redirect:/departments";
+		return "redirect:/staff/departments";
 	}
 
-	@RequestMapping("/department/edit/{departmentId}")
+	@RequestMapping("/staff/department/edit/{departmentId}")
 	public String editDepartment(@PathVariable("departmentId") int departmentId, Model model) {
 		model.addAttribute("department", departmentService.getDepartmentById(departmentId));
 		model.addAttribute("listDepartments", departmentService.listDepartments());
@@ -86,6 +86,6 @@ public class DepartmentController extends GeneralController {
 	@ExceptionHandler(Exception.class)
 	public String handleException(HttpSession httpSession, Exception e) {
 		httpSession.setAttribute("error", "Error, please try again.");
-		return "redirect:/departments";
+		return "redirect:/staff/departments";
 	}
 }

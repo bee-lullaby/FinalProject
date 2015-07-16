@@ -10,10 +10,31 @@ public class SessionUtils {
 		Object idToken = session.getAttribute("idToken");
 		Object accessToken = session.getAttribute("accessToken");
 		Object email = session.getAttribute("email");
-		if (idToken == null || accessToken == null || email == null) {
+		Object roll = session.getAttribute("roll");
+		if (idToken == null || accessToken == null || email == null || roll == null) {
 			return false;
 		} else {
 			return true;
 		}
+	}
+
+	public static boolean isStaff(HttpSession session) {
+		if (session == null) {
+			return false;
+		}
+		if (session.getAttribute("roll") != null && session.getAttribute("roll").toString().equals("staff")) {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean isStudent(HttpSession session) {
+		if (session == null) {
+			return false;
+		}
+		if (session.getAttribute("roll") != null && session.getAttribute("roll").toString().equals("student")) {
+			return true;
+		}
+		return false;
 	}
 }

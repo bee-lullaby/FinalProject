@@ -54,7 +54,7 @@
 	selectSemester = function(semester) {
 		var semesterId = semester.value;
 		window.location
-				.replace("http://localhost:8080/Timetabling/programSemesterDetails?semesterId="
+				.replace("http://localhost:8080/Timetabling/staff/programSemesterDetails?semesterId="
 						+ semesterId);
 	};
 </script>
@@ -69,7 +69,7 @@
 		</c:forEach>
 	</select>
 	<h1>Add a Program Semester Detail</h1>
-	<c:url var="addAction" value="/programSemesterDetail/add"></c:url>
+	<c:url var="addAction" value="/staff/programSemesterDetail/add"></c:url>
 
 	<form:form action="${addAction}" commandName="programSemesterDetail">
 		<table>
@@ -158,9 +158,9 @@
 						${programSemesterDetailTemp.programSemester.currentSemester}</td>
 					<td>${programSemesterDetailTemp.courseSemester.course.name}</td>
 					<td><a
-						href="<c:url value='/programSemesterDetail/edit/${programSemesterDetailTemp.programSemesterDetailId}' />">Edit</a></td>
+						href="<c:url value='/staff/programSemesterDetail/edit/${programSemesterDetailTemp.programSemesterDetailId}' />">Edit</a></td>
 					<td><a
-						href="<c:url value='/programSemesterDetail/delete/${programSemesterDetailTemp.programSemesterDetailId}' />">Delete</a></td>
+						href="<c:url value='/staff/programSemesterDetail/delete/${programSemesterDetailTemp.programSemesterDetailId}' />">Delete</a></td>
 				</tr>
 			</c:forEach>
 		</table>

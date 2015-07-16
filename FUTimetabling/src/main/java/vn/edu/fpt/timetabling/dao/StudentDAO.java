@@ -15,6 +15,8 @@ public interface StudentDAO {
 
 	public Student getStudentByCode(String code);
 
+	public Student getStudentByEmail(String email);
+
 	public void deleteStudent(int studentId);
 
 	public List<Student> listStudentsCanBeInClassCourseSemester(int classSemesterId, int specializedId,

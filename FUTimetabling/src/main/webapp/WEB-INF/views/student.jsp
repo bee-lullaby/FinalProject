@@ -51,7 +51,7 @@
 <body>
 	<t:header />
 	<h1>Add a Student</h1>
-	<c:url var="addAction" value="/student/add"></c:url>
+	<c:url var="addAction" value="/staff/student/add"></c:url>
 
 	<form:form action="${addAction}" commandName="student"
 		acceptCharset="UTF-8">
@@ -180,9 +180,9 @@
 					<td>${student.semester}</td>
 					<td>${student.classSemester.classFPT.code}</td>
 					<td><a
-						href="<c:url value='/student/edit/${student.studentId}' />">Edit</a></td>
+						href="<c:url value='/staff/student/edit/${student.studentId}' />">Edit</a></td>
 					<td><a
-						href="<c:url value='/student/delete/${student.studentId}' />">Delete</a></td>
+						href="<c:url value='/staff/student/delete/${student.studentId}' />">Delete</a></td>
 				</tr>
 			</c:forEach>
 		</table>
