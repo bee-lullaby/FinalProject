@@ -1,6 +1,6 @@
 package vn.edu.fpt.timetabling.exception;
 
-public class CourseNotFoundException extends Exception {
+public class MaxStudentException extends Exception {
 
 	/**
 	 * 

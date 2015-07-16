@@ -22,4 +22,6 @@ public interface ClassCourseSemesterDAO {
 	public ClassCourseSemester getClassCourseSemesterById(int classCourseSemesterId);
 
 	public void deleteClassCourseSemester(int classCourseSemesterId);
+
+	public long getNumberOfStudents(int classCourseSemesterId);
 }

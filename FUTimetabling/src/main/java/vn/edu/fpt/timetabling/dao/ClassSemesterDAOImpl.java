@@ -124,14 +124,14 @@ public class ClassSemesterDAOImpl implements ClassSemesterDAO {
 		String hql = "FROM vn.edu.fpt.timetabling.model.ClassSemester CS"
 				+ " WHERE CS.classFPT.specialized.specializedId = :specializedId"
 				+ " AND CS.semesterNumber = :semesterNumber" + " AND CS.semester.semesterId = :semesterId";
-		if (detailSpecializedId != 0) {
+		if (detailSpecializedId > 0) {
 			hql += " AND CS.classFPT.detailSpecialized.specializedId = :detailSpecializedId";
 		}
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("specializedId", specializedId);
 		query.setParameter("semesterNumber", semesterNumber);
 		query.setParameter("semesterId", semesterId);
-		if (detailSpecializedId != 0) {
+		if (detailSpecializedId > 0) {
 			query.setParameter("detailSpecializedId", detailSpecializedId);
 		}
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);

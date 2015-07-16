@@ -72,6 +72,7 @@ public class ClassCourseSemesterController extends GeneralController {
 			semester = semesters.get(0);
 		}
 		semesterId = semester.getSemesterId();
+		semester = semesterService.getSemesterById(semesterId, true, true, false, false);
 		model.addAttribute("classCourseSemester", new ClassCourseSemester());
 		model.addAttribute("classCourseSemesters",
 				classCourseSemesterService.listClassCourseSemesterBySemester(semesterId));
@@ -151,6 +152,7 @@ public class ClassCourseSemesterController extends GeneralController {
 					false);
 		}
 		semesterId = semester.getSemesterId();
+		semester = semesterService.getSemesterById(semesterId, true, true, false, false);
 		model.addAttribute("classCourseSemester", classCourseSemester);
 		model.addAttribute("classCourseSemesters",
 				classCourseSemesterService.listClassCourseSemesterBySemester(semesterId));

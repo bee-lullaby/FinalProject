@@ -1,5 +1,6 @@
 package vn.edu.fpt.timetabling.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -86,6 +87,9 @@ public class TimetableDAOImpl implements TimetableDAO {
 	public List<Timetable> listTimetablesByStudent(int semesterId, Student student) {
 		List<ClassCourseSemester> classCourseSemesters = classCourseSemesterDAO
 				.listClassCourseSemesterByStudent(semesterId, student.getStudentId());
+		if (classCourseSemesters.isEmpty()) {
+			return new ArrayList<Timetable>();
+		}
 		List<Timetable> timetables = listTimetablesByCCSs(classCourseSemesters);
 		return timetables;
 	}

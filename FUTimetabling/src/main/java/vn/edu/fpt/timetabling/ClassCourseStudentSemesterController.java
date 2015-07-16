@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import vn.edu.fpt.timetabling.exception.MaxStudentException;
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassCourseStudentSemester;
 import vn.edu.fpt.timetabling.model.ClassSemester;
@@ -24,10 +25,12 @@ import vn.edu.fpt.timetabling.model.CourseSemester;
 import vn.edu.fpt.timetabling.model.Semester;
 import vn.edu.fpt.timetabling.model.Specialized;
 import vn.edu.fpt.timetabling.model.Student;
+import vn.edu.fpt.timetabling.service.ClassCourseSemesterService;
 import vn.edu.fpt.timetabling.service.ClassCourseStudentSemesterService;
 import vn.edu.fpt.timetabling.service.ClassSemesterService;
 import vn.edu.fpt.timetabling.service.SemesterService;
 import vn.edu.fpt.timetabling.service.StudentService;
+import vn.edu.fpt.timetabling.utils.Const;
 
 @Controller
 public class ClassCourseStudentSemesterController extends GeneralController {
@@ -35,6 +38,7 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 	private SemesterService semesterService;
 	private StudentService studentService;
 	private ClassSemesterService classSemesterService;
+	private ClassCourseSemesterService classCourseSemesterService;
 
 	@Autowired(required = true)
 	@Qualifier(value = "classCourseStudentSemesterService")
@@ -59,6 +63,12 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 	@Qualifier(value = "classSemesterService")
 	public void setClassSemesterService(ClassSemesterService classSemesterService) {
 		this.classSemesterService = classSemesterService;
+	}
+
+	@Autowired(required = true)
+	@Qualifier(value = "classCourseSemesterService")
+	public void setClassCourseSemesterService(ClassCourseSemesterService classCourseSemesterService) {
+		this.classCourseSemesterService = classCourseSemesterService;
 	}
 
 	private void processClassCourseSemesters(HttpSession session, Model model, ClassSemester classSemester,
@@ -182,6 +192,7 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 			semester = semesters.get(0);
 		}
 		semesterId = semester.getSemesterId();
+		semester = semesterService.getSemesterById(semesterId, true, false, false, false);
 		processClassSemesters(session, model, semester, classSemesterId, classCourseSemesterId);
 		model.addAttribute("semesters", semesters);
 		model.addAttribute("semesterId", semesterId);
@@ -192,7 +203,7 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 
 	@RequestMapping("/classCourseStudentSemester/add/{studentId}")
 	public String addClassCourseStudentSemester(HttpSession session, @PathVariable("studentId") int studentId,
-			Model model) {
+			Model model) throws MaxStudentException {
 		Student student = studentService.getStudentById(studentId);
 		if (student != null && (session.getAttribute("classCourseSemester") != null
 				|| session.getAttribute("classSemester") != null)) {
@@ -210,16 +221,28 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 				classSemester = (ClassSemester) session.getAttribute("classSemester");
 				classCourseSemesters = classSemester.getClassCourseSemesters();
 			}
+			boolean maxStudent = false;
 			for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
-				if (classCourseSemester.getClassCourseSemesterId() == 0) {
-					continue;
+				if (classCourseSemesterService.getNumberOfStudents(
+						classCourseSemester.getClassCourseSemesterId()) >= Const.MAX_NUMBER_OF_STUDENTS_IN_CLASS) {
+					maxStudent = true;
+					break;
 				}
-				ClassCourseStudentSemester classCourseStudentSemester = new ClassCourseStudentSemester();
-				classCourseStudentSemester.setClassCourseSemester(classCourseSemester);
-				classCourseStudentSemester.setStudent(student);
-				classCourseStudentSemesterService.addClassCourseStudentSemester(classCourseStudentSemester);
 			}
-			student.setClassSemester(classSemester);
+			if (!maxStudent) {
+				for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
+					if (classCourseSemester.getClassCourseSemesterId() == 0) {
+						continue;
+					}
+					ClassCourseStudentSemester classCourseStudentSemester = new ClassCourseStudentSemester();
+					classCourseStudentSemester.setClassCourseSemester(classCourseSemester);
+					classCourseStudentSemester.setStudent(student);
+					classCourseStudentSemesterService.addClassCourseStudentSemester(classCourseStudentSemester);
+				}
+				student.setClassSemester(classSemester);
+			} else {
+				throw new MaxStudentException();
+			}
 		}
 		return "redirect:/classCourseStudentSemesters";
 	}
@@ -260,7 +283,11 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 
 	@ExceptionHandler(Exception.class)
 	public String handleException(HttpSession httpSession, Exception e) {
-		httpSession.setAttribute("error", "Error, please try again.");
+		if (e instanceof MaxStudentException) {
+			httpSession.setAttribute("error", "Student number exceeds " + Const.MAX_NUMBER_OF_STUDENTS_IN_CLASS);
+		} else {
+			httpSession.setAttribute("error", "Error, please try again.");
+		}
 		return "redirect:/classCourseStudentSemesters";
 	}
 }

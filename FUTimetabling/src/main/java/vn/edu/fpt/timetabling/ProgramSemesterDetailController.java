@@ -69,6 +69,7 @@ public class ProgramSemesterDetailController extends GeneralController {
 			semester = semesterService.listSemesters(false, true, true, false).get(0);
 		}
 		semesterId = semester.getSemesterId();
+		semester = semesterService.getSemesterById(semesterId, false, true, true, false);
 		model.addAttribute("programSemesterDetail", new ProgramSemesterDetail());
 		model.addAttribute("programSemesterDetails",
 				programSemesterDetailService.listProgramSemesterDetailsBySemester(semesterId));
@@ -132,6 +133,7 @@ public class ProgramSemesterDetailController extends GeneralController {
 			session.setAttribute("semester", semester);
 		}
 		semesterId = semester.getSemesterId();
+		semester = semesterService.getSemesterById(semesterId, false, true, true, false);
 		model.addAttribute("programSemesterDetail", programSemesterDetail);
 		model.addAttribute("programSemesterDetails",
 				programSemesterDetailService.listProgramSemesterDetailsBySemester(semesterId));

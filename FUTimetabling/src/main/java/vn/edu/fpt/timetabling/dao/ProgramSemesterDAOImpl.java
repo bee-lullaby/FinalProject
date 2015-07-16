@@ -65,14 +65,14 @@ public class ProgramSemesterDAOImpl implements ProgramSemesterDAO {
 		String hql = "FROM vn.edu.fpt.timetabling.model.ProgramSemester PS"
 				+ " WHERE PS.semester.semesterId = :semesterId" + " AND PS.specialized.specializedId = :specializedId"
 				+ " AND PS.currentSemester = :semesterNumber";
-		if (detailSpecializedId != 0) {
+		if (detailSpecializedId > 0) {
 			hql += " AND PS.detailSpecialized.specializedId = :detailSpecialized";
 		}
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("semesterId", semesterId);
 		query.setParameter("specializedId", specializedId);
 		query.setParameter("semesterNumber", semesterNumber);
-		if (detailSpecializedId != 0) {
+		if (detailSpecializedId > 0) {
 			query.setParameter("detailSpecialized", detailSpecializedId);
 		}
 		return (ProgramSemester) query.uniqueResult();

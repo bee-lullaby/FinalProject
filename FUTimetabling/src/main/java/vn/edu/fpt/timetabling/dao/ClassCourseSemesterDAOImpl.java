@@ -107,4 +107,16 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 		List<ClassCourseSemester> classCourseSemesters = (List<ClassCourseSemester>) query.list();
 		return classCourseSemesters;
 	}
+
+	@Override
+	public long getNumberOfStudents(int classCourseSemesterId) {
+		String hql = "SELECT COUNT(DISTINCT CCSS.student) FROM vn.edu.fpt.timetabling.model.ClassCourseSemester CCS"
+				+ " JOIN CCS.classCourseStudentSemesters CCSS"
+				+ " WHERE CCS.classCourseSemesterId = :classCourseSemesterId";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("classCourseSemesterId", classCourseSemesterId);
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		long numberOfStudents = (Long) query.uniqueResult();
+		return numberOfStudents;
+	}
 }

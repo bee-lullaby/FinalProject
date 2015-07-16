@@ -20,4 +20,6 @@ public interface ClassCourseSemesterService {
 	public ClassCourseSemester getClassCourseSemesterById(int classCourseSemesterId);
 
 	public void deleteClassCourseSemester(int classCourseSemesterId);
+
+	public long getNumberOfStudents(int classCourseSemesterId);
 }

@@ -94,4 +94,9 @@ public class ClassCourseSemesterServiceImpl implements ClassCourseSemesterServic
 	public List<ClassCourseSemester> listClassCourseSemesterBySemester(int semesterId) {
 		return classCourseSemesterDAO.listClassCourseSemesterBySemester(semesterId);
 	}
+
+	@Override
+	public long getNumberOfStudents(int classCourseSemesterId) {
+		return classCourseSemesterDAO.getNumberOfStudents(classCourseSemesterId);
+	}
 }

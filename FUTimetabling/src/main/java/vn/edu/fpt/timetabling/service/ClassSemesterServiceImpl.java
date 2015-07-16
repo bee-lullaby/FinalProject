@@ -92,6 +92,16 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 		return classSemesterDAO.getNumberOfStudents(classSemesterId);
 	}
 
+	private boolean isMaxStudent(Set<ClassCourseSemester> classCourseSemesters) {
+		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
+			if (classCourseSemesterService.getNumberOfStudents(
+					classCourseSemester.getClassCourseSemesterId()) >= Const.OPTIMAL_NUMBER_OF_STUDENTS_IN_CLASS) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	@Override
 	public void autoPutStudentsIntoClassSemester(int classSemesterId) {
 		ClassSemester classSemester = getClassSemesterById(classSemesterId, true);
@@ -108,17 +118,19 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 		List<Student> students = studentService.listStudentsCanBeInClassCourseSemester(classSemesterId, specializedId,
 				detailSpecializedId, semesterNumber, 0);
 		Set<ClassCourseSemester> classCourseSemesters = classSemester.getClassCourseSemesters();
-		if (getNumberOfStudents(classSemesterId) < Const.MAX_NUMBER_OF_STUDENTS_IN_CLASS && students.size() > 0) {
-			for (Student student : students) {
-				for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
-					ClassCourseStudentSemester classCourseStudentSemester = new ClassCourseStudentSemester();
-					classCourseStudentSemester.setClassCourseSemester(classCourseSemester);
-					classCourseStudentSemester.setStudent(student);
-					classCourseStudentSemesterService.addClassCourseStudentSemester(classCourseStudentSemester);
-				}
-				student.setClassSemester(classSemester);
-				if (getNumberOfStudents(classSemesterId) == Const.MAX_NUMBER_OF_STUDENTS_IN_CLASS) {
-					break;
+		if (!isMaxStudent(classCourseSemesters)) {
+			if (students.size() > 0) {
+				for (Student student : students) {
+					for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
+						ClassCourseStudentSemester classCourseStudentSemester = new ClassCourseStudentSemester();
+						classCourseStudentSemester.setClassCourseSemester(classCourseSemester);
+						classCourseStudentSemester.setStudent(student);
+						classCourseStudentSemesterService.addClassCourseStudentSemester(classCourseStudentSemester);
+					}
+					student.setClassSemester(classSemester);
+					if (isMaxStudent(classCourseSemesters)) {
+						break;
+					}
 				}
 			}
 		}
@@ -244,7 +256,7 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 			boolean put = false;
 			for (ClassSemester classSemester : classSemesters) {
 				Set<ClassCourseSemester> classCourseSemesters = classSemester.getClassCourseSemesters();
-				if (getNumberOfStudents(classSemester.getClassSemesterId()) < Const.MAX_NUMBER_OF_STUDENTS_IN_CLASS) {
+				if (!isMaxStudent(classCourseSemesters)) {
 					for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
 						ClassCourseStudentSemester classCourseStudentSemester = new ClassCourseStudentSemester();
 						classCourseStudentSemester.setClassCourseSemester(classCourseSemester);

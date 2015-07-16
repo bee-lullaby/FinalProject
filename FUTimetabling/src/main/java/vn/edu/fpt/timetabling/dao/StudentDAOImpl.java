@@ -100,12 +100,14 @@ public class StudentDAOImpl implements StudentDAO {
 			classCourseSemesters.add(classCourseSemester);
 		}
 		// get all timetable of all classCourseSemesters
+		System.out.println(classCourseSemesters.size());
 		List<Timetable> timetablesOfClassSemester = timetableDAO
 				.listTimetablesByClassCourseSemesters(classCourseSemesters);
+		System.out.println(timetablesOfClassSemester.size());
 		// select student not in this class
 		String hql = "FROM vn.edu.fpt.timetabling.model.Student S"
 				+ " WHERE S.specialized.specializedId = :specializedId AND S.semester = :semester";
-		if (detailSpecializedId != 0) {
+		if (detailSpecializedId > 0) {
 			hql += " AND S.detailSpecialized.specializedId = :detailSpecializedId";
 		}
 		hql += " AND S NOT IN (SELECT CCSS.student"
@@ -115,7 +117,7 @@ public class StudentDAOImpl implements StudentDAO {
 		query.setParameter("semester", semesterNumber);
 		query.setParameter("specializedId", specializedId);
 		query.setParameterList("classCourseSemesters", classCourseSemesters);
-		if (detailSpecializedId != 0) {
+		if (detailSpecializedId > 0) {
 			query.setParameter("detailSpecializedId", detailSpecializedId);
 		}
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
