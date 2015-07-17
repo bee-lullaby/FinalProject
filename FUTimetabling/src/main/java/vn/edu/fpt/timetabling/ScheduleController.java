@@ -63,7 +63,7 @@ public class ScheduleController extends GeneralController {
 	}
 
 	@RequestMapping(value = "/staff/schedule", method = RequestMethod.GET, params = { "semesterId", "classId", "week" })
-	public void scheduleSemesterClass(@RequestParam int semesterId, @RequestParam int classId, @RequestParam int week,
+	public String scheduleSemesterClass(@RequestParam int semesterId, @RequestParam int classId, @RequestParam int week,
 			Model model) {
 		// Get Semesters
 		Semester semester = semesterService.getSemesterById(semesterId, true, false, false, false);
@@ -90,27 +90,16 @@ public class ScheduleController extends GeneralController {
 		StringWriter sw = new StringWriter();
 
 		try {
-			// if(generate == 0) {
 			om.writeValue(sw, scheduleService.getListDaySlot(semesterId, classId, week));
-			// } else if (generate == 1 && week > 1) {
-			// om.writeValue(sw, scheduleService.getListDaySlot(semesterId,
-			// classId, week - 1));
-			// }
 			model.addAttribute("JSONdata", sw);
 		} catch (JsonGenerationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		// logger.info(startDate);
-		// logger.info(endDate);
-		return;
+		return "schedule";
 	}
 
 	@RequestMapping(value = "/staff/schedule/updateTimetable", method = RequestMethod.POST)

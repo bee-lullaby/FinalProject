@@ -1,23 +1,25 @@
+<%@ taglib tagdir="/WEB-INF/tags" prefix="t"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ page session="false"%>
 <!DOCTYPE html>
 <html>
 <head>
 <title>Room Arrangement</title>
 
-<link href="resources/css/metro.css" rel="stylesheet">
-<link href="resources/css/metro-icons.css" rel="stylesheet">
-<link href="resources/css/docs.css" rel="stylesheet">
+<link href="../resources/css/metro.css" rel="stylesheet">
+<link href="../resources/css/metro-icons.css" rel="stylesheet">
+<link href="../resources/css/docs.css" rel="stylesheet">
 
-<script src="resources/js/jquery-2.1.3.min.js"></script>
-<script src="resources/js/roomArrangement.js"></script>
-<script src="resources/js/metro.js"></script>
-<script src="resources/js/docs.js"></script>
-<script src="resources/js/prettify/run_prettify.js"></script>
-<script src="resources/js/ga.js"></script>
-<script src="resources/js/jquery.dataTables.min.js"></script>
+<script src="../resources/js/jquery-2.1.3.min.js"></script>
+<script src="../resources/js/roomArrangement.js"></script>
+<script src="../resources/js/metro.js"></script>
+<script src="../resources/js/docs.js"></script>
+<script src="../resources/js/prettify/run_prettify.js"></script>
+<script src="../resources/js/ga.js"></script>
+<script src="../resources/js/jquery.dataTables.min.js"></script>
 </head>
 <body>
 	<div style="display: none">
@@ -25,8 +27,7 @@
 			<div id="roomsData">${rooms}</div>
 			<div id="classesCoursesData">${classesCourses}</div>
 			<div>${dataArrangement}</div>
-			<input type="text" id="prevData" name="prevData" />
-		 	<input type="text" id="dataToSet" name="dataToSet" />
+			<input type="text" id="dataToSet" name="dataToSet" />
 		</form:form>
 	</div>
 	<div style="width: 80%; margin: 0 auto;">
@@ -36,6 +37,10 @@
 		</h1>
 		<div style="width: 100%; padding: 15px; margin-left: 50px">
 			<div style="width: 100%"></div>
+			<form:form id="control-classes" method="get">
+				<input type="hidden" id="semesterId" name="semesterId" />
+				<input type="hidden" id="classId" name="classId" />
+			</form:form>
 			<div style="padding-top: 15px; width: 100%;">
 				<div style="display: inline-block">
 					<button id="btn-prev-class" class="button">
@@ -96,7 +101,8 @@
 							<div class="listview set-border padding10" data-role="listview">
 								<div class="list-group">
 									<div class="list-group-content" style="margin-top: 0;">
-										<pre id="warning-room-arrangement"  class="fg-red" style="margin-left: 25px; font-size: 1rem"></pre>
+										<pre id="warning-room-arrangement" class="fg-red"
+											style="margin-left: 25px; font-size: 1rem"></pre>
 									</div>
 								</div>
 							</div>
@@ -121,6 +127,23 @@
 					</div>
 				</div>
 			</div>
+		</div>
+	</div>
+
+	<!-- dialog -->
+	<div data-role="dialog" id="dialog-info-classes" class="padding20"
+		data-close-button="true" data-overlay="true"
+		data-overlay-color="op-dark">
+		<div>
+			<table id="table-classes" class="dataTable striped border bordered"
+				data-role="datatable" data-searching="true">
+				<thead>
+					<tr>
+						<th>Course</th>
+						<th>Set Successful</th>
+					</tr>
+				</thead>
+			</table>
 		</div>
 	</div>
 </body>

@@ -51,5 +51,7 @@
 	<a href="<c:url value='/staff/classCourseStudentSemesters' />">Manage
 		ClassCourseStudentSemesters</a>
 	<br />
+	<a href="<c:url value='/staff/schedule?semesterId=1' />">Schedule</a>
+	<br />
 </body>
 </html>

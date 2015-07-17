@@ -7,9 +7,9 @@ import vn.edu.fpt.timetabling.model.Room;
 
 public interface RoomArrangementService {
 	
-	public List<ClassSemester> getListClassesCoursesOfSemester(int semesterId);
+	public List<ClassSemester> getListClassesCoursesOfSemester(int semesterId, int classId);
 	
 	public List<Room> getListRoomsOfSemester(int semesterId);
 	
-	public boolean saveTimetables(List<ClassSemester> data, List<ClassSemester> prev);
+	public boolean saveTimetables(List<ClassSemester> data);
 }

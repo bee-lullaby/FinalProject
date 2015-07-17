@@ -1,24 +1,25 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="t"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ page session="false"%>
 <!DOCTYPE html>
 <html>
 <head>
 <title>Schedule</title>
 
-<link href="resources/css/schedule.css" rel="stylesheet">
-<link href="resources/css/metro.css" rel="stylesheet">
-<link href="resources/css/metro-icons.css" rel="stylesheet">
-<link href="resources/css/docs.css" rel="stylesheet">
+<link href="../resources/css/schedule.css" rel="stylesheet">
+<link href="../resources/css/metro.css" rel="stylesheet">
+<link href="../resources/css/metro-icons.css" rel="stylesheet">
+<link href="../resources/css/docs.css" rel="stylesheet">
 
-<script src="resources/js/jquery-2.1.3.min.js"></script>
-<script src="resources/js/schedule.js"></script>
-<script src="resources/js/metro.js"></script>
-<script src="resources/js/docs.js"></script>
-<script src="resources/js/prettify/run_prettify.js"></script>
-<script src="resources/js/ga.js"></script>
+<script src="../resources/js/jquery-2.1.3.min.js"></script>
+<script src="../resources/js/schedule.js"></script>
+<script src="../resources/js/metro.js"></script>
+<script src="../resources/js/docs.js"></script>
+<script src="../resources/js/prettify/run_prettify.js"></script>
+<script src="../resources/js/ga.js"></script>
 
 </head>
 <body>

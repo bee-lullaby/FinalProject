@@ -43,7 +43,7 @@ public class RoomServiceImpl implements RoomService {
 			Double capcity = row.getCell(2).getNumericCellValue();
 			r.setCapacity(capcity.intValue());
 			if (row.getCell(3) != null && row.getCell(3).getStringCellValue().trim().compareTo("") != 0) {
-				r.setClasses(row.getCell(3).getStringCellValue().trim());
+				r.setCourses(row.getCell(3).getStringCellValue().trim());
 			}
 			roomDAO.addRoom(r);
 		}
