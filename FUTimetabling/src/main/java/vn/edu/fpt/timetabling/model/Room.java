@@ -26,8 +26,8 @@ public class Room {
 	@Column(name = "code")
 	private String code;
 
-	@Column(name = "classes")
-	private String classes;
+	@Column(name = "courses")
+	private String courses;
 
 	@Column(name = "capacity")
 	private int capacity;
@@ -49,11 +49,11 @@ public class Room {
 	 * @param roomType
 	 * @param capacity
 	 */
-	public Room(int roomId, String code, String classes, int capacity) {
+	public Room(int roomId, String code, String courses, int capacity) {
 		super();
 		this.roomId = roomId;
 		this.code = code;
-		this.classes = classes;
+		this.courses = courses;
 		this.capacity = capacity;
 	}
 
@@ -90,16 +90,16 @@ public class Room {
 	/**
 	 * @return the roomType
 	 */
-	public String getClasses() {
-		return classes;
+	public String getCourses() {
+		return courses;
 	}
 
 	/**
 	 * @param roomType
 	 *            the roomType to sets
 	 */
-	public void setClasses(String classes) {
-		this.classes = classes;
+	public void setCourses(String courses) {
+		this.courses = courses;
 	}
 
 	/**
@@ -140,7 +140,21 @@ public class Room {
 	@Override
 	public String toString() {
 		return "Room [roomId=" + roomId + ", code=" + code + ", classes="
-				+ classes + ", capacity=" + capacity + "]";
+				+ courses + ", capacity=" + capacity + "]";
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		if (obj instanceof Room) {
+			return roomId == ((Room) obj).getRoomId();
+		}
+		return false;
 	}
 
 }

@@ -1,7 +1,7 @@
-<!-- <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="t"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%> -->
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,9 +21,13 @@
 </head>
 <body>
 	<div style="display: none">
-		<div id="roomsData">${rooms}</div>
-		<div id="classesCoursesData">${classesCourses}</div>
-		<div>${dataArrangement}</div>
+		<form:form id="setRooms" method="post">
+			<div id="roomsData">${rooms}</div>
+			<div id="classesCoursesData">${classesCourses}</div>
+			<div>${dataArrangement}</div>
+			<input type="text" id="prevData" name="prevData" />
+		 	<input type="text" id="dataToSet" name="dataToSet" />
+		</form:form>
 	</div>
 	<div style="width: 80%; margin: 0 auto;">
 		<h1>
@@ -43,17 +47,15 @@
 					</div>
 					<div class="input-control select">
 						<select id="select-rooms">
-							<option id="-1">...</option>
-							<option id="custom">CUSTOM</option>
+							<option value="-1">...</option>
+							<option value="custom">CUSTOM</option>
 						</select>
 					</div>
-					<div class="input-control select" style="">
-						<select id="select">
-							<option id="mix">MIX</option>
-							<option id="morning">MORNING (Slot 1/2/3)</option>
-							<option id="afternoon">AFTERNOON (Slot 4/5/6)</option>
-						</select>
-					</div>
+					<button id="btn-submit" class="button" data-role="hint"
+						data-hint-background="#1CB7EC" data-hint-color="fg-white"
+						data-hint-position="top" data-hint="Submit">
+						<span class="mif-download"></span>
+					</button>
 					<button id="btn-prev-class" class="button">
 						<span class="mif-arrow-right"></span>
 					</button>
@@ -72,7 +74,7 @@
 							</tr>
 						</thead>
 						<tbody id="courses-class">
-							
+
 						</tbody>
 					</table>
 				</div>
@@ -80,30 +82,31 @@
 				<div class="example" data-text="note"
 					style="width: auto; display: inline-block; margin: 0.65rem 1rem; flex: 1; float: right; word-wrap: break-word;">
 					<div style="display: inline-block; margin-right: 25px">
-						Number of Classes&nbsp;&nbsp;
+						<b>Number of Classes:</b>&nbsp;&nbsp;
 						<button class="button" id="btn-num-classes"></button>
 					</div>
 					<div style="display: inline-block">
-						Number of Rooms&nbsp;&nbsp;
+						<b>Number of Rooms:</b>&nbsp;&nbsp;
 						<button class="button" id="btn-num-rooms"></button>
 					</div>
 
 					<div>
-						<h4>WARNING:</h4>
-						<div class="listview set-border padding10" data-role="listview">
-							<div class="list-group">
-								<span class="list-group-toggle"></span>
-								<div class="list-group-content" style="margin-top: 0;">
-									<pre style="margin-left: 48px"></pre>
+						<div id="warning">
+							<h5>WARNING:</h5>
+							<div class="listview set-border padding10" data-role="listview">
+								<div class="list-group">
+									<div class="list-group-content" style="margin-top: 0;">
+										<pre id="warning-room-arrangement"  class="fg-red" style="margin-left: 25px; font-size: 1rem"></pre>
+									</div>
 								</div>
 							</div>
 						</div>
-						
-						
-						<h4>Special Rooms:</h4>
+
+						<h5>SPECIAL ROOMS:</h5>
 						<div class="listview set-border padding10" data-role="listview">
 							<div class="list-group">
-								<span class="list-group-toggle">The seating capacity of the rooms is more than 30:</span>
+								<span class="list-group-toggle">The seating capacity of
+									the rooms is more than 30:</span>
 								<div class="list-group-content" style="margin-top: 0;">
 									<pre id="more-than-30" style="margin-left: 48px"></pre>
 								</div>

@@ -1,75 +1,66 @@
 package vn.edu.fpt.timetabling.model;
 
+import java.util.List;
 
 public class DataRoomArrangement {
-	private ClassSemester classSemester;
-	private int morningClass;
-	private int afternoonClass;
+	private Room room;
+	private List<Timetable> timetables;
+
 	/**
 	 * 
 	 */
 	public DataRoomArrangement() {
 		super();
 	}
+
 	/**
-	 * @param classSemester
-	 * @param morningClass
-	 * @param afternoonClass
+	 * @param room
+	 * @param timetables
 	 */
-	public DataRoomArrangement(ClassSemester classSemester, int morningClass,
-			int afternoonClass) {
+	public DataRoomArrangement(Room room, List<Timetable> timetables) {
 		super();
-		this.classSemester = classSemester;
-		this.morningClass = morningClass;
-		this.afternoonClass = afternoonClass;
+		this.room = room;
+		this.timetables = timetables;
 	}
+
 	/**
-	 * @return the classSemester
+	 * @return the room
 	 */
-	public ClassSemester getClassSemester() {
-		return classSemester;
+	public Room getRoom() {
+		return room;
 	}
+
 	/**
-	 * @param classSemester the classSemester to set
+	 * @param room
+	 *            the room to set
 	 */
-	public void setClassSemester(ClassSemester classSemester) {
-		this.classSemester = classSemester;
+	public void setRoom(Room room) {
+		this.room = room;
 	}
+
 	/**
-	 * @return the morningClass
+	 * @return the timetables
 	 */
-	public int getMorningClass() {
-		return morningClass;
+	public List<Timetable> getTimetables() {
+		return timetables;
 	}
+
 	/**
-	 * @param morningClass the morningClass to set
+	 * @param timetables
+	 *            the timetables to set
 	 */
-	public void setMorningClass(int morningClass) {
-		this.morningClass = morningClass;
+	public void setTimetables(List<Timetable> timetables) {
+		this.timetables = timetables;
 	}
-	/**
-	 * @return the afternoonClass
-	 */
-	public int getAfternoonClass() {
-		return afternoonClass;
-	}
-	/**
-	 * @param afternoonClass the afternoonClass to set
-	 */
-	public void setAfternoonClass(int afternoonClass) {
-		this.afternoonClass = afternoonClass;
-	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "DataRoomArrangement [classSemester=" + classSemester
-				+ ", morningClass=" + morningClass + ", afternoonClass="
-				+ afternoonClass + "]";
+		return "DataRoomArrangement [room=" + room + "]";
 	}
-
-	
-	
 
 }

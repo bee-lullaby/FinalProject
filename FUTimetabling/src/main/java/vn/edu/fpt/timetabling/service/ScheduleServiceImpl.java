@@ -18,7 +18,6 @@ import vn.edu.fpt.timetabling.model.ClassSemester;
 import vn.edu.fpt.timetabling.model.CourseSemester;
 import vn.edu.fpt.timetabling.model.DataSchedule;
 import vn.edu.fpt.timetabling.model.DaySlot;
-import vn.edu.fpt.timetabling.model.Room;
 import vn.edu.fpt.timetabling.model.Semester;
 import vn.edu.fpt.timetabling.model.TeacherCourseSemester;
 import vn.edu.fpt.timetabling.model.Timetable;
@@ -122,7 +121,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 					dataS.setNumOfClasses(cs.getClassCourseSemesters().size());
 					dataS.setClassInSlot(
 							TimetableUtils.findNumberSameDaySlot(mapCourseTimetable.get(cs), cal.getTime(), j));
-					dataS.setNumOfTeachers(cs.getTeacherCourseSemesters().size());
+//					dataS.setNumOfTeachers(cs.getTeacherCourseSemesters().size());
+					dataS.setNumOfTeachers(5);
 					dataSchedule.put(cs.getCourse().getCode(), dataS);
 				}
 				ds.setDataSchedule(dataSchedule);
@@ -159,9 +159,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 							classCourseSemesterService.getClassCourseSemesterById(dayslot.getSetCourseSlot()));
 					timetable.setDate(date);
 					timetable.setSlot(dayslot.getSlot());
-					Room a = new Room();
-					a.setRoomId(1);
-					timetable.setRoom(a);
 					timetableService.addTimetable(timetable);
 				}
 			}

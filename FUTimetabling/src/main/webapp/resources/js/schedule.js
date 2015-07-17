@@ -130,6 +130,7 @@ $(document).ready(function(){
 				JSONdata[position].dataSchedule[courseSelectedText].classInSlot += 1;
 			}
 			JSONdata[position].setCourseSlot = courseSelectedVal;
+			console.log(JSONdata[position].setCourseSlot);
 			$("#dialog-schedule").removeData("prev-course-selected");
 			_clearScheduleDialog();
 		}
