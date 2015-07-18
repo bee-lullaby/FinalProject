@@ -42,3 +42,7 @@
 	text-align: left;
 	padding-left: 0;
 }
+
+#course-info-to-set th, #course-info-to-set td {
+	font-size: 1.1rem;
+}

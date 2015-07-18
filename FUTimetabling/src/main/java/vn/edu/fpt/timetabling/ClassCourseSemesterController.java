@@ -75,7 +75,7 @@ public class ClassCourseSemesterController extends GeneralController {
 		semester = semesterService.getSemesterById(semesterId, true, true, false, false);
 		model.addAttribute("classCourseSemester", new ClassCourseSemester());
 		model.addAttribute("classCourseSemesters",
-				classCourseSemesterService.listClassCourseSemesterBySemester(semesterId));
+				classCourseSemesterService.listClassCourseSemesterBySemester(semesterId, false, false));
 		model.addAttribute("classSemesters", semester.getClassSemesters());
 		model.addAttribute("courseSemesters", semester.getCourseSemesters());
 		model.addAttribute("semesterId", semesterId);
@@ -100,7 +100,7 @@ public class ClassCourseSemesterController extends GeneralController {
 			return "redirect:/staff/classCourseSemesters";
 		}
 		ClassCourseSemester classCourseSemester = classCourseSemesterService
-				.getClassCourseSemesterById(classCourseSemesterId);
+				.getClassCourseSemesterById(classCourseSemesterId, false, false);
 		if (classCourseSemester == null) {
 			classCourseSemester = new ClassCourseSemester();
 		}
@@ -133,7 +133,7 @@ public class ClassCourseSemesterController extends GeneralController {
 	public String editCourseSemester(HttpSession session,
 			@PathVariable("classCourseSemesterId") int classCourseSemesterId, Model model) {
 		ClassCourseSemester classCourseSemester = classCourseSemesterService
-				.getClassCourseSemesterById(classCourseSemesterId);
+				.getClassCourseSemesterById(classCourseSemesterId, false, false);
 		if (classCourseSemester == null) {
 			return "redirect:/staff/classCourseSemesters";
 		}
@@ -156,7 +156,7 @@ public class ClassCourseSemesterController extends GeneralController {
 		semester = semesterService.getSemesterById(semesterId, true, true, false, false);
 		model.addAttribute("classCourseSemester", classCourseSemester);
 		model.addAttribute("classCourseSemesters",
-				classCourseSemesterService.listClassCourseSemesterBySemester(semesterId));
+				classCourseSemesterService.listClassCourseSemesterBySemester(semesterId, false, false));
 		model.addAttribute("classSemesters", semester.getClassSemesters());
 		model.addAttribute("courseSemesters", semester.getCourseSemesters());
 		model.addAttribute("classSemesterId", classSemester.getClassSemesterId());

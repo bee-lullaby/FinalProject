@@ -13,11 +13,11 @@ public interface ClassCourseSemesterService {
 
 	public void updateClassCourseSemester(ClassCourseSemester classCourseSemester);
 
-	public List<ClassCourseSemester> listClassCourseSemesters();
+	public List<ClassCourseSemester> listClassCourseSemesters(boolean jointTimetable, boolean jointClassCourseStudentSemesters);
 
-	public List<ClassCourseSemester> listClassCourseSemesterBySemester(int semesterId);
+	public List<ClassCourseSemester> listClassCourseSemesterBySemester(int semesterId, boolean jointTimetable, boolean jointClassCourseStudentSemesters);
 
-	public ClassCourseSemester getClassCourseSemesterById(int classCourseSemesterId);
+	public ClassCourseSemester getClassCourseSemesterById(int classCourseSemesterId, boolean jointTimetable, boolean jointClassCourseStudentSemesters);
 
 	public void deleteClassCourseSemester(int classCourseSemesterId);
 

@@ -195,22 +195,28 @@
 
 
 	<div id="dialog-schedule" data-role="dialog" class="padding20"
-		data-overlay="true" data-overlay-color="op-dark">
-		<table class="bordered">
+		data-overlay="true" data-overlay-color="op-dark"
+		data-windows-style="true">
+		<table class="bordered" style="margin: 0 auto">
 			<tr>
 				<td style="padding: 10px; vertical-align: top;">
-					<h3 id="slot-day">Course:</h3> Course:
-					<div class="input-control select">
-						<select id="set-courses" name="setCourse">
-							<option value="-1">...</option>
-							<c:forEach items="${listClassCourses}" var="classCourseSemester">
-								<option value="${classCourseSemester.classCourseSemesterId}">${classCourseSemester.getCourseSemester().getCourse().code}</option>
-							</c:forEach>
-						</select>
-					</div> <br>
-					<div id="warning-set-course" class="fg-red"
-						style="padding-top: 15px;">Don't have enough teacher to set.</div>
-					<div style="padding-top: 15px">
+					<h2 id="slot-day">Course:</h2>
+					<div style="margin:30px; margin-left: 0;">
+						<font style="font-size: 1.5rem">Course:&nbsp;</font>
+						<div class="input-control select">
+							<select id="set-courses" name="setCourse">
+								<option value="-1">...</option>
+								<c:forEach items="${listClassCourses}" var="classCourseSemester">
+									<option value="${classCourseSemester.classCourseSemesterId}">${classCourseSemester.getCourseSemester().getCourse().code}</option>
+								</c:forEach>
+							</select>
+						</div>
+					</div>
+					<div id="warning-set-teacher" class="fg-red"
+						style="padding-top: 15px;">Don't have enough Teacher to set.</div>
+					<div id="warning-set-room" class="fg-red"
+						style="padding-top: 15px;">Don't have enough Room to set.</div>
+					<div>
 						<button id="btn-set-course" class="button" style="width: 100px">SET</button>
 						<button id="btn-cancel-set-course" class="button"
 							style="width: 100px;">CANCEL</button>
@@ -218,26 +224,31 @@
 				</td>
 				<td style="border-left: thin solid #999999; padding: 10px;">
 					<table id="course-info-to-set">
-
 						<tr>
-							<td style="text-align: left; padding: 5px;"><h4
-									id="course-code"></h4></td>
+							<td style="text-align: left; padding: 5px;"><font
+								style="font-size: 1.5rem" id="course-code"></font></td>
 						</tr>
 						<tr>
 							<th style="text-align: left; padding: 5px;">Remain Slots:</th>
-							<td id="remains_slot"></td>
-						</tr>
-						<tr>
-							<th style="text-align: left; padding: 5px;">Classes:</th>
-							<td id="classes"></td>
-						</tr>
-						<tr>
-							<th style="text-align: left; padding: 5px;">In this slot:</th>
-							<td id="slot"></td>
-						</tr>
-						<tr>
+							<td id="remainSlots" style="padding: 15px"></td>
 							<th style="text-align: left; padding: 5px;">Teachers:</th>
-							<td id="teachers"></td>
+							<td id="teachers" style="padding: 15px"></td>
+						</tr>
+						<tr>
+							<th style="text-align: left; padding: 5px;">Total Classes
+								learn this Course:</th>
+							<td id="classes" style="padding: 15px"></td>
+							<th style="text-align: left; padding: 5px;">Classes learn
+								the course in this slot:
+							</th>
+							<td id="learnCourseInSlot" style="padding: 15px"></td>
+						</tr>
+						<tr>
+							<th style="text-align: left; padding: 5px;">Total Rooms:</th>
+							<td id="totalRooms" style="padding: 15px"></td>
+							<th style="text-align: left; padding: 5px;">Classes learn in
+								this slot:</th>
+							<td id="classesInSlot" style="padding: 15px"></td>
 						</tr>
 					</table>
 				</td>

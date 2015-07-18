@@ -76,7 +76,7 @@ public class TimetableServiceImpl implements TimetableService {
 
 	@Override
 	public Set<Timetable> listTimetablesByClassCourse(int classCourseSemesterId) {
-		return classCourseSemesterService.getClassCourseSemesterById(classCourseSemesterId).getTimetable();
+		return classCourseSemesterService.getClassCourseSemesterById(classCourseSemesterId, true, false).getTimetable();
 	}
 
 	@Override

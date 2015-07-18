@@ -6,8 +6,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -16,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import vn.edu.fpt.timetabling.dao.ClassCourseSemesterDAOImpl;
 import vn.edu.fpt.timetabling.model.ClassSemester;
+import vn.edu.fpt.timetabling.model.DataRoomArrangement;
 import vn.edu.fpt.timetabling.model.Room;
 import vn.edu.fpt.timetabling.service.RoomArrangementService;
 import vn.edu.fpt.timetabling.service.ScheduleService;
@@ -29,7 +27,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
 @Controller
 public class RoomArrangementController {
-	private static final Logger logger = LoggerFactory.getLogger(ClassCourseSemesterDAOImpl.class);
+//	private static final Logger logger = LoggerFactory.getLogger(RoomArrangementController.class);
 	private RoomArrangementService roomArrangementService;
 	private ScheduleService scheduleService;
 	
@@ -59,16 +57,23 @@ public class RoomArrangementController {
 	public String roomArrangement(@RequestParam int semesterId, @RequestParam int classId,Model model) {
 		List<ClassSemester> JSONccs = roomArrangementService.getListClassesCoursesOfSemester(semesterId, classId);
 		List<Room> JSONdataRoomArrangement = roomArrangementService.getListRoomsOfSemester(semesterId);
+		List<DataRoomArrangement> JSONDras = roomArrangementService.getDataRoomArrangement(semesterId);
 		
 		ObjectMapper om = new ObjectMapper();
 		StringWriter classesCoursesJSON = new StringWriter();
 		StringWriter roomsJSON = new StringWriter();
+		StringWriter drasJSON = new StringWriter();
 		try {
+			// Write with JSON style
 			om.writeValue(classesCoursesJSON, JSONccs);
 			om.writeValue(roomsJSON, JSONdataRoomArrangement);
+			om.writeValue(drasJSON, JSONDras);
 			
+			// Add to View
 			model.addAttribute("classesCourses", classesCoursesJSON);
 			model.addAttribute("rooms", roomsJSON);
+			model.addAttribute("dataRoomArrangements", drasJSON);
+			
 		} catch (JsonGenerationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

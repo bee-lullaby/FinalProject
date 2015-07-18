@@ -34,9 +34,13 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ClassCourseSemester> listClassCourseSemesters() {
-		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester CCS"
-				+ " LEFT OUTER JOIN FETCH CCS.timetable" + " ORDER BY CCS.classCourseSemesterId";
+	public List<ClassCourseSemester> listClassCourseSemesters(boolean jointTimetable, boolean jointClassCourseStudentSemesters) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester CCS";
+		if(jointTimetable)
+			hql += " LEFT OUTER JOIN FETCH CCS.timetable";
+		if(jointClassCourseStudentSemesters)
+			hql += " LEFT OUTER JOIN FETCH CCS.classCourseStudentSemesters CCSS";  
+		hql += " ORDER BY CCS.classCourseSemesterId";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<ClassCourseSemester> classCourseSemesters = (List<ClassCourseSemester>) query.list();
@@ -45,9 +49,13 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ClassCourseSemester> listClassCourseSemesterByClass(int classSemesterId) {
-		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester CCS"
-				+ " WHERE CCS.classSemester.classSemesterId = :classSemesterId";
+	public List<ClassCourseSemester> listClassCourseSemesterByClass(int classSemesterId, boolean jointTimetable, boolean jointClassCourseStudentSemesters) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester CCS";
+		if(jointTimetable)
+			hql += " LEFT OUTER JOIN FETCH CCS.timetable";
+		if(jointClassCourseStudentSemesters)
+			hql += " LEFT OUTER JOIN FETCH CCS.classCourseStudentSemesters CCSS"; 
+		hql += " WHERE CCS.classSemester.classSemesterId = :classSemesterId";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("classSemesterId", classSemesterId);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -57,9 +65,13 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ClassCourseSemester> listClassCourseSemesterByCourse(int courseSemesterId) {
-		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester CCS"
-				+ " WHERE CCS.courseSemester.courseSemesterId = :courseSemesterId";
+	public List<ClassCourseSemester> listClassCourseSemesterByCourse(int courseSemesterId, boolean jointTimetable, boolean jointClassCourseStudentSemesters) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester CCS";
+		if(jointTimetable)
+			hql += " LEFT OUTER JOIN FETCH CCS.timetable";
+		if(jointClassCourseStudentSemesters)
+			hql += " LEFT OUTER JOIN FETCH CCS.classCourseStudentSemesters CCSS"; 
+		hql += " WHERE CCS.courseSemester.courseSemesterId = :courseSemesterId";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("courseSemesterId", courseSemesterId);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -68,23 +80,33 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 	}
 
 	@Override
-	public ClassCourseSemester getClassCourseSemesterById(int classCourseSemesterId) {
-		ClassCourseSemester classCourseSemester = (ClassCourseSemester) getCurrentSession()
-				.get(ClassCourseSemester.class, new Integer(classCourseSemesterId));
-		return classCourseSemester;
+	public ClassCourseSemester getClassCourseSemesterById(int classCourseSemesterId, boolean jointTimetable, boolean jointClassCourseStudentSemesters) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester CCS";
+		if(jointTimetable)
+			hql += " LEFT OUTER JOIN FETCH CCS.timetable";
+		if(jointClassCourseStudentSemesters)
+			hql += " LEFT OUTER JOIN FETCH CCS.classCourseStudentSemesters CCSS"; 
+		hql += " WHERE CCS.classCourseSemesterId = :classCourseSemesterId";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("classCourseSemesterId", classCourseSemesterId);
+		return (ClassCourseSemester) query.uniqueResult();
 	}
 
 	@Override
 	public void deleteClassCourseSemester(int classCourseSemesterId) {
-		ClassCourseSemester classCourseSemester = getClassCourseSemesterById(classCourseSemesterId);
+		ClassCourseSemester classCourseSemester = getClassCourseSemesterById(classCourseSemesterId, false, false);
 		getCurrentSession().delete(classCourseSemester);
 
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ClassCourseSemester> listClassCourseSemesterBySemester(int semesterId) {
+	public List<ClassCourseSemester> listClassCourseSemesterBySemester(int semesterId, boolean jointTimetable, boolean jointClassCourseStudentSemesters) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester CCS";
+		if(jointTimetable)
+			hql += " LEFT OUTER JOIN FETCH CCS.timetable";
+		if(jointClassCourseStudentSemesters)
+			hql += " LEFT OUTER JOIN FETCH CCS.classCourseStudentSemesters CCSS";
 		hql += " WHERE CCS.classSemester.semester.semesterId = :semesterId";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("semesterId", semesterId);

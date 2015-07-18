@@ -1,10 +1,12 @@
 package vn.edu.fpt.timetabling.model;
 
-import java.util.List;
-
 public class DataRoomArrangement {
-	private Room room;
-	private List<Timetable> timetables;
+
+	private ClassSemester classSemester;
+	private boolean setRoomSuccessful;
+	private int numberOfSlots;
+	private int numberOfSlots_WereSetSuccessful;
+	private String note;
 
 	/**
 	 * 
@@ -14,53 +16,97 @@ public class DataRoomArrangement {
 	}
 
 	/**
-	 * @param room
-	 * @param timetables
+	 * @param classSemester
+	 * @param setRoomSuccessful
+	 * @param numberOfSlots
+	 * @param numberOfSlots_WereSetSuccessful
+	 * @param note
 	 */
-	public DataRoomArrangement(Room room, List<Timetable> timetables) {
+	public DataRoomArrangement(ClassSemester classSemester,
+			boolean setRoomSuccessful, int numberOfSlots,
+			int numberOfSlots_WereSetSuccessful, String note) {
 		super();
-		this.room = room;
-		this.timetables = timetables;
+		this.classSemester = classSemester;
+		this.setRoomSuccessful = setRoomSuccessful;
+		this.numberOfSlots = numberOfSlots;
+		this.numberOfSlots_WereSetSuccessful = numberOfSlots_WereSetSuccessful;
+		this.note = note;
 	}
 
 	/**
-	 * @return the room
+	 * @return the classSemester
 	 */
-	public Room getRoom() {
-		return room;
+	public ClassSemester getClassSemester() {
+		return classSemester;
 	}
 
 	/**
-	 * @param room
-	 *            the room to set
+	 * @param classSemester
+	 *            the classSemester to set
 	 */
-	public void setRoom(Room room) {
-		this.room = room;
+	public void setClassSemester(ClassSemester classSemester) {
+		this.classSemester = classSemester;
 	}
 
 	/**
-	 * @return the timetables
+	 * @return the setRoomSuccessful
 	 */
-	public List<Timetable> getTimetables() {
-		return timetables;
+	public boolean isSetRoomSuccessful() {
+		return setRoomSuccessful;
 	}
 
 	/**
-	 * @param timetables
-	 *            the timetables to set
+	 * @param setRoomSuccessful
+	 *            the setRoomSuccessful to set
 	 */
-	public void setTimetables(List<Timetable> timetables) {
-		this.timetables = timetables;
+	public void setSetRoomSuccessful(boolean setRoomSuccessful) {
+		this.setRoomSuccessful = setRoomSuccessful;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
+	/**
+	 * @return the numberOfSlots
 	 */
-	@Override
-	public String toString() {
-		return "DataRoomArrangement [room=" + room + "]";
+	public int getNumberOfSlots() {
+		return numberOfSlots;
+	}
+
+	/**
+	 * @param numberOfSlots
+	 *            the numberOfSlots to set
+	 */
+	public void setNumberOfSlots(int numberOfSlots) {
+		this.numberOfSlots = numberOfSlots;
+	}
+
+	/**
+	 * @return the numberOfSlots_WereSetSuccessful
+	 */
+	public int getNumberOfSlots_WereSetSuccessful() {
+		return numberOfSlots_WereSetSuccessful;
+	}
+
+	/**
+	 * @param numberOfSlots_WereSetSuccessful
+	 *            the numberOfSlots_WereSetSuccessful to set
+	 */
+	public void setNumberOfSlots_WereSetSuccessful(
+			int numberOfSlots_WereSetSuccessful) {
+		this.numberOfSlots_WereSetSuccessful = numberOfSlots_WereSetSuccessful;
+	}
+
+	/**
+	 * @return the note
+	 */
+	public String getNote() {
+		return note;
+	}
+
+	/**
+	 * @param note
+	 *            the note to set
+	 */
+	public void setNote(String note) {
+		this.note = note;
 	}
 
 }

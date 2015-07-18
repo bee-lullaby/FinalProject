@@ -7,18 +7,24 @@ $(document).ready(
 		var classesCoursesData = $("#classesCoursesData").text();
 		var classesCoursesJSON = JSON.parse(classesCoursesData);
 		
+		var dataRoomArrangements = $("#dataRoomArrangements").text();
+		var dataRoomArrangementsJSON = JSON.parse(dataRoomArrangements);
+		
 		var conflictDateSlots = [];
 		
 		var specialCourses = [];
 		var positionOfSpecialRooms = [];
 		_init();
+		
+		$("#table-info-classes").dataTable( {
+			"lengthChange": false,
+			"searching": true,
+			"paging": true,
+			"pageLength": 5
+	    });
 
 		$("#btn-num-classes").on("click", function() {
 			_showDialog("dialog-info-classes");
-		});
-
-		$("#btn-num-rooms").on("click", function() {
-
 		});
 
 		$("#select-classes").on("change", function() {
@@ -39,11 +45,13 @@ $(document).ready(
 							+$(this).closest("tr td:first").text();
 				$("#warning-room-arrangement").html(text);
 				$("#warning").show();
+				
+				$(this).attr("data-error", "error");
 			} else if(specialCourses.indexOf(courseCode) > 0) {
 				var courseCode = $(this).closest("tr").find("td:nth-child(1)").text();
 				var check = false;
 				for(var i = 0; i < positionOfSpecialRooms.length; i++) {
-					if(roomsJSON[positionOfSpecialRooms].courses.indexOf(courseCode) > 0) {
+					if(roomsJSON[i].courses.indexOf(courseCode) > 0) {
 						check = true;
 						break;
 					}
@@ -57,13 +65,26 @@ $(document).ready(
 					$(this).find("option:first").attr("selected", "selected");
 					$("#warning-room-arrangement").html(text);
 					$("#warning").show();
+					$(this).attr("data-error", "error");
 				} else {
-					$("#warning-room-arrangement").html("");
-					$("#warning").hide();
+					console.log($(this).attr("data-error"));
+					if($(this).attr("data-error") == "error") {
+						$("#warning-room-arrangement").html("");
+						$("#warning").hide();
+						$(this).attr("data-error", "");
+						if($(this).css("border-color"))
+							$(this).css("border-color", "");
+					}
 				}
 			} else {
-				$("#warning-room-arrangement").html("");
-				$("#warning").hide();
+				console.log($(this).attr("data-error"));
+				if($(this).attr("data-error") == "error") {
+					$("#warning-room-arrangement").html("");
+					$("#warning").hide();
+					$(this).attr("data-error", "");
+					if($(this).css("border-color"))
+						$(this).css("border-color", "");
+				}
 			}
 			
 			_checkCustomRooms();
@@ -72,30 +93,59 @@ $(document).ready(
 		$("#btn-submit").on("click", function() {
 			var classSelected = $("#select-classes option:selected").val(); 
 			
-			var check = true;
+			var checkError = false;
+			var classSelected = $("#select-classes option:selected").val();
 			for(var i = 0; i < classesCoursesJSON[classSelected].classCourseSemesters.length; i++) {
-				var roomSelected = $("#select-rooms-" +classesCoursesJSON[classSelected].classCourseSemesters[i].classCourseSemesterId +" option:selected").val();
-				if(classesCoursesJSON[classSelected].classCourseSemesters[i].timetable != null) {
-					for(var x = 0; x < classesCoursesJSON[classSelected].classCourseSemesters[i].timetable.length; x++) {
-						classesCoursesJSON[classSelected].classCourseSemesters[i].timetable[x].room = null;
-						if(roomSelected != -1) {
-							var room = roomsJSON[roomSelected];
-							room.timetables = null;
-							classesCoursesJSON[classSelected].classCourseSemesters[i].timetable[x].room = room;
-						}	
-					}
+				var id = "select-rooms-" +classesCoursesJSON[classSelected].classCourseSemesters[i].classCourseSemesterId;
+				if($("#" +id).attr("data-error")) {
+					checkError = true;
+					break;
 				}
 			}
-//			console.log(JSON.stringify(classesCoursesJSON));
-			$("#dataToSet").attr("value", JSON.stringify(classesCoursesJSON));
-			$("#setRooms").attr("action", "roomArrangement/updateTimetable");
 			
-			$("#setRooms").submit();
+			if(checkError) {
+				 _showDialog("dialog-error");
+			} else {
+				var check = true;
+				for(var i = 0; i < classesCoursesJSON[classSelected].classCourseSemesters.length; i++) {
+					var roomSelected = $("#select-rooms-" +classesCoursesJSON[classSelected].classCourseSemesters[i].classCourseSemesterId +" option:selected").val();
+					if(classesCoursesJSON[classSelected].classCourseSemesters[i].timetable != null) {
+						for(var x = 0; x < classesCoursesJSON[classSelected].classCourseSemesters[i].timetable.length; x++) {
+							classesCoursesJSON[classSelected].classCourseSemesters[i].timetable[x].room = null;
+							if(roomSelected != -1) {
+								var room = roomsJSON[roomSelected];
+								room.timetables = null;
+								classesCoursesJSON[classSelected].classCourseSemesters[i].timetable[x].room = room;
+							}	
+						}
+					}
+				}
+				$("#dataToSet").attr("value", JSON.stringify(classesCoursesJSON));
+				$("#setRooms").attr("action", "roomArrangement/updateTimetable");
+				
+				$("#setRooms").submit();
+			}
+		});
+		
+		$("#btn-cancel-info-classes").on("click", function() {
+			_showDialog("dialog-info-classes");
+		});
+		
+		$("#btn-cancel-error").on("click", function() {
+			_showDialog("dialog-error");
 		});
 		
 		function _init() {
 
-			$("#btn-num-classes").text(classesCoursesJSON.length);
+			// Set button.
+			var count = 0;
+			for(var i = 0; i < dataRoomArrangementsJSON.length; i++) {
+				if(dataRoomArrangementsJSON[i].setRoomSuccessful == true) {
+					count ++;
+				}
+			}
+
+			$("#btn-num-classes").text(count +"/" +classesCoursesJSON.length);
 			$("#btn-num-rooms").text(roomsJSON.length);
 			$("#warning").hide();
 			
@@ -109,7 +159,7 @@ $(document).ready(
 			
 			_setSelectRoomForCourses();
 			
-			
+			 _setDialogInfoClasses();
 		}
 
 		function _setOptionSelectClasses() {
@@ -172,45 +222,24 @@ $(document).ready(
 					var room = classesCoursesJSON[classSelected].classCourseSemesters[i].timetable[0].room;
 					var check = false;
 					if(room != null) {
+						var id  = classesCoursesJSON[classSelected].classCourseSemesters[i].classCourseSemesterId;
 						for(var x = 0; x < roomsJSON.length; x++) {
 							if(roomsJSON[x].roomId == room.roomId) {
-								var id  = classesCoursesJSON[classSelected].classCourseSemesters[i].classCourseSemesterId;
 								$("#select-rooms-" +id).find("option[value='"+x+"']").attr("selected", "selected");
 								check = true;
 								break;
 							}
 						}
+						if(!check) $("#select-rooms-" +id +" option:first").attr("selected", "selected");
 					}
-					if(!check) $("#select-rooms-" +id +" option:first").attr("selected", "selected");
+					
 				}
 			}
-			
 			_checkCustomRooms();
 			
 		}
 		
-		function _setTextNoteRoomCapacity() {
-			for (var i = 0; i < roomsJSON.length; i++) {
-				if (roomsJSON[i].capacity > 30) {
-					var text = $("#more-than-30").html();
-					text += "<b>" + roomsJSON[i].code
-					+ "</b> - Capacity: "
-					+ roomsJSON[i].capacity;
-					if (roomsJSON[i].capacity == 70)
-						text += " (Only for classes have more than 32 students)";
-					text += "\n";
-					$("#more-than-30").html(text);
-				}
-				if (roomsJSON[i].courses != null
-					&& roomsJSON[i].courses != " ") {
-					var text = $("#courses-only").html();
-				text += "<b>" + roomsJSON[i].code
-				+ "</b>: " + roomsJSON[i].courses;
-				text += "\n";
-				$("#courses-only").html(text);
-			}
-		}
-	}
+		
 		
 	function _setRoomForCourses() {
 		var roomSelected = $("#select-rooms option:selected").val();
@@ -226,16 +255,18 @@ $(document).ready(
 				if(specialCourses.indexOf(courseCode) < 0) {
 					$(this).find("option[value='"+roomSelected+"']").attr("selected", "selected");
 				} else {
-					$(this).css("border-color", "red");
-					var text = $("#warning-room-arrangement").html() + "<br>" +
-							   "<b>+</b> " +courseCode +" needs a Special Room!<br>" +
-							   "&nbsp;&nbsp;Refer to 'SPECIAL ROOMS' for more information.";
-					$("#warning-room-arrangement").html(text);
-					$("#warning").show();
+					var valueSelected = $(this).find("option:selected").val();
+					if(valueSelected == "-1" ) {
+						$(this).css("border-color", "red");
+						$(this).attr("data-error", "error");
+						var text = $("#warning-room-arrangement").html() + "<br>" +
+								   "<b>+</b> " +courseCode +" needs a Special Room!<br>" +
+								   "&nbsp;&nbsp;Refer to 'SPECIAL ROOMS' for more information.";
+						$("#warning-room-arrangement").html(text);
+						$("#warning").show();
+					}
 				}
 			});
-			$("#warning-room-arrangement").html("");
-			$("#warning").hide();
 		}
 
 	}
@@ -254,19 +285,7 @@ $(document).ready(
 		return tr;
 	}	
 			
-	function _setspecialCourses() {
-		for(var i = 0; i < roomsJSON.length; i++) {
-			if(roomsJSON[i].courses != null) {
-				positionOfSpecialRooms.push(i);
-				var courses = roomsJSON[i].courses.split(", ");
-				for(var x = 0; x < courses.length; x++) {
-					if(specialCourses.indexOf(courses[x]) < 0) {
-						specialCourses.push(courses[x]);
-					}
-				}
-			}
-		}
-	}
+	
 	
 	function _checkCustomRooms() {
 		var classSelected = $("#select-classes option:selected").val();
@@ -282,7 +301,7 @@ $(document).ready(
 		}
 		
 		if(check) {
-			value = $("#select-rooms-" +classesCoursesJSON[classSelected].classCourseSemesters[i - 1].classCourseSemesterId +" option:selected").val()
+			value = $("#select-rooms-" +id +" option:selected").val();
 			$("#select-rooms").find("option[value='"+value+"']").attr("selected", "selected");
 		} else {
 			$("#select-rooms").find("option[value='custom']").attr("selected", "selected");
@@ -340,5 +359,64 @@ $(document).ready(
 		} else {
 			dialog.close();
 		}
+	}
+	
+	function _setTextNoteRoomCapacity() {
+		for (var i = 0; i < roomsJSON.length; i++) {
+			if (roomsJSON[i].capacity > 30) {
+				var text = $("#more-than-30").html();
+				text += "<b>" + roomsJSON[i].code
+				+ "</b> - Capacity: "
+				+ roomsJSON[i].capacity;
+				if (roomsJSON[i].capacity == 70)
+					text += " (Only for classes have more than 32 students)";
+				text += "\n";
+				$("#more-than-30").html(text);
+			}
+			if (roomsJSON[i].courses != null
+				&& roomsJSON[i].courses != " ") {
+				var text = $("#courses-only").html();
+				text += "<b>" + roomsJSON[i].code
+				+ "</b>: " + roomsJSON[i].courses;
+				text += "\n";
+				$("#courses-only").html(text);
+			}
+		}
+	}
+	
+	function _setspecialCourses() {
+		for(var i = 0; i < roomsJSON.length; i++) {
+			if(roomsJSON[i].courses != null) {
+				positionOfSpecialRooms.push(i);
+				var courses = roomsJSON[i].courses.split(", ");
+				for(var x = 0; x < courses.length; x++) {
+					if(specialCourses.indexOf(courses[x]) < 0) {
+						specialCourses.push(courses[x]);
+					}
+				}
+			}
+		}
+	}
+	
+	function _setDialogInfoClasses() {
+		for(var i = 0; i < dataRoomArrangementsJSON.length; i++) {
+			$("#info-classes").append(_getTRDialogInfoClasses(i));
+		}
+	}
+	
+	function _getTRDialogInfoClasses(position) {
+		var tr = "<tr>" +
+				"<td>" +dataRoomArrangementsJSON[position].classSemester.classFPT.code +"</td>";
+		if (dataRoomArrangementsJSON[position].setRoomSuccessful) {
+			tr += "<td>Yes</td>"
+		} else {
+			tr += "<td>No</td>";
+		}
+		
+		tr += "<td>" +dataRoomArrangementsJSON[position].numberOfSlots +"</td>" +
+			"<td>" +dataRoomArrangementsJSON[position].numberOfSlots_WereSetSuccessful +"</td>" +
+			"<td></td>";
+		
+		return tr;
 	}
 });

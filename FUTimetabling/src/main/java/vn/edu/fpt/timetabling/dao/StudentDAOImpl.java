@@ -84,7 +84,7 @@ public class StudentDAOImpl implements StudentDAO {
 			int detailSpecializedId, int semesterNumber, int classCourseSemesterId) {
 		ClassSemester classSemester = classSemesterDAO.getClassSemesterById(classSemesterId, true);
 		ClassCourseSemester classCourseSemester = classCourseSemesterDAO
-				.getClassCourseSemesterById(classCourseSemesterId);
+				.getClassCourseSemesterById(classCourseSemesterId, false, false);
 		if (classSemester == null && classCourseSemester == null) {
 			return null;
 		}

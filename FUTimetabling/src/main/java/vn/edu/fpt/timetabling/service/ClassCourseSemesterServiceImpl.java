@@ -76,13 +76,13 @@ public class ClassCourseSemesterServiceImpl implements ClassCourseSemesterServic
 	}
 
 	@Override
-	public List<ClassCourseSemester> listClassCourseSemesters() {
-		return classCourseSemesterDAO.listClassCourseSemesters();
+	public List<ClassCourseSemester> listClassCourseSemesters(boolean jointTimetable, boolean jointClassCourseStudentSemesters) {
+		return classCourseSemesterDAO.listClassCourseSemesters(jointTimetable, jointClassCourseStudentSemesters);
 	}
 
 	@Override
-	public ClassCourseSemester getClassCourseSemesterById(int classCourseSemesterId) {
-		return classCourseSemesterDAO.getClassCourseSemesterById(classCourseSemesterId);
+	public ClassCourseSemester getClassCourseSemesterById(int classCourseSemesterId, boolean jointTimetable, boolean jointClassCourseStudentSemesters) {
+		return classCourseSemesterDAO.getClassCourseSemesterById(classCourseSemesterId, jointTimetable, jointClassCourseStudentSemesters);
 	}
 
 	@Override
@@ -91,8 +91,8 @@ public class ClassCourseSemesterServiceImpl implements ClassCourseSemesterServic
 	}
 
 	@Override
-	public List<ClassCourseSemester> listClassCourseSemesterBySemester(int semesterId) {
-		return classCourseSemesterDAO.listClassCourseSemesterBySemester(semesterId);
+	public List<ClassCourseSemester> listClassCourseSemesterBySemester(int semesterId, boolean jointTimetable, boolean jointClassCourseStudentSemesters) {
+		return classCourseSemesterDAO.listClassCourseSemesterBySemester(semesterId, jointTimetable, jointClassCourseStudentSemesters);
 	}
 
 	@Override

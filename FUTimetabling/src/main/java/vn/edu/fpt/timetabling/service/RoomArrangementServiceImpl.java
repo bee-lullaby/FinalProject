@@ -1,5 +1,6 @@
 package vn.edu.fpt.timetabling.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -18,6 +19,7 @@ import vn.edu.fpt.timetabling.model.ClassFPT;
 import vn.edu.fpt.timetabling.model.ClassSemester;
 import vn.edu.fpt.timetabling.model.Course;
 import vn.edu.fpt.timetabling.model.CourseSemester;
+import vn.edu.fpt.timetabling.model.DataRoomArrangement;
 import vn.edu.fpt.timetabling.model.Room;
 import vn.edu.fpt.timetabling.model.Semester;
 import vn.edu.fpt.timetabling.model.Timetable;
@@ -31,6 +33,9 @@ public class RoomArrangementServiceImpl implements RoomArrangementService {
 	@Autowired
 	private ClassSemesterService classSemesterService;
 
+	@Autowired
+	private ClassCourseSemesterService classCourseSemesterService;
+	
 	@Autowired
 	private TimetableService timetableService;
 
@@ -232,5 +237,60 @@ public class RoomArrangementServiceImpl implements RoomArrangementService {
 			timetableService.updateTimetable(timetable);
 		}
 		return true;
+	}
+	
+	public List<DataRoomArrangement> getDataRoomArrangement(int semesterId) {
+		List<DataRoomArrangement> dras = new ArrayList<DataRoomArrangement>();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		List<ClassSemester> classSemesters = classSemesterService.listClassSemestersBySemester(semesterId, true);
+		
+		for(ClassSemester classSemester: classSemesters) {
+			DataRoomArrangement dra = new DataRoomArrangement();
+			
+			//Set ClassSemester for dra
+			ClassSemester newCS = new ClassSemester();
+			newCS.setClassSemesterId(classSemester.getClassSemesterId());
+			
+			ClassFPT newClass = new ClassFPT();
+			newClass.setClassId(classSemester.getClassFPT().getClassId());
+			newClass.setCode(classSemester.getClassFPT().getCode());
+			newCS.setClassFPT(newClass);
+			
+			dra.setClassSemester(newCS);
+			
+			boolean checkDone = true;
+			StringBuilder sb = new StringBuilder();
+			int count = 0;
+			int countSlotWasSet = 0;
+			for(ClassCourseSemester classCourseSemester: classSemester.getClassCourseSemesters()) {
+				ClassCourseSemester newCCS = classCourseSemesterService.getClassCourseSemesterById(classCourseSemester.getClassCourseSemesterId(), true, false);
+				count += newCCS.getTimetable().size();
+				countSlotWasSet += newCCS.getTimetable().size();
+				for(Timetable timetable : newCCS.getTimetable()) {
+					if(timetable.getRoom() == null) {
+						checkDone = false;
+						countSlotWasSet--;
+						sb.append(sdf.format(timetable.getDate()) +"/" +timetable.getSlot() +"; ");
+						
+					}
+				}
+			}
+			
+			if(checkDone) {
+				dra.setNote("All Slots of this class was set room successful!");
+			} else {
+				dra.setNote("This Class still has "+ (count - countSlotWasSet) +" were not set room!");
+			}
+			
+			dra.setSetRoomSuccessful(checkDone);
+			dra.setNumberOfSlots(count);
+			dra.setNumberOfSlots_WereSetSuccessful(countSlotWasSet);
+			
+			dras.add(dra);
+		}
+		
+		return dras;
 	}
 }

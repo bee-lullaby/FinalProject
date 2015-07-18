@@ -26,7 +26,7 @@
 		<form:form id="setRooms" method="post">
 			<div id="roomsData">${rooms}</div>
 			<div id="classesCoursesData">${classesCourses}</div>
-			<div>${dataArrangement}</div>
+			<div id="dataRoomArrangements">${dataRoomArrangements}</div>
 			<input type="text" id="dataToSet" name="dataToSet" />
 		</form:form>
 	</div>
@@ -131,20 +131,42 @@
 	</div>
 
 	<!-- dialog -->
-	<div data-role="dialog" id="dialog-info-classes" class="padding20"
-		data-close-button="true" data-overlay="true"
-		data-overlay-color="op-dark">
-		<div>
-			<table id="table-classes" class="dataTable striped border bordered"
-				data-role="datatable" data-searching="true">
-				<thead>
-					<tr>
-						<th>Course</th>
-						<th>Set Successful</th>
-					</tr>
-				</thead>
-			</table>
+	<div id="dialog-info-classes" data-role="dialog" class="padding20"
+		data-overlay="true" data-overlay-color="op-dark"
+		data-windows-style="true">
+		<div style="width: 60%; margin: 0 auto;">
+			<div style="padding-bottom: 30px;">
+				<table id="table-info-classes"
+					class="dataTable striped border bordered">
+					<thead>
+						<tr>
+							<th>Class</th>
+							<th>Set Successful</th>
+							<th>Total Slots</th>
+							<th>Not Set Slots</th>
+							<th>Note</th>
+						</tr>
+					</thead>
+					<tbody id="info-classes">
+
+					</tbody>
+				</table>
+			</div>
+			<div>
+				<button id="btn-cancel-info-classes" class="button"
+					style="width: 100px; float: right;">CLOSE</button>
+			</div>
 		</div>
+	</div>
+
+	<div id="dialog-error" data-role="dialog" class="padding20"
+		data-overlay="true" data-overlay-color="op-dark"
+		data-windows-style="true" data-type="warning"
+		style="text-align:center">
+		<h3>You still have Error in your room arrangement!</h3>
+		<button id="btn-cancel-error" class="button"
+			style="width: 100px; margin: 0 auto;">CLOSE</button>
+
 	</div>
 </body>
 </html>
