@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="D:/Capstone Project/FU Timetable/FinalProject/FUTimetabling/libs/open-cbls-2015-03-18.jar">
+	<classpathentry exported="true" kind="lib" path="libs/open-cbls-2015-03-18.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="D:/Capstone Project/FU Timetable/FinalProject/FUTimetabling/libs/choco-solver-2.1.5.jar">
+	<classpathentry exported="true" kind="lib" path="libs/choco-solver-2.1.5.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
