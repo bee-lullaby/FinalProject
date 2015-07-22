@@ -23,4 +23,6 @@ public interface ScheduleService {
 	public boolean saveTimetable(List<DaySlot> daySlots, List<DaySlot> prevDaySlots) throws ParseException;
 
 	public boolean generateFromPreviousWeek(int semesterId, int classId, int week);
+
+	public void autoSchedule();
 }
