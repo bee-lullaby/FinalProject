@@ -1,0 +1,85 @@
+#nbTeacher
+26
+#id	#teacherCode
+0	chilp
+1	caupd
+2	quyenttl
+3	duydt
+4	trungdt
+5	vunh
+6	tamnt
+7	sonhx
+8	nampt
+9	loanntp
+10	linhlhm
+11	lantv
+12	hungpd
+13	hainm
+14	dungnt3
+15	chinhvv
+16	viettk
+17	trangtk
+18	nguyenltt
+19	maivtt
+20	matt
+21	hieuld2
+22	dungdv
+23	cuongn
+24	namvx
+25	ngantt
+-1
+#nbCourse
+51
+#courseID #nbTeacher-Supplied #teacherCode
+1	1	trangtk			
+2	3	namvx	quyenttl	nampt	
+3	3	namvx	quyenttl	nampt	
+4	4	hungpd	lantv	hieuld2	sonhx
+5	4	hungpd	lantv	hieuld2	sonhx
+6	2	dungnt3	loanntp		
+7	2	dungnt3	loanntp		
+8	2	dungnt3	loanntp		
+9	4	caupd	duydt	chilp	vunh
+10	4	caupd	duydt	chilp	vunh
+11	4	caupd	duydt	chilp	vunh
+12	4	caupd	duydt	chilp	vunh
+13	4	hungpd	lantv	hieuld2	sonhx
+14	3	namvx	quyenttl	nampt	
+15	3	namvx	quyenttl	nampt	
+16	3	namvx	quyenttl	nampt	
+17	4	tamnt	nguyenltt	hainm	dungdv
+18	3	namvx	quyenttl	nampt	
+19	3	ngantt	linhlhm	chinhvv	
+20	3	ngantt	linhlhm	chinhvv	
+21	3	ngantt	linhlhm	chinhvv	
+22	4	tamnt	nguyenltt	hainm	dungdv
+23	4	tamnt	nguyenltt	hainm	dungdv
+24	3	namvx	quyenttl	nampt	
+25	3	namvx	quyenttl	nampt	
+26	4	hungpd	lantv	hieuld2	sonhx
+27	1	cuongn			
+28	4	hungpd	lantv	hieuld2	sonhx
+29	4	hungpd	lantv	hieuld2	sonhx
+30	2	trungdt	maivtt	
+31	2	trungdt	maivtt	
+32	2	trungdt	maivtt	
+33	4	tamnt	nguyenltt	hainm	dungdv
+34	4	tamnt	nguyenltt	hainm	dungdv
+35	4	caupd	duydt	chilp	vunh
+36	1	viettk			
+37	4	caupd	duydt	chilp	vunh
+38	4	caupd	duydt	chilp	vunh
+39	4	caupd	duydt	chilp	vunh
+40	4	caupd	duydt	chilp	vunh
+41	2	hainm	matt		
+42	3	namvx	quyenttl	nampt	
+43	1	TrangTK			
+44	1	TrangTK			
+45	2	trungdt	maivtt	
+46	3	ngantt	linhlhm	chinhvv	
+47	4	tamnt	nguyenltt	hainm	dungdv
+48	4	tamnt	nguyenltt	hainm	dungdv
+49	2	hainm	matt		
+50	4	tamnt	nguyenltt	hainm	dungdv
+51	3	ngantt	linhlhm	chinhvv	
+-1 
