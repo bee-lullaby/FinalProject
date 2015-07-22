@@ -1,0 +1,22 @@
+#list-btn-courses {
+	display:none;
+}
+
+#list-btn-courses button {
+	margin-left: 5px;
+	width: 100px;
+	word-wrap: break-work;'
+}
+
+#table-classes td:nth-child(3) {
+	width:350px;
+}
+
+#table-classes td:nth-child(3) div {
+	width:100%;
+}
+
+#table-information thead tr th {
+	text-align: left;
+	width: 200px;
+}

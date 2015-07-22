@@ -269,6 +269,12 @@
 	<beans:bean id="roomArrangementService"
 		class="vn.edu.fpt.timetabling.service.RoomArrangementServiceImpl">
 	</beans:bean>
+	<beans:bean id="roomPerDayService"
+		class="vn.edu.fpt.timetabling.service.RoomPerDayServiceImpl">
+	</beans:bean>
+	<beans:bean id="teacherArrangementService"
+		class="vn.edu.fpt.timetabling.service.TeacherArrangementServiceImpl">
+	</beans:bean>
 	<context:component-scan base-package="vn.edu.fpt.timetabling" />
 
 	<tx:annotation-driven transaction-manager="transactionManager" />

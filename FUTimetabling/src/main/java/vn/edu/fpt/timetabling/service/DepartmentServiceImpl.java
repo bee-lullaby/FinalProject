@@ -64,7 +64,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 	@Override
 	public Department getDepartmentByCode(String code) {
-		return getDepartmentByCode(code);
+		return departmentDAO.getDepartmentByCode(code);
 	}
 
 	@Override

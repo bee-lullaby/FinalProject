@@ -87,7 +87,7 @@ public class StudentController extends GeneralController {
 
 	// For add and update person both
 	@RequestMapping(value = "/staff/student/addFromFile", method = RequestMethod.POST)
-	public String addSpecializedFromFile(@RequestParam("file") MultipartFile file,
+	public String addStudentFromFile(@RequestParam("file") MultipartFile file,
 			@RequestParam("semesterId") int semesterId) {
 		if (!file.isEmpty()) {
 			File students = new File("D:\\FU\\Do an tot nghiep\\Data\\ServerData\\" + file.getOriginalFilename());

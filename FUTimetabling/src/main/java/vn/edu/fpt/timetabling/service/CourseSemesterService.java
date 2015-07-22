@@ -15,7 +15,9 @@ public interface CourseSemesterService {
 
 	public List<CourseSemester> listCourseSemesters(boolean jointClassCourseSemester,
 			boolean jointTeacherCourseSemester, boolean jointProgramSemesterDetails);
-
+	
+	public List<CourseSemester> listCourseSemesterForView(int semesterId);
+	
 	public CourseSemester getCourseSemesterById(int courseSemesterId, boolean jointClassCourseSemester,
 			boolean jointTeacherCourseSemester, boolean jointProgramSemesterDetails);
 

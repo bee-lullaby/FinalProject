@@ -201,7 +201,7 @@
 			<tr>
 				<td style="padding: 10px; vertical-align: top;">
 					<h2 id="slot-day">Course:</h2>
-					<div style="margin:30px; margin-left: 0;">
+					<div style="margin-top:30px; margin-left: 0;">
 						<font style="font-size: 1.5rem">Course:&nbsp;</font>
 						<div class="input-control select">
 							<select id="set-courses" name="setCourse">
@@ -212,10 +212,8 @@
 							</select>
 						</div>
 					</div>
-					<div id="warning-set-teacher" class="fg-red"
-						style="padding-top: 15px;">Don't have enough Teacher to set.</div>
-					<div id="warning-set-room" class="fg-red"
-						style="padding-top: 15px;">Don't have enough Room to set.</div>
+					<div id="warning-set-teacher" class="fg-red" style="margin: 5px 0;">Don't have enough Teacher to set.</div>
+					<div id="warning-set-room" class="fg-red" style="margin: 5px 0;">Don't have enough Room to set.</div>
 					<div>
 						<button id="btn-set-course" class="button" style="width: 100px">SET</button>
 						<button id="btn-cancel-set-course" class="button"
@@ -231,6 +229,8 @@
 						<tr>
 							<th style="text-align: left; padding: 5px;">Remain Slots:</th>
 							<td id="remainSlots" style="padding: 15px"></td>
+						</tr>
+						<tr>
 							<th style="text-align: left; padding: 5px;">Teachers:</th>
 							<td id="teachers" style="padding: 15px"></td>
 						</tr>
@@ -238,6 +238,8 @@
 							<th style="text-align: left; padding: 5px;">Total Classes
 								learn this Course:</th>
 							<td id="classes" style="padding: 15px"></td>
+						</tr>
+						<tr>
 							<th style="text-align: left; padding: 5px;">Classes learn
 								the course in this slot:
 							</th>
@@ -246,6 +248,8 @@
 						<tr>
 							<th style="text-align: left; padding: 5px;">Total Rooms:</th>
 							<td id="totalRooms" style="padding: 15px"></td>
+						</tr>
+						<tr>
 							<th style="text-align: left; padding: 5px;">Classes learn in
 								this slot:</th>
 							<td id="classesInSlot" style="padding: 15px"></td>

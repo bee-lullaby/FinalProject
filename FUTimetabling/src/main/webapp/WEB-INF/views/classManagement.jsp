@@ -150,7 +150,7 @@
 			</tr>
 		</table>
 	</form:form>
-	<form:form action="department/addFromFile" method="post"
+	<form:form action="class/addFromFile" method="post"
 		enctype="multipart/form-data">
 		<input
 			accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

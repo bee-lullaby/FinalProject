@@ -119,7 +119,8 @@ $(document).ready(function(){
 		if(courseSelectedVal != -1 && JSONdata[position].dataSchedule[courseSelectedText].learnCourseInSlot  
 				>= JSONdata[position].dataSchedule[courseSelectedText].numOfTeachers) {
 			$("#warning-set-teacher").show();
-		} else if(courseSelectedVal != -1 && JSONdata[position].dataSchedule[courseSelectedText].classesInSlot >= 0) {
+		} else if(courseSelectedVal != -1 && JSONdata[position].dataSchedule[courseSelectedText].classesInSlot 
+				>= JSONdata[position].dataSchedule[courseSelectedText].totalRooms ) {
 			$("#warning-set-room").show();
 		} else {	
 			if(td.is("[class^='color-']")) {
@@ -259,10 +260,11 @@ $(document).ready(function(){
 			$("#course-info-to-set #teachers").text(data.numOfTeachers);
 		} else {
 			$("#course-info-to-set #course-code").text("N/A");
-			$("#course-info-to-set #remains_slot").text("N/A");
+			$("#course-info-to-set #remainSlots").text("N/A");
 			$("#course-info-to-set #classes").text("N/A");
-			$("#course-info-to-set #classes-code").text("N/A");
-			$("#course-info-to-set #slot").text("N/A");
+			$("#course-info-to-set #learnCourseInSlot").text("N/A");
+			$("#course-info-to-set #totalRooms").text("N/A");
+			$("#course-info-to-set #classesInSlot").text("N/A");
 			$("#course-info-to-set #teachers").text("N/A");
 		}
 	};

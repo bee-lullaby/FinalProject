@@ -1,0 +1,27 @@
+#table-rooms thead th,
+#table-rooms tbody th,
+#table-rooms thead td,
+#table-rooms tbody td {
+	text-align: center;
+} 
+
+#table-rooms thead tr:nth-child(1) th:nth-child(1),
+#table-rooms thead tr:nth-child(1) th:nth-child(3),
+#table-rooms tbody tr th {
+	background: #eeeeee;
+	width: 50px;
+}
+
+#table-rooms tbody td {
+	height:80px;	
+}
+
+
+#table-remain-timetable thead th{
+	width: 200px;
+	text-align: center;
+}
+
+#table-set-room th {
+	text-align: left;
+}

@@ -2868,7 +2868,7 @@ window.METRO_LOCALES = {
         version: "3.0.0",
 
         options: {
-            format: "yyyy.mm.dd",
+            format: "yyyy-mm-dd",
             preset: false,
             minDate: false,
             effect: 'fade',
@@ -2893,7 +2893,7 @@ window.METRO_LOCALES = {
                 button = element.children("button");
 
             //console.log(o);
-
+            
             $.each(element.data(), function(key, value){
                 //console.log(typeof key, key, value);
 
@@ -2972,6 +2972,9 @@ window.METRO_LOCALES = {
                     that.element.children("input[type=text]").val(d);
                     that.options.selected(d, d0);
                     that._hide();
+                    
+                    // add by hans
+                    window.location = "roomPerDay?date=" +that.element.children("input[type=text]").val();
                 }
             });
 

@@ -119,4 +119,15 @@ public class TimetableDAOImpl implements TimetableDAO {
 		List<Timetable> timetables = (List<Timetable>) query.list();
 		return timetables;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Timetable> listTimetablesByDate(Date date) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T "
+				+ " WHERE T.date = :date";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("date", date);
+		List<Timetable> timetables = (List<Timetable>) query.list();
+		return timetables;
+	}
 }

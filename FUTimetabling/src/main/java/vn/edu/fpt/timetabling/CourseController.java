@@ -19,11 +19,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import vn.edu.fpt.timetabling.model.Course;
 import vn.edu.fpt.timetabling.service.ClassCourseSemesterService;
+import vn.edu.fpt.timetabling.service.CourseSemesterService;
 import vn.edu.fpt.timetabling.service.CourseService;
+import vn.edu.fpt.timetabling.service.SemesterService;
 
 @Controller
 public class CourseController extends GeneralController {
 	private CourseService courseService;
+	private SemesterService semesterService;
+	private CourseSemesterService courseSemesterService;
 	private ClassCourseSemesterService classCourseSemesterService;
 
 	@Autowired(required = true)
@@ -31,14 +35,43 @@ public class CourseController extends GeneralController {
 	public void setCourseService(CourseService courseService) {
 		this.courseService = courseService;
 	}
+	
+	@Autowired(required = true)
+	@Qualifier(value = "semesterService")
+	public void setSemesterService(
+			SemesterService semesterService) {
+		this.semesterService = semesterService;
+	}
+
+	@Autowired(required = true)
+	@Qualifier(value = "courseSemesterService")
+	public void setCourseSemesterService(
+			CourseSemesterService courseSemesterService) {
+		this.courseSemesterService = courseSemesterService;
+	}
 
 	@Autowired(required = true)
 	@Qualifier(value = "classCourseSemesterService")
-	public void setClassCourseSemesterService(ClassCourseSemesterService classCourseSemesterService) {
+	public void setClassCourseSemesterService(
+			ClassCourseSemesterService classCourseSemesterService) {
 		this.classCourseSemesterService = classCourseSemesterService;
 	}
 
 	@RequestMapping(value = "/staff/courses", method = RequestMethod.GET)
+	public String courseInit(HttpSession httpSession, Model model) {
+		return "redirect:/staff/courses?semesterId=0";
+	}
+
+	@RequestMapping(value = "/staff/courses", method = RequestMethod.GET, params = {"semesterId"})
+	public String course(@RequestParam int semesterId, HttpSession httpSession, Model model) {
+		model.addAttribute("listSemesters",
+				semesterService.listSemesters(false, false, false, false));
+		model.addAttribute("listCourseSemesters",
+				courseSemesterService.listCourseSemesterForView(semesterId));
+		return "courses";
+	}
+
+	@RequestMapping(value = "/staff/course", method = RequestMethod.GET)
 	public String listCourse(HttpSession httpSession, Model model) {
 		model.addAttribute("course", new Course());
 		model.addAttribute("listCourses", courseService.listCourses());
@@ -63,7 +96,9 @@ public class CourseController extends GeneralController {
 	public String addCourseFromFile(@RequestParam("file") MultipartFile file) {
 		if (!file.isEmpty()) {
 
-			File courses = new File("D:\\FU\\Do an tot nghiep\\Data\\ServerData\\" + file.getOriginalFilename());
+			File courses = new File(
+					"D:\\FU\\Do an tot nghiep\\Data\\ServerData\\"
+							+ file.getOriginalFilename());
 			try {
 				file.transferTo(courses);
 				courseService.addCourseFromFile(courses);
@@ -79,13 +114,17 @@ public class CourseController extends GeneralController {
 	}
 
 	@RequestMapping(value = "/staff/classCourse/addFromFile", method = RequestMethod.POST)
-	public String addClassCourseFromFile(@RequestParam("file") MultipartFile file,
+	public String addClassCourseFromFile(
+			@RequestParam("file") MultipartFile file,
 			@RequestParam("semesterId") int semesterId) {
 		if (!file.isEmpty()) {
-			File classCourses = new File("D:\\FU\\Do an tot nghiep\\Data\\ServerData\\" + file.getOriginalFilename());
+			File classCourses = new File(
+					"D:\\FU\\Do an tot nghiep\\Data\\ServerData\\"
+							+ file.getOriginalFilename());
 			try {
 				file.transferTo(classCourses);
-				classCourseSemesterService.addClassCourseSemesterFromFile(classCourses, semesterId);
+				classCourseSemesterService.addClassCourseSemesterFromFile(
+						classCourses, semesterId);
 			} catch (IllegalStateException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

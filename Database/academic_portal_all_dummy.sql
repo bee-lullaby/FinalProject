@@ -72,9 +72,7 @@ INSERT INTO `classes` (`class_id`, `code`, `type`, `specialized_id`, `detail_spe
 (26, 'IBA1001', 'Specialized', 5, 10, NULL, 10, 'A', 1),
 (30, 'FB1001', 'Specialized', 6, NULL, NULL, 10, 'A', 1),
 (31, 'FB1002', 'Specialized', 6, NULL, NULL, 10, 'B', 2),
-(35, 'SE0901', 'Specialized', 1, NULL, NULL, 9, '\0', 1),
-(38, 'SE0902', 'Specialized', 1, NULL, NULL, 9, '\0', 2);
-
+(31, 'FB1002', 'Specialized', 6, NULL, NULL, 10, 'B', 2),
 -- --------------------------------------------------------
 
 --

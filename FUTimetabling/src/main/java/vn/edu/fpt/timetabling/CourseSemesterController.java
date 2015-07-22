@@ -29,12 +29,13 @@ public class CourseSemesterController extends GeneralController {
 	private SemesterService semesterService;
 	private CourseService courseService;
 
+
 	@Autowired(required = true)
 	@Qualifier(value = "courseSemesterService")
 	public void setCourseSemesterService(CourseSemesterService courseSemesterService) {
 		this.courseSemesterService = courseSemesterService;
 	}
-
+	
 	@Autowired(required = true)
 	@Qualifier(value = "semesterService")
 	public void setSemesterService(SemesterService semesterService) {
@@ -72,7 +73,6 @@ public class CourseSemesterController extends GeneralController {
 					"D:\\FU\\Do an tot nghiep\\Data\\ServerData\\" + file.getOriginalFilename());
 			try {
 				file.transferTo(courseSemesters);
-
 				courseSemesterService.addCourseSemesterFromFile(courseSemesters, semesterId);
 			} catch (IllegalStateException e) {
 				// TODO Auto-generated catch block

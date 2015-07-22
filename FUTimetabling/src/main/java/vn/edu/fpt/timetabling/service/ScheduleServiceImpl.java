@@ -94,7 +94,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public List<DaySlot> getListDaySlot(int semesterId, int classId, int week) {
 		Semester semester = semesterService.getSemesterById(semesterId, false,
 				false, false, false);
-		
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = semester.getStartDate();
@@ -174,8 +173,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 				for (CourseSemester cs : courseSemesters) {
 					DataSchedule dataS = new DataSchedule();
 					dataS.setNumOfClasses(cs.getClassCourseSemesters().size());
-					dataS.setLearnCourseInSlot(TimetableUtils.findNumberSameDaySlot(
-							mapCourseTimetable.get(cs), cal.getTime(), j));
+					dataS.setLearnCourseInSlot(TimetableUtils
+							.findNumberSameDaySlot(mapCourseTimetable.get(cs),
+									cal.getTime(), j));
 
 					// Set Rooms
 					dataS.setTotalRooms(allRooms.size());
@@ -183,7 +183,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 					// Set Remains Room for this day and this slot.
 					String key = ds.getDate() + " " + ds.getSlot();
 					if (mapDateAndNumberOfClasses.containsKey(key)) {
-						dataS.setClassesInSlot(mapDateAndNumberOfClasses.get(key).size());
+						dataS.setClassesInSlot(mapDateAndNumberOfClasses.get(
+								key).size());
 					} else {
 						dataS.setClassesInSlot(0);
 					}
@@ -200,8 +201,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 						}
 					}
 
-					// dataS.setNumOfTeachers(cs.getTeacherCourseSemesters().size());
-					dataS.setNumOfTeachers(5);
+					dataS.setNumOfTeachers(cs.getTeacherCourseSemesters()
+							.size());
+					// dataS.setNumOfTeachers(5);
 					dataSchedule.put(cs.getCourse().getCode(), dataS);
 				}
 				ds.setDataSchedule(dataSchedule);
@@ -231,8 +233,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 					if (dayslot.getSetCourseSlot() != -1) {
 						timetable
 								.setClassCourseSemester(classCourseSemesterService
-										.getClassCourseSemesterById(dayslot
-												.getSetCourseSlot(), false, false));
+										.getClassCourseSemesterById(
+												dayslot.getSetCourseSlot(),
+												false, false));
 						timetableService.updateTimetable(timetable);
 					} else {
 						timetableService.deleteTimetable(timetable
@@ -241,8 +244,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 				} else {
 					timetable = new Timetable();
 					timetable.setClassCourseSemester(classCourseSemesterService
-							.getClassCourseSemesterById(dayslot
-									.getSetCourseSlot(), false, false));
+							.getClassCourseSemesterById(
+									dayslot.getSetCourseSlot(), false, false));
 					timetable.setDate(date);
 					timetable.setSlot(dayslot.getSlot());
 					timetableService.addTimetable(timetable);

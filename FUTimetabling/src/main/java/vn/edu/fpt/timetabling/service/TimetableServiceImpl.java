@@ -109,4 +109,9 @@ public class TimetableServiceImpl implements TimetableService {
 			Date startWeek, Date endWeek) {
 		return timetableDAO.listTimetablesByClassCourseSemestersInWeek(classCourseSemesters, startWeek, endWeek);
 	}
+	
+	@Override
+	public List<Timetable> listTimetablesByDate(Date date) {
+		return timetableDAO.listTimetablesByDate(date);
+	}
 }

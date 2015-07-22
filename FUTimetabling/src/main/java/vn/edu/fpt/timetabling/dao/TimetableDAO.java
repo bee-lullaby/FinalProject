@@ -29,4 +29,6 @@ public interface TimetableDAO {
 
 	public List<Timetable> listTimetablesByClassCourseSemestersInWeek(Set<ClassCourseSemester> classCourseSemesters,
 			Date startWeek, Date endWeek);
+	
+	public List<Timetable> listTimetablesByDate(Date date);
 }
