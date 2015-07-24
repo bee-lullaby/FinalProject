@@ -121,8 +121,7 @@ $(document).ready(
 					}
 				}
 				$("#dataToSet").attr("value", JSON.stringify(classesCoursesJSON));
-				$("#setRooms").attr("action", "roomArrangement/updateTimetable");
-				
+				$("#setRooms").attr("action", "teacherArrangement/updateTimetable");
 				$("#setRooms").submit();
 			}
 		});

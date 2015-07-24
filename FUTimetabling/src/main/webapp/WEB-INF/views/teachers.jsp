@@ -20,6 +20,8 @@
 <script src="../resources/js/ga.js"></script>
 <script src="../resources/js/jquery.dataTables.js"></script>
 </head>
+
+
 <style>
 td a {
 	display: block;
@@ -30,7 +32,8 @@ td a {
 	width: 100px;
 }
 
-#table-edit-course tr th, #table-add-courses tr th {
+#table-edit-course tr th,
+#table-add-courses tr th {
 	text-align: left;
 }
 
@@ -72,12 +75,9 @@ td a {
 }
 
 h3 {
-	padding: 0.625rem 1rem;
-	padding-left: 0;
-	border-bottom: 1px #d9d9d9 solid;
-	text-align: left;
-	margin: .15625rem 0;
-	background-color: #ffffff;
+	padding: .625rem .625rem;
+	background-color: #005696;
+	color: #fff;
 }
 </style>
 <body style="margin-bottom: 50px;">
@@ -91,8 +91,7 @@ h3 {
 				<h3>SEMESTER</h3>
 				<c:if test="${!empty listSemesters}">
 					<c:forEach items="${listSemesters}" var="semester">
-						<a id="${semester.semesterId}"
-							href="?semesterId=${semester.semesterId}">${semester.name}</a>
+						<a id="${semester.semesterId}" href="?semesterId=${semester.semesterId}">${semester.name}</a>
 					</c:forEach>
 				</c:if>
 			</div>
@@ -113,40 +112,40 @@ h3 {
 				</div>
 				<div style="width: 100%; height: 100%;">
 					<div id="table-info" style="float: left; margin-top: 20px;"></div>
-					<table id="table-courses"
-						class="table striped hovered border bordered cell-hovered">
-						<thead>
-							<tr>
-								<th>Course</th>
-								<th>Code</th>
-								<th>Department</th>
-								<th>Semester</th>
-								<th>Slots</th>
-								<th>Course Condition</th>
-								<th>Edit</th>
-								<th>Delete</th>
-							</tr>
-						</thead>
-						<tbody>
-							<c:if test="${!empty listCourseSemesters}">
-								<c:forEach items="${listCourseSemesters}" var="courseSemester">
-									<tr data-courseSemesterId="${courseSemester.courseSemesterId}"
-										data-courseId="${courseSemester.course.courseId}">
-										<td>${courseSemester.course.name}</td>
-										<td>${courseSemester.course.code}</td>
-										<td>${courseSemester.course.department.code}</td>
-										<td>${courseSemester.semester.name}</td>
-										<td>${courseSemester.slots}</td>
-										<td>${courseSemester.courseCondition.code}</td>
-										<td><a href="#"
-											id="edit-course-${courseSemester.course.courseId}">Edit</a></td>
-										<td><a
-											href="<c:url value='/staff/course/delete/${courseSemester.course.courseId}' />">Delete</a></td>
-									</tr>
-								</c:forEach>
-							</c:if>
-						</tbody>
-					</table>
+						<table id="table-courses"
+							class="table striped hovered border bordered cell-hovered">
+							<thead>
+								<tr>
+									<th>Course</th>
+									<th>Code</th>
+									<th>Department</th>
+									<th>Semester</th>
+									<th>Slots</th>
+									<th>Course Condition</th>
+									<th>Edit</th>
+									<th>Delete</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:if test="${!empty listCourseSemesters}">
+									<c:forEach items="${listCourseSemesters}" var="courseSemester">
+										<tr data-courseSemesterId="${courseSemester.courseSemesterId}"
+											data-courseId="${courseSemester.course.courseId}">
+											<td>${courseSemester.course.name}</td>
+											<td>${courseSemester.course.code}</td>
+											<td>${courseSemester.course.department.code}</td>
+											<td>${courseSemester.semester.name}</td>
+											<td>${courseSemester.slots}</td>
+											<td>${courseSemester.courseCondition.code}</td>
+											<td><a href="#"
+												id="edit-course-${courseSemester.course.courseId}">Edit</a></td>
+											<td><a
+												href="<c:url value='/staff/course/delete/${courseSemester.course.courseId}' />">Delete</a></td>
+										</tr>
+									</c:forEach>
+								</c:if>
+							</tbody>
+						</table>
 				</div>
 			</div>
 		</div>
@@ -176,20 +175,20 @@ h3 {
 			<table id="table-edit-course" class="table">
 				<thead>
 					<tr style="display: none">
-						<td><input type="text" id="courseId" name="courseId" /></td>
+						<td><input type="text" id="courseId" name="courseId"/></td>
 						<td><input type="text" id="courseSemesterId"
 							name="courseSemesterId" /></td>
 					</tr>
 					<tr>
 						<th>Course</th>
 						<td><div class="input-control text" style="width: 100%">
-								<input type="text" id="courseName" name="name" />
+								<input type="text" id="courseName" name="name"/>
 							</div></td>
 					</tr>
 					<tr>
 						<th>Code</th>
 						<td><div class="input-control text" style="width: 100%">
-								<input type="text" id="courseCode" name="code" />
+								<input type="text" id="courseCode" name="code"/>
 							</div></td>
 					</tr>
 					<tr>

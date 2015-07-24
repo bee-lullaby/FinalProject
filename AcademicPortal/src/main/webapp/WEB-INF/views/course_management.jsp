@@ -100,13 +100,13 @@
 	                <br><input type="submit" value="Add" class="button primary" style="margin-right:5px"/>
                 </form:form>
 			</div>				
-			<div id="addFileDialog" data-role="dialog"  data-overlay="true" data-close-button="true" data-overlay-color="op-dark">
-				<form action="/academic/course_management/addfile" method="post" enctype="multipart/form-data" style=" padding: 15px 15px">
-	                <br>File Input<br>
-	                <input accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" name="file" type="file" style="margin-bottom:20px" />
-	                <br><input type="submit" name="addFile" value="AddFile" class="button primary" style="margin-right:5px" />
-            	</form>
-			</div>
+					<div id="addFileDialog" data-role="dialog"  data-overlay="true" data-close-button="true" data-overlay-color="op-dark">
+						<form action="/academic/course_management/addfile" method="post" enctype="multipart/form-data" style=" padding: 15px 15px">
+			                <br>File Input<br>
+			                <input accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" name="file" type="file" style="margin-bottom:20px" />
+			                <br><input type="submit" name="addFile" value="AddFile" class="button primary" style="margin-right:5px" />
+		            	</form>
+					</div>
 			<div id="updateDialog" data-role="dialog"  data-overlay="true" data-close-button="true" data-overlay-color="op-dark">
 				<form:form action="/academic/course_management/updateCourse" method="post" modelAttribute="course">
 	               <br>Code<br>

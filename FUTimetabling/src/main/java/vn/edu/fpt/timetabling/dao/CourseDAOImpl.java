@@ -38,7 +38,7 @@ public class CourseDAOImpl implements CourseDAO {
 				.createQuery("FROM vn.edu.fpt.timetabling.model.Course").list();
 		return courses;
 	}
-
+	
 	@Override
 	public Course getCourseById(int courseId) {
 		Course course = (Course) getCurrentSession().get(Course.class, new Integer(courseId));

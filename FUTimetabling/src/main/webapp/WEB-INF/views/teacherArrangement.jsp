@@ -1,3 +1,4 @@
+
 <%@ taglib tagdir="/WEB-INF/tags" prefix="t"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
@@ -22,14 +23,61 @@
 <script src="../resources/js/ga.js"></script>
 <script src="../resources/js/jquery.dataTables.min.js"></script>
 </head>
+
+<style>
+.left {
+	margin: 5px;
+	width: 250px;
+	height: auto;
+	text-align: center;
+}
+
+.left a {
+	line-height: 3.125rem;
+	padding: 0 .625rem;
+	font-size: 1rem;
+	cursor: pointer;
+	color: inherit;
+	display: block;
+	float: left;
+	position: relative;
+	vertical-align: middle !important;
+	text-decoration: none;
+	height: 3.125rem;
+	font-size: 1rem;
+}
+
+.left a:hover {
+	background-color: #005696;
+	color: #fff;
+}
+
+.left a.active {
+	background-color: #005696;
+	color: #fff;
+}
+
+#select-semesters a {
+	width: 100%;
+	text-align: left;
+}
+h3 {
+	padding: 0.625rem 1rem;
+	padding-left: 0;
+	border-bottom: 1px #d9d9d9 solid;
+	text-align: left;
+	margin: .15625rem 0;
+	background-color: #ffffff;
+}
+</style>
 <body>
 	<div style="display: none">
 		<div id="departmentsData">${departmentsData}</div>
 		<div id="coursesData">${coursesData}</div>
 		<div id="courseSemesterData">${courseSemesterData}</div>
 		<div id="dtaData">${dtaData}</div>
-		<form id="setTeacher" action="teacherArrangement/updateTimetable" method="post">
-			<input type="text" id="dataToSet" name="dataToSet" /> 
+		<form id="setTeacher" method="post">
+			<input type="text" id="dataToSet" name="dataToSet" />
 		</form>
 	</div>
 	<div style="width: 80%; margin: 0 auto;">
@@ -37,57 +85,59 @@
 			<a href="index.html" class="nav-button transform"><span></span></a>
 			&nbsp; Teacher Arrangement
 		</h2>
-		<div style="margin-top: 25px; margin-left: 50px; display: flex;">
-			<div style="display: inline-block; width: 60%; margin-right: 15px;">
-				<table id="table-classes" class="table border bordered hovered">
-					<thead>
-						<tr>
-							<th>Class</th>
-							<th>Class has conflict of timetable</th>
-							<th>Teacher</th>
-						</tr>
-					</thead>
-					<tbody>
-
-					</tbody>
-				</table>
+		<div style="display: flex; margin-top: 30px;">
+			<div id="select-semesters" class="left" style="display: inline-block">
+				<h3>SEMESTERS</h3>
+				<c:if test="${!empty listSemesters}">
+					<c:forEach items="${listSemesters}" var="semester">
+						<a id="${semester.semesterId}"
+							href="?semesterId=${semester.semesterId}">${semester.name}</a>
+					</c:forEach>
+				</c:if>
 			</div>
-			<div id="course-information"
-				style="display: inline-block; width: 35%; margin: 0.625rem 0;">
-				<div id="btn-name-course">
-					<div class="input-control select" style="margin:0;">
-						<select id="select-departments" name="departmentId" >
+			<div style="display: inline-block" class="left">
 
-						</select>
-					</div>
-					<button id="btn-course" class="button" style="font-size: 1rem; margin:0;">Course
-						1</button>
+				<h3>DEPARTMENTS</h3>
+				<div id="select-departments" style="height: 200px;"></div>
+				<h3>COURSES</h3>
+				<div id="select-courses" style="height: 200px;"></div>
+			</div>
+
+
+			<div class="left"
+				style="margin-left: 15px; display: inline-block; width: 100%;">
+				<div>
+					Number of Classes
+					<button id="num-of-classes" class="button"></button>
+					Number of Teachers
+					<button id="num-of-teachers" class="button"></button>
+
 					<button id="btn-submit" class="button" data-role="hint"
 						data-hint-background="#1CB7EC" data-hint-color="fg-white"
-						data-hint-position="top" data-hint="Submit" style="margin:0;">
+						data-hint-position="top" data-hint="Submit" style="margin: 0;">
 						<span class="mif-download"></span>
 					</button>
 				</div>
-				<div id="list-btn-courses">
-					<h5>+List Of Courses:</h5>
-				</div>
-				<div>
-					<table id="table-information" class="table hovered border">
+				<div style="width: 100%;">
+					<table id="table-classes" class="table border bordered hovered">
 						<thead>
 							<tr>
-								<th style="text-align: left;">Number of Classes</th>
-								<th><button id="num-of-classes" class="button"></button></th>
-							</tr>
-							<tr>
-								<th style="text-align: left;">Number of Teachers</th>
-								<th><button id="num-of-teachers" class="button"></button></th>
+								<th>Class</th>
+								<th>Class has conflict of timetable</th>
+								<th>Teacher</th>
 							</tr>
 						</thead>
+						<tbody>
+
+						</tbody>
 					</table>
 				</div>
 			</div>
 		</div>
 	</div>
+
+
+
 	<div id="dialog-select-course" data-role="dialog" class="padding20"
 		data-overlay="true" data-overlay-color="op-dark"
 		data-windows-style="true">

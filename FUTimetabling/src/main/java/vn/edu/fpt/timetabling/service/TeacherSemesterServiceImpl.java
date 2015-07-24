@@ -49,4 +49,11 @@ public class TeacherSemesterServiceImpl implements TeacherSemesterService {
 			boolean jointTimetables) {
 		return teacherSemesterDAO.getTeacherSemesterByAccount(account, jointTeacherCourseSemesters, jointTimetables);
 	}
+	
+	@Override
+	public TeacherSemester getTeacherSemesterByTeacherSemester(int teacherId, int semesterId,  boolean jointTeacherCourseSemesters,
+			boolean jointTimetables) {
+		return teacherSemesterDAO.getTeacherSemesterByTeacherSemester(teacherId, semesterId, jointTeacherCourseSemesters, jointTimetables);
+	}
 }
+

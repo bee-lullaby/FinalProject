@@ -15,18 +15,6 @@ $(document).ready(function() {
 
 	_init();
 	
-	$("#btn-course").on("click", function() {
-		$("#list-btn-courses").slideToggle();
-	});
-	
-	$("#select-departments").on("change", function() {
-		window.location="teacherArrangement?semesterId=" +_urlParam("semesterId") +"&departmentId=" +$(this).find("option:selected").val();
-	});
-	
-	$("#list-btn-courses button").on("click", function() {
-		window.location="teacherArrangement?semesterId=" +_urlParam("semesterId") +"&departmentId=" +_urlParam("departmentId") +"&courseId=" +$(this).val();
-	});
-	
 	$("select[id^='select-teacher-']").on("change", function() {
 		var tr = $(this).closest("tr");
 		if(tr.find("#warning").text() != null && tr.find("#warning").text() != "") {
@@ -49,47 +37,53 @@ $(document).ready(function() {
 	
 	
 	$("#btn-submit").on("click", function() {
+		var result=[];
 		$("#table-classes tr").each(function() {
-			var classCourseSemester = _getClassCourseSemester($(this).attr("id"));
-			var teacherSemester = _getTeacherSemester($(this).find("td:eq(2) select option:selected").val());
-			if(classCourseSemester.timetable != null && classCourseSemester.timetable.length > 0) {
-				if(teacherSemester != "-1") {
-						classCourseSemester.timetable[i].teacherSemester = teacherSemester;
-					
-				} else {
-
-					for(var i = 0; i < classCourseSemester.timetable.length; i++) {
-						if(classCourseSemester.timetable[i].teacherSemester != null) {
-							classCourseSemester.timetable[i].teacherSemester = null;
+			var classCourseSemesterId = $(this).attr("id");
+			for(var i = 0; i < courseSemesterJSON.classCourseSemesters.length; i++) {
+				if(courseSemesterJSON.classCourseSemesters[i].classCourseSemesterId == classCourseSemesterId) {
+					if(courseSemesterJSON.classCourseSemesters[i].timetable != undefined 
+							&& courseSemesterJSON.classCourseSemesters[i].timetable != null 
+							&& courseSemesterJSON.classCourseSemesters[i].timetable.length > 0) {
+						if($(this).find("td:eq(2) select option:selected").val() != "-1") {
+							var teacherSemester = _getTeacherSemester($(this).find("td:eq(2) select option:selected").val());
+							for(var x = 0; x < courseSemesterJSON.classCourseSemesters[i].timetable.length; x++) {
+								courseSemesterJSON.classCourseSemesters[i].timetable[x].teacherSemester = teacherSemester;
+								result.push(courseSemesterJSON.classCourseSemesters[i].timetable[x]);
+							}
+						} else {
+							for(var x = 0; x < courseSemesterJSON.classCourseSemesters[i].timetable.length; x++) {
+								if(courseSemesterJSON.classCourseSemesters[i].timetable[x].teacherSemester != null) {
+									courseSemesterJSON.classCourseSemesters[i].timetable[x].teacherSemester = null;
+									result.push(courseSemesterJSON.classCourseSemesters[i].timetable[x]);
+								}
+							}
 						}
 					}
 				}
 			}
 		});
-		
-		
+		$("#dataToSet").attr("value", JSON.stringify(result));
+		$("#setTeacher").attr("action", "teacherArrangement/updateTimetable");
+		$("#setTeacher").submit();
 	}); 
 	
 	function _getTeacherSemester(teacherSemesterId) {
 		for(var i = 0; i < courseSemesterJSON.teacherCourseSemesters.length; i++) {
-			if(courseSemesterJSON.teacherCourseSemesters[i].teacherCourseSemesterId == teacherSemesterId) {
-				return courseSemesterJSON.teacherCourseSemesters[i];
+			if(courseSemesterJSON.teacherCourseSemesters[i].teacherSemester.teacherSemesterId == teacherSemesterId) {
+				return courseSemesterJSON.teacherCourseSemesters[i].teacherSemester;
 			}
 		}
-	}
-	
-	function _getClassCourseSemester(classCourseSemesterId) {
-		for(var i = 0; i < courseSemesterJSON.classCourseSemesters.length; i++) {
-			if(courseSemesterJSON.classCourseSemesters[i].classCourseSemesterId == classCourseSemesterId) {
-				return courseSemesterJSON.classCourseSemesters[i];
-			}
-		}
+		return 
 	}
 	
 	function _init() {
+		
+		$("#select-semesters a[id='" +_urlParam("semesterId") +"']").addClass("active");
+		
 		_setSelectDepartments();
 		
-		_setListBtnCourses();
+		_setListCourses();
 		
 		_setTextBtnCourse();
 		
@@ -100,18 +94,17 @@ $(document).ready(function() {
 		_setSelectTeachers();
 	}
 	
-	
 	function _setSelectDepartments() {
 		for(var i = 0; i < departmentsJSON.length; i++) {
 			$("#select-departments").append(_getOptionSelectDepartments(i));
 		}
-		
-		$("#select-departments option[value='" +_urlParam("departmentId") +"']").attr("selected", "selected");
+		$("#select-departments a[id='" +_urlParam("departmentId") +"']").addClass("active");
 	}
 	
 	function _getOptionSelectDepartments(position) {
-		return "<option value='" +departmentsJSON[position].departmentId +"'>" +
-				departmentsJSON[position].name +"</option>";
+		return "<a id='" +departmentsJSON[position].departmentId +"'" +
+				" href='?semesterId=" + _urlParam("semesterId") +"&departmentId=" +departmentsJSON[position].departmentId +"'		>" +
+				departmentsJSON[position].name +"</a>";
 	} 
 	
 	
@@ -121,10 +114,15 @@ $(document).ready(function() {
 		$("#num-of-teachers").text(courseSemesterJSON.teacherCourseSemesters.length);
 	}
 	
-	function _setListBtnCourses() {
+	function _setListCourses() {
 		for(var i = 0; i < coursesJSON.length; i++) {
-			$("#list-btn-courses").append("<button class='button' value='" +coursesJSON[i].courseId +"'>" +coursesJSON[i].code +"</button>");
+			$("#select-courses").append("<a id='" +coursesJSON[i].courseId +"' " +
+					"href='?semesterId=" +_urlParam("semesterId") +"&departmentId="+_urlParam("departmentId") +"" +
+					"&courseId=" +coursesJSON[i].courseId +"'>" 
+					+coursesJSON[i].code +"</button>");
 		} 
+		$("#select-courses a[id='" +_urlParam("courseId") +"']").addClass("active");
+		
 	}
 	
 	function _setDataTableClasses() {
@@ -184,7 +182,7 @@ $(document).ready(function() {
 	}
 	
 	function _getOptionTeacher(position) {
-		return "<option id='" +courseSemesterJSON.teacherCourseSemesters[position].teacherSemester.teacherSemesterId +"'>" +
+		return "<option value='" +courseSemesterJSON.teacherCourseSemesters[position].teacherSemester.teacherSemesterId +"'>" +
 				courseSemesterJSON.teacherCourseSemesters[position].teacherSemester.teacher.account +"</option>";
 	}
 	function _urlParam(param) {

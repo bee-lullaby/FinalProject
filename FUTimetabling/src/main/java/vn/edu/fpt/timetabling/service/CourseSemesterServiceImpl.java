@@ -10,10 +10,13 @@ import java.util.List;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import vn.edu.fpt.timetabling.CourseController;
 import vn.edu.fpt.timetabling.dao.CourseSemesterDAO;
 import vn.edu.fpt.timetabling.model.Course;
 import vn.edu.fpt.timetabling.model.CourseSemester;
@@ -21,6 +24,10 @@ import vn.edu.fpt.timetabling.model.CourseSemester;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class CourseSemesterServiceImpl implements CourseSemesterService {
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(CourseController.class);
+
 	private CourseSemesterDAO courseSemesterDAO;
 	@Autowired
 	private CourseService courseService;
@@ -28,13 +35,14 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 	private SemesterService semesterService;
 	@Autowired
 	private DepartmentService departmentService;
-	
+
 	public void setCourseSemesterDAO(CourseSemesterDAO courseSemesterDAO) {
 		this.courseSemesterDAO = courseSemesterDAO;
 	}
 
 	@Override
-	public void addCourseSemesterFromFile(File courseSemesters, int semesterId) throws IOException {
+	public void addCourseSemesterFromFile(File courseSemesters, int semesterId)
+			throws IOException {
 		FileInputStream file = new FileInputStream(courseSemesters);
 		XSSFWorkbook workbook = new XSSFWorkbook(file);
 		XSSFSheet sheet = workbook.getSheetAt(0);
@@ -49,28 +57,36 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 			if (row.getCell(4) != null) {
 				codeConditionCourse = row.getCell(4).getStringCellValue();
 			}
-			
-			if(courseService.getCourseByCode(codeCourse) == null) {
+
+			if (courseService.getCourseByCode(codeCourse) == null) {
 				Course course = new Course();
 				String code = row.getCell(0).getStringCellValue().trim();
-				course.setDepartment(departmentService.getDepartmentByCode(code));
+				course.setDepartment(departmentService
+						.getDepartmentByCode(code));
 				course.setCode(codeCourse);
 				course.setName(row.getCell(2).getStringCellValue().trim());
 				courseService.addCourse(course);
 			}
-			
-			courseSemester.setCourse(courseService.getCourseByCode(codeCourse));
-			courseSemester.setSemester(semesterService.getSemesterById(semesterId, false, false, false, false));
-			courseSemester.setSlots(slots.intValue());
-			if (codeConditionCourse.compareTo("") != 0) {
-				courseSemester.setCourseCondition(courseService.getCourseByCode(codeConditionCourse));
+
+			if (getCourseSemesterByCourseCodeSemester(codeCourse, semesterId, false, false, false) == null) {
+				courseSemester.setCourse(courseService
+						.getCourseByCode(codeCourse));
+				logger.info(Integer.toString(semesterId));
+				courseSemester.setSemester(semesterService.getSemesterById(
+						semesterId, false, false, false, false));
+				courseSemester.setSlots(slots.intValue());
+				if (codeConditionCourse.compareTo("") != 0) {
+					courseSemester.setCourseCondition(courseService
+							.getCourseByCode(codeConditionCourse));
+				}
+				courseSemesterDAO.addCourseSemester(courseSemester);
 			}
-			courseSemesterDAO.addCourseSemester(courseSemester);
+
 		}
 		workbook.close();
 		file.close();
 	}
-	
+
 	@Override
 	public void addCourseSemester(CourseSemester courseSemester) {
 		courseSemesterDAO.addCourseSemester(courseSemester);
@@ -82,48 +98,65 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 	}
 
 	@Override
-	public List<CourseSemester> listCourseSemesters(boolean jointClassCourseSemester,
-			boolean jointTeacherCourseSemester, boolean jointProgramSemesterDetails) {
-		return courseSemesterDAO.listCourseSemesters(jointClassCourseSemester, jointTeacherCourseSemester,
-				jointProgramSemesterDetails);
+	public List<CourseSemester> listCourseSemesters(
+			boolean jointClassCourseSemester,
+			boolean jointTeacherCourseSemester,
+			boolean jointProgramSemesterDetails) {
+		return courseSemesterDAO.listCourseSemesters(jointClassCourseSemester,
+				jointTeacherCourseSemester, jointProgramSemesterDetails);
 	}
-	
+
 	@Override
 	public List<CourseSemester> listCourseSemesterForView(int semesterId) {
 		// TODO Auto-generated method stub
-		
+
 		List<CourseSemester> result = new ArrayList<CourseSemester>();
-		
-		if(semesterId == 0) {
-			result.addAll(courseSemesterDAO.listCourseSemesters(false, false, false));
-		} else if (semesterId > 0) {
-			result.addAll(courseSemesterDAO.listCourseSemestersBySemester(semesterId, false, false, false));
-		}
-		
+		result.addAll(courseSemesterDAO.listCourseSemestersBySemester(
+				semesterId, false, false, false));
+
 		return result;
-	}
-	
-	@Override
-	public CourseSemester getCourseSemesterById(int courseSemesterId, boolean jointClassCourseSemester,
-			boolean jointTeacherCourseSemester, boolean jointProgramSemesterDetails) {
-		return courseSemesterDAO.getCourseSemesterById(courseSemesterId, jointClassCourseSemester,
-				jointTeacherCourseSemester, jointProgramSemesterDetails);
 	}
 
 	@Override
-	public CourseSemester getCourseSemesterByCode(String code, boolean jointClassCourseSemester,
-			boolean jointTeacherCourseSemester, boolean jointProgramSemesterDetails) {
-		return courseSemesterDAO.getCourseSemesterByCode(code, jointClassCourseSemester, jointTeacherCourseSemester,
+	public CourseSemester getCourseSemesterById(int courseSemesterId,
+			boolean jointClassCourseSemester,
+			boolean jointTeacherCourseSemester,
+			boolean jointProgramSemesterDetails) {
+		return courseSemesterDAO.getCourseSemesterById(courseSemesterId,
+				jointClassCourseSemester, jointTeacherCourseSemester,
 				jointProgramSemesterDetails);
 	}
 
 	@Override
-	public CourseSemester getCourseSemesterByCourseSemester(int courseId, int semesterId,
-			boolean jointClassCourseSemester, boolean jointTeacherCourseSemester, boolean jointProgramSemesterDetails) {
-		return courseSemesterDAO.getCourseSemesterByCourseSemester(courseId, semesterId, jointClassCourseSemester,
+	public CourseSemester getCourseSemesterByCode(String code,
+			boolean jointClassCourseSemester,
+			boolean jointTeacherCourseSemester,
+			boolean jointProgramSemesterDetails) {
+		return courseSemesterDAO.getCourseSemesterByCode(code,
+				jointClassCourseSemester, jointTeacherCourseSemester,
+				jointProgramSemesterDetails);
+	}
+
+	@Override
+	public CourseSemester getCourseSemesterByCourseSemester(int courseId,
+			int semesterId, boolean jointClassCourseSemester,
+			boolean jointTeacherCourseSemester,
+			boolean jointProgramSemesterDetails) {
+		return courseSemesterDAO.getCourseSemesterByCourseSemester(courseId,
+				semesterId, jointClassCourseSemester,
 				jointTeacherCourseSemester, jointProgramSemesterDetails);
 	}
 
+	@Override
+	public CourseSemester getCourseSemesterByCourseCodeSemester(String code,
+			int semesterId, boolean jointClassCourseSemester,
+			boolean jointTeacherCourseSemester,
+			boolean jointProgramSemesterDetails) {
+		return courseSemesterDAO.getCourseSemesterByCourseCodeSemester(code,
+				semesterId, jointClassCourseSemester,
+				jointTeacherCourseSemester, jointProgramSemesterDetails);
+	}
+	
 	@Override
 	public void deleteCourseSemester(int courseSemesterId) {
 		courseSemesterDAO.deleteCourseSemester(courseSemesterId);
@@ -132,6 +165,16 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 	@Override
 	public List<CourseSemester> listCourseSemestersByStudent(int studentId) {
 		return courseSemesterDAO.listCourseSemestersByStudent(studentId);
+	}
+	
+	@Override 
+	public List<CourseSemester> listCourseSemestersByDepartment(
+			int semesterId,
+			int departmentId,
+			boolean jointClassCourseSemester,
+			boolean jointTeacherCourseSemester,
+			boolean jointProgramSemesterDetails) {
+		return courseSemesterDAO.listCourseSemestersByDepartment(semesterId, departmentId, false, false, false);
 	}
 
 }

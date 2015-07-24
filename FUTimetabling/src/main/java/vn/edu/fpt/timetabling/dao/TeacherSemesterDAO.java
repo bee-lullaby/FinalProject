@@ -17,5 +17,8 @@ public interface TeacherSemesterDAO {
 	public TeacherSemester getTeacherSemesterByAccount(String account, boolean jointTeacherCourseSemesters,
 			boolean jointTimetables);
 
+	public TeacherSemester getTeacherSemesterByTeacherSemester(int teacherId, int semesterId,  boolean jointTeacherCourseSemesters,
+			boolean jointTimetables);
+	
 	public void deleteTeacherSemester(int teacherSemesterId);
 }

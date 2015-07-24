@@ -24,7 +24,6 @@ import vn.edu.fpt.timetabling.model.Timetable;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class TeacherArrangementServiceImpl implements TeacherArrangementService {
-
 	@Autowired
 	private DepartmentService departmentService;
 
@@ -34,35 +33,39 @@ public class TeacherArrangementServiceImpl implements TeacherArrangementService 
 	@Autowired
 	private ClassCourseSemesterService classCourseSemesterService;
 
+	@Autowired
+	private TimetableService timetableService;
+
 	@Override
 	public List<Department> getListDepartment() {
 		List<Department> result = new ArrayList<Department>();
-		
-		for(Department d : departmentService.listDepartments()){
+
+		for (Department d : departmentService.listDepartments()) {
 			Department department = new Department();
 			department.setDepartmentId(d.getDepartmentId());
 			department.setName(d.getName());
-			
+
 			result.add(department);
 		}
-		
+
 		return result;
 	}
-	
+
 	@Override
 	public List<Course> getListCourse(int departmentId) {
 		List<Course> results = new ArrayList<Course>();
-		Department department = departmentService.getDepartmentById(departmentId);
-		for(Course course: department.getCourses()) {
+		Department department = departmentService
+				.getDepartmentById(departmentId);
+		for (Course course : department.getCourses()) {
 			Course newCourse = new Course();
 			newCourse.setCourseId(course.getCourseId());
 			newCourse.setCode(course.getCode());
 			results.add(newCourse);
 		}
-		
+
 		return results;
 	}
-	
+
 	@Override
 	public CourseSemester getCourseSemester(int semesterId, int courseId) {
 
@@ -71,11 +74,11 @@ public class TeacherArrangementServiceImpl implements TeacherArrangementService 
 		CourseSemester cs = courseSemesterService
 				.getCourseSemesterByCourseSemester(courseId, semesterId, true,
 						true, false);
-		
+
 		// set CourseSemeter ID
 		courseSemester.setCourseSemesterId(cs.getCourseSemesterId());
-		
-		// set Course 
+
+		// set Course
 		Course newCourse = new Course();
 		newCourse.setCourseId(cs.getCourse().getCourseId());
 		newCourse.setCode(cs.getCourse().getCode());
@@ -87,8 +90,9 @@ public class TeacherArrangementServiceImpl implements TeacherArrangementService 
 		for (ClassCourseSemester classCourseSemester : cs
 				.getClassCourseSemesters()) {
 			ClassCourseSemester newCCS = new ClassCourseSemester();
-			newCCS.setClassCourseSemesterId(classCourseSemester.getClassCourseSemesterId());
-			
+			newCCS.setClassCourseSemesterId(classCourseSemester
+					.getClassCourseSemesterId());
+
 			ClassSemester newClassSemester = new ClassSemester();
 			ClassFPT classFPT = new ClassFPT();
 			classFPT.setClassId(classCourseSemester.getClassSemester()
@@ -108,12 +112,12 @@ public class TeacherArrangementServiceImpl implements TeacherArrangementService 
 							true, false).getTimetable()) {
 
 				Timetable newT = new Timetable();
-					newT.setTimeTableId(t.getTimeTableId());
-					newT.setDate(t.getDate());
-					newT.setSlot(t.getSlot());
-	
-					TeacherSemester ts = new TeacherSemester();
-					if(t.getTeacherSemester() != null) {
+				newT.setTimeTableId(t.getTimeTableId());
+				newT.setDate(t.getDate());
+				newT.setSlot(t.getSlot());
+
+				TeacherSemester ts = new TeacherSemester();
+				if (t.getTeacherSemester() != null) {
 					ts.setTeacherSemesterId(t.getTeacherSemester()
 							.getTeacherSemesterId());
 					Teacher teacher = new Teacher();
@@ -121,14 +125,15 @@ public class TeacherArrangementServiceImpl implements TeacherArrangementService 
 							.getTeacherId());
 					teacher.setAccount(t.getTeacherSemester().getTeacher()
 							.getAccount());
-					teacher.setName(t.getTeacherSemester().getTeacher().getName());
+					teacher.setName(t.getTeacherSemester().getTeacher()
+							.getName());
 					ts.setTeacher(teacher);
-					newT.setTeacherSemester(ts);
 				}
+				newT.setTeacherSemester(ts);
 				newTimetable.add(newT);
 			}
 			newCCS.setTimetable(newTimetable);
-			
+
 			classCourseSemesters.add(newCCS);
 		}
 		courseSemester.setClassCourseSemesters(classCourseSemesters);
@@ -169,12 +174,13 @@ public class TeacherArrangementServiceImpl implements TeacherArrangementService 
 
 		Set<ClassCourseSemester> classCourseSemesters = cs
 				.getClassCourseSemesters();
-		
+
 		Set<ClassCourseSemester> reCreate = new LinkedHashSet<ClassCourseSemester>();
-		for(ClassCourseSemester ccs : classCourseSemesters) {
-			reCreate.add(classCourseSemesterService.getClassCourseSemesterById(ccs.getClassCourseSemesterId(), true, false));
+		for (ClassCourseSemester ccs : classCourseSemesters) {
+			reCreate.add(classCourseSemesterService.getClassCourseSemesterById(
+					ccs.getClassCourseSemesterId(), true, false));
 		}
-		
+
 		for (ClassCourseSemester classCourseSemester : reCreate) {
 			DataTeacherArrangement dtaObj = new DataTeacherArrangement();
 
@@ -193,7 +199,8 @@ public class TeacherArrangementServiceImpl implements TeacherArrangementService 
 			newCCS.setClassSemester(classSemester);
 
 			CourseSemester courseSemester = new CourseSemester();
-			courseSemester.setCourseSemesterId(classCourseSemester.getCourseSemester().getCourseSemesterId());
+			courseSemester.setCourseSemesterId(classCourseSemester
+					.getCourseSemester().getCourseSemesterId());
 			Course course = new Course();
 			course.setCourseId(classCourseSemester.getCourseSemester()
 					.getCourse().getCourseId());
@@ -201,14 +208,15 @@ public class TeacherArrangementServiceImpl implements TeacherArrangementService 
 					.getCode());
 			courseSemester.setCourse(course);
 			newCCS.setCourseSemester(courseSemester);
-			
+
 			dtaObj.setClassCourseSemester(newCCS);
-			
-			Set<ClassCourseSemester> listConflict = getListClassConflicts(classCourseSemester, reCreate);
-			if(listConflict != null && !listConflict.isEmpty()) {
+
+			Set<ClassCourseSemester> listConflict = getListClassConflicts(
+					classCourseSemester, reCreate);
+			if (listConflict != null && !listConflict.isEmpty()) {
 				dtaObj.setConflictClasses(listConflict);
 			}
-			
+
 			dta.add(dtaObj);
 		}
 		return dta;
@@ -271,4 +279,18 @@ public class TeacherArrangementServiceImpl implements TeacherArrangementService 
 		return result;
 	}
 
+	public boolean saveTimetables(List<Timetable> timetables) {
+		for (Timetable timetable : timetables) {
+			Timetable t = timetableService.getTimetableById(timetable
+					.getTimeTableId());
+
+			if (timetable.getTeacherSemester() != null) {
+				t.setTeacherSemester(timetable.getTeacherSemester());
+			} else {
+				t.setTeacherSemester(null);
+			}
+			timetableService.updateTimetable(t);
+		}
+		return true;
+	}
 }

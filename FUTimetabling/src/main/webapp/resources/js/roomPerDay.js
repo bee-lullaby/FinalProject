@@ -172,9 +172,9 @@ $(document).ready(function() {
 	}
 	
 	function _getOptionForAvailableRoom(position, building) {
-		if(building == 0) {
+		if(building == 0 && position < buildingA.length) {
 			return "<option value='"+buildingA[position].roomId +"'>" +buildingA[position].code  +"</option>";
-		} else if (building == 1) { 
+		} else if (building == 1 && position < buildingB.length) { 
 			return "<option value='"+buildingB[position].roomId +"'>" +buildingB[position].code  +"</option>";
 		}
 	}

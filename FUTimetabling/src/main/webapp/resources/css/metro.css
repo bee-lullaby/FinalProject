@@ -13132,7 +13132,7 @@ p [data-hint] {
   display: block;
   margin: .625rem 0;
   float: left;
-  width: 50%;
+  width: 70%;
   margin: 0;
 }
 .dataTables_paginate:before,
@@ -13259,7 +13259,8 @@ p [data-hint] {
   padding: 5px;
   background-color: #eeeeee;
   font-size: .875rem;
-  float: right;
+  float: left;
+  vertical-align: top;
 }
 .dataTables_length {
   display: block;

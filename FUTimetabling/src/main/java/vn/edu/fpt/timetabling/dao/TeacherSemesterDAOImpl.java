@@ -63,7 +63,24 @@ public class TeacherSemesterDAOImpl implements TeacherSemesterDAO {
 		query.setParameter("teacherSemesterId", teacherSemesterId);
 		return (TeacherSemester) query.uniqueResult();
 	}
-
+	
+	@Override
+	public TeacherSemester getTeacherSemesterByTeacherSemester(int teacherId, int semesterId,  boolean jointTeacherCourseSemesters,
+			boolean jointTimetables) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.TeacherSemester TS";
+		if (jointTeacherCourseSemesters) {
+			hql += " LEFT OUTER JOIN FETCH TS.teacherCourseSemesters";
+		}
+		if (jointTimetables) {
+			hql += " LEFT OUTER JOIN FETCH TS.timetables";
+		}
+		hql += " WHERE TS.teacher.teacherId = :teacherId AND TS.semester.semesterId = :semesterId";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("semesterId", semesterId);
+		query.setParameter("teacherId", teacherId);
+		return (TeacherSemester) query.uniqueResult();
+	}
+	
 	@Override
 	public TeacherSemester getTeacherSemesterByAccount(String account, boolean jointTeacherCourseSemesters,
 			boolean jointTimetables) {

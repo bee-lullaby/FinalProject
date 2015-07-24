@@ -54,7 +54,36 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 				.list();
 		return courseSemesters;
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<CourseSemester> listCourseSemestersByDepartment(
+			int semesterId,
+			int departmentId,
+			boolean jointClassCourseSemester,
+			boolean jointTeacherCourseSemester,
+			boolean jointProgramSemesterDetails) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.CourseSemester C";
+		if (jointClassCourseSemester) {
+			hql += " LEFT OUTER JOIN FETCH C.classCourseSemesters";
+		}
+		if (jointTeacherCourseSemester) {
+			hql += " LEFT OUTER JOIN FETCH C.teacherCourseSemesters";
+		}
+		if (jointProgramSemesterDetails) {
+			hql += " LEFT OUTER JOIN FETCH C.programSemesterDetails";
+		}
+		hql += " WHERE C.course.department.departmentId = :departmentId"
+				+ " AND C.semester.semesterId = :semesterId";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("departmentId", departmentId);
+		query.setParameter("semesterId", semesterId);
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<CourseSemester> courseSemesters = (List<CourseSemester>) query
+				.list();
+		return courseSemesters;
+	}
+	
 	@Override
 	public CourseSemester getCourseSemesterById(int courseSemesterId,
 			boolean jointClassCourseSemester,
@@ -119,6 +148,28 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 		return (CourseSemester) query.uniqueResult();
 	}
 
+	@Override
+	public CourseSemester getCourseSemesterByCourseCodeSemester(String code,
+			int semesterId, boolean jointClassCourseSemester,
+			boolean jointTeacherCourseSemester,
+			boolean jointProgramSemesterDetails) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.CourseSemester C";
+		if (jointClassCourseSemester) {
+			hql += " LEFT OUTER JOIN FETCH C.classCourseSemesters";
+		}
+		if (jointTeacherCourseSemester) {
+			hql += " LEFT OUTER JOIN FETCH C.teacherCourseSemesters";
+		}
+		if (jointProgramSemesterDetails) {
+			hql += " LEFT OUTER JOIN FETCH C.programSemesterDetails";
+		}
+		hql += " WHERE C.course.code = :code AND C.semester.semesterId = :semesterId";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("code", code);
+		query.setParameter("semesterId", semesterId);
+		return (CourseSemester) query.uniqueResult();
+	}
+	
 	@Override
 	public void deleteCourseSemester(int courseSemesterId) {
 		CourseSemester courseSemester = getCourseSemesterById(courseSemesterId,

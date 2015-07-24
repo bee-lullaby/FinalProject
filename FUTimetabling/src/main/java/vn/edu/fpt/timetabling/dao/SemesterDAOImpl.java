@@ -49,6 +49,7 @@ public class SemesterDAOImpl implements SemesterDAO {
 		if (jointTeacherSemester) {
 			hql += " LEFT OUTER JOIN FETCH S.teacherSemesters";
 		}
+		hql += " ORDER BY S.semesterId DESC";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<Semester> semesters = (List<Semester>) query.list();

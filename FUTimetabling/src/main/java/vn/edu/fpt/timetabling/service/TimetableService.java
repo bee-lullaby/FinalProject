@@ -34,4 +34,8 @@ public interface TimetableService {
 			Date startWeek, Date endWeek);
 	
 	public List<Timetable> listTimetablesByDate(Date date);
+	
+	public List<Timetable> listTimetableByClass(int semesterId, int classId);
+	
+	public List<Timetable> listTimetableByTeacher(int semesterId, int teacherId);
 }
