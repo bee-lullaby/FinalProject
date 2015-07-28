@@ -28,8 +28,10 @@ import com.google.api.services.oauth2.model.Userinfoplus;
 
 import vn.edu.fpt.timetabling.model.Staff;
 import vn.edu.fpt.timetabling.model.Student;
+import vn.edu.fpt.timetabling.model.Teacher;
 import vn.edu.fpt.timetabling.service.StaffService;
 import vn.edu.fpt.timetabling.service.StudentService;
+import vn.edu.fpt.timetabling.service.TeacherService;
 import vn.edu.fpt.timetabling.utils.Const;
 import vn.edu.fpt.timetabling.utils.SessionUtils;
 
@@ -41,6 +43,7 @@ public class HomeController {
 	private static final Logger logger = Logger.getLogger(HomeController.class);
 	private StaffService staffService;
 	private StudentService studentService;
+	private TeacherService teacherService;
 
 	@Autowired(required = true)
 	@Qualifier(value = "staffService")
@@ -52,6 +55,12 @@ public class HomeController {
 	@Qualifier(value = "studentService")
 	public void setStudentService(StudentService studentService) {
 		this.studentService = studentService;
+	}
+
+	@Autowired(required = true)
+	@Qualifier(value = "teacherService")
+	public void setTeacherService(TeacherService teacherService) {
+		this.teacherService = teacherService;
 	}
 
 	/**
@@ -82,6 +91,8 @@ public class HomeController {
 			return "redirect:/staff/";
 		} else if (SessionUtils.isStudent(session)) {
 			return "redirect:/studentPage/";
+		} else if (SessionUtils.isTeacher(session)) {
+			return "redirect:/teacherPage/";
 		}
 		return "home";
 	}
@@ -104,12 +115,19 @@ public class HomeController {
 			// email fpt
 			Staff staff = staffService.getStaffByEmail(email);
 			Student student = studentService.getStudentByEmail(email);
+			Teacher teacher = teacherService.getTeacherByEmail(email);
 			if (staff != null) {
 				session.setAttribute("idToken", token.getIdToken());
 				session.setAttribute("accessToken", token.getAccessToken());
 				session.setAttribute("email", email);
 				session.setAttribute("roll", "staff");
 				return "staff";
+			} else if (teacher != null) {
+				session.setAttribute("idToken", token.getIdToken());
+				session.setAttribute("accessToken", token.getAccessToken());
+				session.setAttribute("email", email);
+				session.setAttribute("roll", "teacher");
+				return "teacherPage";
 			} else if (student != null) {
 				session.setAttribute("idToken", token.getIdToken());
 				session.setAttribute("accessToken", token.getAccessToken());

@@ -6,13 +6,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Student page</title>
+<title>Teacher page</title>
 <script>
 	
 </script>
 </head>
 <body>
 	<t:header />
-	Only student can access this page.
+	Only teacher can access this page.
 </body>
 </html>

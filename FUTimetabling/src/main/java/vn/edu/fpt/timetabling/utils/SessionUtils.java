@@ -37,4 +37,14 @@ public class SessionUtils {
 		}
 		return false;
 	}
+
+	public static boolean isTeacher(HttpSession session) {
+		if (session == null) {
+			return false;
+		}
+		if (session.getAttribute("roll") != null && session.getAttribute("roll").toString().equals("teacher")) {
+			return true;
+		}
+		return false;
+	}
 }

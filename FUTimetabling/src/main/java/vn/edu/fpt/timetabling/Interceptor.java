@@ -22,6 +22,8 @@ public class Interceptor extends HandlerInterceptorAdapter {
 				return true;
 			} else if (url.contains("/studentPage") && SessionUtils.isStudent(httpSession)) {
 				return true;
+			} else if (url.contains("/teacherPage") && SessionUtils.isTeacher(httpSession)) {
+				return true;
 			} else {
 				response.sendRedirect(Const.URL);
 				return false;

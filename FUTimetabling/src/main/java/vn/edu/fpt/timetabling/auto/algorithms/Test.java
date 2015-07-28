@@ -14,6 +14,7 @@ public class Test {
 			Scanner in = new Scanner(f);
 			String line = in.nextLine();
 			System.out.println(line);
+			in.close();
 		} catch (Exception e) {
 			// TODO: handle exception
 		}

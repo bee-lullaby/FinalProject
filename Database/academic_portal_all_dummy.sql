@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 17, 2015 at 06:44 AM
+-- Generation Time: Jul 28, 2015 at 05:41 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -2083,7 +2083,7 @@ DROP TABLE IF EXISTS `staff`;
 CREATE TABLE IF NOT EXISTS `staff` (
 `staff_id` int(11) NOT NULL,
   `account` varchar(20) NOT NULL,
-  `name` varchar(100) NOT NULL,
+  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_vietnamese_ci NOT NULL,
   `email` varchar(50) NOT NULL,
   `account_type` varchar(20) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
@@ -2409,42 +2409,42 @@ DROP TABLE IF EXISTS `teachers`;
 CREATE TABLE IF NOT EXISTS `teachers` (
 `teacher_id` int(11) NOT NULL,
   `account` varchar(20) NOT NULL,
-  `name` varchar(100) NOT NULL,
+  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_vietnamese_ci NOT NULL,
   `email` varchar(50) NOT NULL,
   `account_type` varchar(20) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `teachers`
 --
 
 INSERT INTO `teachers` (`teacher_id`, `account`, `name`, `email`, `account_type`) VALUES
-(1, 'TrangTK', 'TrangTK', 'TrangTK', 'teacher'),
-(2, 'NamVX', 'NamVX', 'NamVX', 'teacher'),
-(3, 'HungPD', 'HungPD', 'HungPD', 'teacher'),
-(4, 'LanTV', 'LanTV', 'LanTV', 'teacher'),
-(5, 'DungNT3', 'DungNT3', 'DungNT3', 'teacher'),
-(6, 'LoanNTP', 'LoanNTP', 'LoanNTP', 'teacher'),
-(7, 'CauPD', 'CauPD', 'CauPD', 'teacher'),
-(8, 'ChiLP', 'ChiLP', 'ChiLP', 'teacher'),
-(9, 'QuyenTTL', 'QuyenTTL', 'QuyenTTL', 'teacher'),
-(10, 'TamNT', 'TamNT', 'TamNT', 'teacher'),
-(11, 'SonHX', 'SonHX', 'SonHX', 'teacher'),
-(12, 'NgaNTT', 'NgaNTT', 'NgaNTT', 'teacher'),
-(13, 'DungDV', 'DungDV', 'DungDV', 'teacher'),
-(14, 'NamPT', 'NamPT', 'NamPT', 'teacher'),
-(15, 'HieuLD2', 'HieuLD2', 'HieuLD2', 'teacher'),
-(16, 'CuongN', 'CuongN', 'CuongN', 'teacher'),
-(17, 'TrungDT', 'TrungDT', 'TrungDT', 'teacher'),
-(18, 'NguyenLTT', 'NguyenLTT', 'NguyenLTT', 'teacher'),
-(19, 'HaiNM', 'HaiNM', 'HaiNM', 'teacher'),
-(20, 'VuNH', 'VuNH', 'VuNH', 'teacher'),
-(21, 'VietTK', 'VietTK', 'VietTK', 'teacher'),
-(22, 'DuyDT', 'DuyDT', 'DuyDT', 'teacher'),
-(23, 'ChinhVV', 'ChinhVV', 'ChinhVV', 'teacher'),
-(24, 'LinhLHM', 'LinhLHM', 'LinhLHM', 'teacher'),
-(25, 'MaiVTT', 'MaiVTT', 'MaiVTT', 'teacher'),
-(26, 'MaiTT', 'MaiTT', 'MaiTT', 'teacher');
+(1, 'TrangTK', 'TrangTK', 'TrangTK@fpt.edu.vn', 'teacher'),
+(2, 'NamVX', 'NamVX', 'NamVX@fpt.edu.vn', 'teacher'),
+(3, 'HungPD', 'HungPD', 'HungPD@fpt.edu.vn', 'teacher'),
+(4, 'LanTV', 'LanTV', 'LanTV@fpt.edu.vn', 'teacher'),
+(5, 'DungNT3', 'DungNT3', 'DungNT3@fpt.edu.vn', 'teacher'),
+(6, 'LoanNTP', 'LoanNTP', 'LoanNTP@fpt.edu.vn', 'teacher'),
+(7, 'CauPD', 'CauPD', 'CauPD@fpt.edu.vn', 'teacher'),
+(8, 'ChiLP', 'ChiLP', 'ChiLP@fpt.edu.vn', 'teacher'),
+(9, 'QuyenTTL', 'QuyenTTL', 'QuyenTTL@fpt.edu.vn', 'teacher'),
+(10, 'TamNT', 'TamNT', 'TamNT@fpt.edu.vn', 'teacher'),
+(11, 'SonHX', 'SonHX', 'SonHX@fpt.edu.vn', 'teacher'),
+(12, 'NgaNTT', 'NgaNTT', 'NgaNTT@fpt.edu.vn', 'teacher'),
+(13, 'DungDV', 'DungDV', 'DungDV@fpt.edu.vn', 'teacher'),
+(14, 'NamPT', 'NamPT', 'NamPT@fpt.edu.vn', 'teacher'),
+(15, 'HieuLD2', 'HieuLD2', 'HieuLD2@fpt.edu.vn', 'teacher'),
+(16, 'CuongN', 'CuongN', 'CuongN@fpt.edu.vn', 'teacher'),
+(17, 'TrungDT', 'TrungDT', 'TrungDT@fpt.edu.vn', 'teacher'),
+(18, 'NguyenLTT', 'NguyenLTT', 'NguyenLTT@fpt.edu.vn', 'teacher'),
+(19, 'HaiNM', 'HaiNM', 'HaiNM@fpt.edu.vn', 'teacher'),
+(20, 'VuNH', 'VuNH', 'VuNH@fpt.edu.vn', 'teacher'),
+(21, 'VietTK', 'VietTK', 'VietTK@fpt.edu.vn', 'teacher'),
+(22, 'DuyDT', 'DuyDT', 'DuyDT@fpt.edu.vn', 'teacher'),
+(23, 'ChinhVV', 'ChinhVV', 'ChinhVV@fpt.edu.vn', 'teacher'),
+(24, 'LinhLHM', 'LinhLHM', 'LinhLHM@fpt.edu.vn', 'teacher'),
+(25, 'MaiVTT', 'MaiVTT', 'MaiVTT@fpt.edu.vn', 'teacher'),
+(26, 'MaiTT', 'MaiTT', 'MaiTT@fpt.edu.vn', 'teacher');
 
 -- --------------------------------------------------------
 
@@ -3239,7 +3239,7 @@ MODIFY `student_course_id` int(11) NOT NULL AUTO_INCREMENT;
 -- AUTO_INCREMENT for table `teachers`
 --
 ALTER TABLE `teachers`
-MODIFY `teacher_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=27;
+MODIFY `teacher_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=28;
 --
 -- AUTO_INCREMENT for table `teacher_course_semester`
 --
