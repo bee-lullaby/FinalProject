@@ -1,6 +1,8 @@
 package vn.edu.fpt.timetabling.service;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -278,4 +280,61 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 	public boolean isStudentInClassSemester(int studentId, int classSemesterId) {
 		return classSemesterDAO.isStudentInClassSemester(studentId, classSemesterId);
 	}
+	
+	@Override 
+	public List<ClassSemester> listClassSemesterForView(int semesterId) {
+		List<ClassSemester> result = new ArrayList<ClassSemester>();
+		
+		for(ClassSemester cs : listClassSemesters(true)) {
+			ClassSemester classSemester = new ClassSemester();
+			classSemester.setClassSemesterId(cs.getClassSemesterId());
+			
+			Semester semester = new Semester();
+			semester.setSemesterId(cs.getSemester().getSemesterId());
+			semester.setName(cs.getSemester().getName());
+			classSemester.setSemester(semester);
+			
+			ClassFPT classFPT = new ClassFPT();
+			classFPT.setClassId(cs.getClassFPT().getClassId());
+			classFPT.setCode(cs.getClassFPT().getCode());
+			classFPT.setType(cs.getClassFPT().getType());
+			classFPT.setBatch(cs.getClassFPT().getBatch());
+			classFPT.setBatchChar(cs.getClassFPT().getBatchChar());
+			
+			Specialized specialized = new Specialized();
+			specialized.setSpecializedId(cs.getClassFPT().getSpecialized().getSpecializedId());
+			specialized.setName(cs.getClassFPT().getSpecialized().getName());
+			classFPT.setSpecialized(specialized);
+			
+			classSemester.setClassFPT(classFPT);
+			
+			Set<ClassCourseSemester> listCCS = new LinkedHashSet<ClassCourseSemester>();
+			for(ClassCourseSemester ccs : cs.getClassCourseSemesters()) {
+				ClassCourseSemester classCourseSemester = new ClassCourseSemester();
+				classCourseSemester.setClassCourseSemesterId(ccs.getClassCourseSemesterId());
+				
+				CourseSemester courseSemester = new CourseSemester();
+				courseSemester.setCourseSemesterId(ccs.getCourseSemester().getCourseSemesterId());
+				
+				Course course = new Course();
+				course.setCourseId(ccs.getCourseSemester().getCourse().getCourseId());
+				course.setCode(ccs.getCourseSemester().getCourse().getCode());
+				courseSemester.setCourse(course);
+				
+				classCourseSemester.setCourseSemester(courseSemester);
+				listCCS.add(classCourseSemester);
+			}
+			classSemester.setClassCourseSemesters(listCCS);
+			result.add(classSemester);
+		}
+		
+		return result;
+	}
+
+	@Override
+	public void addClassSemesterFromFile(File classSemesters, int semesterId) {
+		// TODO Auto-generated method stub
+
+	}
+	
 }

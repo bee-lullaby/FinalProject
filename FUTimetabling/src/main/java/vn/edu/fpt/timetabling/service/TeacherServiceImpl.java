@@ -41,6 +41,11 @@ public class TeacherServiceImpl implements TeacherService {
 	public Teacher getTeacherByEmail(String email) {
 		return teacherDAO.getTeacherByEmail(email);
 	}
+	
+	@Override
+	public Teacher getTeacherByAccount(String account) {
+		return teacherDAO.getTeacherByAccount(account);
+	}
 
 	@Override
 	public void deleteTeacher(int teacherId) {

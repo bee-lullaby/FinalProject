@@ -10,11 +10,13 @@ public interface TeacherSemesterDAO {
 	public void updateTeacherSemester(TeacherSemester teacherSemester);
 
 	public List<TeacherSemester> listTeacherSemesters(boolean jointTeacherCourseSemesters, boolean jointTimetables);
-
+	
+	public List<TeacherSemester> listTeacherSemestersBySemester(int semesterId, boolean jointTeacherCourseSemesters, boolean jointTimetables);
+	
 	public TeacherSemester getTeacherSemesterById(int teacherSemesterId, boolean jointTeacherCourseSemesters,
 			boolean jointTimetables);
 
-	public TeacherSemester getTeacherSemesterByAccount(String account, boolean jointTeacherCourseSemesters,
+	public TeacherSemester getTeacherSemesterByAccount(int semesterId, String account, boolean jointTeacherCourseSemesters,
 			boolean jointTimetables);
 
 	public TeacherSemester getTeacherSemesterByTeacherSemester(int teacherId, int semesterId,  boolean jointTeacherCourseSemesters,

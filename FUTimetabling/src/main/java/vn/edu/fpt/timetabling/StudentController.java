@@ -3,6 +3,7 @@ package vn.edu.fpt.timetabling;
 import java.io.File;
 import java.io.IOException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import vn.edu.fpt.timetabling.model.Specialized;
 import vn.edu.fpt.timetabling.model.Student;
+import vn.edu.fpt.timetabling.service.ClassSemesterService;
 import vn.edu.fpt.timetabling.service.SpecializedService;
 import vn.edu.fpt.timetabling.service.StudentService;
 
@@ -25,6 +27,7 @@ import vn.edu.fpt.timetabling.service.StudentService;
 public class StudentController extends GeneralController {
 	private StudentService studentService;
 	private SpecializedService specializedService;
+	private ClassSemesterService classSemesterService;
 
 	@Autowired(required = true)
 	@Qualifier(value = "studentService")
@@ -38,21 +41,33 @@ public class StudentController extends GeneralController {
 		this.specializedService = specializedService;
 	}
 
-	@RequestMapping(value = "/staff/students", method = RequestMethod.GET)
-	public String listStudents(HttpSession httpSession, Model model) {
-		model.addAttribute("student", new Student());
-		model.addAttribute("students", studentService.listStudents());
-		model.addAttribute("specializeds", specializedService.listSpecializeds(false, false));
-		checkError(httpSession, model);
-		return "student";
+	@Autowired(required = true)
+	@Qualifier(value = "classSemesterService")
+	public void setClassSemesterService(
+			ClassSemesterService classSemesterService) {
+		this.classSemesterService = classSemesterService;
 	}
 
-	@RequestMapping(value = "/staff/student/add", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-	public String addStudent(@RequestParam(value = "studentId", required = true) int studentId,
+	@RequestMapping(value = "/staff/students", method = RequestMethod.GET)
+	public String students(Model model) {
+		model.addAttribute("listStudents", studentService.listStudents());
+		model.addAttribute("listClassSemesters",
+				classSemesterService.listClassSemesters(false));
+		model.addAttribute("listSpecializeds",
+				specializedService.listSpecializeds(false, false));
+		model.addAttribute("listDetailSpecializeds",
+				specializedService.listDetailSpecializeds(false, false));
+		return "students";
+	}
+
+	@RequestMapping(value = "/staff/students/addStudent", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	public String addStudent(
+			@RequestParam(value = "studentId", required = true) int studentId,
 			@RequestParam(value = "name", required = true) String name,
-			@RequestParam(value = "specialized", required = true) int specializedId,
+			@RequestParam(value = "specializedId", required = true) int specializedId,
 			@RequestParam(value = "batch", required = true) String batch,
-			@RequestParam(value = "semester", required = true) int semester) {
+			@RequestParam(value = "semester", required = true) int semester,
+			HttpServletRequest request) {
 		Student student = studentService.getStudentById(studentId);
 		boolean update = true;
 		if (student == null) {
@@ -60,7 +75,8 @@ public class StudentController extends GeneralController {
 			update = false;
 		}
 		student.setName(name);
-		Specialized specialized = specializedService.getSpecializedById(specializedId, false, true);
+		Specialized specialized = specializedService.getSpecializedById(
+				specializedId, false, true);
 		student.setSpecialized(specialized);
 		String studentCode;
 		if (update) {
@@ -76,21 +92,58 @@ public class StudentController extends GeneralController {
 		student.setBatch(batch);
 		student.setSemester(semester);
 		if (student.getStudentId() == 0) {
-			// new class semester, add it
 			studentService.addStudent(student);
 		} else {
-			// existing class semester, call update
 			studentService.updateStudent(student);
 		}
-		return "redirect:/staff/students";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 
-	// For add and update person both
-	@RequestMapping(value = "/staff/student/addFromFile", method = RequestMethod.POST)
+	@RequestMapping(value = "/staff/students/editStudent", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	public String editStudent(
+			@RequestParam(value = "studentId", required = true) int studentId,
+			@RequestParam(value = "code", required = true) String code,
+			@RequestParam(value = "name", required = true) String name,
+			@RequestParam(value = "email", required = true) String email,
+			@RequestParam(value = "classSemesterId", required = true) int classSemesterId,
+			@RequestParam(value = "specializedId", required = true) int specializedId,
+			@RequestParam(value = "dsId", required = true) int dsId,
+			@RequestParam(value = "batch", required = true) String batch,
+			@RequestParam(value = "semester", required = true) int semester,
+			HttpServletRequest request) {
+		Student student = studentService.getStudentById(studentId);
+
+		if (student != null) {
+			student.setStudentCode(code);
+			student.setName(name);
+			student.setEmail(email);
+			student.setClassSemester(classSemesterService.getClassSemesterById(
+					classSemesterId, false));
+			if (specializedId != -1)
+				student.setSpecialized(specializedService.getSpecializedById(
+						specializedId, false, false));
+			else
+				student.setSpecialized(null);
+			if(dsId != -1) 
+				student.setDetailSpecialized(specializedService.getSpecializedById(dsId, false, false));
+			else
+				student.setDetailSpecialized(null);
+			student.setBatch(batch);
+			student.setSemester(semester);
+			studentService.updateStudent(student);
+		}
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value = "/staff/students/addFromFile", method = RequestMethod.POST)
 	public String addStudentFromFile(@RequestParam("file") MultipartFile file,
-			@RequestParam("semesterId") int semesterId) {
+			@RequestParam("semesterId") int semesterId, HttpServletRequest request) {
 		if (!file.isEmpty()) {
-			File students = new File("D:\\FU\\Do an tot nghiep\\Data\\ServerData\\" + file.getOriginalFilename());
+			File students = new File(
+					"D:\\FU\\Do an tot nghiep\\Data\\ServerData\\"
+							+ file.getOriginalFilename());
 			try {
 				file.transferTo(students);
 				studentService.addStudentsFromFile(semesterId, students);
@@ -102,30 +155,21 @@ public class StudentController extends GeneralController {
 				e.printStackTrace();
 			}
 		}
-		return "redirect:/staff/students";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 
-	@RequestMapping("/staff/student/delete/{studentId}")
-	public String deleteStudent(@PathVariable("studentId") int studentId) {
+	@RequestMapping("/staff/students/delete/{studentId}")
+	public String deleteStudent(@PathVariable("studentId") int studentId, HttpServletRequest request) {
 		studentService.deleteStudent(studentId);
-		return "redirect:/staff/students";
-	}
-
-	@RequestMapping("/staff/student/edit/{studentId}")
-	public String editStudent(@PathVariable("studentId") int studentId, Model model) {
-		Student student = studentService.getStudentById(studentId);
-		if (student == null) {
-			return "home";
-		}
-		model.addAttribute("student", student);
-		model.addAttribute("students", studentService.listStudents());
-		model.addAttribute("specializeds", specializedService.listSpecializeds(false, false));
-		return "student";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 
 	@ExceptionHandler(Exception.class)
-	public String handleException(HttpSession httpSession, Exception e) {
+	public String handleException(HttpSession httpSession, Exception e, HttpServletRequest request) {
 		httpSession.setAttribute("error", "Error, please try again.");
-		return "redirect:/staff/students";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 }

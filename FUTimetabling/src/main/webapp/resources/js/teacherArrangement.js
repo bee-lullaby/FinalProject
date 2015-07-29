@@ -1,17 +1,19 @@
 $(document).ready(function() { 
-	
-	var departmentsData = $("#departmentsData").text();
-	var departmentsJSON = JSON.parse(departmentsData);
-	
 	var coursesData = $("#coursesData").text();
-	var coursesJSON = JSON.parse(coursesData);
+	var coursesJSON = null;
 	
 	var courseSemesterData = $("#courseSemesterData").text();
-	var courseSemesterJSON = JSON.parse(courseSemesterData);
+	var courseSemesterJSON = null;
 	
 	var dtaData = $("#dtaData").text();
-	var dtaJSON = JSON.parse(dtaData);
-	
+	var dtaJSON = null;
+	if(coursesData != undefined && coursesData != null && coursesData != ""
+			&& courseSemesterData != undefined && courseSemesterData != null && courseSemesterData != ""
+			&& dtaData != undefined && dtaData != null && dtaData != "") { 
+		coursesJSON = JSON.parse(coursesData);
+		courseSemesterJSON = JSON.parse(courseSemesterData);
+		dtaJSON = JSON.parse(dtaData);
+	}
 
 	_init();
 	
@@ -38,50 +40,54 @@ $(document).ready(function() {
 	
 	$("#btn-submit").on("click", function() {
 		var result=[];
-		$("#table-classes tr").each(function() {
-			var classCourseSemesterId = $(this).attr("id");
-			for(var i = 0; i < courseSemesterJSON.classCourseSemesters.length; i++) {
-				if(courseSemesterJSON.classCourseSemesters[i].classCourseSemesterId == classCourseSemesterId) {
-					if(courseSemesterJSON.classCourseSemesters[i].timetable != undefined 
-							&& courseSemesterJSON.classCourseSemesters[i].timetable != null 
-							&& courseSemesterJSON.classCourseSemesters[i].timetable.length > 0) {
-						if($(this).find("td:eq(2) select option:selected").val() != "-1") {
-							var teacherSemester = _getTeacherSemester($(this).find("td:eq(2) select option:selected").val());
-							for(var x = 0; x < courseSemesterJSON.classCourseSemesters[i].timetable.length; x++) {
-								courseSemesterJSON.classCourseSemesters[i].timetable[x].teacherSemester = teacherSemester;
-								result.push(courseSemesterJSON.classCourseSemesters[i].timetable[x]);
-							}
-						} else {
-							for(var x = 0; x < courseSemesterJSON.classCourseSemesters[i].timetable.length; x++) {
-								if(courseSemesterJSON.classCourseSemesters[i].timetable[x].teacherSemester != null) {
-									courseSemesterJSON.classCourseSemesters[i].timetable[x].teacherSemester = null;
+		if(courseSemesterJSON != undefined && courseSemesterJSON != null) {
+			$("#table-classes tr").each(function() {
+				var classCourseSemesterId = $(this).attr("id");
+				for(var i = 0; i < courseSemesterJSON.classCourseSemesters.length; i++) {
+					if(courseSemesterJSON.classCourseSemesters[i].classCourseSemesterId == classCourseSemesterId) {
+						if(courseSemesterJSON.classCourseSemesters[i].timetable != undefined 
+								&& courseSemesterJSON.classCourseSemesters[i].timetable != null 
+								&& courseSemesterJSON.classCourseSemesters[i].timetable.length > 0) {
+							if($(this).find("td:eq(2) select option:selected").val() != "-1") {
+								var teacherSemester = _getTeacherSemester($(this).find("td:eq(2) select option:selected").val());
+								for(var x = 0; x < courseSemesterJSON.classCourseSemesters[i].timetable.length; x++) {
+									courseSemesterJSON.classCourseSemesters[i].timetable[x].teacherSemester = teacherSemester;
 									result.push(courseSemesterJSON.classCourseSemesters[i].timetable[x]);
+								}
+							} else {
+								for(var x = 0; x < courseSemesterJSON.classCourseSemesters[i].timetable.length; x++) {
+									if(courseSemesterJSON.classCourseSemesters[i].timetable[x].teacherSemester != null) {
+										courseSemesterJSON.classCourseSemesters[i].timetable[x].teacherSemester = null;
+										result.push(courseSemesterJSON.classCourseSemesters[i].timetable[x]);
+									}
 								}
 							}
 						}
 					}
 				}
-			}
-		});
-		$("#dataToSet").attr("value", JSON.stringify(result));
-		$("#setTeacher").attr("action", "teacherArrangement/updateTimetable");
-		$("#setTeacher").submit();
+			});
+			$("#dataToSet").attr("value", JSON.stringify(result));
+			$("#setTeacher").attr("action", "teacherArrangement/updateTimetable");
+			$("#setTeacher").submit();
+		}
 	}); 
 	
 	function _getTeacherSemester(teacherSemesterId) {
-		for(var i = 0; i < courseSemesterJSON.teacherCourseSemesters.length; i++) {
-			if(courseSemesterJSON.teacherCourseSemesters[i].teacherSemester.teacherSemesterId == teacherSemesterId) {
-				return courseSemesterJSON.teacherCourseSemesters[i].teacherSemester;
+		if(courseSemesterJSON != undefined && courseSemesterJSON != null) {
+			for(var i = 0; i < courseSemesterJSON.teacherCourseSemesters.length; i++) {
+				if(courseSemesterJSON.teacherCourseSemesters[i].teacherSemester.teacherSemesterId == teacherSemesterId) {
+					return courseSemesterJSON.teacherCourseSemesters[i].teacherSemester;
+				}
 			}
 		}
-		return 
+		return null;
 	}
 	
 	function _init() {
 		
 		$("#select-semesters a[id='" +_urlParam("semesterId") +"']").addClass("active");
 		
-		_setSelectDepartments();
+		_setSelectedDepartments();
 		
 		_setListCourses();
 		
@@ -94,44 +100,47 @@ $(document).ready(function() {
 		_setSelectTeachers();
 	}
 	
-	function _setSelectDepartments() {
-		for(var i = 0; i < departmentsJSON.length; i++) {
-			$("#select-departments").append(_getOptionSelectDepartments(i));
-		}
+	
+	
+	function _setSelectedDepartments() {
+		$("#select-departments a").each(function() {
+			$(this).attr("href", "?semesterId=" + _urlParam("semesterId") +"&departmentId=" +$(this).attr("id"));
+		});
+		
 		$("#select-departments a[id='" +_urlParam("departmentId") +"']").addClass("active");
 	}
 	
-	function _getOptionSelectDepartments(position) {
-		return "<a id='" +departmentsJSON[position].departmentId +"'" +
-				" href='?semesterId=" + _urlParam("semesterId") +"&departmentId=" +departmentsJSON[position].departmentId +"'		>" +
-				departmentsJSON[position].name +"</a>";
-	} 
-	
-	
 	function _setTextBtnCourse() {
-		$("#btn-course").text(courseSemesterJSON.course.code);
-		$("#num-of-classes").text(courseSemesterJSON.classCourseSemesters.length);
-		$("#num-of-teachers").text(courseSemesterJSON.teacherCourseSemesters.length);
+		if(courseSemesterJSON != null) {
+			$("#num-of-classes").text(courseSemesterJSON.classCourseSemesters.length);
+			$("#num-of-teachers").text(courseSemesterJSON.teacherCourseSemesters.length);
+		} else {
+			$("#num-of-classes").text("0/0");
+			$("#num-of-teachers").text("0");
+		}
 	}
 	
 	function _setListCourses() {
-		for(var i = 0; i < coursesJSON.length; i++) {
-			$("#select-courses").append("<a id='" +coursesJSON[i].courseId +"' " +
-					"href='?semesterId=" +_urlParam("semesterId") +"&departmentId="+_urlParam("departmentId") +"" +
-					"&courseId=" +coursesJSON[i].courseId +"'>" 
-					+coursesJSON[i].code +"</button>");
-		} 
-		$("#select-courses a[id='" +_urlParam("courseId") +"']").addClass("active");
-		
+		if(coursesJSON != null) {
+			for(var i = 0; i < coursesJSON.length; i++) {
+				$("#select-courses").append("<a id='" +coursesJSON[i].courseId +"' " +
+						"href='?semesterId=" +_urlParam("semesterId") +"&departmentId="+_urlParam("departmentId") +"" +
+						"&courseId=" +coursesJSON[i].courseId +"'>" 
+						+coursesJSON[i].code +"</button>");
+			} 
+			$("#select-courses a[id='" +_urlParam("courseId") +"']").addClass("active");
+		}
 	}
 	
 	function _setDataTableClasses() {
-		var classCourseSemesters = courseSemesterJSON.classCourseSemesters;
-		for(var i = 0; i < classCourseSemesters.length; i++) {
-			$("#table-classes tbody").append(_getTRTableClasses(classCourseSemesters,  i));
-		}
-		if(classCourseSemesters == null || classCourseSemesters.length == 0) {
-			$("#table-classes tbody").append("<tr><td colspan='3' style='text-align:center'>No Class To Show!</td></tr>");
+		if(courseSemesterJSON != undefined && courseSemesterJSON != null) {
+			var classCourseSemesters = courseSemesterJSON.classCourseSemesters;
+			for(var i = 0; i < classCourseSemesters.length; i++) {
+				$("#table-classes tbody").append(_getTRTableClasses(classCourseSemesters,  i));
+			}
+			if(classCourseSemesters == null || classCourseSemesters.length == 0) {
+				$("#table-classes tbody").append("<tr><td colspan='3' style='text-align:center'>No Class To Show!</td></tr>");
+			}
 		}
 	}
 	

@@ -3,6 +3,7 @@ package vn.edu.fpt.timetabling;
 import java.io.File;
 import java.io.IOException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,74 +18,79 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import vn.edu.fpt.timetabling.model.Department;
+import vn.edu.fpt.timetabling.service.CourseService;
 import vn.edu.fpt.timetabling.service.DepartmentService;
 
 @Controller
 public class DepartmentController extends GeneralController {
 	private DepartmentService departmentService;
+	private CourseService courseService;
 
 	@Autowired(required = true)
 	@Qualifier(value = "departmentService")
 	public void setDepartmentService(DepartmentService departmentService) {
 		this.departmentService = departmentService;
 	}
+	
+	@Autowired(required = true)
+	@Qualifier(value = "courseService")
+	public void setCourseService(CourseService courseService) {
+		this.courseService = courseService;
+	}
 
 	@RequestMapping(value = "/staff/departments", method = RequestMethod.GET)
-	public String listDepartment(HttpSession httpSession, Model model) {
-		model.addAttribute("department", new Department());
+	public String departmentInit(HttpSession httpSession, Model model) {
 		model.addAttribute("listDepartments", departmentService.listDepartments());
-		checkError(httpSession, model);
-		return "department";
+		model.addAttribute("listCourses", courseService.listCourses());
+		return "departments";
 	}
-
-	// For add and update person both
-	@RequestMapping(value = "/staff/department/add", method = RequestMethod.POST)
-	public String addDepartment(@ModelAttribute("department") Department department) {
-		if (department.getDepartmentId() == 0) {
-			// new course, add it
-			departmentService.addDepartment(department);
+	
+	@RequestMapping(value = "/staff/departments/updateDepartment", method = RequestMethod.POST,
+			params={"departmentId", "code", "name"})
+	public String updateDepartment(@RequestParam int departmentId, @RequestParam String code,
+			@RequestParam String name, HttpServletRequest request) {
+		Department d = new Department();
+		d.setCode(code); d.setName(name);
+		if (departmentId < 0) {
+			departmentService.addDepartment(d);
 		} else {
-			// existing course, call update
-			departmentService.updateDepartment(department);
+			System.out.println("1");
+			d.setDepartmentId(departmentId);
+			departmentService.updateDepartment(d);
 		}
-		return "redirect:/staff/departments";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
-
-	// For add and update person both
-	@RequestMapping(value = "/staff/department/addFromFile", method = RequestMethod.POST)
-	public String addDepartmentFromFile(@RequestParam("file") MultipartFile file) {
+	
+	@RequestMapping(value = "/staff/departments/addFromFile", method = RequestMethod.POST)
+	public String addDepartmentsFromFile(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+		System.out.println("1");
 		if (!file.isEmpty()) {
 			File departments = new File("D:\\FU\\Do an tot nghiep\\Data\\ServerData\\" + file.getOriginalFilename());
 			try {
 				file.transferTo(departments);
 				departmentService.addDepartmentFromFile(departments);
 			} catch (IllegalStateException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		return "redirect:/staff/departments";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 
-	@RequestMapping("/staff/department/delete/{departmentId}")
-	public String deleteDepartment(@PathVariable("departmentId") int departmentId) {
+	@RequestMapping("/staff/departments/delete/{departmentId}")
+	public String deleteDepartment(@PathVariable("departmentId") int departmentId, HttpServletRequest request) {
 		departmentService.deleteDepartment(departmentId);
-		return "redirect:/staff/departments";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
-
-	@RequestMapping("/staff/department/edit/{departmentId}")
-	public String editDepartment(@PathVariable("departmentId") int departmentId, Model model) {
-		model.addAttribute("department", departmentService.getDepartmentById(departmentId));
-		model.addAttribute("listDepartments", departmentService.listDepartments());
-		return "department";
-	}
-
+	
 	@ExceptionHandler(Exception.class)
-	public String handleException(HttpSession httpSession, Exception e) {
+	public String handleException(HttpSession httpSession, Exception e, HttpServletRequest request) {
 		httpSession.setAttribute("error", "Error, please try again.");
-		return "redirect:/staff/departments";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 }

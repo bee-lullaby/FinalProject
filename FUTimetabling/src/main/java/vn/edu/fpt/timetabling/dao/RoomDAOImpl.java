@@ -62,6 +62,24 @@ public class RoomDAOImpl implements RoomDAO {
 	}
 
 	@Override
+	public Room getRoomByCode(String code, boolean jointTimetable) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Room R";
+		if (jointTimetable) {
+			hql += " LEFT OUTER JOIN FETCH R.timetables";
+		}
+		hql += " WHERE R.code = :code";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("code", code);
+		Object temp = query.uniqueResult();
+		if (temp != null) {
+			Room room = (Room) temp;
+			return room;
+		} else {
+			return null;
+		}
+	}
+	
+	@Override
 	public void deleteRoom(int roomId) {
 		Room room = getRoomById(roomId, false);
 		if (room != null) {

@@ -38,14 +38,27 @@ public class RoomServiceImpl implements RoomService {
 		rowIterator.next();
 		while (rowIterator.hasNext()) {
 			Row row = rowIterator.next();
-			Room r = new Room();
-			r.setCode(row.getCell(0).getStringCellValue().trim());
-			Double capcity = row.getCell(2).getNumericCellValue();
-			r.setCapacity(capcity.intValue());
-			if (row.getCell(3) != null && row.getCell(3).getStringCellValue().trim().compareTo("") != 0) {
-				r.setCourses(row.getCell(3).getStringCellValue().trim());
+			String code = row.getCell(0).getStringCellValue().trim();
+			Room r = roomDAO.getRoomByCode(code, false);
+			
+			if(r != null) {
+				Double capacity = row.getCell(2).getNumericCellValue();
+				r.setCapacity(capacity.intValue());
+				if (row.getCell(3) != null && row.getCell(3).getStringCellValue().trim().compareTo("") != 0) {
+					r.setCourses(row.getCell(3).getStringCellValue().trim());
+				}
+				roomDAO.addRoom(r);	
+			} else {
+				r = new Room();
+				r.setCode(code);
+				Double capacity = row.getCell(2).getNumericCellValue();
+				r.setCapacity(capacity.intValue());
+				if (row.getCell(3) != null && row.getCell(3).getStringCellValue().trim().compareTo("") != 0) {
+					r.setCourses(row.getCell(3).getStringCellValue().trim());
+				}
+				roomDAO.addRoom(r);
+				
 			}
-			roomDAO.addRoom(r);
 		}
 		workbook.close();
 		file.close();

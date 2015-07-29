@@ -15,58 +15,94 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import vn.edu.fpt.timetabling.dao.TeacherCourseSemesterDAO;
+import vn.edu.fpt.timetabling.model.CourseSemester;
 import vn.edu.fpt.timetabling.model.TeacherCourseSemester;
+import vn.edu.fpt.timetabling.model.TeacherSemester;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class TeacherCourseSemesterSeviceImpl implements TeacherCourseSemesterService {
+public class TeacherCourseSemesterSeviceImpl implements
+		TeacherCourseSemesterService {
 	private TeacherCourseSemesterDAO teacherCourseSemesterDAO;
 	@Autowired
 	private CourseSemesterService courseSemesterService;
 	@Autowired
 	private TeacherSemesterService teacherSemesterService;
 
-	public void setTeacherCourseSemesterDAO(TeacherCourseSemesterDAO teacherCourseSemesterDAO) {
+	public void setTeacherCourseSemesterDAO(
+			TeacherCourseSemesterDAO teacherCourseSemesterDAO) {
 		this.teacherCourseSemesterDAO = teacherCourseSemesterDAO;
 	}
 
 	@Override
-	public void addTeacherCourseSemester(TeacherCourseSemester teacherCourseSemester) {
-		teacherCourseSemesterDAO.addTeacherCourseSemester(teacherCourseSemester);
+	public void addTeacherCourseSemester(
+			TeacherCourseSemester teacherCourseSemester) {
+		teacherCourseSemesterDAO
+				.addTeacherCourseSemester(teacherCourseSemester);
 	}
 
 	@Override
-	public void addTeacherCourseSemesterFromFile(File teacherCourses) throws IOException {
+	public String addTeacherCourseSemesterFromFile(File teacherCourses,
+			int semesterId) throws IOException {
 		FileInputStream file = new FileInputStream(teacherCourses);
 		XSSFWorkbook workbook = new XSSFWorkbook(file);
 		XSSFSheet sheet = workbook.getSheetAt(0);
 		Iterator<Row> rowIterator = sheet.iterator();
 		rowIterator.next();
+
+		StringBuilder result = new StringBuilder();
 		while (rowIterator.hasNext()) {
 			Row row = rowIterator.next();
 			Iterator<Cell> cellIterator = row.cellIterator();
 			String courseCode = "";
+			CourseSemester courseSemester = new CourseSemester();
 			if (cellIterator.hasNext()) {
 				courseCode = cellIterator.next().getStringCellValue().trim();
 				cellIterator.next();
+				courseSemester = courseSemesterService
+						.getCourseSemesterByCourseCodeSemester(courseCode,
+								semesterId, false, false, false);
 			}
-			while (cellIterator.hasNext()) {
-				TeacherCourseSemester tcs = new TeacherCourseSemester();
-				tcs.setCourseSemester(courseSemesterService.getCourseSemesterByCode(courseCode, false, false, false));
+			if (courseSemester != null) {
+				while (cellIterator.hasNext()) {
+					TeacherCourseSemester tcs = new TeacherCourseSemester();
 
-				String teacherAccount = cellIterator.next().getStringCellValue().trim();
-				tcs.setTeacherSemester(
-						teacherSemesterService.getTeacherSemesterByAccount(teacherAccount, false, false));
-				teacherCourseSemesterDAO.addTeacherCourseSemester(tcs);
+					if (courseSemester == null) {
+						result.append(courseCode + "; ");
+					} else {
+						tcs.setCourseSemester(courseSemester);
+
+						String teacherAccount = cellIterator.next()
+								.getStringCellValue().trim();
+						if (getTeacherCourseSemesterByTeacherCourse(
+								teacherAccount, courseCode) == null) {
+							TeacherSemester teacherSemester = teacherSemesterService
+									.getTeacherSemesterByAccount(semesterId,
+											teacherAccount, false, false);
+							if (teacherSemester == null) {
+								// Do Something //
+							} else {
+								tcs.setTeacherSemester(teacherSemester);
+
+								teacherCourseSemesterDAO
+										.addTeacherCourseSemester(tcs);
+							}
+						}
+					}
+				}
 			}
 		}
 		workbook.close();
 		file.close();
+
+		return result.substring(0, result.length());
 	}
 
 	@Override
-	public void updateTeacherCourseSemester(TeacherCourseSemester teacherCourseSemester) {
-		teacherCourseSemesterDAO.updateTeacherCourseSemester(teacherCourseSemester);
+	public void updateTeacherCourseSemester(
+			TeacherCourseSemester teacherCourseSemester) {
+		teacherCourseSemesterDAO
+				.updateTeacherCourseSemester(teacherCourseSemester);
 	}
 
 	@Override
@@ -75,12 +111,38 @@ public class TeacherCourseSemesterSeviceImpl implements TeacherCourseSemesterSer
 	}
 
 	@Override
-	public TeacherCourseSemester getTeacherCourseSemesterById(int teacherCourseSemesterId) {
-		return teacherCourseSemesterDAO.getTeacherCourseSemesterById(teacherCourseSemesterId);
+	public List<TeacherCourseSemester> listTeacherCourseSemestersByCourse(
+			int courseSemesterId) {
+		return teacherCourseSemesterDAO
+				.listTeacherCourseSemestersByCourse(courseSemesterId);
+	}
+
+	@Override
+	public List<TeacherCourseSemester> listTeacherCourseSemestersByTeacher(
+			int teacherSemesterId) {
+		return teacherCourseSemesterDAO
+				.listTeacherCourseSemestersByTeacher(teacherSemesterId);
+	}
+
+	@Override
+	public TeacherCourseSemester getTeacherCourseSemesterById(
+			int teacherCourseSemesterId) {
+		return teacherCourseSemesterDAO
+				.getTeacherCourseSemesterById(teacherCourseSemesterId);
+	}
+
+	@Override
+	public TeacherCourseSemester getTeacherCourseSemesterByTeacherCourse(
+			String teacherAccount, String courseCode) {
+		return teacherCourseSemesterDAO
+				.getTeacherCourseSemesterByTeacherCourse(teacherAccount,
+						courseCode);
 	}
 
 	@Override
 	public void deleteTeacherCourseSemester(int teacherCourseSemesterId) {
-		teacherCourseSemesterDAO.deleteTeacherCourseSemester(teacherCourseSemesterId);
+		teacherCourseSemesterDAO
+				.deleteTeacherCourseSemester(teacherCourseSemesterId);
 	}
+
 }

@@ -56,7 +56,7 @@ public class StudentDAOImpl implements StudentDAO {
 				.createQuery("FROM vn.edu.fpt.timetabling.model.Student").list();
 		return students;
 	}
-
+	
 	@Override
 	public Student getStudentById(int studentId) {
 		Student student = (Student) getCurrentSession().get(Student.class, new Integer(studentId));

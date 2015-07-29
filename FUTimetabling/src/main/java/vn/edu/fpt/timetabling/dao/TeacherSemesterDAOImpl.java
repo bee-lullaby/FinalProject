@@ -47,7 +47,26 @@ public class TeacherSemesterDAOImpl implements TeacherSemesterDAO {
 		List<TeacherSemester> teacherSemesters = (List<TeacherSemester>) query.list();
 		return teacherSemesters;
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<TeacherSemester> listTeacherSemestersBySemester(int semesterId, boolean jointTeacherCourseSemesters, boolean jointTimetables) { 
+		String hql = "FROM vn.edu.fpt.timetabling.model.TeacherSemester TS";
+		if (jointTeacherCourseSemesters) {
+			hql += " LEFT OUTER JOIN FETCH TS.teacherCourseSemesters";
+		}
+		if (jointTimetables) {
+			hql += " LEFT OUTER JOIN FETCH TS.timetables";
+		}
+		hql += " WHERE TS.semester.semesterId = :semesterId";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("semesterId", semesterId);
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<TeacherSemester> teacherSemesters = (List<TeacherSemester>) query.list();
+		return teacherSemesters;
+	}
+	
+	
 	@Override
 	public TeacherSemester getTeacherSemesterById(int teacherSemesterId, boolean jointTeacherCourseSemesters,
 			boolean jointTimetables) {
@@ -82,7 +101,7 @@ public class TeacherSemesterDAOImpl implements TeacherSemesterDAO {
 	}
 	
 	@Override
-	public TeacherSemester getTeacherSemesterByAccount(String account, boolean jointTeacherCourseSemesters,
+	public TeacherSemester getTeacherSemesterByAccount(int semesterId, String account, boolean jointTeacherCourseSemesters,
 			boolean jointTimetables) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.TeacherSemester TS";
 		if (jointTeacherCourseSemesters) {
@@ -91,8 +110,9 @@ public class TeacherSemesterDAOImpl implements TeacherSemesterDAO {
 		if (jointTimetables) {
 			hql += " LEFT OUTER JOIN FETCH TS.timetables";
 		}
-		hql += " WHERE TS.teacher.account = :account";
+		hql += " WHERE TS.semester.semesterId = :semesterId AND TS.teacher.account = :account";
 		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("semesterId", semesterId);
 		query.setParameter("account", account);
 		return (TeacherSemester) query.uniqueResult();
 	}

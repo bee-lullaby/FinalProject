@@ -1,12 +1,15 @@
 package vn.edu.fpt.timetabling.service;
 
+import java.io.File;
 import java.util.List;
 
 import vn.edu.fpt.timetabling.model.ClassSemester;
 
 public interface ClassSemesterService {
 	public void addClassSemester(ClassSemester classSemester);
-
+	
+	public void addClassSemesterFromFile(File classSemesters, int semesterId);
+	
 	public void updateClassSemester(ClassSemester classSemester);
 
 	public List<ClassSemester> listClassSemesters(boolean jointClassCourseSemester);
@@ -31,4 +34,6 @@ public interface ClassSemesterService {
 	public void autoPutStudentsIntoClassSemesters(int semesterId);
 
 	public boolean isStudentInClassSemester(int studentId, int classSemesterId);
+	
+	public List<ClassSemester> listClassSemesterForView(int semesterId);
 }

@@ -53,7 +53,10 @@ public class StudentServiceImpl implements StudentService {
 			String account = getAccount(name, studentCode);
 			Double currentSemester = row.getCell(3).getNumericCellValue();
 			Specialized specialized = specializedService.getSpecializedByCode(specializedCode, false, false);
-			Student s = new Student();
+			Student s = studentDAO.getStudentByCode(studentCode);
+			if(s == null) {
+				s = new Student();
+			}				
 			s.setStudentCode(studentCode);
 			s.setName(name);
 			s.setAccount(account);
@@ -61,7 +64,10 @@ public class StudentServiceImpl implements StudentService {
 			s.setBatch("hameo");
 			s.setSpecialized(specialized);
 			s.setSemester(currentSemester.intValue());
-			studentDAO.addStudent(s);
+			if(s.getStudentId() == 0)
+				studentDAO.addStudent(s);
+			else
+				studentDAO.updateStudent(s);
 		}
 		workbook.close();
 		file.close();
@@ -75,8 +81,8 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public List<Student> listStudents() {
 		return studentDAO.listStudents();
-	}
-
+	}	
+	
 	@Override
 	public Student getStudentById(int studentId) {
 		return studentDAO.getStudentById(studentId);

@@ -19,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import vn.edu.fpt.timetabling.model.Course;
 import vn.edu.fpt.timetabling.model.CourseSemester;
-import vn.edu.fpt.timetabling.model.Semester;
 import vn.edu.fpt.timetabling.service.CourseSemesterService;
 import vn.edu.fpt.timetabling.service.CourseService;
 import vn.edu.fpt.timetabling.service.DepartmentService;
@@ -66,10 +65,6 @@ public class CourseController extends GeneralController {
 	@RequestMapping(value = "/staff/courses", method = RequestMethod.GET, params = { "semesterId" })
 	public String course(@RequestParam int semesterId, HttpSession httpSession,
 			Model model) {
-		CourseSemester courseSemester = new CourseSemester();
-		courseSemester.setCourse(new Course());
-		courseSemester.setSemester(new Semester());
-		model.addAttribute("courseSemester", courseSemester);
 		model.addAttribute("listDepartments",
 				departmentService.listDepartments());
 		model.addAttribute("listCourses", courseService.listCourses());

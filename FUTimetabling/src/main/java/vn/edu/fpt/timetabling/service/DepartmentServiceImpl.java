@@ -38,10 +38,21 @@ public class DepartmentServiceImpl implements DepartmentService {
 		rowIterator.next();
 		while (rowIterator.hasNext()) {
 			Row row = rowIterator.next();
-			Department department = new Department();
-			department.setCode(row.getCell(0).getStringCellValue().trim());
-			department.setName(row.getCell(1).getStringCellValue().trim());
-			departmentDAO.addDepartment(department);
+			String code = row.getCell(0).getStringCellValue().trim();
+			Department department = departmentDAO.getDepartmentByCode(code);
+			
+			if(department == null) {
+				System.out.println(code);
+				department = new Department();
+				department.setCode(code);
+				department.setName(row.getCell(1).getStringCellValue().trim());
+				departmentDAO.addDepartment(department);
+			} else {
+				department.setName(row.getCell(1).getStringCellValue().trim());
+				departmentDAO.updateDepartment(department);
+			}
+			
+			
 		}
 		workbook.close();
 		file.close();

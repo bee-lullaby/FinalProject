@@ -61,6 +61,7 @@
 	width: 100%;
 	text-align: left;
 }
+
 h3 {
 	padding: 0.625rem 1rem;
 	padding-left: 0;
@@ -72,7 +73,6 @@ h3 {
 </style>
 <body>
 	<div style="display: none">
-		<div id="departmentsData">${departmentsData}</div>
 		<div id="coursesData">${coursesData}</div>
 		<div id="courseSemesterData">${courseSemesterData}</div>
 		<div id="dtaData">${dtaData}</div>
@@ -98,7 +98,13 @@ h3 {
 			<div style="display: inline-block" class="left">
 
 				<h3>DEPARTMENTS</h3>
-				<div id="select-departments" style="height: 200px;"></div>
+				<div id="select-departments" style="height: 200px;">
+					<c:if test="${!empty listDepartments}">
+						<c:forEach items="${listDepartments}" var="department">
+							<a id="${department.departmentId}">${department.name}</a>
+						</c:forEach>
+					</c:if>
+				</div>
 				<h3>COURSES</h3>
 				<div id="select-courses" style="height: 200px;"></div>
 			</div>

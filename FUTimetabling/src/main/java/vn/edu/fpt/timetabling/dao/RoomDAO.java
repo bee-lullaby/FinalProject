@@ -12,6 +12,8 @@ public interface RoomDAO {
 	public List<Room> listRooms(boolean jointTimetable);
 
 	public Room getRoomById(int roomId, boolean jointTimetable);
-
+	
+	public Room getRoomByCode(String code, boolean jointTimetable);
+	
 	public void deleteRoom(int roomId);
 }

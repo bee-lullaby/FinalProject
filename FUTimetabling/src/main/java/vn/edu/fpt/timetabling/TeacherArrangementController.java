@@ -2,6 +2,7 @@ package vn.edu.fpt.timetabling;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import vn.edu.fpt.timetabling.model.Course;
 import vn.edu.fpt.timetabling.model.CourseSemester;
 import vn.edu.fpt.timetabling.model.DataTeacherArrangement;
-import vn.edu.fpt.timetabling.model.Department;
 import vn.edu.fpt.timetabling.model.Timetable;
 import vn.edu.fpt.timetabling.service.CourseSemesterService;
 import vn.edu.fpt.timetabling.service.DepartmentService;
@@ -33,26 +33,24 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
 @Controller
 public class TeacherArrangementController {
-	
+
 	private SemesterService semesterService;
 	private DepartmentService departmentService;
 	private CourseSemesterService courseSemesterService;
 	private TeacherArrangementService teacherArrangementService;
-	
-	private static final Logger logger = LoggerFactory.getLogger(TeacherArrangementController.class);
-	
-	
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(TeacherArrangementController.class);
+
 	@Autowired(required = true)
 	@Qualifier(value = "semesterService")
-	public void setSemesterService(
-			SemesterService semesterService) {
+	public void setSemesterService(SemesterService semesterService) {
 		this.semesterService = semesterService;
 	}
-	
+
 	@Autowired(required = true)
 	@Qualifier(value = "departmentService")
-	public void setDepartmentService(
-			DepartmentService departmentService) {
+	public void setDepartmentService(DepartmentService departmentService) {
 		this.departmentService = departmentService;
 	}
 
@@ -62,7 +60,7 @@ public class TeacherArrangementController {
 			CourseSemesterService courseSemesterService) {
 		this.courseSemesterService = courseSemesterService;
 	}
-	
+
 	@Autowired(required = true)
 	@Qualifier(value = "teacherArrangementService")
 	public void setTeacherArrangementService(
@@ -72,21 +70,37 @@ public class TeacherArrangementController {
 
 	@RequestMapping(value = "/staff/teacherArrangement", method = RequestMethod.GET)
 	public String teacherArrangement(Model model) {
-		int semesterId = semesterService.listSemesters(false, false, false,	false).get(0).getSemesterId();
-		int departmentId = departmentService.listDepartments().get(0).getDepartmentId();
-		int courseId = courseSemesterService.listCourseSemestersByDepartment(semesterId, departmentId, false, false, false).get(0).getCourse().getCourseId();
-		return "redirect:/staff/teacherArrangement?semesterId="+semesterId +"&departmentId=" +departmentId +"&courseId=" +courseId;
+		int semesterId = semesterService
+				.listSemesters(false, false, false, false).get(0)
+				.getSemesterId();
+		int departmentId = departmentService.listDepartments().get(0)
+				.getDepartmentId();
 
+		List<CourseSemester> courseSemesters = courseSemesterService
+				.listCourseSemestersByDepartment(semesterId, departmentId,
+						false, false, false);
+		int courseId = 0;
+		if (courseSemesters.size() != 0) {
+			courseId = courseSemesters.get(0).getCourse().getCourseId();
+		}
+		return "redirect:/staff/teacherArrangement?semesterId=" + semesterId
+				+ "&departmentId=" + departmentId + "&courseId=" + courseId;
 	}
-	
-	@RequestMapping(value = "/staff/teacherArrangement", method = RequestMethod.GET, params = {
-			"semesterId"})
+
+	@RequestMapping(value = "/staff/teacherArrangement", method = RequestMethod.GET, params = { "semesterId" })
 	public String teacherArrangementSemesterDepartment(
-			@RequestParam int semesterId,
-			Model model) {
-		int departmentId = departmentService.listDepartments().get(0).getDepartmentId();
-		int courseId = courseSemesterService.listCourseSemestersByDepartment(semesterId, departmentId, false, false, false).get(0).getCourse().getCourseId();
-		return "redirect:/staff/teacherArrangement?semesterId="+semesterId +"&departmentId=" +departmentId +"&courseId=" +courseId;
+			@RequestParam int semesterId, Model model) {
+		int departmentId = departmentService.listDepartments().get(0)
+				.getDepartmentId();
+		List<CourseSemester> courseSemesters = courseSemesterService
+				.listCourseSemestersByDepartment(semesterId, departmentId,
+						false, false, false);
+		int courseId = 0;
+		if (courseSemesters.size() != 0) {
+			courseId = courseSemesters.get(0).getCourse().getCourseId();
+		}
+		return "redirect:/staff/teacherArrangement?semesterId=" + semesterId
+				+ "&departmentId=" + departmentId + "&courseId=" + courseId;
 
 	}
 
@@ -95,8 +109,15 @@ public class TeacherArrangementController {
 	public String teacherArrangementSemesterDepartment(
 			@RequestParam int semesterId, @RequestParam int departmentId,
 			Model model) {
-		int courseId = courseSemesterService.listCourseSemestersByDepartment(semesterId, departmentId, false, false, false).get(0).getCourse().getCourseId();
-		return "redirect:/staff/teacherArrangement?semesterId="+semesterId +"&departmentId=" +departmentId +"&courseId=" +courseId;
+		List<CourseSemester> courseSemesters = courseSemesterService
+				.listCourseSemestersByDepartment(semesterId, departmentId,
+						false, false, false);
+		int courseId = 0;
+		if (courseSemesters.size() != 0) {
+			courseId = courseSemesters.get(0).getCourse().getCourseId();
+		}
+		return "redirect:/staff/teacherArrangement?semesterId=" + semesterId
+				+ "&departmentId=" + departmentId + "&courseId=" + courseId;
 	}
 
 	@RequestMapping(value = "/staff/teacherArrangement", method = RequestMethod.GET, params = {
@@ -104,32 +125,39 @@ public class TeacherArrangementController {
 	public String teacherArrangementSemesterDepartmentCourse(
 			@RequestParam int semesterId, @RequestParam int departmentId,
 			@RequestParam int courseId, Model model) {
-		List<Department> departmentsData = teacherArrangementService
-				.getListDepartment();
-		List<Course> coursesData = teacherArrangementService
-				.getListCourse(departmentId);
-		CourseSemester courseSemesterData = teacherArrangementService
-				.getCourseSemester(semesterId, courseId);
-		List<DataTeacherArrangement> dtaData = teacherArrangementService
-				.getDataTeacherArrangement(semesterId, courseId);
-
+		List<Course> coursesData;
+		CourseSemester courseSemesterData;
+		List<DataTeacherArrangement> dtaData;
+		if (courseId != 0) {
+			coursesData = teacherArrangementService.getListCourse(departmentId);
+			courseSemesterData = teacherArrangementService.getCourseSemester(
+					semesterId, courseId);
+			dtaData = teacherArrangementService.getDataTeacherArrangement(
+					semesterId, courseId);
+		} else {
+			coursesData = new ArrayList<Course>();
+			courseSemesterData = new CourseSemester();
+			dtaData = new ArrayList<DataTeacherArrangement>();
+		}
 		ObjectMapper om = new ObjectMapper();
-		StringWriter departmentsJSON = new StringWriter();
 		StringWriter coursesJSON = new StringWriter();
 		StringWriter courseSemesterJSON = new StringWriter();
 		StringWriter dtaJSON = new StringWriter();
 
 		try {
-			om.writeValue(departmentsJSON, departmentsData);
-			om.writeValue(coursesJSON, coursesData);
-			om.writeValue(courseSemesterJSON, courseSemesterData);
-			om.writeValue(dtaJSON, dtaData);
-			
-			model.addAttribute("listSemesters", semesterService.listSemesters(false, false, false, false));
-			model.addAttribute("departmentsData", departmentsJSON);
-			model.addAttribute("coursesData", coursesJSON);
-			model.addAttribute("courseSemesterData", courseSemesterJSON);
-			model.addAttribute("dtaData", dtaJSON);
+			if (courseId != 0) {
+				om.writeValue(coursesJSON, coursesData);
+				om.writeValue(courseSemesterJSON, courseSemesterData);
+				om.writeValue(dtaJSON, dtaData);
+			}
+			model.addAttribute("listSemesters",
+					semesterService.listSemesters(false, false, false, false));
+			model.addAttribute("listDepartments", teacherArrangementService.getListDepartment());
+			if (courseId != 0) {
+				model.addAttribute("coursesData", coursesJSON);
+				model.addAttribute("courseSemesterData", courseSemesterJSON);
+				model.addAttribute("dtaData", dtaJSON);
+			}
 		} catch (JsonGenerationException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
@@ -139,16 +167,21 @@ public class TeacherArrangementController {
 		}
 		return "teacherArrangement";
 	}
-	
+
 	@RequestMapping(value = "/staff/teacherArrangement/updateTimetable", method = RequestMethod.POST)
-	public String updateTimetable(@RequestParam(value = "dataToSet", required = true) String dataToSet, HttpServletRequest request) {
+	public String updateTimetable(
+			@RequestParam(value = "dataToSet", required = true) String dataToSet,
+			HttpServletRequest request) {
 		ObjectMapper om = new ObjectMapper();
 		TypeFactory typeFactory = om.getTypeFactory();
 		List<Timetable> data;
 		try {
-			data = om.readValue(dataToSet,	typeFactory.constructCollectionType(List.class, Timetable.class));
+			data = om.readValue(dataToSet, typeFactory.constructCollectionType(
+					List.class, Timetable.class));
 			logger.info(dataToSet);
 			boolean result = teacherArrangementService.saveTimetables(data);
+			if (result)
+				logger.info(dataToSet);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

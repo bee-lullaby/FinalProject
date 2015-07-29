@@ -6,14 +6,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Courses Page</title>
+<title>Teachers Page</title>
 
 <link href="../resources/css/metro.css" rel="stylesheet">
 <link href="../resources/css/metro-icons.css" rel="stylesheet">
 <link href="../resources/css/docs.css" rel="stylesheet">
 
 <script src="../resources/js/jquery-2.1.3.min.js"></script>
-<script src="../resources/js/courses.js"></script>
+<script src="../resources/js/teachers.js"></script>
 <script src="../resources/js/metro.js"></script>
 <script src="../resources/js/docs.js"></script>
 <script src="../resources/js/prettify/run_prettify.js"></script>
@@ -32,8 +32,7 @@ td a {
 	width: 100px;
 }
 
-#table-edit-course tr th,
-#table-add-courses tr th {
+#table-edit-course tr th, #table-add-courses tr th {
 	text-align: left;
 }
 
@@ -75,30 +74,35 @@ td a {
 }
 
 h3 {
-	padding: .625rem .625rem;
-	background-color: #005696;
-	color: #fff;
+	padding: 0.625rem 1rem;
+	padding-left: 0;
+	border-bottom: 1px #d9d9d9 solid;
+	text-align: left;
+	margin: .15625rem 0;
+	background-color: #ffffff;
 }
 </style>
-<body style="margin-bottom: 50px;">
-	<div style="width: 80%; margin: 0 auto;">
+
+<body>
+	<div style="width: 80%; margin: 0 auto; padding-bottom: 50px">
 		<h1>
-			<a href="index.html" class="nav-button transform"><span></span></a>
-			&nbsp;Courses Management
+			<a href="/Timetabling/staff" class="nav-button transform"><span></span></a>
+			&nbsp;Teachers Management
 		</h1>
 		<div style="display: flex">
 			<div id="select-semester" class="left" style="display: inline-block">
 				<h3>SEMESTER</h3>
 				<c:if test="${!empty listSemesters}">
 					<c:forEach items="${listSemesters}" var="semester">
-						<a id="${semester.semesterId}" href="?semesterId=${semester.semesterId}">${semester.name}</a>
+						<a id="${semester.semesterId}"
+							href="?semesterId=${semester.semesterId}">${semester.name}</a>
 					</c:forEach>
 				</c:if>
 			</div>
 			<div style="display: inline-block; margin-left: 25px">
 				<div id="control-bar" style="width: 100%; margin-bottom: 45px;">
 					<div style="width: auto; float: right">
-						<button id="btn-add-course" class="button" data-role="hint"
+						<button id="btn-add-teacher" class="button" data-role="hint"
 							data-hint-background="#1CB7EC" data-hint-color="fg-white"
 							data-hint-position="top" data-hint="Add Course">
 							<span class="mif-plus"></span>
@@ -111,51 +115,75 @@ h3 {
 					</div>
 				</div>
 				<div style="width: 100%; height: 100%;">
-					<div id="table-info" style="float: left; margin-top: 20px;"></div>
-						<table id="table-courses"
-							class="table striped hovered border bordered cell-hovered">
-							<thead>
-								<tr>
-									<th>Course</th>
-									<th>Code</th>
-									<th>Department</th>
-									<th>Semester</th>
-									<th>Slots</th>
-									<th>Course Condition</th>
-									<th>Edit</th>
-									<th>Delete</th>
-								</tr>
-							</thead>
-							<tbody>
-								<c:if test="${!empty listCourseSemesters}">
-									<c:forEach items="${listCourseSemesters}" var="courseSemester">
-										<tr data-courseSemesterId="${courseSemester.courseSemesterId}"
-											data-courseId="${courseSemester.course.courseId}">
-											<td>${courseSemester.course.name}</td>
-											<td>${courseSemester.course.code}</td>
-											<td>${courseSemester.course.department.code}</td>
-											<td>${courseSemester.semester.name}</td>
-											<td>${courseSemester.slots}</td>
-											<td>${courseSemester.courseCondition.code}</td>
-											<td><a href="#"
-												id="edit-course-${courseSemester.course.courseId}">Edit</a></td>
-											<td><a
-												href="<c:url value='/staff/course/delete/${courseSemester.course.courseId}' />">Delete</a></td>
-										</tr>
-									</c:forEach>
-								</c:if>
-							</tbody>
-						</table>
+					<table id="table-teachers"
+						class="table striped hovered border bordered cell-hovered">
+						<thead>
+							<tr>
+								<th>Account</th>
+								<th>Name</th>
+								<th>E-mail</th>
+								<th>Semester</th>
+								<th>Courses</th>
+								<th>Edit</th>
+								<th>Delete</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:if test="${!empty listTeacherSemesters}">
+								<c:forEach items="${listTeacherSemesters}" var="teacherSemester">
+									<tr data-teacherSemesterId="${teacherSemester.teacherSemesterId}"
+										data-teacherId="${teacherSemester.teacher.teacherId}">
+										<td>${teacherSemester.teacher.account}</td>
+										<td>${teacherSemester.teacher.name}</td>
+										<td>${teacherSemester.teacher.email}</td>
+										<td>${teacherSemester.semester.name}</td>
+										<td><c:if
+												test="${!empty teacherSemester.teacherCourseSemesters}">
+												<c:forEach items="${teacherSemester.teacherCourseSemesters}"
+													var="teacherCourseSemester" varStatus="loop">
+													<c:choose>
+														<c:when test="${loop.last}">
+															${teacherCourseSemester.courseSemester.course.code}
+														</c:when>
+														<c:otherwise>
+															${teacherCourseSemester.courseSemester.course.code};
+														</c:otherwise>
+													</c:choose>
+												</c:forEach>
+											</c:if></td>
+										<td><a href="#"
+											id="edit-teacher-${teacherSemester.teacher.teacherId}">Edit</a></td>
+										<td><a
+											href="<c:url value='/staff/teacher/delete/${teacherSemester.teacher.teacherId}' />">Delete</a></td>
+									</tr>
+								</c:forEach>
+							</c:if>
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
 	</div>
+
+
 	<div id="dialog-add-file" data-role="dialog" data-overlay="true"
 		data-overlay-color="op-dark" style="padding: 25px"
 		data-close-button="true">
 		<h5>Add File</h5>
-		<form id="form-add-file" action="courses/addFromFile" method="post"
+		<form id="form-add-file" action="teachers/addFromFile" method="post"
 			enctype="multipart/form-data" style="display: inline-block;">
+			<div>
+				<label class="input-control radio"> <input type="radio"
+					name="act" value="0" checked> <span class="check"></span> <span
+					class="caption">Add Teachers</span>
+				</label>
+			</div>
+			<div>
+				<label class="input-control radio"> <input type="radio"
+					name="act" value="1"> <span class="check"></span> <span
+					class="caption">Add Courses For Teachers</span>
+				</label>
+			</div>
 			<div class="input-control file" data-role="input">
 				<input type="file" name="file"
 					accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
@@ -164,37 +192,39 @@ h3 {
 				</button>
 			</div>
 			<button class="button" id="btn-add-file"
-				style="display: inline-block">ADD</button>
+				style="display: inline-block" style="width:100%;">ADD</button>
 		</form>
 	</div>
-	<div id="dialog-edit-course" data-role="dialog" class="padding20"
+
+
+	<div id="dialog-edit-teacher" data-role="dialog" class="padding20"
 		data-overlay="true" data-overlay-color="op-dark">
-		<h3 id="title">Edit Course</h3>
-		<form id="form-edit-course" style="width: 400px; margin: 0 auto;"
+		<h3 id="title">Edit Teacher</h3>
+		<form id="form-edit-teacher" style="width: 400px; margin: 0 auto;"
 			method="post">
-			<table id="table-edit-course" class="table">
+			<table id="table-edit-teachers" class="table">
 				<thead>
 					<tr style="display: none">
-						<td><input type="text" id="courseId" name="courseId"/></td>
-						<td><input type="text" id="courseSemesterId"
-							name="courseSemesterId" /></td>
+						<td><input type="text" id="teacherId" name="teacherId" /></td>
+						<td><input type="text" id="teacherSemesterId"
+							name="teacherSemesterId" /></td>
 					</tr>
 					<tr>
-						<th>Course</th>
+						<th>Teacher</th>
 						<td><div class="input-control text" style="width: 100%">
-								<input type="text" id="courseName" name="name"/>
+								<input type="text" id="name" name="name" />
 							</div></td>
 					</tr>
 					<tr>
-						<th>Code</th>
+						<th>Account</th>
 						<td><div class="input-control text" style="width: 100%">
-								<input type="text" id="courseCode" name="code"/>
+								<input type="text" id="account" name="account" />
 							</div></td>
 					</tr>
 					<tr>
-						<th>Slots</th>
+						<th>E-mail</th>
 						<td><div class="input-control number" style="width: 100%">
-								<input type="number" id="slots" name="slots" />
+								<input type="text" id="email" name="email" />
 							</div></td>
 					</tr>
 					<tr>
@@ -210,33 +240,22 @@ h3 {
 							</div></td>
 					</tr>
 					<tr>
-						<th>Department</th>
+						<th>Courses</th>
 						<td>
-							<div class="input-control select" style="width: 100%">
-								<select id="select-department-edit" name="departmentId">
-									<c:if test="${!empty listDepartments}">
-										<c:forEach items="${listDepartments}" var="department">
-											<option value="${department.departmentId}">${department.name}</option>
+							<div class="input-control text-aria" style="width:100%">
+								<textarea rows="2" cols="1" id="courses-selected" disabled></textarea>
+							</div>
+							<div class="input-control select multiple full-size"
+								style="height: 100px">
+								<select id="select-courses" name="courses" multiple>
+									<c:if test="${!empty listCourseSemesters}">
+										<c:forEach items="${listCourseSemesters}" var="courseSemester">
+											<option value="${courseSemester.course.courseId}">${courseSemester.course.code}</option>
 										</c:forEach>
 									</c:if>
 								</select>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<th>Course Condition</th>
-						<td>
-							<div class="input-control select" style="width: 100%">
-								<select id="select-course-condition-edit"
-									name="courseConditionId">
-									<option value="0">...</option>
-									<c:if test="${!empty listCourses}">
-										<c:forEach items="${listCourses}" var="course">
-											<option value="${course.courseId}">${course.name}</option>
-										</c:forEach>
-									</c:if>
-								</select>
-							</div>
+							</div> <font style="width: 100%; font-size: 0.7rem">(Ctrl +
+								right click to select multiple courses)</font>
 						</td>
 					</tr>
 				</thead>
@@ -247,56 +266,44 @@ h3 {
 			<button class="button" id="btn-edit-cancel">CANCEL</button>
 		</div>
 	</div>
-	<div id="dialog-add-course" data-role="dialog" class="padding20"
+	<div id="dialog-add-teacher" data-role="dialog" class="padding20"
 		data-overlay="true" data-overlay-color="op-dark">
-		<h3 id="title">Add Course</h3>
-		<form id="form-add-course" style="width: 400px; margin: 0 auto;"
+		<h3 id="title">Add Teacher</h3>
+		<form id="form-add-teacher" style="width: 400px; margin: 0 auto;"
 			method="post">
-			<table id="table-add-courses" class="table">
+			<table id="table-add-teachers" class="table">
 				<thead>
 					<tr style="display: none">
-						<td><input type="text" id="courseId" name="courseId" /></td>
-						<td><input type="text" id="courseSemesterId"
-							name="courseSemesterId" /></td>
+						<td><input type="text" id="teacherId" name="teacherId" /></td>
+						<td><input type="text" id="teacherSemesterId"
+							name="teacherSemesterId" /></td>
 					</tr>
 					<tr>
-						<th>Course</th>
+						<th>Teacher</th>
 						<td><div class="input-control text" style="width: 100%">
-								<input type="text" id="courseName" name="name" readonly disabled />
+								<input type="text" id="name" name="name" />
 							</div></td>
 					</tr>
 					<tr>
-						<th>Code</th>
+						<th>Account</th>
 						<td><div class="input-control text" style="width: 100%">
-								<input type="text" id="courseCode" name="code" readonly disabled />
+								<input type="text" id="account" name="account" />
 							</div></td>
 					</tr>
 					<tr>
-						<th>Slots</th>
+						<th>E-mail</th>
 						<td><div class="input-control number" style="width: 100%">
-								<input type="number" id="slots" name="slots" />
+								<input type="text" id="email" name="email" />
 							</div></td>
 					</tr>
 					<tr>
 						<th>Semester</th>
-						<td><div class="input-control select" style="width: 100%">
-								<select id="select-semester-edit" name="semesterId">
+						<td>
+							<div class="input-control select" style="width: 100%">
+								<select id="select-semester-add" name="semesterId">
 									<c:if test="${!empty listSemesters}">
 										<c:forEach items="${listSemesters}" var="semester">
 											<option value="${semester.semesterId}">${semester.name}</option>
-										</c:forEach>
-									</c:if>
-								</select>
-							</div></td>
-					</tr>
-					<tr>
-						<th>Department</th>
-						<td>
-							<div class="input-control select" style="width: 100%">
-								<select id="select-department-add" name="departmentId">
-									<c:if test="${!empty listDepartments}">
-										<c:forEach items="${listDepartments}" var="department">
-											<option value="${department.departmentId}">${department.name}</option>
 										</c:forEach>
 									</c:if>
 								</select>
@@ -304,19 +311,22 @@ h3 {
 						</td>
 					</tr>
 					<tr>
-						<th>Course Condition</th>
+						<th>Courses</th>
 						<td>
-							<div class="input-control select" style="width: 100%">
-								<select id="select-course-condition-add"
-									name="courseConditionId">
-									<option value="0">...</option>
-									<c:if test="${!empty listCourses}">
-										<c:forEach items="${listCourses}" var="course">
-											<option value="${course.courseId}">${course.name}</option>
+							<div class="input-control text-aria" style="width:100%">
+								<textarea rows="2" cols="1" id="courses-selected" disabled></textarea>
+							</div>
+							<div class="input-control select multiple full-size"
+								style="height: 100px">
+								<select id="select-courses" name="courses" multiple>
+									<c:if test="${!empty listCourseSemesters}">
+										<c:forEach items="${listCourseSemesters}" var="courseSemester">
+											<option value="${courseSemester.course.courseId}">${courseSemester.course.code}</option>
 										</c:forEach>
 									</c:if>
 								</select>
-							</div>
+							</div> <font style="width: 100%; font-size: 0.7rem">(Ctrl +
+								right click to select multiple courses)</font>
 						</td>
 					</tr>
 				</thead>

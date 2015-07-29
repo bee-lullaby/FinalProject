@@ -1043,6 +1043,7 @@ span {
 }
 .bg-hover-dark:hover {
   background: #333333 !important;
+  color: #fff;
 }
 .bg-hover-darker:hover {
   background: #222222 !important;
@@ -9696,6 +9697,8 @@ input[type="submit"].dropdown-toggle.drop-marker-light:after {
   font-size: 42px;
   line-height: 1.1;
 }
+
+
 .tile-area-scheme-dark {
   background-color: #1d1d1d !important;
 }
@@ -13259,7 +13262,7 @@ p [data-hint] {
   padding: 5px;
   background-color: #eeeeee;
   font-size: .875rem;
-  float: left;
+  float: right;
   vertical-align: top;
 }
 .dataTables_length {

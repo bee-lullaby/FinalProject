@@ -2,7 +2,7 @@ $(document).ready(function() {
 
 	_init();
 	
-	$("a[id^='edit-course']").on("click", function() {
+	$("#table-courses").on("click", "a[id^='edit-course']",function() {
 		_setDialogEditData($("#dialog-edit-course"), $(this).closest("tr"));
 		$("#dialog-edit-course").attr("data-action", "edit");
 		_showDialog("dialog-edit-course");
@@ -51,11 +51,6 @@ $(document).ready(function() {
 			"paging": false,
 			"info": false
 	    });
-		var info = table.page.info();
-		
-		if($("#table-courses tbody tr").length > 0) {
-			$("#table-info").text("Showing 1 to " +info.end +" of " +info.end +" entries");
-		}
 		
 		$("#select-semester").find("a[id='" +_urlParam("semesterId") +"']").addClass("active");
 		

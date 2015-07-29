@@ -80,10 +80,10 @@ h3 {
 	background-color: #ffffff;
 }
 </style>
-<body style="margin-bottom: 50px;">
+<body>
 	<div style="width: 80%; margin: 0 auto;">
 		<h1>
-			<a href="index.html" class="nav-button transform"><span></span></a>
+			<a href="/Timetabling/staff" class="nav-button transform"><span></span></a>
 			&nbsp;Courses Management
 		</h1>
 		<div style="display: flex">
@@ -112,7 +112,6 @@ h3 {
 					</div>
 				</div>
 				<div style="width: 100%; height: 100%;">
-					<div id="table-info" style="float: left; margin-top: 20px;"></div>
 					<table id="table-courses"
 						class="table striped hovered border bordered cell-hovered">
 						<thead>
