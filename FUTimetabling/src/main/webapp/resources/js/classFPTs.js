@@ -1,7 +1,7 @@
 $(document).ready(function() { 
 
 	_init();
-	$("a[id^='edit-class']").on("click", function() {
+	$("#table-classes").on("click", "#a[id^='edit-class']", function() {
 		_setDialogEditData($("#dialog-edit-class"), $(this).closest("tr"));
 		_showDialog("dialog-edit-class");
 	});
@@ -52,8 +52,9 @@ $(document).ready(function() {
 		var table = $('#table-classes').DataTable({
 			"lengthChange": false,
 			"searching": true,
-			"paging": false,
-			"info": true
+			"paging": true,
+			"info": true,
+			"pageLength":30
 	    });
 		
 		$("#select-semester").find("a[id='" +_urlParam("semesterId") +"']").addClass("active");

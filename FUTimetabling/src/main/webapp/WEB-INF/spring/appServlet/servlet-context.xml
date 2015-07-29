@@ -40,7 +40,15 @@
 	</beans:bean>
 	<interceptors>
 		<interceptor>
-			<mapping path="/*" />
+			<mapping path="/staff/**" />
+			<beans:bean class="vn.edu.fpt.timetabling.Interceptor" />
+		</interceptor>
+		<interceptor>
+			<mapping path="/studentPage/**" />
+			<beans:bean class="vn.edu.fpt.timetabling.Interceptor" />
+		</interceptor>
+		<interceptor>
+			<mapping path="/teacherPage/**" />
 			<beans:bean class="vn.edu.fpt.timetabling.Interceptor" />
 		</interceptor>
 	</interceptors>

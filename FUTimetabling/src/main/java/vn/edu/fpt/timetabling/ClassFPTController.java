@@ -188,11 +188,13 @@ public class ClassFPTController extends GeneralController {
 					@RequestParam("semesterId") int semesterId, HttpServletRequest request) {
 		
 		if (!file.isEmpty()) {
-			File teachers = new File("D:\\FU\\Do an tot nghiep\\Data\\ServerData\\" + file.getOriginalFilename());
+			File classSemesters = new File("D:\\FU\\Do an tot nghiep\\Data\\ServerData\\" + file.getOriginalFilename());
 			try {
-				file.transferTo(teachers);
+				file.transferTo(classSemesters);
 				if(act == 0) {
+					classSemesterService.addClassSemesterFromFile(classSemesters, semesterId);
 				} else if (act == 1) {
+					classCourseSemesterService.addClassCourseSemesterFromFile(classSemesters, semesterId);
 				}
 			} catch (IllegalStateException e) {
 				// TODO Auto-generated catch block

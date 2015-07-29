@@ -2,7 +2,7 @@ $(document).ready(function() {
 
 	_init();
 	
-	$("#table-courses").on("click", "a[id^='edit-course']",function() {
+	$("#table-courses").on("click", "a[id^='edit-course']", function() {
 		_setDialogEditData($("#dialog-edit-course"), $(this).closest("tr"));
 		$("#dialog-edit-course").attr("data-action", "edit");
 		_showDialog("dialog-edit-course");
@@ -48,8 +48,9 @@ $(document).ready(function() {
 		var table = $('#table-courses').DataTable({
 			"lengthChange": false,
 			"searching": true,
-			"paging": false,
-			"info": false
+			"paging": true,
+			"info": true,
+			"pageLength": 30
 	    });
 		
 		$("#select-semester").find("a[id='" +_urlParam("semesterId") +"']").addClass("active");

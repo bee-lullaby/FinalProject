@@ -2,13 +2,6 @@ $(document).ready(function() {
 
 	_init();
 	
-//	$("#table-students tr td").on("click", function() {
-//		alert("123");
-//		_setDialogEditData($("#dialog-edit-student"), $(this).closest("tr"));
-//		$("#dialog-edit-student").attr("data-action", "edit");
-//		_showDialog("dialog-edit-student");
-//	});
-	
 	$("#table-students").on("click", "a[id^='edit-student']", function() {
 		_setDialogEditData($("#dialog-edit-student"), $(this).closest("tr"));
 		$("#dialog-edit-student").attr("data-action", "edit");

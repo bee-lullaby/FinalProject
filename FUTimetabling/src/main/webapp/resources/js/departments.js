@@ -2,7 +2,7 @@ $(document).ready(function() {
 
 	_init();
 	
-	$("a[id^='edit-department']").on("click", function() {
+	$("#table-departments").on("click", "a[id^='edit-department']", function() {
 		_setDialogEditData($("#dialog-edit-department"), $(this).closest("tr"));
 		_showDialog("dialog-edit-department");
 	});
@@ -47,7 +47,7 @@ $(document).ready(function() {
 			"lengthChange": false,
 			"searching": true,
 			"paging": false,
-			"info": false
+			"info": true
 	    });
 		
 	}

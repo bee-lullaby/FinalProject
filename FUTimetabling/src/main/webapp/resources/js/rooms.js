@@ -2,7 +2,7 @@ $(document).ready(function() {
 
 	_init();
 	
-	$("a[id^='edit-room']").on("click", function() {
+	$("#table-rooms").on("click", "a[id^='edit-room']", function() {
 		_setDialogEditData($("#dialog-edit-room"), $(this).closest("tr"));
 		$("#dialog-edit-room").attr("data-action", "edit");
 		_showDialog("dialog-edit-room");
@@ -47,8 +47,9 @@ $(document).ready(function() {
 		var table = $('#table-rooms').DataTable({
 			"lengthChange": false,
 			"searching": true,
-			"paging": false,
-			"info": true
+			"paging": true,
+			"info": true,
+			"pageLength": 30
 	    });
 		$("#select-semester").find("a[id='" +_urlParam("semesterId") +"']").addClass("active");
 		

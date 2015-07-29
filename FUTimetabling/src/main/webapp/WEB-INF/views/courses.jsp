@@ -81,7 +81,7 @@ h3 {
 }
 </style>
 <body>
-	<div style="width: 80%; margin: 0 auto;">
+	<div style="width: 80%; margin: 0 auto; padding-bottom: 50px;">
 		<h1>
 			<a href="/Timetabling/staff" class="nav-button transform"><span></span></a>
 			&nbsp;Courses Management

@@ -58,12 +58,13 @@ public class TeacherSemesterServiceImpl implements TeacherSemesterService {
 			String account = row.getCell(0).getStringCellValue();
 			String name = row.getCell(1).getStringCellValue();
 			String email = row.getCell(2).getStringCellValue();
-			
+			String accountType = row.getCell(3).getStringCellValue();
 			if(teacherService.getTeacherByAccount(account) == null) {
 				Teacher teacher = new Teacher();
 				teacher.setAccount(account);
 				teacher.setName(name);
 				teacher.setEmail(email);
+				teacher.setAccountType(accountType);
 				teacherService.addTeacher(teacher);
 			}
 			

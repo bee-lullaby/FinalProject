@@ -81,12 +81,12 @@ h3 {
 }
 </style>
 <body>
-	<div style="width: 80%; margin: 0 auto;">
+	<div style="width: 80%; margin: 0 auto; padding: 30px;">
 		<h1>
 			<a href="/Timetabling/staff" class="nav-button transform"><span></span></a>
 			&nbsp;Rooms Management
 		</h1>
-		<div style="display: inline-block; margin-left: 25px">
+		<div style="display: inline-block; margin-left: 25px; width: 100%;">
 			<div id="control-bar" style="width: 100%; margin-bottom: 45px;">
 				<div style="width: auto; float: right">
 					<button id="btn-add-room" class="button" data-role="hint"
