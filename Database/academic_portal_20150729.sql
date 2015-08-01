@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 29, 2015 at 06:03 PM
+-- Generation Time: Aug 01, 2015 at 07:08 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -21,6 +21,26 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS `academic_portal` DEFAULT CHARACTER SET utf8 COLLATE utf8_vietnamese_ci;
 USE `academic_portal`;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `buildings`
+--
+
+DROP TABLE IF EXISTS `buildings`;
+CREATE TABLE IF NOT EXISTS `buildings` (
+`building_id` int(11) NOT NULL,
+  `building_code` varchar(11) COLLATE utf8_vietnamese_ci NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_vietnamese_ci;
+
+--
+-- Dumping data for table `buildings`
+--
+
+INSERT INTO `buildings` (`building_id`, `building_code`) VALUES
+(1, 'GD'),
+(2, 'HB');
 
 -- --------------------------------------------------------
 
@@ -467,6 +487,19 @@ INSERT INTO `class_course_semester` (`class_course_semester_id`, `class_semester
 (318, 80, 115, 0, 1),
 (319, 80, 91, 0, 1),
 (320, 80, 132, 0, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `class_course_semester_merge`
+--
+
+DROP TABLE IF EXISTS `class_course_semester_merge`;
+CREATE TABLE IF NOT EXISTS `class_course_semester_merge` (
+`class_course_semester_merge_id` int(11) NOT NULL,
+  `class_course_semester_id_1` int(11) NOT NULL,
+  `class_course_semester_id_2` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_vietnamese_ci;
 
 -- --------------------------------------------------------
 
@@ -1015,63 +1048,64 @@ CREATE TABLE IF NOT EXISTS `rooms` (
 `room_id` int(11) NOT NULL,
   `code` varchar(20) NOT NULL,
   `courses` varchar(100) DEFAULT NULL,
-  `capacity` int(11) NOT NULL
+  `capacity` int(11) NOT NULL,
+  `building_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `rooms`
 --
 
-INSERT INTO `rooms` (`room_id`, `code`, `courses`, `capacity`) VALUES
-(1, 'P201', 'SSG101, SSC102, SSC101', 30),
-(2, 'P202', 'SSG101, SSC102, SSC101', 30),
-(3, 'P203', 'SSG101, SSC102, SSC101', 30),
-(4, 'P204', NULL, 30),
-(5, 'P205', NULL, 30),
-(6, 'P209', NULL, 30),
-(7, 'P211', NULL, 30),
-(8, 'P212', NULL, 30),
-(9, 'P215', NULL, 30),
-(10, 'P216', NULL, 30),
-(11, 'P217', NULL, 30),
-(12, 'P218', NULL, 30),
-(13, 'P219', NULL, 30),
-(14, 'P220', NULL, 30),
-(15, 'P221', NULL, 30),
-(16, 'P301', NULL, 30),
-(17, 'P302', NULL, 30),
-(18, 'P303', NULL, 30),
-(19, 'P304', NULL, 30),
-(20, 'P305', NULL, 30),
-(21, 'P306', NULL, 30),
-(22, 'P307', NULL, 30),
-(23, 'P308', NULL, 30),
-(24, 'P309', NULL, 30),
-(25, 'P310', NULL, 30),
-(26, 'P311', NULL, 31),
-(27, 'P312', NULL, 32),
-(28, 'P313', NULL, 30),
-(29, 'P314', NULL, 30),
-(30, 'P315', NULL, 30),
-(31, 'P316', NULL, 30),
-(32, 'P317', NULL, 30),
-(33, 'P318', NULL, 30),
-(34, 'P319', NULL, 30),
-(35, 'P320', NULL, 31),
-(36, 'P321', NULL, 0),
-(37, 'P411', NULL, 32),
-(38, 'HB/201L', NULL, 33),
-(39, 'HB/203L', NULL, 30),
-(40, 'HB/204L', NULL, 30),
-(41, 'HB/205L', NULL, 30),
-(42, 'HB/206L', NULL, 30),
-(43, 'HB/207L', NULL, 30),
-(44, 'HB/301R', NULL, 30),
-(45, 'HB/302R', NULL, 30),
-(46, 'HB/303R-305R', NULL, 70),
-(47, 'HB/304R', NULL, 30),
-(48, 'HB/307R', NULL, 30),
-(49, 'HB/309R', NULL, 30);
+INSERT INTO `rooms` (`room_id`, `code`, `courses`, `capacity`, `building_id`) VALUES
+(1, 'P201', 'SSG101, SSC102, SSC101', 30, 1),
+(2, 'P202', 'SSG101, SSC102, SSC101', 30, 1),
+(3, 'P203', 'SSG101, SSC102, SSC101', 30, 1),
+(4, 'P204', NULL, 30, 1),
+(5, 'P205', NULL, 30, 1),
+(6, 'P209', NULL, 30, 1),
+(7, 'P211', NULL, 30, 1),
+(8, 'P212', NULL, 30, 1),
+(9, 'P215', NULL, 30, 1),
+(10, 'P216', NULL, 30, 1),
+(11, 'P217', NULL, 30, 1),
+(12, 'P218', NULL, 30, 1),
+(13, 'P219', NULL, 30, 1),
+(14, 'P220', NULL, 30, 1),
+(15, 'P221', NULL, 30, 1),
+(16, 'P301', NULL, 30, 1),
+(17, 'P302', NULL, 30, 1),
+(18, 'P303', NULL, 30, 1),
+(19, 'P304', NULL, 30, 1),
+(20, 'P305', NULL, 30, 1),
+(21, 'P306', NULL, 30, 1),
+(22, 'P307', NULL, 30, 1),
+(23, 'P308', NULL, 30, 1),
+(24, 'P309', NULL, 30, 1),
+(25, 'P310', NULL, 30, 1),
+(26, 'P311', NULL, 31, 1),
+(27, 'P312', NULL, 32, 1),
+(28, 'P313', NULL, 30, 1),
+(29, 'P314', NULL, 30, 1),
+(30, 'P315', NULL, 30, 1),
+(31, 'P316', NULL, 30, 1),
+(32, 'P317', NULL, 30, 1),
+(33, 'P318', NULL, 30, 1),
+(34, 'P319', NULL, 30, 1),
+(35, 'P320', NULL, 31, 1),
+(36, 'P321', NULL, 0, 1),
+(37, 'P411', NULL, 32, 1),
+(38, 'HB/201L', NULL, 33, 1),
+(39, 'HB/203L', NULL, 30, 1),
+(40, 'HB/204L', NULL, 30, 1),
+(41, 'HB/205L', NULL, 30, 1),
+(42, 'HB/206L', NULL, 30, 1),
+(43, 'HB/207L', NULL, 30, 1),
+(44, 'HB/301R', NULL, 30, 1),
+(45, 'HB/302R', NULL, 30, 1),
+(46, 'HB/303R-305R', NULL, 70, 1),
+(47, 'HB/304R', NULL, 30, 1),
+(48, 'HB/307R', NULL, 30, 1),
+(49, 'HB/309R', NULL, 30, 1);
 
 -- --------------------------------------------------------
 
@@ -1120,17 +1154,18 @@ DROP TABLE IF EXISTS `staff`;
 CREATE TABLE IF NOT EXISTS `staff` (
 `staff_id` int(11) NOT NULL,
   `account` varchar(20) NOT NULL,
-  `name` varchar(100) NOT NULL,
+  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_vietnamese_ci NOT NULL,
   `email` varchar(50) NOT NULL,
   `account_type` varchar(20) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `staff`
 --
 
 INSERT INTO `staff` (`staff_id`, `account`, `name`, `email`, `account_type`) VALUES
-(1, 'hansse02618', 'HaNS', 'hansse02618@fpt.edu.vn', 'staff');
+(1, 'hansse02618', 'HaNS', 'hansse02618@fpt.edu.vn', 'staff'),
+(2, 'duchmse02551', 'Hoàng Minh Đức', 'duchmse02551@fpt.edu.vn', 'staff');
 
 -- --------------------------------------------------------
 
@@ -1178,7 +1213,7 @@ DROP TABLE IF EXISTS `teachers`;
 CREATE TABLE IF NOT EXISTS `teachers` (
 `teacher_id` int(11) NOT NULL,
   `account` varchar(20) NOT NULL,
-  `name` varchar(100) NOT NULL,
+  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_vietnamese_ci NOT NULL,
   `email` varchar(50) NOT NULL,
   `account_type` varchar(20) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=latin1;
@@ -1943,6 +1978,12 @@ CREATE TABLE IF NOT EXISTS `time_table` (
 --
 
 --
+-- Indexes for table `buildings`
+--
+ALTER TABLE `buildings`
+ ADD PRIMARY KEY (`building_id`);
+
+--
 -- Indexes for table `classes`
 --
 ALTER TABLE `classes`
@@ -1953,6 +1994,12 @@ ALTER TABLE `classes`
 --
 ALTER TABLE `class_course_semester`
  ADD PRIMARY KEY (`class_course_semester_id`), ADD UNIQUE KEY `class_course_semester_idx` (`class_semester_id`,`course_semester_id`), ADD KEY `class_semester_id` (`class_semester_id`), ADD KEY `course_semester_id` (`course_semester_id`);
+
+--
+-- Indexes for table `class_course_semester_merge`
+--
+ALTER TABLE `class_course_semester_merge`
+ ADD PRIMARY KEY (`class_course_semester_merge_id`), ADD KEY `class_course_semester_id_1` (`class_course_semester_id_1`), ADD KEY `class_course_semester_id_2` (`class_course_semester_id_2`);
 
 --
 -- Indexes for table `class_course_student_semester`
@@ -2006,7 +2053,7 @@ ALTER TABLE `program_semester_detail`
 -- Indexes for table `rooms`
 --
 ALTER TABLE `rooms`
- ADD PRIMARY KEY (`room_id`), ADD UNIQUE KEY `code` (`code`);
+ ADD PRIMARY KEY (`room_id`), ADD UNIQUE KEY `code` (`code`), ADD KEY `building_id` (`building_id`);
 
 --
 -- Indexes for table `semesters`
@@ -2067,6 +2114,11 @@ ALTER TABLE `time_table`
 --
 
 --
+-- AUTO_INCREMENT for table `buildings`
+--
+ALTER TABLE `buildings`
+MODIFY `building_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+--
 -- AUTO_INCREMENT for table `classes`
 --
 ALTER TABLE `classes`
@@ -2076,6 +2128,11 @@ MODIFY `class_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=84;
 --
 ALTER TABLE `class_course_semester`
 MODIFY `class_course_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=321;
+--
+-- AUTO_INCREMENT for table `class_course_semester_merge`
+--
+ALTER TABLE `class_course_semester_merge`
+MODIFY `class_course_semester_merge_id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `class_course_student_semester`
 --
@@ -2135,7 +2192,7 @@ MODIFY `specialized_id` int(11) NOT NULL AUTO_INCREMENT;
 -- AUTO_INCREMENT for table `staff`
 --
 ALTER TABLE `staff`
-MODIFY `staff_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+MODIFY `staff_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `students`
 --
@@ -2184,6 +2241,13 @@ ADD CONSTRAINT `classes_ibfk_3` FOREIGN KEY (`detail_specialized_id`) REFERENCES
 ALTER TABLE `class_course_semester`
 ADD CONSTRAINT `class_course_semester_ibfk_1` FOREIGN KEY (`class_semester_id`) REFERENCES `class_semester` (`class_semester_id`),
 ADD CONSTRAINT `class_course_semester_ibfk_2` FOREIGN KEY (`course_semester_id`) REFERENCES `course_semester` (`course_semester_id`);
+
+--
+-- Constraints for table `class_course_semester_merge`
+--
+ALTER TABLE `class_course_semester_merge`
+ADD CONSTRAINT `class_course_semester_merge_ibfk_1` FOREIGN KEY (`class_course_semester_id_1`) REFERENCES `class_course_semester` (`class_course_semester_id`),
+ADD CONSTRAINT `class_course_semester_merge_ibfk_2` FOREIGN KEY (`class_course_semester_id_2`) REFERENCES `class_course_semester` (`class_course_semester_id`);
 
 --
 -- Constraints for table `class_course_student_semester`
@@ -2235,6 +2299,12 @@ ADD CONSTRAINT `program_semester_ibfk_3` FOREIGN KEY (`detail_specialized_id`) R
 ALTER TABLE `program_semester_detail`
 ADD CONSTRAINT `program_semester_detail_ibfk_1` FOREIGN KEY (`program_semester_id`) REFERENCES `program_semester` (`program_semester_id`),
 ADD CONSTRAINT `program_semester_detail_ibfk_2` FOREIGN KEY (`course_semester_id`) REFERENCES `course_semester` (`course_semester_id`);
+
+--
+-- Constraints for table `rooms`
+--
+ALTER TABLE `rooms`
+ADD CONSTRAINT `rooms_ibfk_1` FOREIGN KEY (`building_id`) REFERENCES `buildings` (`building_id`);
 
 --
 -- Constraints for table `students`

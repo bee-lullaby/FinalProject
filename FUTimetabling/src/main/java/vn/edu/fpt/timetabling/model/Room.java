@@ -10,6 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
@@ -32,9 +34,21 @@ public class Room {
 	@Column(name = "capacity")
 	private int capacity;
 
+	@ManyToOne
+	@JoinColumn(name = "building_id")
+	private Building building;
+
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "room", orphanRemoval = true)
 	@OrderBy
 	Set<Timetable> timetables = new LinkedHashSet<Timetable>();
+
+	public Building getBuilding() {
+		return building;
+	}
+
+	public void setBuilding(Building building) {
+		this.building = building;
+	}
 
 	/**
 	 * 
@@ -139,8 +153,7 @@ public class Room {
 	 */
 	@Override
 	public String toString() {
-		return "Room [roomId=" + roomId + ", code=" + code + ", classes="
-				+ courses + ", capacity=" + capacity + "]";
+		return "Room [roomId=" + roomId + ", code=" + code + ", classes=" + courses + ", capacity=" + capacity + "]";
 	}
 
 	/*

@@ -24,5 +24,5 @@ public interface ScheduleService {
 
 	public boolean generateFromPreviousWeek(int semesterId, int classId, int week);
 
-	public void autoSchedule();
+	public void autoSchedule(int semesterId);
 }

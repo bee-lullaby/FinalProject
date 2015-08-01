@@ -136,7 +136,7 @@ public class ScheduleController extends GeneralController {
 
 	@RequestMapping(value = "/staff/schedule/auto", method = RequestMethod.GET)
 	public String autoSchedule(@RequestParam(value = "semesterId", required = true) int semesterId, Model model) {
-		scheduleService.autoSchedule();
+		scheduleService.autoSchedule(semesterId);
 		return "redirect:/staff/schedule?semesterId=" + semesterId;
 	}
 }

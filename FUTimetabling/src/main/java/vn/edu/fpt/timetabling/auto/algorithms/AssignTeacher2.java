@@ -36,7 +36,7 @@ import vn.edu.fpt.timetabling.auto.entities.Teacher;
 import vn.edu.fpt.timetabling.auto.userdefinefunction.AtMostOneInTwo;
 
 public class AssignTeacher2 {
-	public DataCenter DA;
+	DataCenter DA;
 	CPSolver solver;
 	CPModel model;
 	IntegerVariable[] x; // x[i] = a: the a'th teacher will teach class-course i
@@ -49,7 +49,7 @@ public class AssignTeacher2 {
 	int[][] teacherCourse = new int[][] { { 1, 1, 0, 0 }, { 1, 0, 1, 1 }, { 0, 1, 0, 1 } };
 	int[][] courseTeacher = new int[][] { { 1, 1, 0 }, { 1, 0, 1 }, { 0, 1, 0 }, { 0, 1, 1 } };
 
-	public HashMap<Teacher, ArrayList<ClassCourse>> mTeacher2AssignedClassCourseList;
+	public HashMap<Teacher, ArrayList<ClassCourse>> mTeacher2NBCourse;
 	// public HashMap<Teacher, ArrayList<ClassCourse>>
 	// mTeacher2AssignedClassCourse;
 	// public HashMap<Course, ArrayList<Teacher>> mClassCourse2AssignedTeacher;
@@ -59,8 +59,8 @@ public class AssignTeacher2 {
 	public int[] aClassCourse2Day;
 	public int[] aClassCourse2Block;
 	public int[] aClassCourse2Noon;
-	public static final int LIMIT_NBSEARCHITERATION_LS = 400;
-	public static final int LIMIT_NBSEARCHITERATION_OLS = 400;
+	public static final int LIMIT_NBSEARCHITERATION_LS = 500;
+	public static final int LIMIT_NBSEARCHITERATION_OLS = 300;
 
 	IntegerVariable[][] x_cp;
 	IntegerExpressionVariable[] sum_cp;
@@ -163,7 +163,6 @@ public class AssignTeacher2 {
 		ls.close();
 	}
 
-	@SuppressWarnings("unchecked")
 	public void stateModel_LS() {
 		ls = new LocalSearchManager();
 		x_LS = new VarIntLS[nbCourse];
@@ -266,8 +265,28 @@ public class AssignTeacher2 {
 		ts.searchMaintainConstraints(objfunc, S, 100, 3000, LIMIT_NBSEARCHITERATION_OLS, 30);
 	}
 
+	public void completeMapClassCourse2AssignedTeacher() {
+		DA.mClassCourse2AssignedTeacher = new HashMap<>();
+		DA.mTeacher2AssignedClassCourse = new HashMap<>();
+		for (Teacher tc : DA.teachers) {
+			DA.mTeacher2AssignedClassCourse.put(tc, new ArrayList<>());
+		}
+
+		for (int ic = 0; ic < DA.nbClassCourse; ic++) {
+			for (int it = 0; it < DA.nbTeacher; it++) {
+				if (X[ic][it].getValue() == 1) {
+					ClassCourse cc = DA.classCourses[ic];
+					Teacher t = DA.teachers[it];
+					DA.mClassCourse2AssignedTeacher.put(cc, t);
+					DA.mTeacher2AssignedClassCourse.get(t).add(cc);
+					break; // tim thay teacher roi thi break
+				}
+				//
+			}
+		}
+	}
+
 	// //////////////////////////////////////////////////
-	@SuppressWarnings("unchecked")
 	public void stateModel_CP() {
 		x_cp = new IntegerVariable[nbTeacher][nbCourse];
 		sum_cp = new IntegerExpressionVariable[nbTeacher];
@@ -632,7 +651,6 @@ public class AssignTeacher2 {
 	public void printsolHTML2(String fn) {
 		DA.mTeacher2AssignedClassCourse = new HashMap<Teacher, ArrayList<ClassCourse>>();
 		DA.mCourse2AssignedTeacher = new HashMap<Course, ArrayList<Teacher>>();
-		DA.mClassCourse2AssignedTeacher = new HashMap<>();
 		// ArrayList<ClassCourse> NY = new ArrayList<ClassCourse>();
 		for (int t = 0; t < DA.nbTeacher; t++) {
 			Teacher tc = DA.teachers[t];
@@ -658,7 +676,6 @@ public class AssignTeacher2 {
 					} else {
 						System.out.println(cls.code + "-" + cc.code + ": " + tc.code);
 						DA.mTeacher2AssignedClassCourse.get(tc).add(cc);
-						DA.mClassCourse2AssignedTeacher.put(cc, tc);
 						Course co = DA.mClassCourse2Course.get(cc);
 						if (!DA.mCourse2AssignedTeacher.get(co).contains(tc)) {
 							DA.mCourse2AssignedTeacher.get(co).add(tc);
@@ -701,10 +718,9 @@ public class AssignTeacher2 {
 
 	public void printsolHTML(String fn) {
 		System.out.println("\n(x): la ghep sai, (*): mon hoc 2 blocks\n");
-		mTeacher2AssignedClassCourseList = new HashMap<Teacher, ArrayList<ClassCourse>>();
-		DA.mClassCourse2AssignedTeacher = new HashMap<>();
+		mTeacher2NBCourse = new HashMap<Teacher, ArrayList<ClassCourse>>();
 		for (int t = 0; t < DA.nbTeacher; t++) {
-			mTeacher2AssignedClassCourseList.put(DA.teachers[t], new ArrayList<ClassCourse>());
+			mTeacher2NBCourse.put(DA.teachers[t], new ArrayList<ClassCourse>());
 		}
 
 		try {
@@ -718,20 +734,18 @@ public class AssignTeacher2 {
 				int tIdx = x_LS[i].getValue();
 
 				Teacher tc = DA.teachers[tIdx];
-
+				mTeacher2NBCourse.get(tc).add(cc);
 				System.out.print(tc.ID + "-");
 				if (S.violations(x_LS[i]) > 0) {
 					System.out.println(tc.code + "(x)");
 				} else {
 					System.out.println(tc.code);
-					DA.mClassCourse2AssignedTeacher.put(cc, tc);
-					mTeacher2AssignedClassCourseList.get(tc).add(cc);
 				}
 			}
 
 			for (int t = 0; t < DA.nbTeacher; t++) {
 				Teacher tc = DA.teachers[t];
-				ArrayList<ClassCourse> L = mTeacher2AssignedClassCourseList.get(tc);
+				ArrayList<ClassCourse> L = mTeacher2NBCourse.get(tc);
 				System.out.print(tc.ID + "-" + tc.code + "-<" + L.size() + ">: ");
 				int wrong = 0;
 				for (ClassCourse clc : L) {
@@ -795,7 +809,7 @@ public class AssignTeacher2 {
 				out.print("<td height = 40 width = 80 ");
 				// String str = "";
 				if (T[i][j] >= 0) {
-					ClassCourse cc = DA.mID2ClassCourse_all.get(T[i][j]);
+					ClassCourse cc = DA.mID2ClassCourse.get(T[i][j]);
 					ClassFU cls = DA.mClassCourse2Class.get(cc);
 					Course c = DA.mClassCourse2Course.get(cc);
 					// str = c.code;
@@ -862,9 +876,9 @@ public class AssignTeacher2 {
 	}
 
 	public void printsolCP() {
-		mTeacher2AssignedClassCourseList = new HashMap<Teacher, ArrayList<ClassCourse>>();
+		mTeacher2NBCourse = new HashMap<Teacher, ArrayList<ClassCourse>>();
 		for (int t = 0; t < DA.nbTeacher; t++) {
-			mTeacher2AssignedClassCourseList.put(DA.teachers[t], new ArrayList<ClassCourse>());
+			mTeacher2NBCourse.put(DA.teachers[t], new ArrayList<ClassCourse>());
 		}
 
 		for (int i = 0; i < DA.nbClassCourse; i++) {
@@ -879,7 +893,7 @@ public class AssignTeacher2 {
 
 			if (tIdx != -1) {
 				Teacher tc = DA.teachers[tIdx];
-				mTeacher2AssignedClassCourseList.get(tc).add(cc);
+				mTeacher2NBCourse.get(tc).add(cc);
 				System.out.print(tc.ID + "-");
 				System.out.println(tc.code);
 			}
@@ -888,7 +902,7 @@ public class AssignTeacher2 {
 
 		for (int t = 0; t < DA.nbTeacher; t++) {
 			Teacher tc = DA.teachers[t];
-			ArrayList<ClassCourse> L = mTeacher2AssignedClassCourseList.get(tc);
+			ArrayList<ClassCourse> L = mTeacher2NBCourse.get(tc);
 			System.out.print(tc.ID + "-" + tc.code + "-<" + L.size() + ">: ");
 			for (ClassCourse clc : L) {
 				// int idx = DA.mClassCourseAll2Index.get(clc);
