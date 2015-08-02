@@ -39,7 +39,7 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public void addStudentsFromFile(int semesterId, File students) throws IOException {
+	public void addStudentsFromFile(File students) throws IOException {
 		FileInputStream file = new FileInputStream(students);
 		XSSFWorkbook workbook = new XSSFWorkbook(file);
 		XSSFSheet sheet = workbook.getSheetAt(0);
@@ -57,6 +57,7 @@ public class StudentServiceImpl implements StudentService {
 			if(s == null) {
 				s = new Student();
 			}				
+			System.out.println(studentCode);
 			s.setStudentCode(studentCode);
 			s.setName(name);
 			s.setAccount(account);

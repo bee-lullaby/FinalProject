@@ -32,7 +32,7 @@
 	</div>
 	<div style="width: 80%; margin: 0 auto;">
 		<h1>
-			<a href="index.html" class="nav-button transform"><span></span></a>
+			<a href="/Timetabling/staff/scheduleInfo" class="nav-button transform"><span></span></a>
 			&nbsp;Arrange Room - Semester ...
 		</h1>
 		<div style="width: 100%; padding: 15px; margin-left: 50px">

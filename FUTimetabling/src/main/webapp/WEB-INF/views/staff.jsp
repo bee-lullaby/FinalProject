@@ -160,7 +160,7 @@
 				<span class="sub-header no-margin text-light">You are logged
 					in as ${accountType}</span> <span class="icon mif-user"></span>
 			</button>
-			<a href="../tiles.html"
+			<a href="/Timetabling/logout"
 				class="square-button bg-transparent bg-hover-dark no-border"> <span
 				class="mif-switch"></span>
 			</a>
@@ -191,7 +191,7 @@
 					</div>
 					<span class="tile-label">Classes Arrangement</span>
 				</div>
-				<div class="tile-wide bg-olive fg-white" data-role="tile">
+				<div class="tile-wide bg-olive fg-white" data-role="tile" id="activity-schedule">
 					<div class="tile-content iconic">
 						<div class="icon flaticon-calendar130"></div>
 					</div>

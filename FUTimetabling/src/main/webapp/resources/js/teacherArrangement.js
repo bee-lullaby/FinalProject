@@ -129,6 +129,7 @@ $(document).ready(function() {
 						+coursesJSON[i].code +"</button>");
 			} 
 			$("#select-courses a[id='" +_urlParam("courseId") +"']").addClass("active");
+			$("#title-course").text($("#select-courses a[id='" +_urlParam("courseId") +"']").text());
 		}
 	}
 	

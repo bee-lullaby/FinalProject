@@ -10,7 +10,7 @@ import vn.edu.fpt.timetabling.model.Student;
 public interface StudentService {
 	public void addStudent(Student student);
 
-	public void addStudentsFromFile(int semesterId, File students) throws IOException;
+	public void addStudentsFromFile(File students) throws IOException;
 
 	public void updateStudent(Student student);
 

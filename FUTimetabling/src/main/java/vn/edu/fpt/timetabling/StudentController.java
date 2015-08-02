@@ -138,15 +138,14 @@ public class StudentController extends GeneralController {
 	}
 
 	@RequestMapping(value = "/staff/students/addFromFile", method = RequestMethod.POST)
-	public String addStudentFromFile(@RequestParam("file") MultipartFile file,
-			@RequestParam("semesterId") int semesterId, HttpServletRequest request) {
+	public String addStudentFromFile(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
 		if (!file.isEmpty()) {
 			File students = new File(
 					"D:\\FU\\Do an tot nghiep\\Data\\ServerData\\"
 							+ file.getOriginalFilename());
 			try {
 				file.transferTo(students);
-				studentService.addStudentsFromFile(semesterId, students);
+				studentService.addStudentsFromFile(students);
 			} catch (IllegalStateException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

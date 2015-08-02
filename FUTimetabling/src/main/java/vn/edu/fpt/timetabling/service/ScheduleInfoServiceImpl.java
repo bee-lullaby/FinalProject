@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassSemester;
 
-public class ScheduleInforServiceImpl implements ScheduleInforService{
+@Service
+@Transactional(rollbackFor = Exception.class)
+public class ScheduleInfoServiceImpl implements ScheduleInfoService{
 	@Autowired
 	private ClassSemesterService classSemesterService;
 	
@@ -21,7 +25,10 @@ public class ScheduleInforServiceImpl implements ScheduleInforService{
 		
 		for(ClassSemester classSemester: classSemesters) {
 			for(ClassCourseSemester classCourseSemester: classSemester.getClassCourseSemesters()) {
-				if(classCourseSemester.getTimetable().size() < classCourseSemester.getCourseSemester().getSlots()) {
+				if(classCourseSemester.getTimetable() == null) {
+					result.add(classSemester);
+					break;
+				} else if(classCourseSemester.getTimetable().size() < classCourseSemester.getCourseSemester().getSlots()) {
 					result.add(classSemester);
 					break;
 				}

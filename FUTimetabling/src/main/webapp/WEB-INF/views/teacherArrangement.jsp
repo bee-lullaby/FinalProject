@@ -27,7 +27,6 @@
 <style>
 .left {
 	margin: 5px;
-	width: 250px;
 	height: auto;
 	text-align: center;
 }
@@ -80,10 +79,11 @@ h3 {
 			<input type="text" id="dataToSet" name="dataToSet" />
 		</form>
 	</div>
-	<div style="width: 80%; margin: 0 auto;">
+	<div style="width: 80%; margin: 0 auto; margin-bottom: 100px;">
 		<h2>
-			<a href="index.html" class="nav-button transform"><span></span></a>
-			&nbsp; Teacher Arrangement
+			<a href="/Timetabling/staff/scheduleInfo"
+				class="nav-button transform"><span></span></a> &nbsp; Teacher
+			Arrangement
 		</h2>
 		<div style="display: flex; margin-top: 30px;">
 			<div id="select-semesters" class="left" style="display: inline-block">
@@ -95,8 +95,7 @@ h3 {
 					</c:forEach>
 				</c:if>
 			</div>
-			<div style="display: inline-block" class="left">
-
+			<div style="display: inline-block; width: 250px;" class="left">
 				<h3>DEPARTMENTS</h3>
 				<div id="select-departments" style="height: 200px;">
 					<c:if test="${!empty listDepartments}">
@@ -105,39 +104,41 @@ h3 {
 						</c:forEach>
 					</c:if>
 				</div>
+
+			</div>
+			<div style="display: inline-block" class="left">
 				<h3>COURSES</h3>
 				<div id="select-courses" style="height: 200px;"></div>
 			</div>
+		</div>
+		<div
+			style="margin-left: 15px; margin-top: 50px; display: inline-block; width: 100%;">
+			<h3 id="title-course"></h3>
+			<div>
+				Number of Classes:&nbsp;
+				<button id="num-of-classes" class="button"></button>
+				Number of Teachers:&nbsp;
+				<button id="num-of-teachers" class="button"></button>
 
+				<button id="btn-submit" class="button" data-role="hint"
+					data-hint-background="#1CB7EC" data-hint-color="fg-white"
+					data-hint-position="top" data-hint="Submit" style="margin: 0;">
+					<span class="mif-download"></span>
+				</button>
+			</div>
+			<div style="width: 100%;">
+				<table id="table-classes" class="table border bordered hovered">
+					<thead>
+						<tr>
+							<th>Class</th>
+							<th>Class has conflict of timetable</th>
+							<th>Teacher</th>
+						</tr>
+					</thead>
+					<tbody>
 
-			<div class="left"
-				style="margin-left: 15px; display: inline-block; width: 100%;">
-				<div>
-					Number of Classes
-					<button id="num-of-classes" class="button"></button>
-					Number of Teachers
-					<button id="num-of-teachers" class="button"></button>
-
-					<button id="btn-submit" class="button" data-role="hint"
-						data-hint-background="#1CB7EC" data-hint-color="fg-white"
-						data-hint-position="top" data-hint="Submit" style="margin: 0;">
-						<span class="mif-download"></span>
-					</button>
-				</div>
-				<div style="width: 100%;">
-					<table id="table-classes" class="table border bordered hovered">
-						<thead>
-							<tr>
-								<th>Class</th>
-								<th>Class has conflict of timetable</th>
-								<th>Teacher</th>
-							</tr>
-						</thead>
-						<tbody>
-
-						</tbody>
-					</table>
-				</div>
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>

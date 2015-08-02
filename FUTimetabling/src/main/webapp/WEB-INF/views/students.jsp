@@ -92,7 +92,7 @@ h3 {
 				<div style="width: auto; float: right">
 					<button id="btn-add-student" class="button" data-role="hint"
 						data-hint-background="#1CB7EC" data-hint-color="fg-white"
-						data-hint-position="top" data-hint="Add Course">
+						data-hint-position="top" data-hint="Add Student">
 						<span class="mif-plus"></span>
 					</button>
 					<button id="btn-add-from-file" class="button" data-role="hint"

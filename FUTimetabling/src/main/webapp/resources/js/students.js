@@ -51,12 +51,6 @@ $(document).ready(function() {
 			"info": true
 	    });
 		
-		$("#select-semester").find("a[id='" +_urlParam("semesterId") +"']").addClass("active");
-		
-		var input = $("<input>").attr("type", "hidden")
-        						.attr("name", "semesterId").val(_urlParam("semesterId"));
-		$('#form-add-file').append($(input));
-		
 	}
 	
 	function _clearDialogData(dialog) {
