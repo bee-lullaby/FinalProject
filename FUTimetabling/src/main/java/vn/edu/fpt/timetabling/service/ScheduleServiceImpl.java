@@ -324,10 +324,12 @@ public class ScheduleServiceImpl implements ScheduleService {
 					+ course.getDepartment().getCode());
 		}
 		for (ClassCourseSemesterMerge classCourseSemesterMerge : classCourseSemesterMerges) {
-			mergeClassData.add(classCourseSemesterMerge.getClassCourseSemesterMergeId() + "|"
-					+ classCourseSemesterMerge.getClassCourseSemester1().getClassSemester().getClassFPT().getCode()
-					+ "|"
-					+ classCourseSemesterMerge.getClassCourseSemester2().getClassSemester().getClassFPT().getCode());
+			mergeClassData.add(
+					classCourseSemesterMerge.getClassCourseSemester1().getCourseSemester().getCourse().getCode() + "|"
+							+ classCourseSemesterMerge.getClassCourseSemester1().getClassSemester().getClassFPT()
+									.getCode()
+							+ "|" + classCourseSemesterMerge.getClassCourseSemester2().getClassSemester().getClassFPT()
+									.getCode());
 		}
 		DataCenter dataCenter = new DataCenter();
 		dataCenter.loadData_Department_v2(departmentData);
