@@ -102,6 +102,9 @@
 				</beans:value>
 				<beans:value>vn.edu.fpt.timetabling.model.ClassCourseStudentSemester
 				</beans:value>
+				<beans:value>vn.edu.fpt.timetabling.model.Building</beans:value>
+				<beans:value>vn.edu.fpt.timetabling.model.ClassCourseSemesterMerge
+				</beans:value>
 			</beans:list>
 		</beans:property>
 		<beans:property name="hibernateProperties">
@@ -197,6 +200,15 @@
 		<beans:property name="sessionFactory"
 			ref="hibernate4AnnotatedSessionFactory" />
 	</beans:bean>
+	<beans:bean id="buildingDAO" class="vn.edu.fpt.timetabling.dao.BuildingDAOImpl">
+		<beans:property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
+	<beans:bean id="classCourseSemesterMergeDAO"
+		class="vn.edu.fpt.timetabling.dao.ClassCourseSemesterMergeDAOImpl">
+		<beans:property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</beans:bean>
 	<!-- Service Beans -->
 	<beans:bean id="courseService"
 		class="vn.edu.fpt.timetabling.service.CourseServiceImpl">
@@ -273,6 +285,14 @@
 	<beans:bean id="roomService"
 		class="vn.edu.fpt.timetabling.service.RoomServiceImpl">
 		<beans:property name="roomDAO" ref="roomDAO"></beans:property>
+	</beans:bean>
+	<beans:bean id="buildingService"
+		class="vn.edu.fpt.timetabling.service.BuildingServiceImpl">
+		<beans:property name="buildingDAO" ref="buildingDAO"></beans:property>
+	</beans:bean>
+	<beans:bean id="classCourseSemesterMergeService"
+		class="vn.edu.fpt.timetabling.service.ClassCourseSemesterMergeServiceImpl">
+		<beans:property name="classCourseSemesterMergeDAO" ref="classCourseSemesterMergeDAO"></beans:property>
 	</beans:bean>
 	<beans:bean id="roomArrangementService"
 		class="vn.edu.fpt.timetabling.service.RoomArrangementServiceImpl">

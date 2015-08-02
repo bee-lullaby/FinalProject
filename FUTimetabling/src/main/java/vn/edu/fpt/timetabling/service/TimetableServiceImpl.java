@@ -25,8 +25,6 @@ public class TimetableServiceImpl implements TimetableService {
 	@Autowired
 	private ClassSemesterService classSemesterService;
 	@Autowired
-	private TeacherSemesterService teacherSemesterService;
-	@Autowired
 	private ClassCourseSemesterService classCourseSemesterService;
 
 	public void setTimetableDAO(TimetableDAO timetableDAO) {

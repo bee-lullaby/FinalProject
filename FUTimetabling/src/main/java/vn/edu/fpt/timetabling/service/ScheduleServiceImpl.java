@@ -14,17 +14,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import vn.edu.fpt.timetabling.auto.algorithms.AssignRoom;
-import vn.edu.fpt.timetabling.auto.algorithms.AssignTeacher2;
-import vn.edu.fpt.timetabling.auto.algorithms.MainApp;
-import vn.edu.fpt.timetabling.auto.algorithms.TimeTableAllClass;
 import vn.edu.fpt.timetabling.auto.entities.DataCenter;
-import vn.edu.fpt.timetabling.auto.entities.SingleSolution;
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
+import vn.edu.fpt.timetabling.model.ClassCourseSemesterMerge;
 import vn.edu.fpt.timetabling.model.ClassSemester;
+import vn.edu.fpt.timetabling.model.Course;
 import vn.edu.fpt.timetabling.model.CourseSemester;
 import vn.edu.fpt.timetabling.model.DataSchedule;
 import vn.edu.fpt.timetabling.model.DaySlot;
+import vn.edu.fpt.timetabling.model.Department;
 import vn.edu.fpt.timetabling.model.Room;
 import vn.edu.fpt.timetabling.model.Semester;
 import vn.edu.fpt.timetabling.model.TeacherCourseSemester;
@@ -42,6 +40,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 	private CourseSemesterService courseSemesterService;
 	@Autowired
 	private ClassCourseSemesterService classCourseSemesterService;
+	@Autowired
+	private ClassCourseSemesterMergeService classCourseSemesterMergeService;
 	@Autowired
 	private TimetableService timetableService;
 	@Autowired
@@ -282,83 +282,60 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	public void autoSchedule() {
-		DataCenter DA;
-		TimeTableAllClass TA;
-
-		AssignTeacher2 teacherAssigner2;
-		AssignRoom roomAssigner;
-		long startTime = System.currentTimeMillis();
-		// =================================================================
-		MainApp mainApp = new MainApp();
-		DA = new DataCenter();
-		TA = new TimeTableAllClass();
-		TA.DA = DA;
-		teacherAssigner2 = new AssignTeacher2();
-		teacherAssigner2.DA = DA;
-		roomAssigner = new AssignRoom();
-		roomAssigner.DA = DA;
-
-		String fn_data_course_class = "data/data_course_class_merged.txt";
-		String fn_data_teacher = "data/data_teacher.txt";
-		String fn_data_room_building = "data/data_room_building.txt";
-		String fn_data_mergedCases = "data/data_mergedCases.txt";
-		String fn_classTimeTableSolutions = "data/data_solutionWarehouses.dat";
-		String fn_conflictMatrix = "data/data_conflictMatrix.txt";
-		String fn_beingUsedTimeTable = "data/data_beingusedTT.dat";
-		String fn_allTeacherTTB = "teacherTimeTable.html";
-		String fn_allClass_TimetableFull = "allClassTimeTable.html";
-
-		DA.loadData_Course_Class(fn_data_course_class); // for all phases
-		DA.loadData_Teacher_UsingCode(fn_data_teacher); // for phase 3
-		DA.loadData_Room_Building(fn_data_room_building); // for phase 4
-		DA.loadData_mergedCases(fn_data_mergedCases); // for phase 1
-
-		// ---------------------------------------------------------------------------
-		// PHASE 1:
-		long startTime_phase1 = System.currentTimeMillis();
-		// //TA.makeSolutionWarehouse(fn_classTimeTableSolutions);
-		long estimatedTime_phase1 = System.currentTimeMillis() - startTime_phase1;
-
-		// ---------------------------------------------------------------------------
-		// PHASE 2:
-		long startTime_phase2 = System.currentTimeMillis();
-		TA.findOptimalTimeTable_v2_2(fn_classTimeTableSolutions);
-		TA.savebeingUsedTimeTable(fn_beingUsedTimeTable);
-		TA.writeMatrix2File(fn_conflictMatrix, TA.beingUsedTimeTable);
-
-		SingleSolution[] sol = TA.loadbeingUsedTimeTable(fn_beingUsedTimeTable);
-		// TA.printTimeTableAllClass(fn_allClassTTB,sol);
-
-		long estimatedTime_phase2 = System.currentTimeMillis() - startTime_phase2;
-
-		// ---------------------------------------------------------------------------
-		// PHASE 3:
-		long startTime_phase3 = System.currentTimeMillis();
-		teacherAssigner2.assignTeacherUsingLS(fn_conflictMatrix);
-		// teacherAssigner2.printAllTeacherHTML(fn_allTeacherTTB2, sol);
-
-		long estimatedTime_phase3 = System.currentTimeMillis() - startTime_phase3;
-
-		// ---------------------------------------------------------------------------
-		// PHASE 4:
-		long startTime_phase4 = System.currentTimeMillis();
-		roomAssigner.assignRoomUsingFor(fn_beingUsedTimeTable);
-		System.out.println("\nRoom demand of every slot:");
-		TA.calRoomDemandEverySlot(sol);
-		System.out.println();
-		long estimatedTime_phase4 = System.currentTimeMillis() - startTime_phase4;
-
-		// ==================================================================
-		mainApp.printTimeTableHTML_AllClass(DA, fn_allClass_TimetableFull, sol);
-		mainApp.printTimeTable_AllTeacher(DA, fn_allTeacherTTB, sol);
-		mainApp.PoiWriteExcelFile(DA, TA, "timetable.xls", sol);
-		// ==================================================================
-		long estimatedTime = System.currentTimeMillis() - startTime;
-		System.out.println("\nTime-consuming phase 1: " + (double) estimatedTime_phase1 / 1000 + " secs");
-		System.out.println("Time-consuming phase 2: " + (double) estimatedTime_phase2 / 1000 + " secs");
-		System.out.println("Time-consuming phase 3: " + (double) estimatedTime_phase3 / 1000 + " secs");
-		System.out.println("Time-consuming phase 4: " + (double) estimatedTime_phase4 / 1000 + " secs");
-		System.out.println("Time-consuming all phases and loading data: " + (double) estimatedTime / 1000 + " secs");
+	public void autoSchedule(int semesterId) {
+		Semester semester = semesterService.getSemesterById(semesterId, true, true, false, false);
+		List<Department> departments = departmentService.listDepartments();
+		List<Room> rooms = roomService.listRooms(false);
+		Set<ClassSemester> classSemesters = semester.getClassSemesters();
+		Set<CourseSemester> courseSemesters = semester.getCourseSemesters();
+		List<ClassCourseSemesterMerge> classCourseSemesterMerges = classCourseSemesterMergeService
+				.listClassCourseSemesterMerges();
+		List<String> departmentData = new ArrayList<>();
+		List<String> roomData = new ArrayList<>();
+		List<String> classData = new ArrayList<>();
+		List<String> courseData = new ArrayList<>();
+		List<String> classCourseData = new ArrayList<>();
+		List<String> mergeClassData = new ArrayList<>();
+		for (Department department : departments) {
+			departmentData.add(department.getDepartmentId() + "|" + department.getCode());
+		}
+		for (Room room : rooms) {
+			roomData.add(room.getRoomId() + "|" + room.getCode() + "|" + room.getBuilding().getCode() + "|"
+					+ room.getCapacity());
+		}
+		for (ClassSemester classSemester : classSemesters) {
+			classData.add(classSemester.getClassSemesterId() + "|" + classSemester.getClassFPT().getCode());
+			Set<ClassCourseSemester> classCourseSemesters = classSemester.getClassCourseSemesters();
+			for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
+				String data = classCourseSemester.getClassCourseSemesterId() + "|"
+						+ classCourseSemester.getCourseSemester().getCourse().getCode() + "|"
+						+ classCourseSemester.getClassSemester().getClassFPT().getCode() + "|";
+				if (classCourseSemester.isSemesterLong()) {
+					data += "3";
+				} else {
+					data += classCourseSemester.getBlockCondition();
+				}
+				classCourseData.add(data);
+			}
+		}
+		for (CourseSemester courseSemester : courseSemesters) {
+			Course course = courseSemester.getCourse();
+			courseData.add(courseSemester.getCourseSemesterId() + "|" + course.getCode() + "|"
+					+ course.getDepartment().getCode());
+		}
+		for (ClassCourseSemesterMerge classCourseSemesterMerge : classCourseSemesterMerges) {
+			mergeClassData.add(
+					classCourseSemesterMerge.getClassCourseSemester1().getCourseSemester().getCourse().getCode() + "|"
+							+ classCourseSemesterMerge.getClassCourseSemester1().getClassSemester().getClassFPT()
+									.getCode()
+							+ "|" + classCourseSemesterMerge.getClassCourseSemester2().getClassSemester().getClassFPT()
+									.getCode());
+		}
+		DataCenter dataCenter = new DataCenter();
+		dataCenter.loadData_Department_v2(departmentData);
+		dataCenter.loadData_Class_v2(classData);
+		dataCenter.loadData_Course_v2(courseData);
+		dataCenter.loadData_ClassCourse_v2(classCourseData);
+		dataCenter.loadData_mergedCases(mergeClassData);
 	}
 }

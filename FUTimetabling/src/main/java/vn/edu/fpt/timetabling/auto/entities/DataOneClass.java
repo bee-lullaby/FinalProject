@@ -10,7 +10,7 @@ public class DataOneClass implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	public ClassFU cls;
-	public int nbCourses;
+	public int nbClasscoursePerClass;
 	public ClassCourse[] classCourses;
 	public int[] statusOfCourse;
 	
@@ -20,7 +20,7 @@ public class DataOneClass implements Serializable{
 	public FCourse[] fCourses;
 	public FCourse[] fCourses_20;
 	
-	public HashMap<ClassCourse, ArrayList<FCourse>> fCoursesOfCourse;
+	public HashMap<ClassCourse, ArrayList<FCourse>> fCoursesOfClasscourse;
 	public HashMap<ClassCourse, ArrayList<FCourse>> fCoursesOfCourse_20;
 	
 	public HashMap<FCourse, ClassCourse> courseOfFCourse;
@@ -50,17 +50,17 @@ public class DataOneClass implements Serializable{
 			Scanner in = new Scanner(new File(fn));
 			String line = "";
 			line = in.nextLine();
-			nbCourses = in.nextInt();
+			nbClasscoursePerClass = in.nextInt();
 			line = in.nextLine();
-			System.out.println("nbCourses = " + nbCourses);
-			classCourses = new ClassCourse[nbCourses];
+			System.out.println("nbCourses = " + nbClasscoursePerClass);
+			classCourses = new ClassCourse[nbClasscoursePerClass];
 			mID2Course = new HashMap<Integer, ClassCourse>();
 			mCourse2Index = new HashMap<ClassCourse, Integer>();
 			line = in.nextLine();
 			System.out.println("Line = " + line);			
 			//line = in.nextLine();
 			
-			for(int i = 0; i < nbCourses; i++){
+			for(int i = 0; i < nbClasscoursePerClass; i++){
 				int id = in.nextInt();
 				System.out.println("Course " + id);
 				ClassCourse c = new ClassCourse();
@@ -106,9 +106,9 @@ public class DataOneClass implements Serializable{
 			
 			System.out.println("Line = " + line);
 			
-			fCoursesOfCourse = new HashMap<ClassCourse, ArrayList<FCourse>>();
-			for(int i = 0; i < nbCourses; i++){				
-				fCoursesOfCourse.put(classCourses[i], new ArrayList<FCourse>());
+			fCoursesOfClasscourse = new HashMap<ClassCourse, ArrayList<FCourse>>();
+			for(int i = 0; i < nbClasscoursePerClass; i++){				
+				fCoursesOfClasscourse.put(classCourses[i], new ArrayList<FCourse>());
 			}
 			courseOfFCourse= new HashMap<FCourse, ClassCourse>();
 			while(true){
@@ -118,7 +118,7 @@ public class DataOneClass implements Serializable{
 				System.out.println("FCourse " + fcID + ", Course " + cID);
 				ClassCourse c = mID2Course.get(cID);
 				FCourse fc = mID2FCourse.get(fcID);
-				fCoursesOfCourse.get(c).add(fc);
+				fCoursesOfClasscourse.get(c).add(fc);
 				courseOfFCourse.put(fc, c);
 			}
 			in.close();
@@ -132,19 +132,18 @@ public class DataOneClass implements Serializable{
 			Scanner in = new Scanner(new File(fn));
 			String line = "";
 			line = in.nextLine();
-			nbCourses = in.nextInt();
+			nbClasscoursePerClass = in.nextInt();
 			line = in.nextLine();
-			System.out.println("nbCourses = " + nbCourses);
-			classCourses = new ClassCourse[nbCourses];
+//			System.out.println("nbCourses = " + nbCourses);
+			classCourses = new ClassCourse[nbClasscoursePerClass];
 			mID2Course = new HashMap<Integer, ClassCourse>();
 			mCourse2Index = new HashMap<ClassCourse, Integer>();
 			line = in.nextLine();
-			System.out.println("Line = " + line);			
-			//line = in.nextLine();
+//			System.out.println("Line = " + line);			
 			
-			for(int i = 0; i < nbCourses; i++){
+			for(int i = 0; i < nbClasscoursePerClass; i++){
 				int id = in.nextInt();
-				System.out.println("Course " + id);
+//				System.out.println("Course " + id);
 				ClassCourse c = new ClassCourse();
 				c.ID = id;
 				classCourses[i] = c;
@@ -155,30 +154,30 @@ public class DataOneClass implements Serializable{
 			//status
 			line = in.nextLine();
 			line = in.nextLine();
-			statusOfCourse = new int[nbCourses];
-			for (int i = 0; i < nbCourses; i++) {
+			statusOfCourse = new int[nbClasscoursePerClass];
+			for (int i = 0; i < nbClasscoursePerClass; i++) {
 				int stt = in.nextInt();
 				statusOfCourse[i] = stt;
-				System.out.println("Course " + classCourses[i].ID +", stt = "+ stt);
+//				System.out.println("Course " + classCourses[i].ID +", stt = "+ stt);
 			}
 			
 			
 			line = in.nextLine();
 			line = in.nextLine();
-			System.out.println("Line = " + line);
+//			System.out.println("Line = " + line);
 			
 			//fcourse
 			nbFCourses = in.nextInt();
-			System.out.println("nbFCourses = " + nbFCourses);
+//			System.out.println("nbFCourses = " + nbFCourses);
 			fCourses = new FCourse[nbFCourses];
 			mID2FCourse = new HashMap<Integer, FCourse>();
 			mFCourse2Index = new HashMap<FCourse, Integer>();
 			line = in.nextLine();
 			line = in.nextLine();
-			System.out.println("Line = " + line);
+//			System.out.println("Line = " + line);
 			for(int i = 0; i < nbFCourses; i++){
 				int id = in.nextInt();
-				System.out.println("FCourse " + id);
+//				System.out.println("FCourse " + id);
 				FCourse fc = new FCourse();
 				fc.ID = id;
 				fCourses[i] = fc;
@@ -188,34 +187,34 @@ public class DataOneClass implements Serializable{
 			line = in.nextLine();
 			line = in.nextLine();
 			
-			System.out.println("Line = " + line);
+//			System.out.println("Line = " + line);
 			
 			//fcourse-course
-			fCoursesOfCourse = new HashMap<ClassCourse, ArrayList<FCourse>>();
-			for(int i = 0; i < nbCourses; i++){				
-				fCoursesOfCourse.put(classCourses[i], new ArrayList<FCourse>());
+			fCoursesOfClasscourse = new HashMap<ClassCourse, ArrayList<FCourse>>();
+			for(int i = 0; i < nbClasscoursePerClass; i++){				
+				fCoursesOfClasscourse.put(classCourses[i], new ArrayList<FCourse>());
 			}
 			courseOfFCourse= new HashMap<FCourse, ClassCourse>();
 			while(true){
 				int fcID = in.nextInt();
 				if(fcID == -1) break;
 				int cID = in.nextInt();
-				System.out.println("FCourse " + fcID + ", Course " + cID);
+//				System.out.println("FCourse " + fcID + ", Course " + cID);
 				ClassCourse c = mID2Course.get(cID);
 				FCourse fc = mID2FCourse.get(fcID);
-				fCoursesOfCourse.get(c).add(fc);
+				fCoursesOfClasscourse.get(c).add(fc);
 				courseOfFCourse.put(fc, c);
 			}
 			
 			//fcourse-20 days
 			line = in.nextLine();
 			line = in.nextLine();
-			System.out.println("Line = " + line);
+//			System.out.println("Line = " + line);
 			nbFCourses_20 = in.nextInt();
 			
 			line = in.nextLine();
 			line = in.nextLine();
-			System.out.println("Line = " + line);
+//			System.out.println("Line = " + line);
 			
 			fCourses_20 = new FCourse[nbFCourses_20];
 			mID2FCourse_20 = new HashMap<Integer, FCourse>();
@@ -223,7 +222,7 @@ public class DataOneClass implements Serializable{
 			
 			for(int i = 0; i < nbFCourses_20; i++){
 				int id = in.nextInt();
-				System.out.println("FCourse " + id);
+//				System.out.println("FCourse " + id);
 				FCourse fc = new FCourse();
 				fc.ID = id;
 				fCourses_20[i] = fc;
@@ -234,9 +233,9 @@ public class DataOneClass implements Serializable{
 			//fcourse-course 20 days
 			line = in.nextLine();
 			line = in.nextLine();
-			System.out.println("Line = " + line);
+//			System.out.println("Line = " + line);
 			fCoursesOfCourse_20 = new HashMap<ClassCourse, ArrayList<FCourse>>();
-			for(int i = 0; i < nbCourses; i++){				
+			for(int i = 0; i < nbClasscoursePerClass; i++){				
 				fCoursesOfCourse_20.put(classCourses[i], new ArrayList<FCourse>());
 			}
 			courseOfFCourse_20 = new HashMap<FCourse, ClassCourse>();
@@ -244,7 +243,7 @@ public class DataOneClass implements Serializable{
 				int fcID = in.nextInt();
 				if(fcID == -1) break;
 				int cID = in.nextInt();
-				System.out.println("FCourse " + fcID + ", Course " + cID);
+//				System.out.println("FCourse " + fcID + ", Course " + cID);
 				ClassCourse c = mID2Course.get(cID);
 				FCourse fc = mID2FCourse_20.get(fcID);
 				fCoursesOfCourse_20.get(c).add(fc);
@@ -261,7 +260,7 @@ public class DataOneClass implements Serializable{
 		DataOneClass d = new DataOneClass();
 //		d.loadData("1.txt");
 		d.loadData_SM("dataOneClass.txt");
-		for (int i = 0; i < d.nbCourses; i++) {
+		for (int i = 0; i < d.nbClasscoursePerClass; i++) {
 			System.out.println("c = "+d.classCourses[i].ID+", stt = "+d.statusOfCourse[i]);
 		}
 	}

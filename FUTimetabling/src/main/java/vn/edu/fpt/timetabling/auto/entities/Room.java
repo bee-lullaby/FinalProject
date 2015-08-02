@@ -4,8 +4,10 @@ public class Room {
 	public int ID;
 	public String code;
 	public int buildingID;
-	public int capacity;
+	public int supplySlotCapacity;
 	public int availableSlot;
+	public int capacity;
+	
 	
 	public Room() {
 		// TODO Auto-generated constructor stub
@@ -33,6 +35,14 @@ public class Room {
 		ID = iD;
 		this.code = code;
 		this.buildingID = buildingID;
+	}
+
+	public Room(int iD, String code, int buildingID, int capacity) {
+		super();
+		ID = iD;
+		this.code = code;
+		this.buildingID = buildingID;
+		this.capacity = capacity;
 	}
 
 	public static void main(String[] args) {

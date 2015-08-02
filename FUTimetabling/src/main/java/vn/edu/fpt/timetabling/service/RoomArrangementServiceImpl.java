@@ -26,10 +26,6 @@ import vn.edu.fpt.timetabling.model.Timetable;
 
 @Service
 public class RoomArrangementServiceImpl implements RoomArrangementService {
-
-	@Autowired
-	private SemesterService semesterService;
-
 	@Autowired
 	private ClassSemesterService classSemesterService;
 
