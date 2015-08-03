@@ -41,4 +41,9 @@ public class ClassCourseSemesterMergeServiceImpl implements ClassCourseSemesterM
 	public void deleteClassCourseSemesterMerge(int classCourseSemesterMergeId) {
 		classCourseSemesterMergeDAO.deleteClassCourseSemesterMerge(classCourseSemesterMergeId);
 	}
+
+	@Override
+	public List<ClassCourseSemesterMerge> listClassCourseSemesterMerges(int semesterId) {
+		return classCourseSemesterMergeDAO.listClassCourseSemesterMerges(semesterId);
+	}
 }
