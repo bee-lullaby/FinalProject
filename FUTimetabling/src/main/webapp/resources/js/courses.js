@@ -7,7 +7,20 @@ $(document).ready(function() {
 		$("#dialog-edit-course").attr("data-action", "edit");
 		_showDialog("dialog-edit-course");
 	});
+	
+	$("#table-courses").on("click", "a[id^='delete-course']",function() {
+		$("#dialog-delete-course").attr("data-courseId", $(this).closest("tr").attr("data-courseId"));
+		_showDialog("dialog-delete-course");
+	});
 
+	$("#btn-delete-accept").on("click", function() {
+		window.location = "courses/deleteCourse?courseId=" +$("#dialog-delete-course").attr("data-courseId");
+	});
+	
+	$("#btn-delete-decline").on("click", function() {
+		$("#dialog-delete-course").removeAttr("data-courseId");
+		_showDialog("dialog-delete-course");
+	});
 	
 	$("#btn-add-course").on("click", function() {
 		_clearDialogData($("#dialog-add-course"));
@@ -15,7 +28,6 @@ $(document).ready(function() {
 	});
 	
 	$("#dialog-edit-course #btn-edit-save").on("click", function() {
-		console.log("123");
 		$("#form-edit-course").attr("action", "courses/updateCourse");
 		$("#form-edit-course").submit();
 	});

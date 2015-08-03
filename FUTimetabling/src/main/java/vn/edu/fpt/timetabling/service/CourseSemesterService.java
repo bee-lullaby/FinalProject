@@ -7,7 +7,7 @@ import java.util.List;
 import vn.edu.fpt.timetabling.model.CourseSemester;
 
 public interface CourseSemesterService {
-	public void addCourseSemesterFromFile(File courseSemesters, int semesterId)
+	public List<String> addCourseSemesterFromFile(File courseSemesters, int semesterId)
 			throws IOException;
 
 	public void addCourseSemester(CourseSemester courseSemester);

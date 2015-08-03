@@ -41,7 +41,13 @@ public class StaffServiceImpl implements StaffService {
 	public Staff getStaffByEmail(String email) {
 		return staffDAO.getStaffByEmail(email);
 	}
+	
+	@Override
+	public Staff getStaffByAccount(String account) {
+		return staffDAO.getStaffByAccount(account);
+	}
 
+	
 	@Override
 	public void deleteStaff(int staffId) {
 		staffDAO.deleteStaff(staffId);

@@ -3,6 +3,7 @@ package vn.edu.fpt.timetabling.service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class TeacherCourseSemesterSeviceImpl implements
 	}
 
 	@Override
-	public String addTeacherCourseSemesterFromFile(File teacherCourses,
+	public List<String> addTeacherCourseSemesterFromFile(File teacherCourses,
 			int semesterId) throws IOException {
 		FileInputStream file = new FileInputStream(teacherCourses);
 		XSSFWorkbook workbook = new XSSFWorkbook(file);
@@ -50,7 +51,7 @@ public class TeacherCourseSemesterSeviceImpl implements
 		Iterator<Row> rowIterator = sheet.iterator();
 		rowIterator.next();
 
-		StringBuilder result = new StringBuilder();
+		List<String> checkCourseExisted = new ArrayList<String>();
 		while (rowIterator.hasNext()) {
 			Row row = rowIterator.next();
 			Iterator<Cell> cellIterator = row.cellIterator();
@@ -58,24 +59,22 @@ public class TeacherCourseSemesterSeviceImpl implements
 			CourseSemester courseSemester = new CourseSemester();
 			if (cellIterator.hasNext()) {
 				courseCode = cellIterator.next().getStringCellValue().trim();
-				cellIterator.next();
 				courseSemester = courseSemesterService
 						.getCourseSemesterByCourseCodeSemester(courseCode,
 								semesterId, false, false, false);
-			}
-			if (courseSemester != null) {
-				while (cellIterator.hasNext()) {
-					TeacherCourseSemester tcs = new TeacherCourseSemester();
+				if (courseSemester == null) {
+					checkCourseExisted.add(courseCode);
+				} else {
+					cellIterator.next();
+					while (cellIterator.hasNext()) {
+						TeacherCourseSemester tcs = new TeacherCourseSemester();
 
-					if (courseSemester == null) {
-						result.append(courseCode + "; ");
-					} else {
 						tcs.setCourseSemester(courseSemester);
 
 						String teacherAccount = cellIterator.next()
 								.getStringCellValue().trim();
-						if (getTeacherCourseSemesterByTeacherCourse(
-								teacherAccount, courseCode) == null) {
+						if (getTeacherCourseSemesterByTeacherCourse(teacherAccount,
+								courseCode) == null) {
 							TeacherSemester teacherSemester = teacherSemesterService
 									.getTeacherSemesterByAccount(semesterId,
 											teacherAccount, false, false);
@@ -88,6 +87,7 @@ public class TeacherCourseSemesterSeviceImpl implements
 										.addTeacherCourseSemester(tcs);
 							}
 						}
+
 					}
 				}
 			}
@@ -95,7 +95,7 @@ public class TeacherCourseSemesterSeviceImpl implements
 		workbook.close();
 		file.close();
 
-		return result.substring(0, result.length());
+		return checkCourseExisted;
 	}
 
 	@Override

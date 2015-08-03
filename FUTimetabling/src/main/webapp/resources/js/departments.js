@@ -1,32 +1,29 @@
 $(document).ready(function() { 
 
 	_init();
-	
-	$("#table-departments").on("click", "a[id^='edit-department']", function() {
-		_setDialogEditData($("#dialog-edit-department"), $(this).closest("tr"));
-		_showDialog("dialog-edit-department");
+
+	$("#table-departments").on("click", "a[id^='delete-department']",function() {
+		$("#dialog-delete-department").attr("data-departmentId", $(this).closest("tr").attr("data-departmentId"));
+		_showDialog("dialog-delete-department");
 	});
 
+	$("#btn-delete-accept").on("click", function() {
+		window.location = "departments/deleteDepartment?departmentId=" +$("#dialog-delete-department").attr("data-departmentId");
+	});
+	
+	$("#btn-delete-decline").on("click", function() {
+		$("#dialog-delete-department").removeAttr("data-departmentId");
+		_showDialog("dialog-delete-department");
+	});
 	
 	$("#btn-add-department").on("click", function() {
 		_clearDialogData($("#dialog-add-department"));
 		_showDialog("dialog-add-department");
 	});
 	
-	$("#dialog-edit-department #btn-edit-save").on("click", function() {
-		$("#form-edit-department").attr("action", "departments/updateDepartment");
-		$("#form-edit-department").submit();
-	});
-	
 	$("#dialog-add-department #btn-add-save").on("click", function() {
 		$("#form-add-department").attr("action", "departments/updateDepartment");
 		$("#form-add-department").submit();
-	});
-	
-	$("#dialog-edit-department #btn-edit-cancel").on("click", function() {
-		_showDialog("dialog-edit-department");
-		$("#dialog-edit-department").removeAttr("data-action");
-		
 	});
 	
 	$("#dialog-add-department #btn-add-cancel").on("click", function() {
@@ -53,19 +50,10 @@ $(document).ready(function() {
 	}
 	
 	function _clearDialogData(dialog) {
-		dialog.find("#departmentId").attr("value", "-1");
-		dialog.find("#code").attr("value", "");
+		dialog.find("#code").val("");
 		dialog.find("#code").attr("readonly", false);
-		dialog.find("#name").attr("value", "");
+		dialog.find("#name").val("");
 	}
-	
-	function _setDialogEditData(dialog, tr) {
-		dialog.find("#departmentId").attr("value", tr.attr("data-departmentId"));
-		dialog.find("#code").attr("value", tr.find("td:eq(0)").text());
-		dialog.find("#code").attr("readonly", true);
-		dialog.find("#name").attr("value", tr.find("td:eq(1)").text());
-	}
-	
 	function _urlParam(param) {
 	    var url = $(location).attr('search').substring(1);
 	    var parameters = url.split('&');

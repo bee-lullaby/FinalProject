@@ -20,6 +20,7 @@ import vn.edu.fpt.timetabling.CourseController;
 import vn.edu.fpt.timetabling.dao.CourseSemesterDAO;
 import vn.edu.fpt.timetabling.model.Course;
 import vn.edu.fpt.timetabling.model.CourseSemester;
+import vn.edu.fpt.timetabling.model.Department;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -41,13 +42,15 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 	}
 
 	@Override
-	public void addCourseSemesterFromFile(File courseSemesters, int semesterId)
+	public List<String> addCourseSemesterFromFile(File courseSemesters, int semesterId)
 			throws IOException {
 		FileInputStream file = new FileInputStream(courseSemesters);
 		XSSFWorkbook workbook = new XSSFWorkbook(file);
 		XSSFSheet sheet = workbook.getSheetAt(0);
 		Iterator<Row> rowIteratorFirst = sheet.iterator();
 		rowIteratorFirst.next();
+		List<String> checkDepartmentExisted = new ArrayList<String>();
+		
 		while (rowIteratorFirst.hasNext()) {
 			Row row = rowIteratorFirst.next();
 			CourseSemester courseSemester = new CourseSemester();
@@ -60,9 +63,15 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 
 			if (courseService.getCourseByCode(codeCourse) == null) {
 				Course course = new Course();
-				String code = row.getCell(0).getStringCellValue().trim();
-				course.setDepartment(departmentService
-						.getDepartmentByCode(code));
+				String departmentCode = row.getCell(0).getStringCellValue().trim();
+				
+				Department department = departmentService
+						.getDepartmentByCode(departmentCode);
+				if(department == null) {
+					checkDepartmentExisted.add(departmentCode);
+					continue;
+				}
+				course.setDepartment(department);
 				course.setCode(codeCourse);
 				course.setName(row.getCell(2).getStringCellValue().trim());
 				courseService.addCourse(course);
@@ -85,6 +94,7 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 		}
 		workbook.close();
 		file.close();
+		return checkDepartmentExisted;
 	}
 
 	@Override

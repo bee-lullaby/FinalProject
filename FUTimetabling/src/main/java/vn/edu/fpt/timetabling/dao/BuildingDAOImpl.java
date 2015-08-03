@@ -44,7 +44,7 @@ public class BuildingDAOImpl implements BuildingDAO {
 
 	@Override
 	public Building getBuildingById(int buildingId) {
-		String hql = "FROM vn.edu.fpt.timetabling.model.Building B" + " WHERE B.buildingId = : buildingId";
+		String hql = "FROM vn.edu.fpt.timetabling.model.Building B" + " WHERE B.buildingId = :buildingId";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("buildingId", buildingId);
 		return (Building) query.uniqueResult();
@@ -52,9 +52,9 @@ public class BuildingDAOImpl implements BuildingDAO {
 
 	@Override
 	public Building getBuildingByCode(String code) {
-		String hql = "FROM vn.edu.fpt.timetabling.model.Building B" + " WHERE B.buildingCode = : buildingCode";
+		String hql = "FROM vn.edu.fpt.timetabling.model.Building B" + " WHERE B.code = :code";
 		Query query = getCurrentSession().createQuery(hql);
-		query.setParameter("buildingCode", code);
+		query.setParameter("code", code);
 		return (Building) query.uniqueResult();
 	}
 

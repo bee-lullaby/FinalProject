@@ -9,13 +9,15 @@ import vn.edu.fpt.timetabling.model.Room;
 public interface RoomService {
 	public void addRoom(Room room);
 
-	public void addRoomFromFile(File rooms) throws IOException;
+	public List<String> addRoomFromFile(File rooms) throws IOException;
 
 	public void updateRoom(Room room);
 
 	public List<Room> listRooms(boolean jointTimetable);
 
 	public Room getRoomById(int roomId, boolean jointTimetable);
-
+	
+	public Room getRoomByCode(String code, boolean jointTimetable);
+	
 	public void deleteRoom(int roomId);
 }

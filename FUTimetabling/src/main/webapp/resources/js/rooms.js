@@ -8,6 +8,20 @@ $(document).ready(function() {
 		_showDialog("dialog-edit-room");
 	});
 
+	$("#table-rooms").on("click", "a[id^='delete-room']",function() {
+		$("#dialog-delete-room").attr("data-roomId", $(this).closest("tr").attr("data-roomId"));
+		_showDialog("dialog-delete-room");
+	});
+	
+	$("#btn-delete-accept").on("click", function() {
+		window.location = "rooms/deleteRoom?roomId=" +$("#dialog-delete-room").attr("data-roomId");
+	});
+	
+	$("#btn-delete-decline").on("click", function() {
+		$("#dialog-delete-room").removeAttr("data-roomId");
+		_showDialog("dialog-delete-room");
+	});
+	
 	
 	$("#btn-add-room").on("click", function() {
 		_clearDialogData($("#dialog-add-room"));
@@ -60,10 +74,11 @@ $(document).ready(function() {
 	}
 	
 	function _clearDialogData(dialog) {
-		dialog.find("#roomId").attr("value", "-1");
-		dialog.find("#code").attr("value", "");
+		dialog.find("#roomId").val("-1");
+		dialog.find("#code").val("");
 		dialog.find("#code").attr("readonly", false);
-		dialog.find("#capacity").attr("value", "");
+		dialog.find("#capacity").val("");
+		dialog.find("#select-building option:first").attr("selected", "selected");
 		dialog.find("#select-courses option").each(function() {
 			$(this).removeAttr("selected");
 		});
@@ -72,16 +87,22 @@ $(document).ready(function() {
 	}
 	
 	function _setDialogEditData(dialog, tr) {
-		dialog.find("#roomId").attr("value", tr.attr("data-roomId"));
-		dialog.find("#code").attr("value", tr.find("td:eq(0)").text());
+		dialog.find("#roomId").val(tr.attr("data-roomId"));
+		dialog.find("#code").val(tr.find("td:eq(0)").text());
 		dialog.find("#code").attr("readonly", true);
-		dialog.find("#capacity").attr("value", tr.find("td:eq(1)").text());
+		dialog.find("#capacity").val(tr.find("td:eq(1)").text());
+		dialog.find("#select-building option").filter(function() {
+		            return $(this).text() === tr.find("td:eq(2)").text().trim()
+		        }).attr("selected", "selected");
 		
-		var listCourses = tr.find("td:eq(2)").text().split(", ");
+		
+		var listCourses = tr.find("td:eq(3)").text().split(", ");
 		
 		$.each(listCourses, function(i, e) {
 			if(e != "") {
-				$("#select-courses option:contains('" +e.trim() +"')").prop("selected", true);
+				$('#select-courses option').filter(function() {
+		             return $(this).text() === e.trim()
+		        }).prop("selected", true);
 			}
 		});
 

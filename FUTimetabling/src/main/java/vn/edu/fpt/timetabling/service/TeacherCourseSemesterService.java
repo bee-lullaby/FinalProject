@@ -9,7 +9,7 @@ import vn.edu.fpt.timetabling.model.TeacherCourseSemester;
 public interface TeacherCourseSemesterService {
 	public void addTeacherCourseSemester(TeacherCourseSemester teacherCourseSemester);
 	
-	public String addTeacherCourseSemesterFromFile(File teacherCourses, int semesterId) throws IOException;
+	public List<String> addTeacherCourseSemesterFromFile(File teacherCourses, int semesterId) throws IOException;
 
 	public void updateTeacherCourseSemester(TeacherCourseSemester teacherCourseSemester);
 

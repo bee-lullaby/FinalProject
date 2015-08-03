@@ -6,20 +6,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Departments Page</title>
+<title>staffs Page</title>
 
 <link href="../resources/css/metro.css" rel="stylesheet">
 <link href="../resources/css/metro-icons.css" rel="stylesheet">
 <link href="../resources/css/docs.css" rel="stylesheet">
 
 <script src="../resources/js/jquery-2.1.3.min.js"></script>
-<script src="../resources/js/departments.js"></script>
+<script src="../resources/js/staffManagement.js"></script>
 <script src="../resources/js/metro.js"></script>
 <script src="../resources/js/docs.js"></script>
 <script src="../resources/js/prettify/run_prettify.js"></script>
 <script src="../resources/js/ga.js"></script>
 <script src="../resources/js/jquery.dataTables.js"></script>
 </head>
+
+
 <style>
 td a {
 	display: block;
@@ -83,20 +85,12 @@ h3 {
 <script>
 	function _errorNotify() {
 		var text = $("#messageError").text();
-		$.Notify({
-			type : 'alert',
-			caption : 'Alert',
-			content : text
-		});
+		$.Notify({type: 'alert', caption: 'Alert', content: text});
 	}
-
+	
 	function _successNotify() {
 		var text = $("#messageSuccess").text();
-		$.Notify({
-			type : 'success',
-			caption : 'Success',
-			content : text
-		});
+		$.Notify({type: 'success', caption: 'Success', content: text});
 	}
 </script>
 <body>
@@ -104,54 +98,46 @@ h3 {
 	<div style="width: 80%; margin: 0 auto; padding-bottom: 50px">
 		<h1>
 			<a href="/Timetabling/staff" class="nav-button transform"><span></span></a>
-			&nbsp;Departments Management
+			&nbsp;Staffs Management
 		</h1>
 		<div style="display: flex">
 			<div id="select-semester" class="left"
 				style="display: inline-block; width: 250px;">
 				<h3>General Management</h3>
-				<a href="staffManagement">Staff</a> <a href="building">Building</a>
-				<a href="rooms">Room</a> <a href="semester">Semester</a> 
-				<a href="secialized">Specialized</a> <a class="active" href="#">Department</a>
+				<a class="active" href="#">Staff</a> <a href="building">Building</a>
+				<a href="semester">Semester</a> <a href="Specialized">Specialized</a>
 			</div>
-			<div style="display: inline-block; margin-left: 25px; width: 100%;">
+			<div style="display: inline-block; margin-left: 25px">
 				<div id="control-bar" style="width: 100%; margin-bottom: 45px;">
 					<div style="width: auto; float: right">
-						<button id="btn-add-department" class="button" data-role="hint"
+						<button id="btn-add-staff" class="button" data-role="hint"
 							data-hint-background="#1CB7EC" data-hint-color="fg-white"
-							data-hint-position="top" data-hint="Add Department">
+							data-hint-position="top" data-hint="Add Staff">
 							<span class="mif-plus"></span>
-						</button>
-						<button id="btn-add-from-file" class="button" data-role="hint"
-							data-hint-background="#1CB7EC" data-hint-color="fg-white"
-							data-hint-position="top" data-hint="Add From File">
-							<span class="mif-file-text"></span>
 						</button>
 					</div>
 				</div>
 				<div style="width: 100%; height: 100%;">
-					<table id="table-departments"
+					<table id="table-staffs"
 						class="table striped hovered border bordered cell-hovered">
 						<thead>
 							<tr>
-								<th>Code</th>
+								<th>Account</th>
 								<th>Name</th>
-								<th>Courses</th>
+								<th>E-mail</th>
+								<th>Edit</th>
 								<th>Delete</th>
 							</tr>
 						</thead>
 						<tbody>
-							<c:if test="${!empty listDepartments}">
-								<c:forEach items="${listDepartments}" var="department">
-									<tr data-departmentId="${department.departmentId}">
-										<td>${department.code}</td>
-										<td>${department.name}</td>
-										<td><c:if test="${!empty department.courses}">
-												<c:forEach items="${department.courses}" var="course">
-												${course.code};
-											</c:forEach>
-											</c:if></td>
-										<td><a href="#" id="delete-department-${department.departmentId}">Delete</a></td>
+							<c:if test="${!empty listStaffs}">
+								<c:forEach items="${listStaffs}" var="staff">
+									<tr data-staffId="${staff.staffId}">
+										<td>${staff.account}</td>
+										<td>${staff.name}</td>
+										<td>${staff.email}</td>
+										<td><a href="#" id="edit-staff-${staff.staffId}">Edit</a></td>
+										<td><a href="#" id="delete-staff-${staff.staffId}">Delete</a></td>
 									</tr>
 								</c:forEach>
 							</c:if>
@@ -162,42 +148,71 @@ h3 {
 		</div>
 	</div>
 
-
-	<div id="dialog-add-file" data-role="dialog" data-overlay="true"
-		data-overlay-color="op-dark" style="padding: 25px"
-		data-close-button="true">
-		<h5>Add File</h5>
-		<form id="form-add-file" action="departments/addFromFile"
-			method="post" enctype="multipart/form-data"
-			style="display: inline-block;">
-			<div class="input-control file" data-role="input">
-				<input type="file" name="file"
-					accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-				<button class="button">
-					<span class="mif-folder"></span>
-				</button>
-			</div>
-			<button class="button" id="btn-add-file"
-				style="display: inline-block">ADD</button>
-		</form>
-	</div>
-	<div id="dialog-add-department" data-role="dialog" class="padding20"
+	<div id="dialog-edit-staff" data-role="dialog" class="padding20"
 		data-overlay="true" data-overlay-color="op-dark">
-		<h3 id="title">Add Department</h3>
-		<form id="form-add-department" style="width: 400px; margin: 0 auto;"
+		<h3 id="title">Edit staff</h3>
+		<form id="form-edit-staff" style="width: 400px; margin: 0 auto;"
 			method="post">
-			<table id="table-add-department" class="table">
+			<table id="table-edit-staffs" class="table">
 				<thead>
+					<tr style="display: none">
+						<td><input type="text" id="staffId" name="staffId" /></td>
+						<td></td>
+					</tr>
 					<tr>
-						<th>Code</th>
-						<td><div class="input-control text" style="width: 300px">
-								<input type="text" id="code" name="code" />
+						<th>Account</th>
+						<td><div class="input-control text" style="width: 100%">
+								<input type="text" id="account" name="account" />
 							</div></td>
 					</tr>
 					<tr>
 						<th>Name</th>
-						<td><div class="input-control text" style="width: 300px">
+						<td><div class="input-control text" style="width: 100%">
 								<input type="text" id="name" name="name" />
+							</div></td>
+					</tr>
+					<tr>
+						<th>E-mail</th>
+						<td><div class="input-control number" style="width: 100%">
+								<input type="text" id="email" name="email" />
+							</div></td>
+					</tr>
+				</thead>
+			</table>
+		</form>
+		<div id="btn-group" style="float: right;">
+			<button class="button" id="btn-edit-save">SAVE</button>
+			<button class="button" id="btn-edit-cancel">CANCEL</button>
+		</div>
+	</div>
+
+	<div id="dialog-add-staff" data-role="dialog" class="padding20"
+		data-overlay="true" data-overlay-color="op-dark">
+		<h3 id="title">Add staff</h3>
+		<form id="form-add-staff" style="width: 400px; margin: 0 auto;"
+			method="post">
+			<table id="table-add-staffs" class="table">
+				<thead>
+					<tr style="display: none">
+						<td><input type="text" id="staffId" name="staffId" /></td>
+						<td></td>
+					</tr>
+					<tr>
+						<th>Account</th>
+						<td><div class="input-control text" style="width: 100%">
+								<input type="text" id="account" name="account" />
+							</div></td>
+					</tr>
+					<tr>
+						<th>Name</th>
+						<td><div class="input-control text" style="width: 100%">
+								<input type="text" id="name" name="name" />
+							</div></td>
+					</tr>
+					<tr>
+						<th>E-mail</th>
+						<td><div class="input-control number" style="width: 100%">
+								<input type="text" id="email" name="email" />
 							</div></td>
 					</tr>
 				</thead>
@@ -208,19 +223,19 @@ h3 {
 			<button class="button" id="btn-add-cancel">CANCEL</button>
 		</div>
 	</div>
-	
-	
-	<div id="dialog-delete-department" data-role="dialog" class="padding20"
+
+	<div id="dialog-delete-staff" data-role="dialog" class="padding20"
 		data-overlay="true" data-overlay-color="op-dark"
 		data-windows-style="true">
 		<div style="width: 500px; margin: 0 auto; text-align: center;">
-			<h2>Are you sure to delete this department?</h2>
+			<h2>Are you sure to delete this staff?</h2>
 			<div id="btn-group" style="margin-top: 25px;">
 				<button class="button" id="btn-delete-accept">ACCEPT</button>
 				<button class="button" id="btn-delete-decline">DECLINE</button>
 			</div>
 		</div>
 	</div>
+	
 	
 </body>
 </html>

@@ -54,6 +54,15 @@ public class StaffDAOImpl implements StaffDAO {
 	}
 
 	@Override
+	public Staff getStaffByAccount(String account) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Staff S WHERE lower(S.account) = lower(:account)";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("account", account);
+		return (Staff) query.uniqueResult();
+	}
+
+	
+	@Override
 	public void deleteStaff(int staffId) {
 		Staff staff = getStaffById(staffId);
 		getCurrentSession().delete(staff);

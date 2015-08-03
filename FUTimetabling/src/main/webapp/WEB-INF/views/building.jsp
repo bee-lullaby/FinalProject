@@ -6,20 +6,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Departments Page</title>
+<title>buildings Page</title>
 
 <link href="../resources/css/metro.css" rel="stylesheet">
 <link href="../resources/css/metro-icons.css" rel="stylesheet">
 <link href="../resources/css/docs.css" rel="stylesheet">
 
 <script src="../resources/js/jquery-2.1.3.min.js"></script>
-<script src="../resources/js/departments.js"></script>
+<script src="../resources/js/building.js"></script>
 <script src="../resources/js/metro.js"></script>
 <script src="../resources/js/docs.js"></script>
 <script src="../resources/js/prettify/run_prettify.js"></script>
 <script src="../resources/js/ga.js"></script>
 <script src="../resources/js/jquery.dataTables.js"></script>
 </head>
+
+
 <style>
 td a {
 	display: block;
@@ -103,55 +105,43 @@ h3 {
 	<t:header />
 	<div style="width: 80%; margin: 0 auto; padding-bottom: 50px">
 		<h1>
-			<a href="/Timetabling/staff" class="nav-button transform"><span></span></a>
-			&nbsp;Departments Management
+			<a href="/Timetabling/building" class="nav-button transform"><span></span></a>
+			&nbsp;Building Management
 		</h1>
 		<div style="display: flex">
 			<div id="select-semester" class="left"
 				style="display: inline-block; width: 250px;">
 				<h3>General Management</h3>
-				<a href="staffManagement">Staff</a> <a href="building">Building</a>
+				<a href="staffManagement">Staff</a> <a class="active" href="#">Building</a>
 				<a href="rooms">Room</a> <a href="semester">Semester</a> 
-				<a href="secialized">Specialized</a> <a class="active" href="#">Department</a>
+				<a href="secialized">Specialized</a> <a href="departments">Department</a>
 			</div>
 			<div style="display: inline-block; margin-left: 25px; width: 100%;">
 				<div id="control-bar" style="width: 100%; margin-bottom: 45px;">
 					<div style="width: auto; float: right">
-						<button id="btn-add-department" class="button" data-role="hint"
+						<button id="btn-add-building" class="button" data-role="hint"
 							data-hint-background="#1CB7EC" data-hint-color="fg-white"
-							data-hint-position="top" data-hint="Add Department">
+							data-hint-position="top" data-hint="Add building">
 							<span class="mif-plus"></span>
-						</button>
-						<button id="btn-add-from-file" class="button" data-role="hint"
-							data-hint-background="#1CB7EC" data-hint-color="fg-white"
-							data-hint-position="top" data-hint="Add From File">
-							<span class="mif-file-text"></span>
 						</button>
 					</div>
 				</div>
 				<div style="width: 100%; height: 100%;">
-					<table id="table-departments"
+					<table id="table-buildings"
 						class="table striped hovered border bordered cell-hovered">
 						<thead>
 							<tr>
 								<th>Code</th>
-								<th>Name</th>
-								<th>Courses</th>
 								<th>Delete</th>
 							</tr>
 						</thead>
 						<tbody>
-							<c:if test="${!empty listDepartments}">
-								<c:forEach items="${listDepartments}" var="department">
-									<tr data-departmentId="${department.departmentId}">
-										<td>${department.code}</td>
-										<td>${department.name}</td>
-										<td><c:if test="${!empty department.courses}">
-												<c:forEach items="${department.courses}" var="course">
-												${course.code};
-											</c:forEach>
-											</c:if></td>
-										<td><a href="#" id="delete-department-${department.departmentId}">Delete</a></td>
+							<c:if test="${!empty listBuildings}">
+								<c:forEach items="${listBuildings}" var="building">
+									<tr data-buildingId="${building.buildingId}">
+										<td>${building.code}</td>
+										<td><a href="#"
+											id="delete-building-${building.buildingId}">Delete</a></td>
 									</tr>
 								</c:forEach>
 							</c:if>
@@ -161,43 +151,21 @@ h3 {
 			</div>
 		</div>
 	</div>
-
-
-	<div id="dialog-add-file" data-role="dialog" data-overlay="true"
-		data-overlay-color="op-dark" style="padding: 25px"
-		data-close-button="true">
-		<h5>Add File</h5>
-		<form id="form-add-file" action="departments/addFromFile"
-			method="post" enctype="multipart/form-data"
-			style="display: inline-block;">
-			<div class="input-control file" data-role="input">
-				<input type="file" name="file"
-					accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-				<button class="button">
-					<span class="mif-folder"></span>
-				</button>
-			</div>
-			<button class="button" id="btn-add-file"
-				style="display: inline-block">ADD</button>
-		</form>
-	</div>
-	<div id="dialog-add-department" data-role="dialog" class="padding20"
+	<div id="dialog-add-building" data-role="dialog" class="padding20"
 		data-overlay="true" data-overlay-color="op-dark">
-		<h3 id="title">Add Department</h3>
-		<form id="form-add-department" style="width: 400px; margin: 0 auto;"
+		<h3 id="title">Add building</h3>
+		<form id="form-add-building" style="width: 400px; margin: 0 auto;"
 			method="post">
-			<table id="table-add-department" class="table">
+			<table id="table-add-buildings" class="table">
 				<thead>
-					<tr>
-						<th>Code</th>
-						<td><div class="input-control text" style="width: 300px">
-								<input type="text" id="code" name="code" />
-							</div></td>
+					<tr style="display: none">
+						<td><input type="text" id="buildingId" name="buildingId" /></td>
+						<td></td>
 					</tr>
 					<tr>
-						<th>Name</th>
-						<td><div class="input-control text" style="width: 300px">
-								<input type="text" id="name" name="name" />
+						<th>Code</th>
+						<td><div class="input-control text" style="width: 100%">
+								<input type="text" id="code" name="code" />
 							</div></td>
 					</tr>
 				</thead>
@@ -208,19 +176,19 @@ h3 {
 			<button class="button" id="btn-add-cancel">CANCEL</button>
 		</div>
 	</div>
-	
-	
-	<div id="dialog-delete-department" data-role="dialog" class="padding20"
+
+	<div id="dialog-delete-building" data-role="dialog" class="padding20"
 		data-overlay="true" data-overlay-color="op-dark"
 		data-windows-style="true">
 		<div style="width: 500px; margin: 0 auto; text-align: center;">
-			<h2>Are you sure to delete this department?</h2>
+			<h2>Are you sure to delete this building?</h2>
 			<div id="btn-group" style="margin-top: 25px;">
 				<button class="button" id="btn-delete-accept">ACCEPT</button>
 				<button class="button" id="btn-delete-decline">DECLINE</button>
 			</div>
 		</div>
 	</div>
-	
+
+
 </body>
 </html>

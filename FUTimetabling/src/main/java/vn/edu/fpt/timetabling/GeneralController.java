@@ -11,4 +11,11 @@ public class GeneralController {
 			httpSession.removeAttribute("error");
 		}
 	}
+	
+	protected void notifySuccess(HttpSession httpSession, Model model) {
+		if (httpSession.getAttribute("success") != null) {
+			model.addAttribute("success", httpSession.getAttribute("success"));
+			httpSession.removeAttribute("success");
+		}
+	}
 }

@@ -14,6 +14,8 @@ public interface StaffDAO {
 	public Staff getStaffById(int staffId);
 
 	public Staff getStaffByEmail(String email);
-
+	
+	public Staff getStaffByAccount(String account);
+	
 	public void deleteStaff(int staffId);
 }

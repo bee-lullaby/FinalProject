@@ -82,8 +82,27 @@ h3 {
 	background-color: #ffffff;
 }
 </style>
+<script>
+	function _errorNotify() {
+		var text = $("#messageError").text();
+		$.Notify({
+			type : 'alert',
+			caption : 'Alert',
+			content : text
+		});
+	}
 
+	function _successNotify() {
+		var text = $("#messageSuccess").text();
+		$.Notify({
+			type : 'success',
+			caption : 'Success',
+			content : text
+		});
+	}
+</script>
 <body>
+	<t:header />
 	<div style="width: 80%; margin: 0 auto; padding-bottom: 50px">
 		<h1>
 			<a href="/Timetabling/staff" class="nav-button transform"><span></span></a>
@@ -104,7 +123,7 @@ h3 {
 					<div style="width: auto; float: right">
 						<button id="btn-add-teacher" class="button" data-role="hint"
 							data-hint-background="#1CB7EC" data-hint-color="fg-white"
-							data-hint-position="top" data-hint="Add Course">
+							data-hint-position="top" data-hint="Add Teacher">
 							<span class="mif-plus"></span>
 						</button>
 						<button id="btn-add-from-file" class="button" data-role="hint"
@@ -153,8 +172,7 @@ h3 {
 											</c:if></td>
 										<td><a href="#"
 											id="edit-teacher-${teacherSemester.teacher.teacherId}">Edit</a></td>
-										<td><a
-											href="<c:url value='/staff/teacher/delete/${teacherSemester.teacher.teacherId}' />">Delete</a></td>
+										<td><a href="#" id="delete-teacher-${teacherSemester.teacher.teacherId}">Delete</a></td>
 									</tr>
 								</c:forEach>
 							</c:if>
@@ -210,15 +228,15 @@ h3 {
 							name="teacherSemesterId" /></td>
 					</tr>
 					<tr>
-						<th>Teacher</th>
-						<td><div class="input-control text" style="width: 100%">
-								<input type="text" id="name" name="name" />
-							</div></td>
-					</tr>
-					<tr>
 						<th>Account</th>
 						<td><div class="input-control text" style="width: 100%">
 								<input type="text" id="account" name="account" />
+							</div></td>
+					</tr>
+					<tr>
+						<th>Name</th>
+						<td><div class="input-control text" style="width: 100%">
+								<input type="text" id="name" name="name" />
 							</div></td>
 					</tr>
 					<tr>
@@ -279,15 +297,15 @@ h3 {
 							name="teacherSemesterId" /></td>
 					</tr>
 					<tr>
-						<th>Teacher</th>
-						<td><div class="input-control text" style="width: 100%">
-								<input type="text" id="name" name="name" />
-							</div></td>
-					</tr>
-					<tr>
 						<th>Account</th>
 						<td><div class="input-control text" style="width: 100%">
 								<input type="text" id="account" name="account" />
+							</div></td>
+					</tr>
+					<tr>
+						<th>Name</th>
+						<td><div class="input-control text" style="width: 100%">
+								<input type="text" id="name" name="name" />
 							</div></td>
 					</tr>
 					<tr>
@@ -337,5 +355,19 @@ h3 {
 			<button class="button" id="btn-add-cancel">CANCEL</button>
 		</div>
 	</div>
+	
+	
+	<div id="dialog-delete-teacher" data-role="dialog" class="padding20"
+		data-overlay="true" data-overlay-color="op-dark"
+		data-windows-style="true">
+		<div style="width: 500px; margin: 0 auto; text-align: center;">
+			<h2>Are you sure to delete this teacher?</h2>
+			<div id="btn-group" style="margin-top: 25px;">
+				<button class="button" id="btn-delete-accept">ACCEPT</button>
+				<button class="button" id="btn-delete-decline">DECLINE</button>
+			</div>
+		</div>
+	</div>
+	
 </body>
 </html>

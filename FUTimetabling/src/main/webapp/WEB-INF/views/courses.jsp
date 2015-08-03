@@ -80,7 +80,27 @@ h3 {
 	background-color: #ffffff;
 }
 </style>
+<script>
+	function _errorNotify() {
+		var text = $("#messageError").text();
+		$.Notify({
+			type : 'alert',
+			caption : 'Alert',
+			content : text
+		});
+	}
+
+	function _successNotify() {
+		var text = $("#messageSuccess").text();
+		$.Notify({
+			type : 'success',
+			caption : 'Success',
+			content : text
+		});
+	}
+</script>
 <body>
+	<t:header />
 	<div style="width: 80%; margin: 0 auto; padding-bottom: 50px;">
 		<h1>
 			<a href="/Timetabling/staff" class="nav-button transform"><span></span></a>
@@ -139,8 +159,8 @@ h3 {
 										<td>${courseSemester.courseCondition.code}</td>
 										<td><a href="#"
 											id="edit-course-${courseSemester.course.courseId}">Edit</a></td>
-										<td><a
-											href="<c:url value='/staff/course/delete/${courseSemester.course.courseId}' />">Delete</a></td>
+										<td><a href="#"
+											id="delete-course-${courseSemester.course.courseId}">Delete</a></td>
 									</tr>
 								</c:forEach>
 							</c:if>
@@ -325,6 +345,19 @@ h3 {
 		<div id="btn-group" style="float: right;">
 			<button class="button" id="btn-add-save">SAVE</button>
 			<button class="button" id="btn-add-cancel">CANCEL</button>
+		</div>
+	</div>
+
+
+	<div id="dialog-delete-course" data-role="dialog" class="padding20"
+		data-overlay="true" data-overlay-color="op-dark"
+		data-windows-style="true">
+		<div style="width: 500px; margin: 0 auto; text-align: center;">
+			<h2>Are you sure to delete this course?</h2>
+			<div id="btn-group" style="margin-top: 25px;">
+				<button class="button" id="btn-delete-accept">ACCEPT</button>
+				<button class="button" id="btn-delete-decline">DECLINE</button>
+			</div>
 		</div>
 	</div>
 </body>

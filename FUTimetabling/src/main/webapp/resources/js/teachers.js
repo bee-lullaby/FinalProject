@@ -2,11 +2,23 @@ $(document).ready(function() {
 
 	_init();
 	$("#table-teachers").on("click", "a[id^='edit-teacher']",function() {
-		console.log("edit");
 		_setDialogEditData($("#dialog-edit-teacher"), $(this).closest("tr"));
 		_showDialog("dialog-edit-teacher");
 	});
 
+	$("#table-teachers").on("click", "a[id^='delete-teacher']",function() {
+		$("#dialog-delete-teacher").attr("data-teacherId", $(this).closest("tr").attr("data-teacherId"));
+		_showDialog("dialog-delete-teacher");
+	});
+
+	$("#btn-delete-accept").on("click", function() {
+		window.location = "teachers/deleteTeacher?teacherId=" +$("#dialog-delete-teacher").attr("data-teacherId");
+	});
+	
+	$("#btn-delete-decline").on("click", function() {
+		$("#dialog-delete-teacher").removeAttr("data-teacherId");
+		_showDialog("dialog-delete-teacher");
+	});
 	
 	$("#btn-add-teacher").on("click", function() {
 		_clearDialogData($("#dialog-add-teacher"));
@@ -14,13 +26,33 @@ $(document).ready(function() {
 	});
 	
 	$("#dialog-edit-teacher #btn-edit-save").on("click", function() {
-		$("#form-edit-teacher").attr("action", "teachers/updateTeacher");
-		$("#form-edit-teacher").submit();
+		if(_isFPTEmail($("#dialog-edit-teacher #email").val())) {
+			$("#form-edit-teacher").attr("action", "teachers/updateTeacher");
+			$("#form-edit-teacher").submit();
+		} else {
+			$.Notify({type: 'alert', caption: 'Alert', content: "Your Email is not FPT University's mail!!!"});
+			$("#dialog-edit-teacher #email").css("border-color", "red");
+		}
 	});
 	
 	$("#dialog-add-teacher #btn-add-save").on("click", function() {
-		$("#form-add-teacher").attr("action", "teachers/updateTeacher");
-		$("#form-add-teacher").submit();
+		if($("#dialog-add-teacher #account").val() == "") {
+			$.Notify({type: 'alert', caption: 'Alert', content: "Your Account can not be empty!!!"});
+			$("#dialog-add-teacher #account").css("border-color", "red");
+		} else {
+			if($("#dialog-add-teacher #name").val() == "") {
+				$.Notify({type: 'alert', caption: 'Alert', content: "Your Name can not be empty!!!"});
+				$("#dialog-add-teacher #name").css("border-color", "red");
+			} else {
+				if(_isFPTEmail($("#dialog-add-teacher #email").val())) {
+					$("#form-add-teacher").attr("action", "teachers/updateTeacher");
+					$("#form-add-teacher").submit();
+				} else {
+					$.Notify({type: 'alert', caption: 'Alert', content: "Your Email is not FPT University's mail!!!"});
+					$("#dialog-add-teacher #email").css("border-color", "red");
+				}
+			}
+		}
 	});
 	
 	$("#dialog-edit-teacher #btn-edit-cancel").on("click", function() {
@@ -122,6 +154,18 @@ $(document).ready(function() {
 	            return parameter[1];
 	        }
 	    }
+	}
+
+	function _isFPTEmail(email) {
+		var part = email.split("@");
+		
+		if(part.length != 2) {
+			return false;
+		}
+		if(part[1] != "fpt.edu.vn") {
+			return false;
+		} 
+		return true;
 	}
 	
 	function _showDialog(id) {

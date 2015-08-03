@@ -80,58 +80,88 @@ h3 {
 	background-color: #ffffff;
 }
 </style>
+<script>
+	function _errorNotify() {
+		var text = $("#messageError").text();
+		$.Notify({
+			type : 'alert',
+			caption : 'Alert',
+			content : text
+		});
+	}
+
+	function _successNotify() {
+		var text = $("#messageSuccess").text();
+		$.Notify({
+			type : 'success',
+			caption : 'Success',
+			content : text
+		});
+	}
+</script>
 <body>
+	<t:header />
 	<div style="width: 80%; margin: 0 auto; padding: 30px;">
 		<h1>
 			<a href="/Timetabling/staff" class="nav-button transform"><span></span></a>
 			&nbsp;Rooms Management
 		</h1>
-		<div style="display: inline-block; margin-left: 25px; width: 100%;">
-			<div id="control-bar" style="width: 100%; margin-bottom: 45px;">
-				<div style="width: auto; float: right">
-					<button id="btn-add-room" class="button" data-role="hint"
-						data-hint-background="#1CB7EC" data-hint-color="fg-white"
-						data-hint-position="top" data-hint="Add Course">
-						<span class="mif-plus"></span>
-					</button>
-					<button id="btn-add-from-file" class="button" data-role="hint"
-						data-hint-background="#1CB7EC" data-hint-color="fg-white"
-						data-hint-position="top" data-hint="Add From File">
-						<span class="mif-file-text"></span>
-					</button>
-				</div>
+
+		<div style="display: flex">
+			<div id="select-semester" class="left"
+				style="display: inline-block; width: 250px;">
+				<h3>General Management</h3>
+				<a href="staffManagement">Staff</a> <a href="building">Building</a>
+				<a class="active" href="#">Room</a> <a href="semester">Semester</a> <a
+					href="secialized">Specialized</a> <a href="departments">Department</a>
 			</div>
-			<div style="width: 100%; height: 100%;">
-				<table id="table-rooms"
-					class="table striped hovered border bordered cell-hovered">
-					<thead>
-						<tr>
-							<th>Code</th>
-							<th>Capacity</th>
-							<th>For Courses</th>
-							<th>Edit</th>
-							<th>Delete</th>
-						</tr>
-					</thead>
-					<tbody>
-						<c:if test="${!empty listRooms}">
-							<c:forEach items="${listRooms}" var="room">
-								<tr data-roomId="${room.roomId}">
-									<td>${room.code}</td>
-									<td>${room.capacity}</td>
-									<td>${room.courses}</td>
-									<td><a href="#" id="edit-room-${room.roomId}">Edit</a></td>
-									<td><a
-										href="<c:url value='/staff/rooms/delete/${room.roomId}' />">Delete</a></td>
-								</tr>
-							</c:forEach>
-						</c:if>
-					</tbody>
-				</table>
+			<div style="display: inline-block; margin-left: 25px; width: 100%;">
+				<div id="control-bar" style="width: 100%; margin-bottom: 45px;">
+					<div style="width: auto; float: right">
+						<button id="btn-add-room" class="button" data-role="hint"
+							data-hint-background="#1CB7EC" data-hint-color="fg-white"
+							data-hint-position="top" data-hint="Add Course">
+							<span class="mif-plus"></span>
+						</button>
+						<button id="btn-add-from-file" class="button" data-role="hint"
+							data-hint-background="#1CB7EC" data-hint-color="fg-white"
+							data-hint-position="top" data-hint="Add From File">
+							<span class="mif-file-text"></span>
+						</button>
+					</div>
+				</div>
+				<div style="width: 100%; height: 100%;">
+					<table id="table-rooms"
+						class="table striped hovered border bordered cell-hovered">
+						<thead>
+							<tr>
+								<th>Code</th>
+								<th>Capacity</th>
+								<th>Building</th>
+								<th>For Courses</th>
+								<th>Edit</th>
+								<th>Delete</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:if test="${!empty listRooms}">
+								<c:forEach items="${listRooms}" var="room">
+									<tr data-roomId="${room.roomId}">
+										<td>${room.code}</td>
+										<td>${room.capacity}</td>
+										<td>${room.building.code}</td>
+										<td>${room.courses}</td>
+										<td><a href="#" id="edit-room-${room.roomId}">Edit</a></td>
+										<td><a href="#" id="delete-room-${room.roomId}">Delete</a></td>
+									</tr>
+								</c:forEach>
+							</c:if>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
-
 
 	<div id="dialog-add-file" data-role="dialog" data-overlay="true"
 		data-overlay-color="op-dark" style="padding: 25px"
@@ -157,7 +187,7 @@ h3 {
 			method="post">
 			<table id="table-edit-room" class="table">
 				<thead>
-					<tr style="display:none">
+					<tr style="display: none">
 						<td><input type="text" id="roomId" name="roomId" /></td>
 						<td></td>
 					</tr>
@@ -171,6 +201,18 @@ h3 {
 						<th>Capacity</th>
 						<td><div class="input-control text" style="width: 300px">
 								<input type="number" id="capacity" name="capacity" />
+							</div></td>
+					</tr>
+					<tr>
+						<th>Building</th>
+						<td><div class="input-control select full-size">
+								<select id="select-building" name="buildingId">
+									<c:if test="${!empty listBuildings}">
+										<c:forEach items="${listBuildings}" var="building">
+											<option value="${building.buildingId}">${building.code}</option>
+										</c:forEach>
+									</c:if>
+								</select>
 							</div></td>
 					</tr>
 					<tr>
@@ -202,12 +244,12 @@ h3 {
 	</div>
 	<div id="dialog-add-room" data-role="dialog" class="padding20"
 		data-overlay="true" data-overlay-color="op-dark">
-		<h3 id="title">Add Course</h3>
+		<h3 id="title">Add Room</h3>
 		<form id="form-add-room" style="width: 400px; margin: 0 auto;"
 			method="post">
 			<table id="table-add-courses" class="table">
 				<thead>
-					<tr style="display:none">
+					<tr style="display: none">
 						<td><input type="text" id="roomId" name="roomId" /></td>
 						<td></td>
 					</tr>
@@ -221,6 +263,18 @@ h3 {
 						<th>Capacity</th>
 						<td><div class="input-control text" style="width: 300px">
 								<input type="number" id="capacity" name="capacity" />
+							</div></td>
+					</tr>
+					<tr>
+						<th>Building</th>
+						<td><div class="input-control select full-size">
+								<select id="select-building" name="buildingId">
+									<c:if test="${!empty listBuildings}">
+										<c:forEach items="${listBuildings}" var="building">
+											<option value="${building.buildingId}">${building.code}</option>
+										</c:forEach>
+									</c:if>
+								</select>
 							</div></td>
 					</tr>
 					<tr>
@@ -250,5 +304,18 @@ h3 {
 			<button class="button" id="btn-add-cancel">CANCEL</button>
 		</div>
 	</div>
+
+	<div id="dialog-delete-room" data-role="dialog" class="padding20"
+		data-overlay="true" data-overlay-color="op-dark"
+		data-windows-style="true">
+		<div style="width: 500px; margin: 0 auto; text-align: center;">
+			<h2>Are you sure to delete this Room?</h2>
+			<div id="btn-group" style="margin-top: 25px;">
+				<button class="button" id="btn-delete-accept">ACCEPT</button>
+				<button class="button" id="btn-delete-decline">DECLINE</button>
+			</div>
+		</div>
+	</div>
+
 </body>
 </html>
