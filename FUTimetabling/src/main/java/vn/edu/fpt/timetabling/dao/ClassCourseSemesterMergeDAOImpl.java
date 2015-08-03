@@ -45,7 +45,7 @@ public class ClassCourseSemesterMergeDAOImpl implements ClassCourseSemesterMerge
 	@Override
 	public ClassCourseSemesterMerge getClassCourseSemesterMergeById(int classCourseSemesterMergeId) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemesterMerge CCSM"
-				+ " WHERE CCSM.classCourseSemesterMergeId = : classCourseSemesterMergeId";
+				+ " WHERE CCSM.classCourseSemesterMergeId = :classCourseSemesterMergeId";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("classCourseSemesterMergeId", classCourseSemesterMergeId);
 		return (ClassCourseSemesterMerge) query.uniqueResult();
@@ -55,5 +55,17 @@ public class ClassCourseSemesterMergeDAOImpl implements ClassCourseSemesterMerge
 	public void deleteClassCourseSemesterMerge(int classCourseSemesterMergeId) {
 		ClassCourseSemesterMerge classCourseSemesterMerge = getClassCourseSemesterMergeById(classCourseSemesterMergeId);
 		getCurrentSession().delete(classCourseSemesterMerge);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ClassCourseSemesterMerge> listClassCourseSemesterMerges(int semesterId) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemesterMerge CCSM"
+				+ " WHERE CCSM.classCourseSemester1.classSemester.semester.semesterId = :semesterId";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("semesterId", semesterId);
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<ClassCourseSemesterMerge> classCourseSemesterMerges = (List<ClassCourseSemesterMerge>) query.list();
+		return classCourseSemesterMerges;
 	}
 }

@@ -11,6 +11,8 @@ public interface ClassCourseSemesterMergeService {
 
 	public List<ClassCourseSemesterMerge> listClassCourseSemesterMerges();
 
+	public List<ClassCourseSemesterMerge> listClassCourseSemesterMerges(int semesterId);
+
 	public ClassCourseSemesterMerge getClassCourseSemesterMergeById(int classCourseSemesterMergeId);
 
 	public void deleteClassCourseSemesterMerge(int classCourseSemesterMergeId);

@@ -10,6 +10,8 @@ public interface ClassCourseSemesterMergeDAO {
 	public void updateClassCourseSemesterMerge(ClassCourseSemesterMerge classCourseSemesterMerge);
 
 	public List<ClassCourseSemesterMerge> listClassCourseSemesterMerges();
+	
+	public List<ClassCourseSemesterMerge> listClassCourseSemesterMerges(int semesterId);
 
 	public ClassCourseSemesterMerge getClassCourseSemesterMergeById(int classCourseSemesterMergeId);
 

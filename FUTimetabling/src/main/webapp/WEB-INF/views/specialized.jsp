@@ -7,7 +7,7 @@
 <html>
 <head>
 
-<title>Course Page</title>
+<title>Specialized Page</title>
 <style type="text/css">
 .tg {
 	border-collapse: collapse;
