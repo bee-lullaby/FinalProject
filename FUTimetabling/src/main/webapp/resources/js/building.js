@@ -27,12 +27,18 @@ $(document).ready(function() {
 	});
 	
 	$("#dialog-add-building #btn-add-save").on("click", function() {
-		$("#form-add-building").attr("action", "building/updateBuilding");
-		$("#form-add-building").submit();
+		if($("#dialog-add-building #code").val() == "") {
+			$.Notify({type: 'alert', caption: 'Alert', content: "Your Code can not be empty!!!"});
+			$("#dialog-add-building #code").css("border-color", "red");
+		} else {
+			$("#form-add-building").attr("action", "building/updateBuilding");
+			$("#form-add-building").submit();
+		}
 	});
 	
 	$("#dialog-add-building #btn-add-cancel").on("click", function() {
 		_showDialog("dialog-add-building");
+		$("#dialog-add-building #code").css("border-color", "");
 	});
 	
 	function _init() {

@@ -77,7 +77,29 @@ public class SemesterDAOImpl implements SemesterDAO {
 		query.setParameter("semesterId", semesterId);
 		return (Semester) query.uniqueResult();
 	}
-
+	
+	@Override
+	public Semester getSemesterByCode(String code, boolean jointClassSemester, boolean jointCourseSemester,
+			boolean jointProgramSemester, boolean jointTeacherSemester) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Semester S";
+		if (jointClassSemester) {
+			hql += " LEFT OUTER JOIN FETCH S.classSemesters";
+		}
+		if (jointCourseSemester) {
+			hql += " LEFT OUTER JOIN FETCH S.courseSemesters";
+		}
+		if (jointProgramSemester) {
+			hql += " LEFT OUTER JOIN FETCH S.programSemesters";
+		}
+		if (jointTeacherSemester) {
+			hql += " LEFT OUTER JOIN FETCH S.teacherSemesters";
+		}
+		hql += " WHERE S.code = :code";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("code", code);
+		return (Semester) query.uniqueResult();
+	}
+	
 	@Override
 	public void deleteSemester(int semesterId) {
 		Semester semester = getSemesterById(semesterId, false, false, false, false);

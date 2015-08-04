@@ -15,5 +15,8 @@ public interface SemesterService {
 	public Semester getSemesterById(int semesterId, boolean jointClassSemester, boolean jointCourseSemester,
 			boolean jointProgramSemester, boolean jointTeacherSemester);
 
+	public Semester getSemesterByCode(String code, boolean jointClassSemester, boolean jointCourseSemester,
+			boolean jointProgramSemester, boolean jointTeacherSemester);
+	
 	public void deleteSemester(int semesterId);
 }

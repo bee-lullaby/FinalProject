@@ -34,8 +34,19 @@ $(document).ready(function() {
 	});
 	
 	$("#dialog-add-room #btn-add-save").on("click", function() {
-		$("#form-add-room").attr("action", "rooms/updateRoom");
-		$("#form-add-room").submit();
+		if($("#dialog-add-room #code").val() == "") {
+			$.Notify({type: 'alert', caption: 'Alert', content: "Your Code can not be empty!!!"});
+			$("#dialog-add-room #code").css("border-color", "red");
+		} else {
+			$("#dialog-add-room #code").css("border-color", "");
+			if($("#dialog-add-room #capacity").val() == "") {
+				$.Notify({type: 'alert', caption: 'Alert', content: "Your Capacity can not be empty!!!"});
+				$("#dialog-add-room #capacity").css("border-color", "red");
+			} else {
+				$("#form-add-room").attr("action", "rooms/updateRoom");
+				$("#form-add-room").submit();
+			}
+		}
 	});
 	
 	$("#dialog-edit-room #btn-edit-cancel").on("click", function() {
@@ -47,6 +58,8 @@ $(document).ready(function() {
 	$("#dialog-add-room #btn-add-cancel").on("click", function() {
 		_showDialog("dialog-add-room");
 		_clearDialogData($("#dialog-add-room"));
+		$("#dialog-add-room #code").css("border-color", "");
+		$("#dialog-add-room #capacity").css("border-color", "");
 	});
 	
 	$("#btn-add-from-file").on("click", function() {

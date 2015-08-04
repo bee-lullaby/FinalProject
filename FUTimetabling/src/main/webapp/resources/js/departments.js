@@ -22,13 +22,27 @@ $(document).ready(function() {
 	});
 	
 	$("#dialog-add-department #btn-add-save").on("click", function() {
-		$("#form-add-department").attr("action", "departments/updateDepartment");
-		$("#form-add-department").submit();
+		if($("#dialog-add-department #code").val() == "") {
+			$.Notify({type: 'alert', caption: 'Alert', content: "Your Code can not be empty!!!"});
+			$("#dialog-add-department #code").css("border-color", "red");
+		} else {
+			$("#dialog-add-department #code").css("border-color", "");
+			if($("#dialog-add-department #name").val() == "") {
+				$.Notify({type: 'alert', caption: 'Alert', content: "Your Capacity can not be empty!!!"});
+				$("#dialog-add-department #name").css("border-color", "red");
+			} else {
+				$("#form-add-department").attr("action", "departments/updateDepartment");
+				$("#form-add-department").submit();
+			}
+		}
+		
 	});
 	
 	$("#dialog-add-department #btn-add-cancel").on("click", function() {
 		_showDialog("dialog-add-department");
 		_clearDialogData($("#dialog-add-department"));
+		$("#dialog-add-department #code").css("border-color", "");
+		$("#dialog-add-department #name").css("border-color", "");
 	});
 	
 	$("#btn-add-from-file").on("click", function() {

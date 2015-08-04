@@ -1,12 +1,34 @@
 $(document).ready(function() { 
-
+	var table = $('#table-classes').DataTable({
+		"lengthChange": false,
+		"searching": true,
+		"paging": true,
+		"info": true,
+		"pageLength":30
+    });
+	
 	_init();
 	$("#table-classes").on("click", "#a[id^='edit-class']", function() {
 		_setDialogEditData($("#dialog-edit-class"), $(this).closest("tr"));
 		_showDialog("dialog-edit-class");
 	});
 
-	
+	$("#table-classes").on("click", "#a[id='courses-class']", function() {
+		var tr = $(this).closest('tr');
+        var row = table.row( tr );
+ 
+        if ( row.child.isShown() ) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            // Open this row
+            row.child().show();
+            tr.addClass('shown');
+        }
+	});
+
 	$("#btn-add-class").on("click", function() {
 		_clearDialogData($("#dialog-add-class"));
 		_showDialog("dialog-add-class");
@@ -49,14 +71,6 @@ $(document).ready(function() {
 	});
 	
 	function _init() {
-		var table = $('#table-classes').DataTable({
-			"lengthChange": false,
-			"searching": true,
-			"paging": true,
-			"info": true,
-			"pageLength":30
-	    });
-		
 		$("#select-semester").find("a[id='" +_urlParam("semesterId") +"']").addClass("active");
 		
 		var input = $("<input>").attr("type", "hidden")

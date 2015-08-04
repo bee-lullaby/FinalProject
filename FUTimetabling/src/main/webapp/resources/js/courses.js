@@ -33,8 +33,25 @@ $(document).ready(function() {
 	});
 	
 	$("#dialog-add-course #btn-add-save").on("click", function() {
-		$("#form-add-course").attr("action", "courses/updateCourse");
-		$("#form-add-course").submit();
+		if($("#dialog-add-course #courseCode").val() == "") {
+			$.Notify({type: 'alert', caption: 'Alert', content: "Your Code can not be empty!!!"});
+			$("#dialog-add-course #courseCode").css("border-color", "red");
+		} else {
+			$("#dialog-add-course #courseCode").css("border-color", "");
+			if($("#dialog-add-course #courseName").val() == "") {
+				$.Notify({type: 'alert', caption: 'Alert', content: "Your Name can not be empty!!!"});
+				$("#dialog-add-course #courseName").css("border-color", "red");
+			} else {
+				$("#dialog-add-course #courseName").css("border-color", "");
+				if($("#dialog-add-course #slots").val() == "") {
+					$.Notify({type: 'alert', caption: 'Alert', content: "Your slots can not be empty!!!"});
+					$("#dialog-add-course #slots").css("border-color", "red");
+				} else {
+					$("#form-add-course").attr("action", "courses/updateCourse");
+					$("#form-add-course").submit();
+				}
+			}
+		}
 	});
 	
 	$("#dialog-edit-course #btn-edit-cancel").on("click", function() {
@@ -46,6 +63,9 @@ $(document).ready(function() {
 	$("#dialog-add-course #btn-add-cancel").on("click", function() {
 		_showDialog("dialog-add-course");
 		_clearDialogData($("#dialog-add-course"));
+		$("#dialog-add-course #courseCode").css("border-color", "");
+		$("#dialog-add-course #courseName").css("border-color", "");
+		$("#dialog-add-course #slots").css("border-color", "");
 	});
 	
 	$("#btn-add-from-file").on("click", function() {
@@ -74,30 +94,30 @@ $(document).ready(function() {
 	}
 	
 	function _clearDialogData(dialog) {
-		dialog.find("#courseId").attr("value", "-1");
-		dialog.find("#courseSemesterId").attr("value", "-1");
-		dialog.find("#courseName").attr("value", "");
+		dialog.find("#courseId").val("-1");
+		dialog.find("#courseSemesterId").val("-1");
+		dialog.find("#courseName").val("");
 		dialog.find("#courseName").attr("readonly", false);
 		dialog.find("#courseName").attr("disabled", false);
-		dialog.find("#courseCode").attr("value", "");
+		dialog.find("#courseCode").val("");
 		dialog.find("#courseCode").attr("readonly", false);
 		dialog.find("#courseCode").attr("disabled", false);
-		dialog.find("#slots").attr("value", "");
+		dialog.find("#slots").val("");
 		dialog.find("#select-semester-edit").find("option:first").attr("selected", "selected");
 		dialog.find("#select-department-edit").find("option:first").attr("selected", "selected");	
 		dialog.find("#select-course-condition-edit option:first").attr("selected", "selected");
 	}
 	
 	function _setDialogEditData(dialog, tr) {
-		dialog.find("#courseId").attr("value", tr.attr("data-courseId"));
+		dialog.find("#courseId").val(tr.attr("data-courseId"));
 		dialog.find("#courseSemesterId").attr("value", tr.attr("data-courseSemesterId"));
-		dialog.find("#courseName").attr("value", tr.find("td:eq(0)").text());
+		dialog.find("#courseName").val(tr.find("td:eq(0)").text());
 		dialog.find("#courseName").attr("readonly", true);
 //		dialog.find("#courseName").attr("disabled", true);
-		dialog.find("#courseCode").attr("value", tr.find("td:eq(1)").text());
+		dialog.find("#courseCode").val(tr.find("td:eq(1)").text());
 		dialog.find("#courseCode").attr("readonly", true);
 //		dialog.find("#courseCode").attr("disabled", true);
-		dialog.find("#slots").attr("value", tr.find("td:eq(4)").text());
+		dialog.find("#slots").val(tr.find("td:eq(4)").text());
 		dialog.find("#select-semester-edit").find("option:contains('" +tr.find("td:eq(3)").text().trim() +"')").attr("selected", "selected");
 		dialog.find("#select-department-edit").find("option:contains('" +tr.find("td:eq(2)").text() +"')").attr("selected", "selected");
 		

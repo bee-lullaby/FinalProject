@@ -28,17 +28,31 @@ public class SemesterServiceImpl implements SemesterService {
 	}
 
 	@Override
-	public List<Semester> listSemesters(boolean jointClassSemester, boolean jointCourseSemester,
-			boolean jointProgramSemester, boolean jointTeacherSemester) {
-		return semesterDAO.listSemesters(jointClassSemester, jointCourseSemester, jointProgramSemester,
-				jointTeacherSemester);
+	public List<Semester> listSemesters(boolean jointClassSemester,
+			boolean jointCourseSemester, boolean jointProgramSemester,
+			boolean jointTeacherSemester) {
+		return semesterDAO
+				.listSemesters(jointClassSemester, jointCourseSemester,
+						jointProgramSemester, jointTeacherSemester);
 	}
 
 	@Override
-	public Semester getSemesterById(int semesterId, boolean jointClassSemester, boolean jointCourseSemester,
-			boolean jointProgramSemester, boolean jointTeacherSemester) {
-		return semesterDAO.getSemesterById(semesterId, jointClassSemester, jointCourseSemester, jointProgramSemester,
-				jointTeacherSemester);
+	public Semester getSemesterById(int semesterId, boolean jointClassSemester,
+			boolean jointCourseSemester, boolean jointProgramSemester,
+			boolean jointTeacherSemester) {
+		return semesterDAO
+				.getSemesterById(semesterId, jointClassSemester,
+						jointCourseSemester, jointProgramSemester,
+						jointTeacherSemester);
+	}
+
+	public Semester getSemesterByCode(String code, boolean jointClassSemester,
+			boolean jointCourseSemester, boolean jointProgramSemester,
+			boolean jointTeacherSemester) {
+		return semesterDAO
+				.getSemesterByCode(code, jointClassSemester,
+						jointCourseSemester, jointProgramSemester,
+						jointTeacherSemester);
 	}
 
 	@Override

@@ -200,15 +200,15 @@ h3 {
 							name="courseSemesterId" /></td>
 					</tr>
 					<tr>
-						<th>Course</th>
-						<td><div class="input-control text" style="width: 100%">
-								<input type="text" id="courseName" name="name" />
-							</div></td>
-					</tr>
-					<tr>
 						<th>Code</th>
 						<td><div class="input-control text" style="width: 100%">
 								<input type="text" id="courseCode" name="code" />
+							</div></td>
+					</tr>
+					<tr>
+						<th>Name</th>
+						<td><div class="input-control text" style="width: 100%">
+								<input type="text" id="courseName" name="name" />
 							</div></td>
 					</tr>
 					<tr>
@@ -280,15 +280,15 @@ h3 {
 							name="courseSemesterId" /></td>
 					</tr>
 					<tr>
-						<th>Course</th>
+						<th>Code</th>
 						<td><div class="input-control text" style="width: 100%">
-								<input type="text" id="courseName" name="name" readonly disabled />
+								<input type="text" id="courseCode" name="code" readonly/>
 							</div></td>
 					</tr>
 					<tr>
-						<th>Code</th>
+						<th>Name</th>
 						<td><div class="input-control text" style="width: 100%">
-								<input type="text" id="courseCode" name="code" readonly disabled />
+								<input type="text" id="courseName" name="name" readonly/>
 							</div></td>
 					</tr>
 					<tr>

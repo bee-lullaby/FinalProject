@@ -55,7 +55,7 @@ public class ProgramSemesterController extends GeneralController {
 		detailSpecializeds.add(0, new Specialized());
 		model.addAttribute("detailSpecializeds", detailSpecializeds);
 		checkError(httpSession, model);
-		return "programSemester";
+		return "programSemesters";
 	}
 
 	@RequestMapping(value = "/staff/programSemester/add", method = RequestMethod.POST)

@@ -105,7 +105,7 @@ h3 {
 	<t:header />
 	<div style="width: 80%; margin: 0 auto; padding-bottom: 50px">
 		<h1>
-			<a href="/Timetabling/building" class="nav-button transform"><span></span></a>
+			<a href="/Timetabling/staff" class="nav-button transform"><span></span></a>
 			&nbsp;Building Management
 		</h1>
 		<div style="display: flex">
@@ -113,7 +113,7 @@ h3 {
 				style="display: inline-block; width: 250px;">
 				<h3>General Management</h3>
 				<a href="staffManagement">Staff</a> <a class="active" href="#">Building</a>
-				<a href="rooms">Room</a> <a href="semester">Semester</a> 
+				<a href="rooms">Room</a> <a href="semesters">Semester</a> 
 				<a href="secialized">Specialized</a> <a href="departments">Department</a>
 			</div>
 			<div style="display: inline-block; margin-left: 25px; width: 100%;">

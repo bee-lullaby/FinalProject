@@ -112,7 +112,7 @@ h3 {
 				style="display: inline-block; width: 250px;">
 				<h3>General Management</h3>
 				<a href="staffManagement">Staff</a> <a href="building">Building</a>
-				<a class="active" href="#">Room</a> <a href="semester">Semester</a> <a
+				<a class="active" href="#">Room</a> <a href="semesters">Semester</a> <a
 					href="secialized">Specialized</a> <a href="departments">Department</a>
 			</div>
 			<div style="display: inline-block; margin-left: 25px; width: 100%;">

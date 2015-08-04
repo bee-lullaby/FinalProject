@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,12 +81,12 @@ public class CourseController extends GeneralController {
 
 	@RequestMapping(value = "/staff/courses/updateCourse", method = RequestMethod.POST, params = {
 			"courseId", "courseSemesterId", "courseId", "code", "name",
-			"slots", "semesterId", "departmentId", "courseConditionId" })
+			"slots", "semesterId", "departmentId"})
 	public String updateCourse(@RequestParam int courseId,
 			@RequestParam int courseSemesterId, @RequestParam String code,
 			@RequestParam String name, @RequestParam int slots,
 			@RequestParam int semesterId, @RequestParam int departmentId,
-			@RequestParam int courseConditionId, HttpSession httpSession)
+			@RequestParam(value="courseConditionId", required = false) int courseConditionId, HttpSession httpSession)
 			throws CourseExistedException {
 
 		Course course = courseService.getCourseByCode(code);

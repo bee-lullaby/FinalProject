@@ -143,18 +143,7 @@ h3 {
 										<td>${classSemester.classFPT.specialized.name}</td>
 										<td>${classSemester.classFPT.type}</td>
 										<td>${classSemester.semester.name}</td>
-										<td><a href="#">Courses</a>
-											<div style="display: none" id="data-courses">
-											<c:if
-												test="${!empty classSemester.classCourseSemesters}">
-												<c:forEach items="${classSemester.classCourseSemesters}"
-													var="classCourseSemester" varStatus="loop">
-													<div id="course-${classCourseSemester.classCourseSemesterId}">
-														
-													</div>
-												</c:forEach>
-											</c:if>
-											</div></td>
+										<td><a href="#" id="courses-class">Courses</a></td>
 										<td><a href="#"
 											id="edit-class-${classSemester.classFPT.classId}">Edit</a></td>
 										<td><a

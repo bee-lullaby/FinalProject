@@ -2974,7 +2974,10 @@ window.METRO_LOCALES = {
                     that._hide();
                     
                     // add by hans
-                    window.location = "roomPerDay?date=" +that.element.children("input[type=text]").val();
+                    var url = window.location.href;
+                    if(url.indexOf("roomPerDay")  != -1) {
+                    	window.location = "roomPerDay?date=" +that.element.children("input[type=text]").val();
+                	}
                 }
             });
 

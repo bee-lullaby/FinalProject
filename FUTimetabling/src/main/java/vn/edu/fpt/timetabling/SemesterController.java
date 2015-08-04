@@ -1,5 +1,9 @@
 package vn.edu.fpt.timetabling;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,12 +11,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import vn.edu.fpt.timetabling.model.Course;
+import vn.edu.fpt.timetabling.exception.SemesterExistedException;
 import vn.edu.fpt.timetabling.model.Semester;
 import vn.edu.fpt.timetabling.service.SemesterService;
 
@@ -28,41 +31,51 @@ public class SemesterController extends GeneralController {
 
 	@RequestMapping(value = "/staff/semesters", method = RequestMethod.GET)
 	public String listSemester(HttpSession httpSession, Model model) {
-		model.addAttribute("semester", new Course());
-		model.addAttribute("listSemesters", semesterService.listSemesters(false, false, false, false));
+		model.addAttribute("listSemesters",
+				semesterService.listSemesters(false, false, false, false));
 		checkError(httpSession, model);
-		return "semester";
+		notifySuccess(httpSession, model);
+		return "semesters";
 	}
 
 	// For add and update person both
-	@RequestMapping(value = "/staff/semester/add", method = RequestMethod.POST)
-	public String addSemester(@ModelAttribute("semester") Semester semester) {
-		if (semester.getSemesterId() == 0) {
-			// new course, add it
-			semesterService.addSemester(semester);
+	@RequestMapping(value = "/staff/semesters/updateSemester", method = RequestMethod.POST, params = {
+			"code", "name", "startDate", "endDate" })
+	public String updateSemester(@RequestParam String code,
+			@RequestParam String name, @RequestParam String startDate,
+			@RequestParam String endDate, HttpSession httpSession) throws SemesterExistedException, ParseException {
+		
+		Semester semester = semesterService.getSemesterByCode(code, false, false, false, false);
+		if(semester != null) {
+			throw new SemesterExistedException();
 		} else {
-			// existing course, call update
-			semesterService.updateSemester(semester);
+			semester = new Semester();
 		}
+		semester.setCode(code);
+		semester.setName(name);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date start = sdf.parse(startDate);
+		Date end = sdf.parse(endDate);
+		
+		semester.setStartDate(start);
+		semester.setEndDate(end);
+		
+		semesterService.addSemester(semester);
+		httpSession.setAttribute("success", "Add Semester Successful!");
 		return "redirect:/staff/semesters";
 	}
 
-	@RequestMapping("/staff/semester/delete/{semesterId}")
-	public String deleteSemester(@PathVariable("semesterId") int semesterId) {
+	@RequestMapping(value = "/staff/semesters/deleteSemester", method = RequestMethod.GET, params = {"semesterId"})
+	public String deleteSemester(@RequestParam int semesterId, HttpSession httpSession) {
 		semesterService.deleteSemester(semesterId);
+		httpSession.setAttribute("success", "Delete Semester Successful!");
 		return "redirect:/staff/semesters";
 	}
 
-	@RequestMapping("/staff/semester/edit/{semesterId}")
-	public String editSemester(@PathVariable("semesterId") int semesterId, Model model) {
-		model.addAttribute("semester", semesterService.getSemesterById(semesterId, false, false, false, false));
-		model.addAttribute("listSemesters", semesterService.listSemesters(false, false, false, false));
-		return "semester";
-	}
-
-	@ExceptionHandler(Exception.class)
+	@ExceptionHandler(SemesterExistedException.class)
 	public String handleException(HttpSession httpSession, Exception e) {
-		httpSession.setAttribute("error", "Error, please try again.");
+		httpSession.setAttribute("error", "The Semester's code existed! Please try again!");
 		return "redirect:/staff/semesters";
 	}
 }
