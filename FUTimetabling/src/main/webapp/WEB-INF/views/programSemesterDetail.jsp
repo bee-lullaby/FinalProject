@@ -111,7 +111,7 @@
 				<td><form:select path="courseSemester">
 						<c:forEach var="item" items="${courseSemesters}">
 							<option value="${item.courseSemesterId}"
-								${item.courseSemesterId == courseSemesterId ? 'selected="selected"' : ''}>${item.course.name}</option>
+								${item.courseSemesterId == courseSemesterId ? 'selected="selected"' : ''}>${item.course.code}</option>
 						</c:forEach>
 					</form:select></td>
 			</tr>
@@ -156,7 +156,7 @@
 						${programSemesterDetailTemp.programSemester.detailSpecialized != null ? programSemesterDetailTemp.programSemester.detailSpecialized.name : ''}
 						- Semester
 						${programSemesterDetailTemp.programSemester.currentSemester}</td>
-					<td>${programSemesterDetailTemp.courseSemester.course.name}</td>
+					<td>${programSemesterDetailTemp.courseSemester.course.code}</td>
 					<td><a
 						href="<c:url value='/staff/programSemesterDetail/edit/${programSemesterDetailTemp.programSemesterDetailId}' />">Edit</a></td>
 					<td><a

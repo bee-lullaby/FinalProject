@@ -197,7 +197,7 @@ public class StudentController extends GeneralController {
 		studentNumber = createTestData(studentNumber, "SE", "JS", 8, "8B", 16);
 		studentNumber = createTestData(studentNumber, "SE", "JS", 8, "8B", 16);
 		studentNumber = createTestData(studentNumber, "SE", "CS", 8, "8B", 10);
-		studentNumber = createTestData(studentNumber, "EC", null, 8, "8B", 16);
+		studentNumber = createTestData(studentNumber, "SE", "EC", 8, "8B", 16);
 
 		studentNumber = createTestData(studentNumber, "SE", "ISE", 7, "8A", 29);
 
@@ -207,16 +207,16 @@ public class StudentController extends GeneralController {
 		studentNumber = createTestData(studentNumber, "SE", "ES2", 7, "8C", 16);
 		studentNumber = createTestData(studentNumber, "SE", "JS", 7, "8C", 23);
 		studentNumber = createTestData(studentNumber, "SE", "JS", 7, "8C", 23);
-		studentNumber = createTestData(studentNumber, "EC", null, 7, "8C", 8);
+		studentNumber = createTestData(studentNumber, "SE", "EC", 7, "8C", 8);
 
 		studentNumber = createTestData(studentNumber, "SE", "ISE", 6, "9A", 5);
 
 		studentNumber = createTestData(studentNumber, "SE", null, 5, "9B", 18);
 		studentNumber = createTestData(studentNumber, "SE", null, 5, "9B", 17);
 		studentNumber = createTestData(studentNumber, "SE", null, 5, "9B", 25);
-		studentNumber = createTestData(studentNumber, "EC", null, 5, "9B", 5);
-		studentNumber = createTestData(studentNumber, "IA", "IA1", 5, "9B", 23);
-		studentNumber = createTestData(studentNumber, "IA", "IA2", 5, "9B", 23);
+		studentNumber = createTestData(studentNumber, "SE", "EC", 5, "9B", 5);
+		studentNumber = createTestData(studentNumber, "SE", "IA1", 5, "9B", 23);
+		studentNumber = createTestData(studentNumber, "SE", "IA2", 5, "9B", 23);
 		studentNumber = createTestData(studentNumber, "SE", "ISE", 5, "9B", 4);
 
 		studentNumber = createTestData(studentNumber, "SE", null, 4, "9C", 31);
@@ -225,24 +225,24 @@ public class StudentController extends GeneralController {
 		studentNumber = createTestData(studentNumber, "SE", null, 4, "9C", 26);
 		studentNumber = createTestData(studentNumber, "SE", null, 4, "9C", 23);
 		studentNumber = createTestData(studentNumber, "SE", "ISE", 4, "9C", 6);
-		studentNumber = createTestData(studentNumber, "EC", null, 4, "9C", 6);
-		studentNumber = createTestData(studentNumber, "IA", null, 4, "9C", 21);
-		studentNumber = createTestData(studentNumber, "IA", null, 4, "9C", 20);
-		studentNumber = createTestData(studentNumber, "GD", null, 4, "9C", 16);
+		studentNumber = createTestData(studentNumber, "SE", "EC", 4, "9C", 6);
+		studentNumber = createTestData(studentNumber, "SE", "IA", 4, "9C", 21);
+		studentNumber = createTestData(studentNumber, "SE", "IA", 4, "9C", 20);
+		studentNumber = createTestData(studentNumber, "SE", "GD", 4, "9C", 16);
 
 		studentNumber = createTestData(studentNumber, "SE", null, 3, "10A", 25);
 		studentNumber = createTestData(studentNumber, "SE", null, 3, "10A", 17);
 		studentNumber = createTestData(studentNumber, "SE", null, 3, "10A", 30);
-		studentNumber = createTestData(studentNumber, "EC", null, 3, "10A", 4);
-		studentNumber = createTestData(studentNumber, "IA", null, 3, "10A", 17);
+		studentNumber = createTestData(studentNumber, "SE", "EC", 3, "10A", 4);
+		studentNumber = createTestData(studentNumber, "SE", "IA", 3, "10A", 17);
 
 		studentNumber = createTestData(studentNumber, "SE", null, 2, "10B", 24);
 		studentNumber = createTestData(studentNumber, "SE", null, 2, "10B", 25);
 		studentNumber = createTestData(studentNumber, "SE", null, 2, "10B", 19);
-		studentNumber = createTestData(studentNumber, "IA", null, 2, "10B", 14);
-		studentNumber = createTestData(studentNumber, "EC", null, 2, "10B", 8);
+		studentNumber = createTestData(studentNumber, "SE", "IA", 2, "10B", 14);
+		studentNumber = createTestData(studentNumber, "SE", "EC", 2, "10B", 8);
 		studentNumber = createTestData(studentNumber, "SE", "ISE", 2, "10B", 21);
-		studentNumber = createTestData(studentNumber, "GD", null, 2, "10B", 17);
+		studentNumber = createTestData(studentNumber, "SE", "GD", 2, "10B", 17);
 
 		studentNumber = createTestData(studentNumber, "SE", null, 1, "10C", 28);
 		studentNumber = createTestData(studentNumber, "SE", null, 1, "10C", 28);
@@ -250,9 +250,9 @@ public class StudentController extends GeneralController {
 		studentNumber = createTestData(studentNumber, "SE", null, 1, "10C", 28);
 		studentNumber = createTestData(studentNumber, "SE", null, 1, "10C", 28);
 		studentNumber = createTestData(studentNumber, "SE", null, 1, "10C", 28);
-		studentNumber = createTestData(studentNumber, "EC", null, 1, "10C", 27);
-		studentNumber = createTestData(studentNumber, "IA", null, 1, "10C", 32);
-		studentNumber = createTestData(studentNumber, "GD", null, 1, "10C", 12);
+		studentNumber = createTestData(studentNumber, "SE", "EC", 1, "10C", 27);
+		studentNumber = createTestData(studentNumber, "SE", "IA", 1, "10C", 32);
+		studentNumber = createTestData(studentNumber, "SE", "GD", 1, "10C", 12);
 
 		studentNumber = createTestData(studentNumber, "SE", "ISE", 0, "0", 20);
 		return "redirect:/";
