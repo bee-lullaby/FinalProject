@@ -32,20 +32,8 @@ td a {
 	width: 100px;
 }
 
-#table-edit-course tr th, #table-add-courses tr th {
+#table-class-course tr th, #table-add-courses tr th {
 	text-align: left;
-}
-
-#table-add-edit-courses tr th, #table-add-edit-courses tr td {
-	padding: 0.4rem 0;
-}
-
-#table-info {
-	padding: 5px;
-	background-color: #eeeeee;
-	font-size: .875rem;
-	float: left;
-	vertical-align: top;
 }
 
 .left>a {
@@ -82,7 +70,25 @@ h3 {
 	background-color: #ffffff;
 }
 </style>
+<script>
+	function _errorNotify() {
+		var text = $("#messageError").text();
+		$.Notify({
+			type : 'alert',
+			caption : 'Alert',
+			content : text
+		});
+	}
 
+	function _successNotify() {
+		var text = $("#messageSuccess").text();
+		$.Notify({
+			type : 'success',
+			caption : 'Success',
+			content : text
+		});
+	}
+</script>
 <body>
 	<t:header />
 	<div style="width: 80%; margin: 0 auto; padding-bottom: 50px;">
@@ -105,7 +111,7 @@ h3 {
 					<div style="width: auto; float: right">
 						<button id="btn-add-class" class="button" data-role="hint"
 							data-hint-background="#1CB7EC" data-hint-color="fg-white"
-							data-hint-position="top" data-hint="Add Course">
+							data-hint-position="top" data-hint="Add Class">
 							<span class="mif-plus"></span>
 						</button>
 						<button id="btn-add-from-file" class="button" data-role="hint"
@@ -126,7 +132,6 @@ h3 {
 								<th>Batch Char</th>
 								<th>Specialized</th>
 								<th>Type</th>
-								<th>Semester</th>
 								<th>Courses</th>
 								<th>Edit</th>
 								<th>Delete</th>
@@ -136,18 +141,34 @@ h3 {
 							<c:if test="${!empty listClassSemesters}">
 								<c:forEach items="${listClassSemesters}" var="classSemester">
 									<tr data-classSemesterId="${classSemester.classSemesterId}"
-										data-classId="${classSemester.classFPT.classId}">
+										data-classId="${classSemester.classFPT.classId}"
+										data-semesterName="${classSemester.semester.name}">
 										<td>${classSemester.classFPT.code}</td>
 										<td>${classSemester.classFPT.batch}</td>
 										<td>${classSemester.classFPT.batchChar}</td>
 										<td>${classSemester.classFPT.specialized.name}</td>
 										<td>${classSemester.classFPT.type}</td>
-										<td>${classSemester.semester.name}</td>
-										<td><a href="#" id="courses-class">Courses</a></td>
+										<td><a href="#" id="courses-class">Courses</a>
+											<div id="data-courses" style="display: none">
+												<c:forEach items="${classSemester.classCourseSemesters}"
+													var="classCourseSemester">
+													<div
+														id="class-course-${classCourseSemester.classCourseSemesterId}">
+														<div id="name">${classCourseSemester.courseSemester.course.code}</div>
+														<div id="blockCondition">${classCourseSemester.blockCondition}</div>
+														<div id="semesterLong">
+															<c:choose>
+																<c:when test="${classCourseSemester.semesterLong}">1</c:when>
+																<c:otherwise>0</c:otherwise>
+															</c:choose>
+														</div>
+													</div>
+												</c:forEach>
+											</div></td>
 										<td><a href="#"
 											id="edit-class-${classSemester.classFPT.classId}">Edit</a></td>
-										<td><a
-											href="<c:url value='/staff/classFPTs/delete/${classSemester.classFPT.classId}' />">Delete</a></td>
+										<td><a href="#"
+											id="delete-class-${classSemester.classFPT.classId}">Delete</a></td>
 									</tr>
 								</c:forEach>
 							</c:if>
@@ -360,7 +381,7 @@ h3 {
 										<c:if test="${!empty listCourseSemesters}">
 											<c:forEach items="${listCourseSemesters}"
 												var="courseSemester">
-												<option value="${courseSemester.course.courseId}">${courseSemester.course.code}</option>
+												<option value="${courseSemester.courseSemesterId}">${courseSemester.course.code}</option>
 											</c:forEach>
 										</c:if>
 									</select>
@@ -386,5 +407,139 @@ h3 {
 			</div>
 		</div>
 	</div>
+
+	<div id="dialog-delete-class" data-role="dialog" class="padding20"
+		data-overlay="true" data-overlay-color="op-dark"
+		data-windows-style="true">
+		<div style="width: 500px; margin: 0 auto; text-align: center;">
+			<h2>Are you sure to delete this class?</h2>
+			<div id="btn-group" style="margin-top: 25px;">
+				<button class="button" id="btn-delete-accept">ACCEPT</button>
+				<button class="button" id="btn-delete-decline">DECLINE</button>
+			</div>
+		</div>
+	</div>
+
+
+	<div id="dialog-class-course" data-role="dialog" class="padding20"
+		data-overlay="true" data-overlay-color="op-dark">
+		<div style="width: auto; margin: 0 auto; text-align: center;">
+			<h3 id="class-name"></h3>
+			<form id="form-class-course" method="post">
+				<table class="table" id="table-class-course">
+					<thead>
+						<tr>
+							<th>Course</th>
+							<th>Block Condition</th>
+							<th>Semester Long</th>
+						</tr>
+						<tr id="course-1">
+							<td><div class='input-control select'>
+									<select id='select-course' name="courseId"><option value="-1">...
+										</option></select>
+								</div></td>
+							<td><div class='input-control select' >
+									<select id='blockCondition' name='blockCondition'>
+										<option value='0'>No condition</option>
+										<option value='1'>Block 1</option>
+										<option value='2'>Block 2</option>
+									</select>
+								</div></td>
+							<td><div class='input-control select'>
+									<select id='semesterLong' name='semesterLong'>
+										<option value='0'>No condition</option>
+										<option value='1'>12 weeks</option>
+									</select>
+								</div></td>
+						</tr>
+						<tr id="course-2">
+							<td><div class='input-control select' >
+									<select id='select-course' name="courseId"><option value="-1">...
+										</option></select>
+								</div></td>
+							<td><div class='input-control select'>
+									<select id='blockCondition' name='blockCondition'>
+										<option value='0'>No condition</option>
+										<option value='1'>Block 1</option>
+										<option value='2'>Block 2</option>
+									</select>
+								</div></td>
+							<td><div class='input-control select'>
+									<select id='semesterLong' name='semesterLong'>
+										<option value='0'>No condition</option>
+										<option value='1'>12 weeks</option>
+									</select>
+								</div></td>
+						</tr>
+						<tr id="course-3">
+							<td><div class='input-control select'>
+									<select id='select-course' name="courseId"><option value="-1">...
+										</option></select>
+								</div></td>
+							<td><div class='input-control select'>
+									<select id='blockCondition' name='blockCondition'>
+										<option value='0'>No condition</option>
+										<option value='1'>Block 1</option>
+										<option value='2'>Block 2</option>
+									</select>
+								</div></td>
+							<td><div class='input-control select'>
+									<select id='semesterLong' name='semesterLong'>
+										<option value='0'>No condition</option>
+										<option value='1'>12 weeks</option>
+									</select>
+								</div></td>
+						</tr>
+						<tr id="course-4">
+							<td><div class='input-control select'>
+									<select id='select-course' name="courseId"><option value="-1">...
+										</option></select>
+								</div></td>
+							<td><div class='input-control select'>
+									<select id='blockCondition' name='blockCondition'>
+										<option value='0'>No condition</option>
+										<option value='1'>Block 1</option>
+										<option value='2'>Block 2</option>
+									</select>
+								</div></td>
+							<td><div class='input-control select'>
+									<select id='semesterLong' name='semesterLong'>
+										<option value='0'>No condition</option>
+										<option value='1'>12 weeks</option>
+									</select>
+								</div></td>
+						</tr>
+						<tr id="course-5">
+							<td><div class='input-control select'>
+									<select id='select-course' name="courseId"><option value="-1">...
+										</option></select>
+								</div></td>
+							<td><div class='input-control select'>
+									<select id='blockCondition' name='blockCondition'>
+										<option value='0'>No condition</option>
+										<option value='1'>Block 1</option>
+										<option value='2'>Block 2</option>
+									</select>
+								</div></td>
+							<td><div class='input-control select'>
+									<select id='semesterLong' name='semesterLong'>
+										<option value='0'>No condition</option>
+										<option value='1'>12 weeks</option>
+									</select>
+								</div></td>
+						</tr>
+					</thead>
+				</table>
+
+			</form>
+			<div id="btn-group" style="margin-top: 25px;">
+				<div style="float: right">
+					<button class="button" id="btn-save">SAVE</button>
+					<button class="button" id="btn-cancel">CANCEL</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 </body>
 </html>

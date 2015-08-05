@@ -10,13 +10,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import vn.edu.fpt.timetabling.exception.SpecializedExistedException;
 import vn.edu.fpt.timetabling.model.Specialized;
 import vn.edu.fpt.timetabling.service.SpecializedService;
 
@@ -30,26 +29,37 @@ public class SpecializedController extends GeneralController {
 		this.specializedService = specializedService;
 	}
 
-	@RequestMapping(value = "/staff/specializeds", method = RequestMethod.GET)
+	@RequestMapping(value = "/staff/specialized", method = RequestMethod.GET)
 	public String listSpecialized(HttpSession httpSession, Model model) {
-		model.addAttribute("specialized", new Specialized());
-		model.addAttribute("listSpecializeds", specializedService.listSpecializeds(true, false));
+		model.addAttribute("listSpecializeds", specializedService.listSpecializeds(false, false));
 		checkError(httpSession, model);
+		notifySuccess(httpSession, model);
 		return "specialized";
 	}
 
-	// For add and update person both
-	@RequestMapping(value = "/staff/specialized/add", method = RequestMethod.POST)
-	public String addSpecialized(@ModelAttribute("specialized") Specialized specialized) {
-		if (specialized.getSpecializedId() == 0) {
-			specializedService.addSpecialized(specialized);
+	@RequestMapping(value = "/staff/specialized/updateSpecialized", method = RequestMethod.POST,
+			params={"code", "name", "isDetail"})
+	public String addSpecialized(@RequestParam String code, @RequestParam String name,
+			@RequestParam int isDetail, HttpSession httpSession) throws SpecializedExistedException {
+		Specialized specialized = specializedService.getSpecializedByCode(code, false, false);
+		if(specialized != null) {
+			throw new SpecializedExistedException();
 		} else {
-			specializedService.updateSpecialized(specialized);
+			specialized = new Specialized();
 		}
-		return "redirect:/staff/specializeds";
+		
+		specialized.setCode(code);
+		specialized.setName(name);
+		if(isDetail == 1) {
+			specialized.setDetailSpecialized(true);
+		} else {
+			specialized.setDetailSpecialized(false);
+		}
+		specializedService.addSpecialized(specialized);
+		httpSession.setAttribute("success", "Add Specialized Successful!");
+		return "redirect:/staff/specialized";
 	}
 
-	// For add and update person both
 	@RequestMapping(value = "/staff/specialized/addFromFile", method = RequestMethod.POST)
 	public String addSpecializedFromFile(@RequestParam("file") MultipartFile file) {
 		if (!file.isEmpty()) {
@@ -58,32 +68,24 @@ public class SpecializedController extends GeneralController {
 				file.transferTo(specializeds);
 				specializedService.addSpecializedFromFile(specializeds);
 			} catch (IllegalStateException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		return "redirect:/staff/specializeds";
+		return "redirect:/staff/specialized";
 	}
 
-	@RequestMapping("/staff/specialized/delete/{specializedId}")
-	public String deleteSpecialized(@PathVariable("specializedId") int specializedId) {
+	@RequestMapping(value = "/staff/specialized/deleteSpecialized", method = RequestMethod.GET, params={"specializedId"} )
+	public String deleteSpecialized(@RequestParam int specializedId, HttpSession httpSession) {
 		specializedService.deleteSpecialized(specializedId);
-		return "redirect:/staff/specializeds";
+		httpSession.setAttribute("success", "Delete Specialized Successful!");
+		return "redirect:/staff/specialized";
 	}
 
-	@RequestMapping("/staff/specialized/edit/{specializedId}")
-	public String editSpecialized(@PathVariable("specializedId") int specializedId, Model model) {
-		model.addAttribute("specialized", specializedService.getSpecializedById(specializedId, true, false));
-		model.addAttribute("listSpecializeds", specializedService.listSpecializeds(true, false));
-		return "specialized";
-	}
-
-	@ExceptionHandler(Exception.class)
+	@ExceptionHandler(SpecializedExistedException.class)
 	public String handleException(HttpSession httpSession, Exception e) {
-		httpSession.setAttribute("error", "Error, please try again.");
-		return "redirect:/staff/specializeds";
+		httpSession.setAttribute("error", "This Specialized's code existed! Please Try Again!");
+		return "redirect:/staff/specialized";
 	}
 }

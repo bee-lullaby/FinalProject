@@ -138,16 +138,6 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 	}
 
 	@Override
-	public CourseSemester getCourseSemesterByCode(String code,
-			boolean jointClassCourseSemester,
-			boolean jointTeacherCourseSemester,
-			boolean jointProgramSemesterDetails) {
-		return courseSemesterDAO.getCourseSemesterByCode(code,
-				jointClassCourseSemester, jointTeacherCourseSemester,
-				jointProgramSemesterDetails);
-	}
-
-	@Override
 	public CourseSemester getCourseSemesterByCourseSemester(int courseId,
 			int semesterId, boolean jointClassCourseSemester,
 			boolean jointTeacherCourseSemester,

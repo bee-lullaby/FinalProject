@@ -8,11 +8,26 @@ $(document).ready(function() {
     });
 	
 	_init();
+	
 	$("#table-classes").on("click", "#a[id^='edit-class']", function() {
 		_setDialogEditData($("#dialog-edit-class"), $(this).closest("tr"));
 		_showDialog("dialog-edit-class");
 	});
+	
+	$("#table-classes").on("click", "a[id^='delete-class']",function() {
+		$("#dialog-delete-class").attr("data-classId", $(this).closest("tr").attr("data-classId"));
+		_showDialog("dialog-delete-class");
+	});
 
+	$("#btn-delete-accept").on("click", function() {
+		window.location = "classFPTs/deleteClassFPT?classId=" +$("#dialog-delete-class").attr("data-classId");
+	});
+	
+	$("#btn-delete-decline").on("click", function() {
+		$("#dialog-delete-course").removeAttr("data-courseId");
+		_showDialog("dialog-delete-course");
+	});
+	
 	$("#table-classes").on("click", "#a[id='courses-class']", function() {
 		var tr = $(this).closest('tr');
         var row = table.row( tr );
@@ -70,12 +85,41 @@ $(document).ready(function() {
 		_setTextAriaCoursesSelected($(this));
 	});
 	
+	$("#table-classes").on("click", "#courses-class", function() {
+		var td = $(this).closest("td");
+		_setDataDialogClassCourse(td);
+		$("#dialog-class-course").attr("data-classId", $(td).closest("tr").attr("data-classId")); 
+		_showDialog("dialog-class-course");
+	});
+	
+	$("#dialog-class-course").on("click", "#btn-save", function() {
+		var semesterId = $("<input>").attr("type", "hidden")
+		                        .attr("name", "semesterId").val(_urlParam("semesterId"));
+		var classId = $("<input>").attr("type", "hidden")
+									.attr("name", "classId").val($("#dialog-class-course").attr("data-classId"));
+		$('#form-class-course').append($(semesterId));
+		$('#form-class-course').append($(classId));
+		$("#form-class-course").attr("action","classFPTs/updateClassCourse");
+		$("#form-class-course").submit();
+	});
+	
+	$("#dialog-class-course").on("click", "#btn-cancel", function() {
+		_clearDataDialogClassCourse();
+		_showDialog("dialog-class-course");
+		$("#dialog-class-course").removeAttr("data-classId");
+	});
+	
 	function _init() {
 		$("#select-semester").find("a[id='" +_urlParam("semesterId") +"']").addClass("active");
 		
 		var input = $("<input>").attr("type", "hidden")
         						.attr("name", "semesterId").val(_urlParam("semesterId"));
 		$('#form-add-file').append($(input));
+		
+		
+
+		var $options = $("#dialog-add-class").find("#select-courses option").clone();
+		$("#table-class-course #select-course").append($options);
 	}
 	
 	function _clearDialogData(dialog) {
@@ -98,7 +142,7 @@ $(document).ready(function() {
 		dialog.find("#classSemesterId").attr("value", tr.attr("data-classSemesterId"));
 		dialog.find("#batch").attr("value", tr.find("td:eq(1)").text());
 		dialog.find("#batchChar").attr("value", tr.find("td:eq(2)").text());
-		dialog.find("#select-semester-edit").find("option:contains('" +tr.find("td:eq(6)").text().trim() +"')").attr("selected", "selected");
+		dialog.find("#select-semester-edit").find("option:contains('" +tr.attr("data-semesterName").trim() +"')").attr("selected", "selected");
 		dialog.find("#select-specializeds").find("option:contains('" +tr.find("td:eq(3)").text().trim() +"')").attr("selected", "selected");
 		dialog.find("#select-types").find("option:contains('" +tr.find("td:eq(4)").text().trim() +"')").attr("selected", "selected");
 		
@@ -122,7 +166,43 @@ $(document).ready(function() {
 		});
 		parents.closest("tr").find("#courses-selected").text(text);
 	}
-
+	
+	function _setDataDialogClassCourse(td) {
+		var tr = $(td).closest("tr");
+		$("#class-name").text($(tr).find("td:eq(0)").text());
+		
+		var dataCourses = $(td).find("#data-courses");
+		var classCourses = $(dataCourses).find("div[id^='class-course']");
+		var tr = $("#dialog-class-course tr[id^='course']");
+		for(var i = 0; i < classCourses.length; i++) {
+			console.log($(classCourses[i]).find("#name").text().trim());
+			$(tr[i]).find("#select-course option").filter(function() {
+	            return $(this).text() === $(classCourses[i]).find("#name").text().trim()
+	        }).attr("selected", "selected");
+			
+			$(tr[i]).find("#blockCondition option").filter(function() {
+	            return $(this).val() === $(classCourses[i]).find("#blockCondition").text().trim()
+	        }).attr("selected", "selected");;
+	        	
+	        $(tr[i]).find("#semesterLong option").filter(function() {
+				return $(this).val() === $(classCourses[i]).find("#semesterLong").text().trim();
+	        }).attr("selected", "selected");
+	        
+		}
+	}
+	
+	function _clearDataDialogClassCourse() {
+		$.each($("#dialog-class-course #select-course"), function() {
+			$(this).find("option:first").attr("selected", "selected");
+		});
+		$.each($("#dialog-class-course #blockCondition"), function() {
+			$(this).find("option:first").attr("selected", "selected");
+		});
+		$.each($("#dialog-class-course #semesterLong"), function() {
+			$(this).find("option:first").attr("selected", "selected");
+		});
+	}
+	
 	function _urlParam(param) {
 	    var url = $(location).attr('search').substring(1);
 	    var parameters = url.split('&');

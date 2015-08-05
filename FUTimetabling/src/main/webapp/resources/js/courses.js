@@ -117,14 +117,14 @@ $(document).ready(function() {
 		dialog.find("#courseCode").val(tr.find("td:eq(1)").text());
 		dialog.find("#courseCode").attr("readonly", true);
 //		dialog.find("#courseCode").attr("disabled", true);
-		dialog.find("#slots").val(tr.find("td:eq(4)").text());
-		dialog.find("#select-semester-edit").find("option:contains('" +tr.find("td:eq(3)").text().trim() +"')").attr("selected", "selected");
+		dialog.find("#slots").val(tr.find("td:eq(3)").text());
+		dialog.find("#select-semester-edit").find("option:contains('" +tr.attr("data-semesterName").trim() +"')").attr("selected", "selected");
 		dialog.find("#select-department-edit").find("option:contains('" +tr.find("td:eq(2)").text() +"')").attr("selected", "selected");
 		
-		if(tr.find("td:eq(5)").text() == null || tr.find("td:eq(5)").text() == "") {
+		if(tr.find("td:eq(4)").text() == null || tr.find("td:eq(4)").text() == "") {
 			$("#select-course-condition-edit option:first").attr("selected", "selected");
 		} else {
-			$("#select-course-condition-edit").find("option:contains('" +tr.find("td:eq(5)").text() +"')").attr("selected", "selected");
+			$("#select-course-condition-edit").find("option:contains('" +tr.find("td:eq(4)").text() +"')").attr("selected", "selected");
 		}
 	}
 	

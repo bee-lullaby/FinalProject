@@ -32,14 +32,6 @@ td a {
 	width: 100px;
 }
 
-#table-edit-course tr th, #table-add-courses tr th {
-	text-align: left;
-}
-
-#table-add-edit-courses tr th, #table-add-edit-courses tr td {
-	padding: 0.4rem 0;
-}
-
 #table-info {
 	padding: 5px;
 	background-color: #eeeeee;

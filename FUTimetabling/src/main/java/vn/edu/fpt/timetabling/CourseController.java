@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import vn.edu.fpt.timetabling.exception.CourseExistedException;
 import vn.edu.fpt.timetabling.model.Course;
 import vn.edu.fpt.timetabling.model.CourseSemester;
+import vn.edu.fpt.timetabling.model.Semester;
 import vn.edu.fpt.timetabling.service.CourseSemesterService;
 import vn.edu.fpt.timetabling.service.CourseService;
 import vn.edu.fpt.timetabling.service.DepartmentService;
@@ -58,9 +59,11 @@ public class CourseController extends GeneralController {
 
 	@RequestMapping(value = "/staff/courses", method = RequestMethod.GET)
 	public String courseInit(HttpSession httpSession, Model model) {
-		int semesterId = semesterService
-				.listSemesters(false, false, false, false).get(0)
-				.getSemesterId();
+		List<Semester> semesters = semesterService
+				.listSemesters(false, false, false, false);
+		int semesterId = 0;
+		if(!semesters.isEmpty()) 
+			semesterId = semesters.get(0).getSemesterId();
 		return "redirect:/staff/courses?semesterId=" + semesterId;
 	}
 

@@ -3,6 +3,8 @@ package vn.edu.fpt.timetabling.service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -20,14 +22,16 @@ import vn.edu.fpt.timetabling.model.CourseSemester;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class ClassCourseSemesterServiceImpl implements ClassCourseSemesterService {
+public class ClassCourseSemesterServiceImpl implements
+		ClassCourseSemesterService {
 	private ClassCourseSemesterDAO classCourseSemesterDAO;
 	@Autowired
 	private ClassSemesterService classSemesterService;
 	@Autowired
 	private CourseSemesterService courseSemesterService;
 
-	public void setClassCourseSemesterDAO(ClassCourseSemesterDAO classCourseSemesterDAO) {
+	public void setClassCourseSemesterDAO(
+			ClassCourseSemesterDAO classCourseSemesterDAO) {
 		this.classCourseSemesterDAO = classCourseSemesterDAO;
 	}
 
@@ -37,58 +41,94 @@ public class ClassCourseSemesterServiceImpl implements ClassCourseSemesterServic
 	}
 
 	@Override
-	public void addClassCourseSemesterFromFile(File classCourses, int semesterId) throws IOException {
+	public HashMap<String, List<String>> addClassCourseSemesterFromFile(
+			File classCourses, int semesterId) throws IOException {
 		FileInputStream file = new FileInputStream(classCourses);
 		XSSFWorkbook workbook = new XSSFWorkbook(file);
 		XSSFSheet sheet = workbook.getSheetAt(0);
 		Iterator<Row> rowIterator = sheet.iterator();
 		rowIterator.next();
+
+		HashMap<String, List<String>> mCheckClassAndCourseExisted = new HashMap<String, List<String>>();
+		mCheckClassAndCourseExisted.put("class", new ArrayList<String>());
+		mCheckClassAndCourseExisted.put("course", new ArrayList<String>());
 		while (rowIterator.hasNext()) {
 			Row row = rowIterator.next();
 			String classCode = row.getCell(0).getStringCellValue().trim();
 
-			ClassCourseSemester classCourseSemester = new ClassCourseSemester();
-
-			ClassSemester classSemester = classSemesterService.getClassSemesterByCode(classCode, semesterId, true);
+			ClassSemester classSemester = classSemesterService
+					.getClassSemesterByCode(classCode, semesterId, true);
 			if (classSemester == null) {
+				mCheckClassAndCourseExisted.get("class").add(classCode);
 				continue;
 			}
-			classCourseSemester.setClassSemester(classSemester);
 			String courseCode = row.getCell(1).getStringCellValue().trim();
-			CourseSemester courseSemester = courseSemesterService.getCourseSemesterByCode(courseCode, false, false,
-					false);
+			CourseSemester courseSemester = courseSemesterService
+					.getCourseSemesterByCourseCodeSemester(courseCode,
+							semesterId, false, false, false);
 			if (courseSemester == null) {
+				mCheckClassAndCourseExisted.get("course").add(courseCode);
 				continue;
 			}
+
+			ClassCourseSemester classCourseSemester = getClassCourseSemesterByClassAndCourseSemester(
+					classSemester.getClassSemesterId(),
+					courseSemester.getCourseSemesterId(), false, false);
+
+			if (classCourseSemester == null) {
+				classCourseSemester = new ClassCourseSemester();
+			}
+
+			classCourseSemester.setClassSemester(classSemester);
 			classCourseSemester.setCourseSemester(courseSemester);
 			if (row.getCell(2) != null) {
-				classCourseSemester.setSemesterLong(true);
-			} else {
-				classCourseSemester.setSemesterLong(false);
+				System.out.println(row.getCell(2).getNumericCellValue());
+				if (row.getCell(2).getNumericCellValue() == 1) {
+					classCourseSemester.setSemesterLong(true);
+				} else {
+					classCourseSemester.setSemesterLong(false);
+				}
 			}
-			System.out.println(classCode + " " + courseCode);
-			classCourseSemesterDAO.addClassCourseSemester(classCourseSemester);
+
+			if (classCourseSemester.getClassCourseSemesterId() != 0) {
+				classCourseSemesterDAO
+						.addClassCourseSemester(classCourseSemester);
+			}
 		}
 		workbook.close();
 		file.close();
+		return mCheckClassAndCourseExisted;
 	}
 
 	@Override
-	public void updateClassCourseSemester(ClassCourseSemester classCourseSemester) {
+	public void updateClassCourseSemester(
+			ClassCourseSemester classCourseSemester) {
 		classCourseSemesterDAO.updateClassCourseSemester(classCourseSemester);
 	}
 
 	@Override
-	public List<ClassCourseSemester> listClassCourseSemesters(boolean jointTimetable,
-			boolean jointClassCourseStudentSemesters) {
-		return classCourseSemesterDAO.listClassCourseSemesters(jointTimetable, jointClassCourseStudentSemesters);
+	public List<ClassCourseSemester> listClassCourseSemesters(
+			boolean jointTimetable, boolean jointClassCourseStudentSemesters) {
+		return classCourseSemesterDAO.listClassCourseSemesters(jointTimetable,
+				jointClassCourseStudentSemesters);
 	}
 
 	@Override
-	public ClassCourseSemester getClassCourseSemesterById(int classCourseSemesterId, boolean jointTimetable,
+	public ClassCourseSemester getClassCourseSemesterById(
+			int classCourseSemesterId, boolean jointTimetable,
 			boolean jointClassCourseStudentSemesters) {
-		return classCourseSemesterDAO.getClassCourseSemesterById(classCourseSemesterId, jointTimetable,
+		return classCourseSemesterDAO.getClassCourseSemesterById(
+				classCourseSemesterId, jointTimetable,
 				jointClassCourseStudentSemesters);
+	}
+
+	@Override
+	public ClassCourseSemester getClassCourseSemesterByClassAndCourseSemester(
+			int classSemesterId, int courseSemesterId, boolean jointTimetable,
+			boolean jointClassCourseStudentSemesters) {
+		return classCourseSemesterDAO
+				.getClassCourseSemesterByClassAndCourseSemester(
+						classSemesterId, courseSemesterId, false, false);
 	}
 
 	@Override
@@ -97,33 +137,41 @@ public class ClassCourseSemesterServiceImpl implements ClassCourseSemesterServic
 	}
 
 	@Override
-	public List<ClassCourseSemester> listClassCourseSemesterBySemester(int semesterId, boolean jointTimetable,
+	public List<ClassCourseSemester> listClassCourseSemesterBySemester(
+			int semesterId, boolean jointTimetable,
 			boolean jointClassCourseStudentSemesters) {
-		return classCourseSemesterDAO.listClassCourseSemesterBySemester(semesterId, jointTimetable,
-				jointClassCourseStudentSemesters);
+		return classCourseSemesterDAO.listClassCourseSemesterBySemester(
+				semesterId, jointTimetable, jointClassCourseStudentSemesters);
 	}
 
 	@Override
 	public long getNumberOfStudents(int classCourseSemesterId) {
-		return classCourseSemesterDAO.getNumberOfStudents(classCourseSemesterId);
+		return classCourseSemesterDAO
+				.getNumberOfStudents(classCourseSemesterId);
 	}
 
 	@Override
-	public List<ClassCourseSemester> listClassCourseSemesterByClass(int classSemesterId, boolean jointTimetable,
+	public List<ClassCourseSemester> listClassCourseSemesterByClass(
+			int classSemesterId, boolean jointTimetable,
 			boolean jointClassCourseStudentSemesters) {
-		return classCourseSemesterDAO.listClassCourseSemesterByClass(classSemesterId, jointTimetable,
+		return classCourseSemesterDAO.listClassCourseSemesterByClass(
+				classSemesterId, jointTimetable,
 				jointClassCourseStudentSemesters);
 	}
 
 	@Override
-	public List<ClassCourseSemester> listClassCourseSemesterByCourse(int courseSemesterId, boolean jointTimetable,
+	public List<ClassCourseSemester> listClassCourseSemesterByCourse(
+			int courseSemesterId, boolean jointTimetable,
 			boolean jointClassCourseStudentSemesters) {
-		return classCourseSemesterDAO.listClassCourseSemesterByCourse(courseSemesterId, jointTimetable,
+		return classCourseSemesterDAO.listClassCourseSemesterByCourse(
+				courseSemesterId, jointTimetable,
 				jointClassCourseStudentSemesters);
 	}
 
 	@Override
-	public List<ClassCourseSemester> listClassCourseSemesterByStudent(int semesterId, int studentId) {
-		return classCourseSemesterDAO.listClassCourseSemesterByStudent(semesterId, studentId);
+	public List<ClassCourseSemester> listClassCourseSemesterByStudent(
+			int semesterId, int studentId) {
+		return classCourseSemesterDAO.listClassCourseSemesterByStudent(
+				semesterId, studentId);
 	}
 }
