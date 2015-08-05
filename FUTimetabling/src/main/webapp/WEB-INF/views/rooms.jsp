@@ -30,14 +30,6 @@ td a {
 	width: 100px;
 }
 
-#table-edit-course tr th, #table-add-courses tr th {
-	text-align: left;
-}
-
-#table-add-edit-courses tr th, #table-add-edit-courses tr td {
-	padding: 0.4rem 0;
-}
-
 #table-info {
 	padding: 5px;
 	background-color: #eeeeee;
@@ -113,7 +105,7 @@ h3 {
 				<h3>General Management</h3>
 				<a href="staffManagement">Staff</a> <a href="building">Building</a>
 				<a class="active" href="#">Room</a> <a href="semesters">Semester</a> <a
-					href="secialized">Specialized</a> <a href="departments">Department</a>
+					href="specialized">Specialized</a> <a href="departments">Department</a>
 			</div>
 			<div style="display: inline-block; margin-left: 25px; width: 100%;">
 				<div id="control-bar" style="width: 100%; margin-bottom: 45px;">

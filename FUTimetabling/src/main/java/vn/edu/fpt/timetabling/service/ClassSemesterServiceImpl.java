@@ -330,7 +330,7 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 	public List<ClassSemester> listClassSemesterForView(int semesterId) {
 		List<ClassSemester> result = new ArrayList<ClassSemester>();
 
-		for (ClassSemester cs : listClassSemesters(true)) {
+		for (ClassSemester cs : listClassSemestersBySemester(semesterId, true)) {
 			ClassSemester classSemester = new ClassSemester();
 			classSemester.setClassSemesterId(cs.getClassSemesterId());
 
@@ -378,6 +378,8 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 				courseSemester.setCourse(course);
 
 				classCourseSemester.setCourseSemester(courseSemester);
+				classCourseSemester.setBlockCondition(ccs.getBlockCondition());
+				classCourseSemester.setSemesterLong(ccs.isSemesterLong());
 				listCCS.add(classCourseSemester);
 			}
 			classSemester.setClassCourseSemesters(listCCS);

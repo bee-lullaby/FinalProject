@@ -20,7 +20,9 @@ public interface ClassCourseSemesterDAO {
 	public List<ClassCourseSemester> listClassCourseSemesterByStudent(int semesterId, int studentId);
 
 	public ClassCourseSemester getClassCourseSemesterById(int classCourseSemesterId, boolean jointTimetable, boolean jointClassCourseStudentSemesters);
-
+	
+	public ClassCourseSemester getClassCourseSemesterByClassAndCourseSemester(int classSemesterId, int courseSemesterId, boolean jointTimetable, boolean jointClassCourseStudentSemesters);
+	
 	public void deleteClassCourseSemester(int classCourseSemesterId);
 
 	public long getNumberOfStudents(int classCourseSemesterId);

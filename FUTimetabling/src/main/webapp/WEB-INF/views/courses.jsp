@@ -139,7 +139,6 @@ h3 {
 								<th>Course</th>
 								<th>Code</th>
 								<th>Department</th>
-								<th>Semester</th>
 								<th>Slots</th>
 								<th>Course Condition</th>
 								<th>Edit</th>
@@ -150,11 +149,11 @@ h3 {
 							<c:if test="${!empty listCourseSemesters}">
 								<c:forEach items="${listCourseSemesters}" var="courseSemester">
 									<tr data-courseSemesterId="${courseSemester.courseSemesterId}"
-										data-courseId="${courseSemester.course.courseId}">
+										data-courseId="${courseSemester.course.courseId}"
+										data-semesterName="${courseSemester.semester.name}">
 										<td>${courseSemester.course.name}</td>
 										<td>${courseSemester.course.code}</td>
 										<td>${courseSemester.course.department.code}</td>
-										<td>${courseSemester.semester.name}</td>
 										<td>${courseSemester.slots}</td>
 										<td>${courseSemester.courseCondition.code}</td>
 										<td><a href="#"

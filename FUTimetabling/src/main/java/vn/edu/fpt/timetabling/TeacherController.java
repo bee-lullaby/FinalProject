@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import vn.edu.fpt.timetabling.exception.TeacherExistedException;
+import vn.edu.fpt.timetabling.model.Semester;
 import vn.edu.fpt.timetabling.model.Teacher;
 import vn.edu.fpt.timetabling.model.TeacherCourseSemester;
 import vn.edu.fpt.timetabling.model.TeacherSemester;
@@ -69,9 +70,11 @@ public class TeacherController extends GeneralController {
 
 	@RequestMapping(value = "/staff/teachers", method = RequestMethod.GET)
 	public String teacherInit(HttpSession httpSession, Model model) {
-		int semesterId = semesterService
-				.listSemesters(false, false, false, false).get(0)
-				.getSemesterId();
+		List<Semester> semesters = semesterService
+				.listSemesters(false, false, false, false);
+		int semesterId = 0;
+		if(!semesters.isEmpty()) 
+			semesterId = semesters.get(0).getSemesterId();
 		return "redirect:/staff/teachers?semesterId=" + semesterId;
 	}
 

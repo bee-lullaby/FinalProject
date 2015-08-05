@@ -6,120 +6,219 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <title>Specialized Page</title>
-<style type="text/css">
-.tg {
-	border-collapse: collapse;
-	border-spacing: 0;
-	border-color: #ccc;
+
+<link href="../resources/css/metro.css" rel="stylesheet">
+<link href="../resources/css/metro-icons.css" rel="stylesheet">
+<link href="../resources/css/docs.css" rel="stylesheet">
+
+<script src="../resources/js/jquery-2.1.3.min.js"></script>
+<script src="../resources/js/specialized.js"></script>
+<script src="../resources/js/metro.js"></script>
+<script src="../resources/js/docs.js"></script>
+<script src="../resources/js/prettify/run_prettify.js"></script>
+<script src="../resources/js/ga.js"></script>
+<script src="../resources/js/jquery.dataTables.js"></script>
+</head>
+<style>
+td a {
+	display: block;
+	width: 100%;
 }
 
-.tg td {
-	font-family: Arial, sans-serif;
-	font-size: 14px;
-	padding: 10px 5px;
-	border-style: solid;
-	border-width: 1px;
-	overflow: hidden;
-	word-break: normal;
-	border-color: #ccc;
-	color: #333;
-	background-color: #fff;
+#btn-group button {
+	width: 100px;
 }
 
-.tg th {
-	font-family: Arial, sans-serif;
-	font-size: 14px;
-	font-weight: normal;
-	padding: 10px 5px;
-	border-style: solid;
-	border-width: 1px;
-	overflow: hidden;
-	word-break: normal;
-	border-color: #ccc;
-	color: #333;
-	background-color: #f0f0f0;
+#table-info {
+	padding: 5px;
+	background-color: #eeeeee;
+	font-size: .875rem;
+	float: left;
+	vertical-align: top;
 }
 
-.tg .tg-4eph {
-	background-color: #f9f9f9
+.left>a {
+	width: 100%;
+	line-height: 3.125rem;
+	padding: 0 .625rem;
+	font-size: 1rem;
+	cursor: pointer;
+	color: inherit;
+	display: block;
+	float: left;
+	position: relative;
+	vertical-align: middle !important;
+	text-decoration: none;
+	height: 3.125rem;
+}
+
+.left>a:hover {
+	background-color: #005696;
+	color: #fff;
+}
+
+.left>a.active {
+	background-color: #005696;
+	color: #fff;
+}
+
+h3 {
+	padding: 0.625rem 1rem;
+	padding-left: 0;
+	border-bottom: 1px #d9d9d9 solid;
+	text-align: left;
+	margin: .15625rem 0;
+	background-color: #ffffff;
 }
 </style>
-</head>
+<script>
+	function _errorNotify() {
+		var text = $("#messageError").text();
+		$.Notify({
+			type : 'alert',
+			caption : 'Alert',
+			content : text
+		});
+	}
+
+	function _successNotify() {
+		var text = $("#messageSuccess").text();
+		$.Notify({
+			type : 'success',
+			caption : 'Success',
+			content : text
+		});
+	}
+</script>
 <body>
 	<t:header />
-	<h1>Add a Specialized</h1>
+	<div style="width: 80%; margin: 0 auto; padding: 30px;">
+		<h1>
+			<a href="/Timetabling/staff" class="nav-button transform"><span></span></a>
+			&nbsp;Specialized Management
+		</h1>
 
-	<c:url var="addAction" value="/staff/specialized/add"></c:url>
+		<div style="display: flex">
+			<div id="select-semester" class="left"
+				style="display: inline-block; width: 250px;">
+				<h3>General Management</h3>
+				<a href="staffManagement">Staff</a> <a href="building">Building</a>
+				<a href="rooms">Room</a> <a href="semesters">Semester</a> <a
+					class="active" href="#">Specialized</a> <a href="departments">Department</a>
+			</div>
+			<div style="display: inline-block; margin-left: 25px; width: 100%;">
+				<div id="control-bar" style="width: 100%; margin-bottom: 45px;">
+					<div style="width: auto; float: right">
+						<button id="btn-add-specialized" class="button" data-role="hint"
+							data-hint-background="#1CB7EC" data-hint-color="fg-white"
+							data-hint-position="top" data-hint="Add Specialized">
+							<span class="mif-plus"></span>
+						</button>
+						<button id="btn-add-from-file" class="button" data-role="hint"
+							data-hint-background="#1CB7EC" data-hint-color="fg-white"
+							data-hint-position="top" data-hint="Add From File">
+							<span class="mif-file-text"></span>
+						</button>
+					</div>
+				</div>
+				<div style="width: 100%; height: 100%;">
+					<table id="table-specializeds"
+						class="table striped hovered border bordered cell-hovered">
+						<thead>
+							<tr>
+								<th>Code</th>
+								<th>Name</th>
+								<th>Delete</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:if test="${!empty listSpecializeds}">
+								<c:forEach items="${listSpecializeds}" var="specialized">
+									<tr data-specializedId="${specialized.specializedId}">
+										<td>${specialized.code}</td>
+										<td>${specialized.name}</td>
+										<td><a href="#"
+											id="delete-specialized-${specialized.specializedId}">Delete</a></td>
+									</tr>
+								</c:forEach>
+							</c:if>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
 
-	<form:form action="${addAction}" commandName="specialized">
-		<table>
-			<c:if test="${!empty specialized.code}">
-				<tr>
-					<td><form:label path="specializedId">
-							<spring:message text="Specialized ID" />
-						</form:label></td>
-					<td><form:input path="specializedId" readonly="true" size="8"
-							disabled="true" /> <form:hidden path="specializedId" /></td>
-				</tr>
-			</c:if>
-			<tr>
-				<td><form:label path="code">
-						<spring:message text="Code" />
-					</form:label></td>
-				<td><form:input path="code" /></td>
-			</tr>
-			<tr>
-				<td><form:label path="name">
-						<spring:message text="Name" />
-					</form:label></td>
-				<td><form:input path="name" /></td>
-			</tr>
-			<tr>
-				<td colspan="2"><c:if test="${!empty specialized.name}">
-						<input type="submit"
-							value="<spring:message text="Edit Specialized"/>" />
-					</c:if> <c:if test="${empty specialized.name}">
-						<input type="submit"
-							value="<spring:message text="Add Specialized"/>" />
-					</c:if></td>
-			</tr>
-		</table>
-	</form:form>
-	<form:form action="specialized/addFromFile" method="post"
-		enctype="multipart/form-data">
-		<input
-			accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-			name="file" type="file" style="margin-bottom: 20px" />
-		<input type="submit" name="addFile" value="AddFile"
-			class="button primary" style="margin-right: 5px" />
-	</form:form>
-	<br>
-	<h3>Specialized List</h3>
-	<c:if test="${!empty listSpecializeds}">
-		<table class="tg">
-			<tr>
-				<th width="80">Specialized ID</th>
-				<th width="120">Specialized Code</th>
-				<th width="120">Specialized Name</th>
-				<th width="120">Courses</th>
-				<th width="60">Edit</th>
-				<th width="60">Delete</th>
-			</tr>
-			<c:forEach items="${listSpecializeds}" var="specialized">
-				<tr>
-					<td>${specialized.specializedId}</td>
-					<td>${specialized.code}</td>
-					<td>${specialized.name}</td>
-					<td>${specialized.classesToString()}</td>
-					<td><a
-						href="<c:url value='/staff/specialized/edit/${specialized.specializedId}' />">Edit</a></td>
-					<td><a
-						href="<c:url value='/staff/specialized/delete/${specialized.specializedId}' />">Delete</a></td>
-				</tr>
-			</c:forEach>
-		</table>
-	</c:if>
+	<div id="dialog-add-file" data-role="dialog" data-overlay="true"
+		data-overlay-color="op-dark" style="padding: 25px"
+		data-close-button="true">
+		<h5>Add File</h5>
+		<form id="form-add-file" action="specialized/addFromFile"
+			method="post" enctype="multipart/form-data"
+			style="display: inline-block;">
+			<div class="input-control file" data-role="input">
+				<input type="file" name="file"
+					accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+				<button class="button">
+					<span class="mif-folder"></span>
+				</button>
+			</div>
+			<button class="button" id="btn-add-file"
+				style="display: inline-block">ADD</button>
+		</form>
+	</div>
+
+	<div id="dialog-add-specialized" data-role="dialog" class="padding20"
+		data-overlay="true" data-overlay-color="op-dark">
+		<h3 id="title">Add specialized</h3>
+		<form id="form-add-specialized" style="width: auto; margin: 0 auto;"
+			method="post">
+			<table id="table-add-specialized" class="table">
+				<thead>
+					<tr>
+						<th>Code</th>
+						<td><div class="input-control text" style="width: 300px">
+								<input type="text" id="code" name="code" />
+							</div></td>
+					</tr>
+					<tr>
+						<th>Name</th>
+						<td><div class="input-control text" style="width: 300px">
+								<input type="text" id="name" name="name" />
+							</div></td>
+					</tr>
+					<tr>
+						<th>Is Detail Specialized</th>
+						<td style="text-align:left"><label class="input-control radio"> <input
+								type="radio" name="isDetail" value="1"> <span
+								class="check"></span> <span class="caption">Yes</span></label> <label
+							class="input-control radio"> <input type="radio"
+								name="isDetail" value="1" checked> <span class="check"></span>
+								<span class="caption">No</span>
+
+						</label></td>
+					</tr>
+				</thead>
+			</table>
+		</form>
+		<div id="btn-group" style="float: right;">
+			<button class="button" id="btn-add-save">SAVE</button>
+			<button class="button" id="btn-add-cancel">CANCEL</button>
+		</div>
+	</div>
+
+	<div id="dialog-delete-specialized" data-role="dialog"
+		class="padding20" data-overlay="true" data-overlay-color="op-dark"
+		data-windows-style="true">
+		<div style="width: 500px; margin: 0 auto; text-align: center;">
+			<h2>Are you sure to delete this specialized?</h2>
+			<div id="btn-group" style="margin-top: 25px;">
+				<button class="button" id="btn-delete-accept">ACCEPT</button>
+				<button class="button" id="btn-delete-decline">DECLINE</button>
+			</div>
+		</div>
+	</div>
+
 </body>
 </html>

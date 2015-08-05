@@ -91,7 +91,22 @@ public class ClassCourseSemesterDAOImpl implements ClassCourseSemesterDAO {
 		query.setParameter("classCourseSemesterId", classCourseSemesterId);
 		return (ClassCourseSemester) query.uniqueResult();
 	}
-
+	
+	@Override
+	public ClassCourseSemester getClassCourseSemesterByClassAndCourseSemester(int classSemesterId, int courseSemesterId, boolean jointTimetable, boolean jointClassCourseStudentSemesters) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemester CCS";
+		if(jointTimetable)
+			hql += " LEFT OUTER JOIN FETCH CCS.timetable";
+		if(jointClassCourseStudentSemesters)
+			hql += " LEFT OUTER JOIN FETCH CCS.classCourseStudentSemesters CCSS"; 
+		hql += " WHERE CCS.classSemester.classSemesterId = :classSemesterId AND"
+				+ " CCS.courseSemester.courseSemesterId = :courseSemesterId";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("classSemesterId", classSemesterId);
+		query.setParameter("courseSemesterId", courseSemesterId);
+		return (ClassCourseSemester) query.uniqueResult();
+	}
+	
 	@Override
 	public void deleteClassCourseSemester(int classCourseSemesterId) {
 		ClassCourseSemester classCourseSemester = getClassCourseSemesterById(classCourseSemesterId, false, false);
