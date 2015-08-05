@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.text.Normalizer;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
@@ -54,9 +53,9 @@ public class StudentServiceImpl implements StudentService {
 			Double currentSemester = row.getCell(3).getNumericCellValue();
 			Specialized specialized = specializedService.getSpecializedByCode(specializedCode, false, false);
 			Student s = studentDAO.getStudentByCode(studentCode);
-			if(s == null) {
+			if (s == null) {
 				s = new Student();
-			}				
+			}
 			System.out.println(studentCode);
 			s.setStudentCode(studentCode);
 			s.setName(name);
@@ -65,7 +64,7 @@ public class StudentServiceImpl implements StudentService {
 			s.setBatch("hameo");
 			s.setSpecialized(specialized);
 			s.setSemester(currentSemester.intValue());
-			if(s.getStudentId() == 0)
+			if (s.getStudentId() == 0)
 				studentDAO.addStudent(s);
 			else
 				studentDAO.updateStudent(s);
@@ -82,8 +81,8 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public List<Student> listStudents() {
 		return studentDAO.listStudents();
-	}	
-	
+	}
+
 	@Override
 	public Student getStudentById(int studentId) {
 		return studentDAO.getStudentById(studentId);
@@ -101,23 +100,12 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public String getNextStudentCode(Specialized specialized) {
-		Set<Student> students = specialized.getStudents();
-		System.out.println(students.size());
 		String code = specialized.getCode();
-		if (students.isEmpty()) {
+		Student lastStudent = studentDAO.getLastStudent(specialized.getSpecializedId());
+		if (lastStudent == null) {
 			code += "00000";
 		} else {
-			String studentCode = "";
-			for (Student student : students) {
-				if (studentCode.isEmpty()) {
-					studentCode = student.getStudentCode();
-				} else {
-					String temp = student.getStudentCode();
-					if (temp.compareTo(studentCode) > 0) {
-						studentCode = temp;
-					}
-				}
-			}
+			String studentCode = lastStudent.getStudentCode();
 			Integer number = Integer.parseInt(studentCode.substring(2));
 			code += String.format("%05d", number + 1);
 		}

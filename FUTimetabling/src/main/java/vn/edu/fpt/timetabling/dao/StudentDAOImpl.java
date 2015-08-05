@@ -56,7 +56,7 @@ public class StudentDAOImpl implements StudentDAO {
 				.createQuery("FROM vn.edu.fpt.timetabling.model.Student").list();
 		return students;
 	}
-	
+
 	@Override
 	public Student getStudentById(int studentId) {
 		Student student = (Student) getCurrentSession().get(Student.class, new Integer(studentId));
@@ -205,5 +205,24 @@ public class StudentDAOImpl implements StudentDAO {
 		query.setParameter("email", email);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		return (Student) query.uniqueResult();
+	}
+
+	@Override
+	public Student getLastStudent(int specializedId) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Student S"
+				+ " WHERE S.specialized.specializedId = :specializedId" + " ORDER BY S.studentCode DESC";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("specializedId", specializedId);
+		query.setFirstResult(0);
+		query.setMaxResults(1);
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		Object temp = query.uniqueResult();
+		Student student;
+		if (temp == null) {
+			student = null;
+		} else {
+			student = (Student) temp;
+		}
+		return student;
 	}
 }
