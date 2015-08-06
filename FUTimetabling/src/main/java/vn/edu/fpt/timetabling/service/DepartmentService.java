@@ -20,4 +20,5 @@ public interface DepartmentService {
 	public Department getDepartmentByCode(String code);
 
 	public void deleteDepartment(int departmentId);
+	
 }

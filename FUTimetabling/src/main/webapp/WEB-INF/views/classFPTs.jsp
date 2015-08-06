@@ -131,7 +131,9 @@ h3 {
 								<th>Batch</th>
 								<th>Batch Char</th>
 								<th>Specialized</th>
+								<th>Detail Specialized</th>
 								<th>Type</th>
+								<th>Current Semester</th>
 								<th>Courses</th>
 								<th>Edit</th>
 								<th>Delete</th>
@@ -147,7 +149,9 @@ h3 {
 										<td>${classSemester.classFPT.batch}</td>
 										<td>${classSemester.classFPT.batchChar}</td>
 										<td>${classSemester.classFPT.specialized.name}</td>
+										<td>${classSemester.classFPT.detailSpecialized.name}</td>
 										<td>${classSemester.classFPT.type}</td>
+										<td>${classSemester.semesterNumber}</td>
 										<td><a href="#" id="courses-class">Courses</a>
 											<div id="data-courses" style="display: none">
 												<c:forEach items="${classSemester.classCourseSemesters}"
@@ -235,8 +239,15 @@ h3 {
 										</c:if>
 									</select>
 								</div></td>
-							<td></td>
-							<td></td>
+							<th>Type</th>
+							<td>
+								<div class="input-control select" style="width: 200px">
+									<select id="select-types" name="type">
+										<option>Specialized</option>
+										<option>Course</option>
+									</select>
+								</div>
+							</td>
 						</tr>
 						<tr>
 							<th>Batch</th>
@@ -249,15 +260,6 @@ h3 {
 								</div></td>
 						</tr>
 						<tr>
-							<th>Type</th>
-							<td>
-								<div class="input-control select" style="width: 200px">
-									<select id="select-types" name="type">
-										<option>Specialized</option>
-										<option>Course</option>
-									</select>
-								</div>
-							</td>
 							<th>Specialized</th>
 							<td>
 								<div class="input-control select" style="width: 200px">
@@ -265,6 +267,19 @@ h3 {
 										<option value="-1">...</option>
 										<c:if test="${!empty listSpecializeds}">
 											<c:forEach items="${listSpecializeds}" var="specialized">
+												<option value="${specialized.specializedId}">${specialized.name}</option>
+											</c:forEach>
+										</c:if>
+									</select>
+								</div>
+							</td>
+							<th>Detail Specialized</th>
+							<td>
+								<div class="input-control select" style="width: 200px">
+									<select id="select-detail-specializeds" name="detailSepecializedId">
+										<option value="-1">...</option>
+										<c:if test="${!empty listDetailSpecializeds}">
+											<c:forEach items="${listDetailSpecializeds}" var="specialized">
 												<option value="${specialized.specializedId}">${specialized.name}</option>
 											</c:forEach>
 										</c:if>
@@ -327,7 +342,7 @@ h3 {
 						<tr>
 							<th>Semester</th>
 							<td><div class="input-control select" style="width: 200px">
-									<select id="select-semester-add" name="semesterId">
+									<select id="select-semester-edit" name="semesterId">
 										<c:if test="${!empty listSemesters}">
 											<c:forEach items="${listSemesters}" var="semester">
 												<option value="${semester.semesterId}">${semester.name}</option>
@@ -335,8 +350,15 @@ h3 {
 										</c:if>
 									</select>
 								</div></td>
-							<td></td>
-							<td></td>
+							<th>Type</th>
+							<td>
+								<div class="input-control select" style="width: 200px">
+									<select id="select-types" name="type">
+										<option>Specialized</option>
+										<option>Course</option>
+									</select>
+								</div>
+							</td>
 						</tr>
 						<tr>
 							<th>Batch</th>
@@ -349,15 +371,6 @@ h3 {
 								</div></td>
 						</tr>
 						<tr>
-							<th>Type</th>
-							<td>
-								<div class="input-control select" style="width: 200px">
-									<select id="select-types" name="type">
-										<option>Specialized</option>
-										<option>Course</option>
-									</select>
-								</div>
-							</td>
 							<th>Specialized</th>
 							<td>
 								<div class="input-control select" style="width: 200px">
@@ -365,6 +378,19 @@ h3 {
 										<option value="-1">...</option>
 										<c:if test="${!empty listSpecializeds}">
 											<c:forEach items="${listSpecializeds}" var="specialized">
+												<option value="${specialized.specializedId}">${specialized.name}</option>
+											</c:forEach>
+										</c:if>
+									</select>
+								</div>
+							</td>
+							<th>Detail Specialized</th>
+							<td>
+								<div class="input-control select" style="width: 200px">
+									<select id="select-detail-specializeds" name="detailSepecializedId">
+										<option value="-1">...</option>
+										<c:if test="${!empty listDetailSpecializeds}">
+											<c:forEach items="${listDetailSpecializeds}" var="specialized">
 												<option value="${specialized.specializedId}">${specialized.name}</option>
 											</c:forEach>
 										</c:if>
@@ -381,7 +407,7 @@ h3 {
 										<c:if test="${!empty listCourseSemesters}">
 											<c:forEach items="${listCourseSemesters}"
 												var="courseSemester">
-												<option value="${courseSemester.courseSemesterId}">${courseSemester.course.code}</option>
+												<option value="${courseSemester.course.courseId}">${courseSemester.course.code}</option>
 											</c:forEach>
 										</c:if>
 									</select>
@@ -535,7 +561,7 @@ h3 {
 			<div id="btn-group" style="margin-top: 25px;">
 				<div style="float: right">
 					<button class="button" id="btn-save">SAVE</button>
-					<button class="button" id="btn-cancel">CANCEL</button>
+					<button class="button" id="btn-cancel">CLOSE</button>
 				</div>
 			</div>
 		</div>

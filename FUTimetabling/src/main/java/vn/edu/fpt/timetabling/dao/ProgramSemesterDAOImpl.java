@@ -42,7 +42,21 @@ public class ProgramSemesterDAOImpl implements ProgramSemesterDAO {
 		List<ProgramSemester> programSemesters = (List<ProgramSemester>) query.list();
 		return programSemesters;
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ProgramSemester> listProgramSemestersBySemester(int semesterId) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.ProgramSemester PS"
+				+ " LEFT OUTER JOIN FETCH PS.programSemesterDetails"
+				+ " WHERE PS.semester.semesterId = :semesterId" 
+				+ " ORDER BY PS.programSemesterId";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		query.setParameter("semesterId", semesterId);
+		List<ProgramSemester> programSemesters = (List<ProgramSemester>) query.list();
+		return programSemesters;
+	}
+	
 	@Override
 	public ProgramSemester getProgramSemesterById(int programSemesterId) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.ProgramSemester PS"

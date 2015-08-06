@@ -85,7 +85,7 @@ public class TeacherController extends GeneralController {
 		model.addAttribute("listSemesters",
 				semesterService.listSemesters(false, false, false, false));
 		model.addAttribute("listCourseSemesters",
-				courseSemesterService.listCourseSemesters(false, false, false));
+				courseSemesterService.listCourseSemestersBySemester(semesterId, false, false, false));
 		model.addAttribute("listTeacherSemesters",
 				teacherSemesterService.listTeacherSemestersForView(semesterId));
 		checkError(httpSession, model);

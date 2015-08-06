@@ -54,7 +54,7 @@ public class ClassCourseSemesterServiceImpl implements
 		mCheckClassAndCourseExisted.put("course", new ArrayList<String>());
 		while (rowIterator.hasNext()) {
 			Row row = rowIterator.next();
-			String classCode = row.getCell(0).getStringCellValue().trim();
+			String classCode = row.getCell(3).getStringCellValue().trim();
 
 			ClassSemester classSemester = classSemesterService
 					.getClassSemesterByCode(classCode, semesterId, true);
@@ -62,37 +62,42 @@ public class ClassCourseSemesterServiceImpl implements
 				mCheckClassAndCourseExisted.get("class").add(classCode);
 				continue;
 			}
-			String courseCode = row.getCell(1).getStringCellValue().trim();
-			CourseSemester courseSemester = courseSemesterService
-					.getCourseSemesterByCourseCodeSemester(courseCode,
-							semesterId, false, false, false);
-			if (courseSemester == null) {
-				mCheckClassAndCourseExisted.get("course").add(courseCode);
-				continue;
-			}
 
-			ClassCourseSemester classCourseSemester = getClassCourseSemesterByClassAndCourseSemester(
-					classSemester.getClassSemesterId(),
-					courseSemester.getCourseSemesterId(), false, false);
-
-			if (classCourseSemester == null) {
-				classCourseSemester = new ClassCourseSemester();
-			}
-
-			classCourseSemester.setClassSemester(classSemester);
-			classCourseSemester.setCourseSemester(courseSemester);
-			if (row.getCell(2) != null) {
-				System.out.println(row.getCell(2).getNumericCellValue());
-				if (row.getCell(2).getNumericCellValue() == 1) {
-					classCourseSemester.setSemesterLong(true);
-				} else {
-					classCourseSemester.setSemesterLong(false);
+			int count = 4;
+			while (row.getCell(count) != null) {
+				String courseCode = row.getCell(count).getStringCellValue().trim();
+				CourseSemester courseSemester = courseSemesterService
+						.getCourseSemesterByCourseCodeSemester(courseCode,
+								semesterId, false, false, false);
+				if (courseSemester == null) {
+					mCheckClassAndCourseExisted.get("course").add(courseCode);
+					continue;
 				}
-			}
 
-			if (classCourseSemester.getClassCourseSemesterId() != 0) {
-				classCourseSemesterDAO
-						.addClassCourseSemester(classCourseSemester);
+				ClassCourseSemester classCourseSemester = getClassCourseSemesterByClassAndCourseSemester(
+						classSemester.getClassSemesterId(),
+						courseSemester.getCourseSemesterId(), false, false);
+
+				if (classCourseSemester == null) {
+					classCourseSemester = new ClassCourseSemester();
+				}
+
+				classCourseSemester.setClassSemester(classSemester);
+				classCourseSemester.setCourseSemester(courseSemester);
+//				if (row.getCell(2) != null) {
+//					System.out.println(row.getCell(2).getNumericCellValue());
+//					if (row.getCell(2).getNumericCellValue() == 1) {
+//						classCourseSemester.setSemesterLong(true);
+//					} else {
+//						classCourseSemester.setSemesterLong(false);
+//					}
+//				}
+				classCourseSemester.setSemesterLong(false);
+				if (classCourseSemester.getClassCourseSemesterId() == 0) {
+					classCourseSemesterDAO
+							.addClassCourseSemester(classCourseSemester);
+				}
+				count++;
 			}
 		}
 		workbook.close();

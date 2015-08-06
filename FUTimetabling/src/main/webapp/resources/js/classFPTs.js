@@ -9,7 +9,7 @@ $(document).ready(function() {
 	
 	_init();
 	
-	$("#table-classes").on("click", "#a[id^='edit-class']", function() {
+	$("#table-classes").on("click", "a[id^='edit-class']", function() {
 		_setDialogEditData($("#dialog-edit-class"), $(this).closest("tr"));
 		_showDialog("dialog-edit-class");
 	});

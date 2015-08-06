@@ -46,24 +46,46 @@ public class StudentServiceImpl implements StudentService {
 		rowIterator.next();
 		while (rowIterator.hasNext()) {
 			Row row = rowIterator.next();
+			if (row.getCell(0) == null)
+				continue;
+
 			String studentCode = row.getCell(0).getStringCellValue().trim();
-			String name = row.getCell(1).getStringCellValue().trim();
-			String specializedCode = row.getCell(2).getStringCellValue().trim();
-			String account = getAccount(name, studentCode);
-			Double currentSemester = row.getCell(3).getNumericCellValue();
-			Specialized specialized = specializedService.getSpecializedByCode(specializedCode, false, false);
 			Student s = studentDAO.getStudentByCode(studentCode);
 			if (s == null) {
 				s = new Student();
 			}
-			System.out.println(studentCode);
+
 			s.setStudentCode(studentCode);
+
+			if (row.getCell(1) == null)
+				continue;
+			String name = row.getCell(1).getStringCellValue().trim();
 			s.setName(name);
+
+			String account = getAccount(name, studentCode);
 			s.setAccount(account);
 			s.setEmail(account += "@fpt.edu.vn");
-			s.setBatch("hameo");
-			s.setSpecialized(specialized);
-			s.setSemester(currentSemester.intValue());
+			
+			if (row.getCell(2) != null) {
+				String specializedPrefix = row.getCell(2).getStringCellValue()
+						.trim();
+				s.setSpecialized(specializedService.getSpecializedByCode(
+						specializedPrefix, false, false));
+			}
+			
+			if(row.getCell(3) != null) {
+				String specializedCode = row.getCell(3).getStringCellValue().trim();
+				s.setDetailSpecialized(specializedService.getSpecializedByCode(
+						specializedCode, false, false));
+			}
+			
+			if(row.getCell(4) != null) {
+				Double currentSemester = row.getCell(4).getNumericCellValue();
+				s.setSemester(currentSemester.intValue());
+			}
+			
+			s.setBatch("NotSet");
+			
 			if (s.getStudentId() == 0)
 				studentDAO.addStudent(s);
 			else
@@ -101,7 +123,8 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public String getNextStudentCode(Specialized specialized) {
 		String code = specialized.getCode();
-		Student lastStudent = studentDAO.getLastStudent(specialized.getSpecializedId());
+		Student lastStudent = studentDAO.getLastStudent(specialized
+				.getSpecializedId());
 		if (lastStudent == null) {
 			code += "00000";
 		} else {
@@ -116,8 +139,9 @@ public class StudentServiceImpl implements StudentService {
 	public String getAccount(String name, String studentCode) {
 		String temp = Normalizer.normalize(name, Normalizer.Form.NFD);
 		Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-		StringTokenizer stringTokenizer = new StringTokenizer(
-				pattern.matcher(temp).replaceAll("").replaceAll("Đ", "D").replaceAll("đ", "d"));
+		StringTokenizer stringTokenizer = new StringTokenizer(pattern
+				.matcher(temp).replaceAll("").replaceAll("Đ", "D")
+				.replaceAll("đ", "d"));
 		String account = "";
 		if (stringTokenizer.hasMoreTokens()) {
 			while (true) {
@@ -141,15 +165,19 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public List<Student> listStudentsCanBeInClassCourseSemester(int classSemesterId, int specializedId,
-			int detailspecializedId, int semesterNumber, int classCourseSemesterId) {
-		return studentDAO.listStudentsCanBeInClassCourseSemester(classSemesterId, specializedId, detailspecializedId,
+	public List<Student> listStudentsCanBeInClassCourseSemester(
+			int classSemesterId, int specializedId, int detailspecializedId,
+			int semesterNumber, int classCourseSemesterId) {
+		return studentDAO.listStudentsCanBeInClassCourseSemester(
+				classSemesterId, specializedId, detailspecializedId,
 				semesterNumber, classCourseSemesterId);
 	}
 
 	@Override
-	public List<Student> listStudentsInClassCourseSemester(int classSemesterId, int classCourseSemesterId) {
-		return studentDAO.listStudentsInClassCourseSemester(classSemesterId, classCourseSemesterId);
+	public List<Student> listStudentsInClassCourseSemester(int classSemesterId,
+			int classCourseSemesterId) {
+		return studentDAO.listStudentsInClassCourseSemester(classSemesterId,
+				classCourseSemesterId);
 	}
 
 	@Override

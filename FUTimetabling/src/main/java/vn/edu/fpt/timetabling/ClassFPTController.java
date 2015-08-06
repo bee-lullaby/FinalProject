@@ -106,6 +106,8 @@ public class ClassFPTController extends GeneralController {
 				classSemesterService.listClassSemesterForView(semesterId));
 		model.addAttribute("listSpecializeds",
 				specializedService.listSpecializeds(false, false));
+		model.addAttribute("listDetailSpecializeds",
+				specializedService.listDetailSpecializeds(false, false));
 		model.addAttribute("listCourseSemesters",
 				courseSemesterService.listCourseSemesters(false, false, false));
 
@@ -169,6 +171,7 @@ public class ClassFPTController extends GeneralController {
 			@RequestParam char batchChar,
 			@RequestParam String type,
 			@RequestParam int specializedId,
+			@RequestParam(value = "detailSepecializedId", required = false) int detailSepecializedId,
 			@RequestParam(value = "courses", required = false) String[] courses,
 			HttpSession httpSession, Model model, HttpServletRequest request) {
 		if (type.equals(ClassType.SPECIALIZED)) {
@@ -214,6 +217,10 @@ public class ClassFPTController extends GeneralController {
 			classCode = classCodePrefix + "." + classFPT.getNumber();
 			classFPT.setCode(classCode);
 		}
+		if(detailSepecializedId != -1) {
+			classFPT.setDetailSpecialized(specializedService.getSpecializedById(detailSepecializedId, false, false));
+		}
+		
 		if (classId == -1) {
 			// new class, add it
 			classService.addClass(classFPT);
@@ -306,6 +313,9 @@ public class ClassFPTController extends GeneralController {
 							text += " are ";
 						text += " not existed! Please insert course first then try again!";
 						httpSession.setAttribute("error", text);
+					}
+					if(check.get("course").isEmpty() && check.get("class").isEmpty()) {
+						httpSession.setAttribute("success", "Add Courses For Classes Successful!");
 					}
 				}
 			} catch (IllegalStateException e) {

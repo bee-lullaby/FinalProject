@@ -32,6 +32,7 @@ public class SpecializedController extends GeneralController {
 	@RequestMapping(value = "/staff/specialized", method = RequestMethod.GET)
 	public String listSpecialized(HttpSession httpSession, Model model) {
 		model.addAttribute("listSpecializeds", specializedService.listSpecializeds(false, false));
+		model.addAttribute("listDetailSpecializeds", specializedService.listDetailSpecializeds(false, false));
 		checkError(httpSession, model);
 		notifySuccess(httpSession, model);
 		return "specialized";

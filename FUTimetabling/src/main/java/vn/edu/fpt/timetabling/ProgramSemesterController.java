@@ -1,5 +1,7 @@
 package vn.edu.fpt.timetabling;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -13,10 +15,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import vn.edu.fpt.timetabling.model.ProgramSemester;
 import vn.edu.fpt.timetabling.model.Semester;
 import vn.edu.fpt.timetabling.model.Specialized;
+import vn.edu.fpt.timetabling.service.CourseSemesterService;
 import vn.edu.fpt.timetabling.service.ProgramSemesterService;
 import vn.edu.fpt.timetabling.service.SemesterService;
 import vn.edu.fpt.timetabling.service.SpecializedService;
@@ -26,7 +30,8 @@ public class ProgramSemesterController extends GeneralController {
 	private ProgramSemesterService programSemesterService;
 	private SemesterService semesterService;
 	private SpecializedService specializedService;
-
+	private CourseSemesterService courseSemesterService;
+	
 	@Autowired(required = true)
 	@Qualifier(value = "programSemesterService")
 	public void setProgramSemesterService(ProgramSemesterService programSemesterService) {
@@ -44,82 +49,58 @@ public class ProgramSemesterController extends GeneralController {
 	public void setSpecializedService(SpecializedService specializedService) {
 		this.specializedService = specializedService;
 	}
-
-	@RequestMapping(value = "/staff/programSemesters", method = RequestMethod.GET)
-	public String listProgramSemester(HttpSession httpSession, Model model) {
-		model.addAttribute("programSemester", new ProgramSemester());
-		model.addAttribute("programSemesters", programSemesterService.listProgramSemesters());
-		model.addAttribute("semesters", semesterService.listSemesters(false, false, false, false));
-		model.addAttribute("specializeds", specializedService.listSpecializeds(false, false));
-		List<Specialized> detailSpecializeds = specializedService.listDetailSpecializeds(false, false);
-		detailSpecializeds.add(0, new Specialized());
-		model.addAttribute("detailSpecializeds", detailSpecializeds);
-		checkError(httpSession, model);
-		return "programSemesters";
+	
+	@Autowired(required = true)
+	@Qualifier(value = "courseSemesterService")
+	public void setCourseSemesterService(CourseSemesterService courseSemesterService) {
+		this.courseSemesterService = courseSemesterService;
 	}
-
-	@RequestMapping(value = "/staff/programSemester/add", method = RequestMethod.POST)
-	public String addProgramSemester(@RequestParam(value = "programSemesterId", required = true) int programSemesterId,
-			@RequestParam(value = "semester", required = true) int semesterId,
-			@RequestParam(value = "currentSemester", required = true) int currentSemester,
-			@RequestParam(value = "specialized", required = true) int specializedId,
-			@RequestParam(value = "detailSpecialized", required = false) Integer detailSpecializedId) {
-		ProgramSemester programSemester = programSemesterService.getProgramSemesterById(programSemesterId);
-		if (programSemester == null) {
-			programSemester = new ProgramSemester();
-		}
-		Semester semester = semesterService.getSemesterById(semesterId, false, false, false, false);
-		Specialized specialized = specializedService.getSpecializedById(specializedId, false, false);
-		if (semester == null || specialized == null) {
-			return "redirect:/staff/programSemesters";
-		}
-		if (detailSpecializedId != null) {
-			Specialized detailSpecialized = specializedService.getSpecializedById(detailSpecializedId, false, false);
-			if (detailSpecialized != null) {
-				programSemester.setDetailSpecialized(detailSpecialized);
+	
+	@RequestMapping(value = "/staff/programs", method = RequestMethod.GET)
+	public String programSemestersInit(HttpSession httpSession, Model model) {
+		List<Semester> semesters = semesterService
+				.listSemesters(false, false, false, false);
+		int semesterId = 0;
+		if(!semesters.isEmpty()) 
+			semesterId = semesters.get(0).getSemesterId();
+		return "redirect:/staff/programs?semesterId=" + semesterId;
+	}
+	
+	@RequestMapping(value = "/staff/programs", method = RequestMethod.GET, params={"semesterId"})
+	public String programSemesters(@RequestParam int semesterId, 	HttpSession httpSession, Model model) {
+		model.addAttribute("listSemesters", semesterService.listSemesters(false, false, false, false));
+		model.addAttribute("listProgramSemesters", programSemesterService.listProgramSemestersBySemester(semesterId));
+		model.addAttribute("listSpecializeds", specializedService.listSpecializeds(false, false));
+		model.addAttribute("listDetailSpecializeds", specializedService.listDetailSpecializeds(false, false));	
+		model.addAttribute("listCourseSemesters", courseSemesterService.listCourseSemestersBySemester(semesterId, false, false, false));
+		return "programs";
+	}
+	
+	@RequestMapping(value = "/staff/programs/addFromFile", method = RequestMethod.POST)
+	public String addDepartmentsFromFile(@RequestParam("semesterId") int semesterId, 
+			@RequestParam("file") MultipartFile file, HttpSession httpSession) {
+		if (!file.isEmpty()) {
+			File programSemesters = new File(
+					"D:\\FU\\Do an tot nghiep\\Data\\ServerData\\"
+							+ file.getOriginalFilename());
+			try {
+				file.transferTo(programSemesters);
+				programSemesterService.addProgramSemesterFromFile(semesterId, programSemesters);
+				httpSession.setAttribute("success",
+						"Add Programs From File Successful!");
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
-		programSemester.setSemester(semester);
-		programSemester.setCurrentSemester(currentSemester);
-		programSemester.setSpecialized(specialized);
-		if (programSemester.getProgramSemesterId() == 0) {
-			// new program semester, add it
-			programSemesterService.addProgramSemester(programSemester);
-		} else {
-			// existing program semester, call update
-			programSemesterService.updateProgramSemester(programSemester);
-		}
-		return "redirect:/staff/programSemesters";
+		return "redirect:/staff/programs";
 	}
-
-	@RequestMapping("/staff/programSemester/delete/{programSemesterId}")
-	public String deleteProgramSemester(@PathVariable("programSemesterId") int programSemesterId) {
-		programSemesterService.deleteProgramSemester(programSemesterId);
-		return "redirect:/staff/programSemesters";
-	}
-
-	@RequestMapping("/staff/programSemester/edit/{programSemesterId}")
-	public String editProgramSemester(@PathVariable("programSemesterId") int programSemesterId, Model model) {
-		ProgramSemester programSemester = programSemesterService.getProgramSemesterById(programSemesterId);
-		if (programSemester == null) {
-			return "redirect:/staff/programSemesters";
-		}
-		model.addAttribute("programSemester", programSemester);
-		model.addAttribute("programSemesters", programSemesterService.listProgramSemesters());
-		model.addAttribute("semesters", semesterService.listSemesters(false, false, false, false));
-		model.addAttribute("specializeds", specializedService.listSpecializeds(false, false));
-		List<Specialized> detailSpecializeds = specializedService.listDetailSpecializeds(false, false);
-		detailSpecializeds.add(0, new Specialized());
-		model.addAttribute("detailSpecializeds", detailSpecializeds);
-		model.addAttribute("semesterId", programSemester.getSemester().getSemesterId());
-		model.addAttribute("specializedId", programSemester.getSpecialized().getSpecializedId());
-		model.addAttribute("detailSpecializedId", programSemester.getDetailSpecialized().getSpecializedId());
-		return "programSemester";
-	}
-
+	
+	
 	@ExceptionHandler(Exception.class)
 	public String handleException(HttpSession httpSession, Exception e) {
 		httpSession.setAttribute("error", "Error, please try again.");
-		return "redirect:/staff/programSemesters";
+		return "redirect:/staff/programs";
 	}
 }

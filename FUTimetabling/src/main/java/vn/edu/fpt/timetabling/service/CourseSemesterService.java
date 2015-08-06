@@ -18,9 +18,15 @@ public interface CourseSemesterService {
 			boolean jointClassCourseSemester,
 			boolean jointTeacherCourseSemester,
 			boolean jointProgramSemesterDetails);
-
+	
+	public List<CourseSemester> listCourseSemestersBySemester(
+			int semesterId,
+			boolean jointClassCourseSemester,
+			boolean jointTeacherCourseSemester,
+			boolean jointProgramSemesterDetails);
+	
 	public List<CourseSemester> listCourseSemesterForView(int semesterId);
-
+	
 	public CourseSemester getCourseSemesterById(int courseSemesterId,
 			boolean jointClassCourseSemester,
 			boolean jointTeacherCourseSemester,

@@ -48,20 +48,23 @@ public class StudentController extends GeneralController {
 	}
 
 	@RequestMapping(value = "/staff/students", method = RequestMethod.GET)
-	public String students(Model model) {
+	public String students(Model model, HttpSession httpSession) {
 		model.addAttribute("listStudents", studentService.listStudents());
 		model.addAttribute("listClassSemesters", classSemesterService.listClassSemesters(false));
 		model.addAttribute("listSpecializeds", specializedService.listSpecializeds(false, false));
 		model.addAttribute("listDetailSpecializeds", specializedService.listDetailSpecializeds(false, false));
+		checkError(httpSession, model);
+		notifySuccess(httpSession, model);
 		return "students";
 	}
 
-	@RequestMapping(value = "/staff/students/addStudent", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value = "/staff/students/updateStudent", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
 	public String addStudent(@RequestParam(value = "studentId", required = true) int studentId,
 			@RequestParam(value = "name", required = true) String name,
 			@RequestParam(value = "specializedId", required = true) int specializedId,
-			@RequestParam(value = "batch", required = true) String batch,
-			@RequestParam(value = "semester", required = true) int semester, HttpServletRequest request) {
+			@RequestParam(value = "dsId", required = true) int dsId,
+			@RequestParam(value = "batch", required = false) String batch,
+			@RequestParam(value = "semester", required = true) int semester, HttpSession httpSession) {
 		Student student = studentService.getStudentById(studentId);
 		boolean update = true;
 		if (student == null) {
@@ -82,57 +85,30 @@ public class StudentController extends GeneralController {
 		student.setAccount(account);
 		String email = studentService.getEmail(account);
 		student.setEmail(email);
-		student.setBatch(batch);
+		if(batch != null) {
+			student.setBatch(batch);
+		}
 		student.setSemester(semester);
+		student.setDetailSpecialized(specializedService.getSpecializedById(dsId, false, false));
+		
 		if (student.getStudentId() == 0) {
 			studentService.addStudent(student);
+			httpSession.setAttribute("success", "Add Student Successful!");
 		} else {
 			studentService.updateStudent(student);
+			httpSession.setAttribute("success", "Edit Student Successful!");
 		}
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-	}
-
-	@RequestMapping(value = "/staff/students/editStudent", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-	public String editStudent(@RequestParam(value = "studentId", required = true) int studentId,
-			@RequestParam(value = "code", required = true) String code,
-			@RequestParam(value = "name", required = true) String name,
-			@RequestParam(value = "email", required = true) String email,
-			@RequestParam(value = "classSemesterId", required = true) int classSemesterId,
-			@RequestParam(value = "specializedId", required = true) int specializedId,
-			@RequestParam(value = "dsId", required = true) int dsId,
-			@RequestParam(value = "batch", required = true) String batch,
-			@RequestParam(value = "semester", required = true) int semester, HttpServletRequest request) {
-		Student student = studentService.getStudentById(studentId);
-
-		if (student != null) {
-			student.setStudentCode(code);
-			student.setName(name);
-			student.setEmail(email);
-			student.setClassSemester(classSemesterService.getClassSemesterById(classSemesterId, false));
-			if (specializedId != -1)
-				student.setSpecialized(specializedService.getSpecializedById(specializedId, false, false));
-			else
-				student.setSpecialized(null);
-			if (dsId != -1)
-				student.setDetailSpecialized(specializedService.getSpecializedById(dsId, false, false));
-			else
-				student.setDetailSpecialized(null);
-			student.setBatch(batch);
-			student.setSemester(semester);
-			studentService.updateStudent(student);
-		}
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
+		return "redirect:/staff/students";
 	}
 
 	@RequestMapping(value = "/staff/students/addFromFile", method = RequestMethod.POST)
-	public String addStudentFromFile(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+	public String addStudentFromFile(@RequestParam("file") MultipartFile file, HttpSession httpSession) {
 		if (!file.isEmpty()) {
 			File students = new File("D:\\FU\\Do an tot nghiep\\Data\\ServerData\\" + file.getOriginalFilename());
 			try {
 				file.transferTo(students);
 				studentService.addStudentsFromFile(students);
+				httpSession.setAttribute("success", "Add Student From File Successful!");
 			} catch (IllegalStateException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -141,15 +117,14 @@ public class StudentController extends GeneralController {
 				e.printStackTrace();
 			}
 		}
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
+		return "redirect:/staff/students";
 	}
 
-	@RequestMapping("/staff/students/delete/{studentId}")
-	public String deleteStudent(@PathVariable("studentId") int studentId, HttpServletRequest request) {
+	@RequestMapping(value = "/staff/students/delete", method=RequestMethod.GET, params = "studentId")
+	public String deleteStudent(@RequestParam int studentId, HttpSession httpSession) {
 		studentService.deleteStudent(studentId);
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
+		httpSession.setAttribute("success", "Delete Student Successful!");
+		return "redirect:/staff/students";
 	}
 
 	public int createTestData(int studentNumber, String specializedCode, String detailSpecializedCode,
@@ -197,7 +172,7 @@ public class StudentController extends GeneralController {
 		studentNumber = createTestData(studentNumber, "SE", "JS", 8, "8B", 16);
 		studentNumber = createTestData(studentNumber, "SE", "JS", 8, "8B", 16);
 		studentNumber = createTestData(studentNumber, "SE", "CS", 8, "8B", 10);
-		studentNumber = createTestData(studentNumber, "SE", "EC", 8, "8B", 16);
+		studentNumber = createTestData(studentNumber, "EC", null, 8, "8B", 16);
 
 		studentNumber = createTestData(studentNumber, "SE", "ISE", 7, "8A", 29);
 
@@ -207,16 +182,16 @@ public class StudentController extends GeneralController {
 		studentNumber = createTestData(studentNumber, "SE", "ES2", 7, "8C", 16);
 		studentNumber = createTestData(studentNumber, "SE", "JS", 7, "8C", 23);
 		studentNumber = createTestData(studentNumber, "SE", "JS", 7, "8C", 23);
-		studentNumber = createTestData(studentNumber, "SE", "EC", 7, "8C", 8);
+		studentNumber = createTestData(studentNumber, "EC", null, 7, "8C", 8);
 
 		studentNumber = createTestData(studentNumber, "SE", "ISE", 6, "9A", 5);
 
 		studentNumber = createTestData(studentNumber, "SE", null, 5, "9B", 18);
 		studentNumber = createTestData(studentNumber, "SE", null, 5, "9B", 17);
 		studentNumber = createTestData(studentNumber, "SE", null, 5, "9B", 25);
-		studentNumber = createTestData(studentNumber, "SE", "EC", 5, "9B", 5);
-		studentNumber = createTestData(studentNumber, "SE", "IA1", 5, "9B", 23);
-		studentNumber = createTestData(studentNumber, "SE", "IA2", 5, "9B", 23);
+		studentNumber = createTestData(studentNumber, "EC", null, 5, "9B", 5);
+		studentNumber = createTestData(studentNumber, "IA", "IA1", 5, "9B", 23);
+		studentNumber = createTestData(studentNumber, "IA", "IA2", 5, "9B", 23);
 		studentNumber = createTestData(studentNumber, "SE", "ISE", 5, "9B", 4);
 
 		studentNumber = createTestData(studentNumber, "SE", null, 4, "9C", 31);
@@ -225,24 +200,24 @@ public class StudentController extends GeneralController {
 		studentNumber = createTestData(studentNumber, "SE", null, 4, "9C", 26);
 		studentNumber = createTestData(studentNumber, "SE", null, 4, "9C", 23);
 		studentNumber = createTestData(studentNumber, "SE", "ISE", 4, "9C", 6);
-		studentNumber = createTestData(studentNumber, "SE", "EC", 4, "9C", 6);
-		studentNumber = createTestData(studentNumber, "SE", "IA", 4, "9C", 21);
-		studentNumber = createTestData(studentNumber, "SE", "IA", 4, "9C", 20);
-		studentNumber = createTestData(studentNumber, "SE", "GD", 4, "9C", 16);
+		studentNumber = createTestData(studentNumber, "EC", null, 4, "9C", 6);
+		studentNumber = createTestData(studentNumber, "IA", null, 4, "9C", 21);
+		studentNumber = createTestData(studentNumber, "IA", null, 4, "9C", 20);
+		studentNumber = createTestData(studentNumber, "GD", null, 4, "9C", 16);
 
 		studentNumber = createTestData(studentNumber, "SE", null, 3, "10A", 25);
 		studentNumber = createTestData(studentNumber, "SE", null, 3, "10A", 17);
 		studentNumber = createTestData(studentNumber, "SE", null, 3, "10A", 30);
-		studentNumber = createTestData(studentNumber, "SE", "EC", 3, "10A", 4);
-		studentNumber = createTestData(studentNumber, "SE", "IA", 3, "10A", 17);
+		studentNumber = createTestData(studentNumber, "EC", null, 3, "10A", 4);
+		studentNumber = createTestData(studentNumber, "IA", null, 3, "10A", 17);
 
 		studentNumber = createTestData(studentNumber, "SE", null, 2, "10B", 24);
 		studentNumber = createTestData(studentNumber, "SE", null, 2, "10B", 25);
 		studentNumber = createTestData(studentNumber, "SE", null, 2, "10B", 19);
-		studentNumber = createTestData(studentNumber, "SE", "IA", 2, "10B", 14);
-		studentNumber = createTestData(studentNumber, "SE", "EC", 2, "10B", 8);
+		studentNumber = createTestData(studentNumber, "IA", null, 2, "10B", 14);
+		studentNumber = createTestData(studentNumber, "EC", null, 2, "10B", 8);
 		studentNumber = createTestData(studentNumber, "SE", "ISE", 2, "10B", 21);
-		studentNumber = createTestData(studentNumber, "SE", "GD", 2, "10B", 17);
+		studentNumber = createTestData(studentNumber, "GD", null, 2, "10B", 17);
 
 		studentNumber = createTestData(studentNumber, "SE", null, 1, "10C", 28);
 		studentNumber = createTestData(studentNumber, "SE", null, 1, "10C", 28);
@@ -250,9 +225,9 @@ public class StudentController extends GeneralController {
 		studentNumber = createTestData(studentNumber, "SE", null, 1, "10C", 28);
 		studentNumber = createTestData(studentNumber, "SE", null, 1, "10C", 28);
 		studentNumber = createTestData(studentNumber, "SE", null, 1, "10C", 28);
-		studentNumber = createTestData(studentNumber, "SE", "EC", 1, "10C", 27);
-		studentNumber = createTestData(studentNumber, "SE", "IA", 1, "10C", 32);
-		studentNumber = createTestData(studentNumber, "SE", "GD", 1, "10C", 12);
+		studentNumber = createTestData(studentNumber, "EC", null, 1, "10C", 27);
+		studentNumber = createTestData(studentNumber, "IA", null, 1, "10C", 32);
+		studentNumber = createTestData(studentNumber, "GD", null, 1, "10C", 12);
 
 		studentNumber = createTestData(studentNumber, "SE", "ISE", 0, "0", 20);
 		return "redirect:/";

@@ -80,7 +80,27 @@ h3 {
 	background-color: #ffffff;
 }
 </style>
+<script>
+	function _errorNotify() {
+		var text = $("#messageError").text();
+		$.Notify({
+			type : 'alert',
+			caption : 'Alert',
+			content : text
+		});
+	}
+
+	function _successNotify() {
+		var text = $("#messageSuccess").text();
+		$.Notify({
+			type : 'success',
+			caption : 'Success',
+			content : text
+		});
+	}
+</script>
 <body>
+	<t:header />
 	<div style="display: none"></div>
 	<div style="width: 80%; margin: 0 auto; padding-bottom: 50px;">
 		<h1>
@@ -131,8 +151,7 @@ h3 {
 									<td>${student.semester}</td>
 									<td>${student.classSemester.classFPT.code}</td>
 									<td><a href="#" id="edit-student">Edit</a></td>
-									<td><a
-										href="<c:url value='/staff/students/delete/${student.studentId}' />">Delete</a></td>
+									<td><a href="#" id="delete-student">Delete</a></td>
 								</tr>
 							</c:forEach>
 						</c:if>
@@ -161,8 +180,7 @@ h3 {
 		</form>
 	</div>
 	<div id="dialog-edit-student" data-role="dialog" class="padding20"
-		data-overlay="true" data-overlay-color="op-dark"
-		data-windows-style="true">
+		data-overlay="true" data-overlay-color="op-dark">
 		<div style="width: 600px; margin: 0 auto;">
 			<h3 id="title">Edit Student</h3>
 			<form id="form-edit-student" method="post">
@@ -173,38 +191,15 @@ h3 {
 							<td></td>
 						</tr>
 						<tr>
-							<th>Student Code</th>
-							<td><div class="input-control text" style="width: 200px">
-									<input type="text" id="code" name="code" />
-								</div></td>
 							<th>Name</th>
 							<td><div class="input-control text" style="width: 200px">
 									<input type="text" id="name" name="name" />
 								</div></td>
 						</tr>
 						<tr>
-							<th>E-mail</th>
-							<td><div class="input-control text" style="width: 200px">
-									<input type="text" id="email" name="email" />
-								</div></td>
-							<th>Class</th>
-							<td>
-								<div class="input-control select" style="width: 200px">
-									<select name="classSemesterId" id="select-class">
-										<c:if test="${!empty listClassSemesters}">
-											<c:forEach items="${listClassSemesters}" var="classSemester">
-												<option value="${classSemester.classSemesterId}">${classSemester.classFPT.code}</option>
-											</c:forEach>
-										</c:if>
-									</select>
-								</div>
-							</td>
-						</tr>
-						<tr>
 							<th>Specialized</th>
 							<td><div class="input-control select" style="width: 200px">
 									<select name="specializedId" id="select-specialized">
-										<option>...</option>
 										<c:if test="${!empty listSpecializeds}">
 											<c:forEach items="${listSpecializeds}" var="specialized">
 												<option value="${specialized.specializedId}">${specialized.name}</option>
@@ -212,13 +207,20 @@ h3 {
 										</c:if>
 									</select>
 								</div></td>
-							<th>DS</th>
+						</tr>
+						<tr>
+							<th>Detail Specialized</th>
 							<td><div class="input-control select" style="width: 200px">
 									<select name="dsId" id="select-ds">
-										<option>...</option>
+										<c:if test="${!empty listSpecializeds}">
+											<c:forEach items="${listSpecializeds}" var="specialized">
+												<option value="${specialized.specializedId}">${specialized.name}</option>
+											</c:forEach>
+										</c:if>
 										<c:if test="${!empty listDetailSpecializeds}">
-											<c:forEach items="${listDetailSpecializeds}" var="detailSpecialized">
-													<option value="${detailSpecialized.specializedId}">${detailSpecialized.name}</option>
+											<c:forEach items="${listDetailSpecializeds}"
+												var="detailSpecialized">
+												<option value="${detailSpecialized.specializedId}">${detailSpecialized.name}</option>
 											</c:forEach>
 										</c:if>
 									</select>
@@ -227,8 +229,10 @@ h3 {
 						<tr>
 							<th>Batch</th>
 							<td><div class="input-control text" style="width: 200px">
-									<input type="number" id="batch" name="batch" />
+									<input type="text" id="batch" name="batch" />
 								</div></td>
+						</tr>
+						<tr>
 							<th>Semester</th>
 							<td><div class="input-control text" style="width: 200px">
 									<input type="number" id="semester" name="semester" />
@@ -255,38 +259,15 @@ h3 {
 							<td></td>
 						</tr>
 						<tr>
-					<!-- <th>Student Code</th>
-							<td><div class="input-control text" style="width: 200px">
-									<input type="text" id="studentCode" name="studentCode" />
-								</div></td>-->	
 							<th>Name</th>
 							<td><div class="input-control text" style="width: 200px">
 									<input type="text" id="name" name="name" />
-								</div></td>  	
-						</tr>
-						<tr>
-					<!--		<th>E-mail</th>
-							<td><div class="input-control text" style="width: 200px">
-									<input type="text" id="email" name="email" />
 								</div></td>
-					  <th>Class</th>
-							<td>
-								<div class="input-control select" style="width: 200px">
-									<select id="classId">
-										<c:if test="${!empty listClassSemesters}">
-											<c:forEach items="${listClassSemesters}" var="classSemester">
-												<option value="${classSemester.classFPT.classId}">${classSemester.classFPT.code}</option>
-											</c:forEach>
-										</c:if>
-									</select>
-								</div>
-							</td> -->		
 						</tr>
 						<tr>
 							<th>Specialized</th>
 							<td><div class="input-control select" style="width: 200px">
 									<select name="specializedId" id="select-specialized">
-										<option>...</option>
 										<c:if test="${!empty listSpecializeds}">
 											<c:forEach items="${listSpecializeds}" var="specialized">
 												<option value="${specialized.specializedId}">${specialized.name}</option>
@@ -294,10 +275,16 @@ h3 {
 										</c:if>
 									</select>
 								</div></td>
-							<!-- <th>DS</th>
+						</tr>
+						<tr>
+							<th>Detail Specialized</th>
 							<td><div class="input-control select" style="width: 200px">
-									<select name="dsId" id="dsId">
-										<option>...</option>
+									<select name="dsId" id="select-ds">
+										<c:if test="${!empty listSpecializeds}">
+											<c:forEach items="${listSpecializeds}" var="specialized">
+												<option value="${specialized.specializedId}">${specialized.name}</option>
+											</c:forEach>
+										</c:if>
 										<c:if test="${!empty listDetailSpecializeds}">
 											<c:forEach items="${listDetailSpecializeds}"
 												var="detailSpecialized">
@@ -305,12 +292,12 @@ h3 {
 											</c:forEach>
 										</c:if>
 									</select>
-								</div></td>  -->
+								</div></td>
 						</tr>
 						<tr>
 							<th>Batch</th>
 							<td><div class="input-control text" style="width: 200px">
-									<input type="number" id="batch" name="batch" />
+									<input type="text" id="batch" name="batch" />
 								</div></td>
 						</tr>
 						<tr>
@@ -325,6 +312,18 @@ h3 {
 			<div id="btn-group" style="float: right;">
 				<button class="button" id="btn-add-save">SAVE</button>
 				<button class="button" id="btn-add-cancel">CANCEL</button>
+			</div>
+		</div>
+	</div>
+
+	<div id="dialog-delete-student" data-role="dialog" class="padding20"
+		data-overlay="true" data-overlay-color="op-dark"
+		data-windows-style="true">
+		<div style="width: 500px; margin: 0 auto; text-align: center;">
+			<h2>Are you sure to delete this student?</h2>
+			<div id="btn-group" style="margin-top: 25px;">
+				<button class="button" id="btn-delete-accept">ACCEPT</button>
+				<button class="button" id="btn-delete-decline">DECLINE</button>
 			</div>
 		</div>
 	</div>

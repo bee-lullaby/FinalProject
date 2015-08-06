@@ -13,7 +13,7 @@ public interface CourseSemesterDAO {
 			boolean jointClassCourseSemester,
 			boolean jointTeacherCourseSemester,
 			boolean jointProgramSemesterDetails);
-
+	
 	public CourseSemester getCourseSemesterById(int courseSemesterId,
 			boolean jointClassCourseSemester,
 			boolean jointTeacherCourseSemester,

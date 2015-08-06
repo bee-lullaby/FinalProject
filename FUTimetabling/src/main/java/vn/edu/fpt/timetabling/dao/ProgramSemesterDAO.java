@@ -10,7 +10,9 @@ public interface ProgramSemesterDAO {
 	public void updateProgramSemester(ProgramSemester programSemester);
 
 	public List<ProgramSemester> listProgramSemesters();
-
+	
+	public List<ProgramSemester> listProgramSemestersBySemester(int semesterId);
+	
 	public ProgramSemester getProgramSemesterById(int programSemesterId);
 
 	public void deleteProgramSemester(int programSemesterId);

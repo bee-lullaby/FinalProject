@@ -120,18 +120,27 @@ public class HomeController {
 				session.setAttribute("idToken", token.getIdToken());
 				session.setAttribute("accessToken", token.getAccessToken());
 				session.setAttribute("email", email);
+				session.setAttribute("name", staff.getName());
+				session.setAttribute("account", staff.getAccount());
+				session.setAttribute("accountType", staff.getAccountType());
 				session.setAttribute("roll", "staff");
 				return "staff";
 			} else if (teacher != null) {
 				session.setAttribute("idToken", token.getIdToken());
 				session.setAttribute("accessToken", token.getAccessToken());
 				session.setAttribute("email", email);
+				session.setAttribute("name", teacher.getName());
+				session.setAttribute("account", teacher.getAccount());
+				session.setAttribute("accountType", teacher.getAccountType());
 				session.setAttribute("roll", "teacher");
 				return "teacherPage";
 			} else if (student != null) {
 				session.setAttribute("idToken", token.getIdToken());
 				session.setAttribute("accessToken", token.getAccessToken());
 				session.setAttribute("email", email);
+				session.setAttribute("name", student.getName());
+				session.setAttribute("account", student.getAccount());
+				session.setAttribute("accountType", "student");
 				session.setAttribute("roll", "student");
 				return "studentPage";
 			} else {

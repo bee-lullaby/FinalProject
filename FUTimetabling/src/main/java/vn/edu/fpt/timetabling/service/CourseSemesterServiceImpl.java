@@ -42,15 +42,15 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 	}
 
 	@Override
-	public List<String> addCourseSemesterFromFile(File courseSemesters, int semesterId)
-			throws IOException {
+	public List<String> addCourseSemesterFromFile(File courseSemesters,
+			int semesterId) throws IOException {
 		FileInputStream file = new FileInputStream(courseSemesters);
 		XSSFWorkbook workbook = new XSSFWorkbook(file);
 		XSSFSheet sheet = workbook.getSheetAt(0);
 		Iterator<Row> rowIteratorFirst = sheet.iterator();
 		rowIteratorFirst.next();
 		List<String> checkDepartmentExisted = new ArrayList<String>();
-		
+
 		while (rowIteratorFirst.hasNext()) {
 			Row row = rowIteratorFirst.next();
 			CourseSemester courseSemester = new CourseSemester();
@@ -63,11 +63,12 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 
 			if (courseService.getCourseByCode(codeCourse) == null) {
 				Course course = new Course();
-				String departmentCode = row.getCell(0).getStringCellValue().trim();
-				
+				String departmentCode = row.getCell(0).getStringCellValue()
+						.trim();
+
 				Department department = departmentService
 						.getDepartmentByCode(departmentCode);
-				if(department == null) {
+				if (department == null) {
 					checkDepartmentExisted.add(departmentCode);
 					continue;
 				}
@@ -77,7 +78,8 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 				courseService.addCourse(course);
 			}
 
-			if (getCourseSemesterByCourseCodeSemester(codeCourse, semesterId, false, false, false) == null) {
+			if (getCourseSemesterByCourseCodeSemester(codeCourse, semesterId,
+					false, false, false) == null) {
 				courseSemester.setCourse(courseService
 						.getCourseByCode(codeCourse));
 				logger.info(Integer.toString(semesterId));
@@ -114,6 +116,15 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 			boolean jointProgramSemesterDetails) {
 		return courseSemesterDAO.listCourseSemesters(jointClassCourseSemester,
 				jointTeacherCourseSemester, jointProgramSemesterDetails);
+	}
+
+	@Override
+	public List<CourseSemester> listCourseSemestersBySemester(int semesterId,
+			boolean jointClassCourseSemester,
+			boolean jointTeacherCourseSemester,
+			boolean jointProgramSemesterDetails) {
+		return courseSemesterDAO.listCourseSemestersBySemester(semesterId,
+				false, false, false);
 	}
 
 	@Override
@@ -156,7 +167,7 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 				semesterId, jointClassCourseSemester,
 				jointTeacherCourseSemester, jointProgramSemesterDetails);
 	}
-	
+
 	@Override
 	public void deleteCourseSemester(int courseSemesterId) {
 		courseSemesterDAO.deleteCourseSemester(courseSemesterId);
@@ -166,15 +177,14 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 	public List<CourseSemester> listCourseSemestersByStudent(int studentId) {
 		return courseSemesterDAO.listCourseSemestersByStudent(studentId);
 	}
-	
-	@Override 
-	public List<CourseSemester> listCourseSemestersByDepartment(
-			int semesterId,
-			int departmentId,
-			boolean jointClassCourseSemester,
+
+	@Override
+	public List<CourseSemester> listCourseSemestersByDepartment(int semesterId,
+			int departmentId, boolean jointClassCourseSemester,
 			boolean jointTeacherCourseSemester,
 			boolean jointProgramSemesterDetails) {
-		return courseSemesterDAO.listCourseSemestersByDepartment(semesterId, departmentId, false, false, false);
+		return courseSemesterDAO.listCourseSemestersByDepartment(semesterId,
+				departmentId, false, false, false);
 	}
 
 }

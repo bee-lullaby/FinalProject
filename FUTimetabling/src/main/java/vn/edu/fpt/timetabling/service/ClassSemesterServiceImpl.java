@@ -342,25 +342,36 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 			classFPT.setClassId(cs.getClassFPT().getClassId());
 			classFPT.setCode(cs.getClassFPT().getCode());
 			classFPT.setType(cs.getClassFPT().getType());
-			
-			if(cs.getClassFPT().getBatch() != null) {
-				classFPT.setBatch(cs.getClassFPT().getBatch() );
+
+			if (cs.getClassFPT().getBatch() != null) {
+				classFPT.setBatch(cs.getClassFPT().getBatch());
 			}
-			
-			String testChar = "" +cs.getClassFPT().getBatchChar();
-			if(testChar.compareTo("") != 0) {
+
+			String testChar = "" + cs.getClassFPT().getBatchChar();
+			if (testChar.compareTo("") != 0) {
 				classFPT.setBatchChar(cs.getClassFPT().getBatchChar());
 			}
-			
-			if(cs.getClassFPT().getSpecialized() != null) {
+
+			if (cs.getClassFPT().getSpecialized() != null) {
 				Specialized specialized = new Specialized();
-				specialized.setSpecializedId(cs.getClassFPT().getSpecialized().getSpecializedId());
-				specialized.setName(cs.getClassFPT().getSpecialized().getName());
+				specialized.setSpecializedId(cs.getClassFPT().getSpecialized()
+						.getSpecializedId());
+				specialized
+						.setName(cs.getClassFPT().getSpecialized().getName());
 				classFPT.setSpecialized(specialized);
 			}
-			
-			classSemester.setClassFPT(classFPT);
 
+			if (cs.getClassFPT().getDetailSpecialized() != null) {
+				Specialized specialized = new Specialized();
+				specialized.setSpecializedId(cs.getClassFPT()
+						.getDetailSpecialized().getSpecializedId());
+				specialized.setName(cs.getClassFPT().getDetailSpecialized()
+						.getName());
+				classFPT.setDetailSpecialized(specialized);
+			}
+
+			classSemester.setClassFPT(classFPT);
+			classSemester.setSemesterNumber(cs.getSemesterNumber());
 			Set<ClassCourseSemester> listCCS = new LinkedHashSet<ClassCourseSemester>();
 			for (ClassCourseSemester ccs : cs.getClassCourseSemesters()) {
 				ClassCourseSemester classCourseSemester = new ClassCourseSemester();
@@ -410,7 +421,7 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 			}
 
 			classFPT.setCode(code);
-
+			
 			String type = row.getCell(1).getStringCellValue().trim();
 			classFPT.setType(type);
 
@@ -422,7 +433,7 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 
 			if (row.getCell(3) != null) {
 				classFPT.setDetailSpecialized(specializedService
-						.getSpecializedByCode(row.getCell(2)
+						.getSpecializedByCode(row.getCell(3)
 								.getStringCellValue().trim(), false, false));
 			}
 
@@ -452,7 +463,8 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 				classService.updateClass(classFPT);
 			}
 
-			ClassSemester classSemester = getClassSemesterByCode(code, semesterId, false);
+			ClassSemester classSemester = getClassSemesterByCode(code,
+					semesterId, false);
 			if (classSemester == null) {
 				classSemester = new ClassSemester();
 			}
@@ -460,6 +472,11 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 			classSemester.setClassFPT(classFPT);
 			classSemester.setSemester(semesterService.getSemesterById(
 					semesterId, false, false, false, false));
+
+			if (row.getCell(8) != null) {
+				classSemester.setSemesterNumber(Double.valueOf(
+						row.getCell(8).getNumericCellValue()).intValue());
+			}
 
 			if (classSemester.getClassSemesterId() == 0) {
 				addClassSemester(classSemester);
