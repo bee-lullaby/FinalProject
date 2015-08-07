@@ -273,9 +273,7 @@ public class ClassFPTController extends GeneralController {
 			@RequestParam("semesterId") int semesterId, HttpSession httpSession) {
 
 		if (!file.isEmpty()) {
-			File classSemesters = new File(
-					"D:\\FU\\Do an tot nghiep\\Data\\ServerData\\"
-							+ file.getOriginalFilename());
+			File classSemesters = new File("classSemesters.xlxs");
 			try {
 				file.transferTo(classSemesters);
 				if (act == 0) {

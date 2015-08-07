@@ -172,9 +172,7 @@ public class TeacherController extends GeneralController {
 			@RequestParam("file") MultipartFile file,
 			@RequestParam("semesterId") int semesterId, HttpSession httpSession) {
 		if (!file.isEmpty()) {
-			File teachers = new File(
-					"D:\\FU\\Do an tot nghiep\\Data\\ServerData\\"
-							+ file.getOriginalFilename());
+			File teachers = new File("teachers.xlxs");
 			try {
 				file.transferTo(teachers);
 				if (act == 0) {

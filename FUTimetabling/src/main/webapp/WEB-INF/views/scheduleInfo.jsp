@@ -2,6 +2,7 @@
 <%@ taglib tagdir="/WEB-INF/tags" prefix="t"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page session="false"%>
 <!DOCTYPE html>
 <html>
@@ -77,13 +78,17 @@ table tr td {
 					<td>${totalClasses}</td>
 				</tr>
 				<tr>
-					<th>Number of Classes was not created timetable:</th>
-					<td>${totalClassesNotCreated}</td>
+					<th>Total Classes was set courses:</th>
+					<td>${fn:length(listClassWasSetCourse)}</td>
 				</tr>
 				<tr>
+					<th>Number of Classes was created timetable done:</th>
+					<td>${fn:length(listClassWasSetTimetablesDone)}</td>
+				</tr>
+	<!--		<tr>
 					<th>Conflict:</th>
 					<td></td>
-				</tr>
+				</tr>   -->
 			</table>
 		</div>
 		<div id="div-room-arrangement"
@@ -91,17 +96,17 @@ table tr td {
 			<h3>Room Arrangement</h3>
 			<table class="table" style="width: 100%">
 				<tr>
-					<th>Total Classes:</th>
-					<td>${totalClasses}</td>
+					<th>Number of Classes was created timetable done:</th>
+					<td>${fn:length(listClassWasSetTimetablesDone)}</td>
 				</tr>
 				<tr>
-					<th>Total Rooms:</th>
-					<td>${totalRooms}</td>
+					<th>Number of Classes was set room done:</th>
+					<td>${fn:length(listClassWasSetRoomsDone)}</td>
 				</tr>
-				<tr>
+					<!--		<tr>
 					<th>Conflict:</th>
 					<td></td>
-				</tr>
+				</tr>   -->
 			</table>
 		</div>
 		
@@ -110,17 +115,17 @@ table tr td {
 			<h3>Teacher Arrangement</h3>
 			<table class="table" style="width: 100%">
 				<tr>
-					<th>Total Classes:</th>
-					<td>${totalClasses}</td>
+					<th>Number of Classes was created timetable done:</th>
+					<td>${fn:length(listClassWasSetTimetablesDone)}</td>
 				</tr>
 				<tr>
-					<th>Number of Classes was set teacher:</th>
-					<td></td>
+					<th>Number of Classes was set teacher done:</th>
+					<td>${fn:length(listClassWasSetTeachersDone)}</td>
 				</tr>
-				<tr>
+					<!--		<tr>
 					<th>Conflict:</th>
 					<td></td>
-				</tr>
+				</tr>   -->
 			</table>
 		</div>
 		<div id="btn-group" style="margin: 0 auto; text-align: center;">

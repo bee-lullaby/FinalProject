@@ -103,7 +103,7 @@ public class StudentController extends GeneralController {
 	@RequestMapping(value = "/staff/students/addFromFile", method = RequestMethod.POST)
 	public String addStudentFromFile(@RequestParam("file") MultipartFile file, HttpSession httpSession) {
 		if (!file.isEmpty()) {
-			File students = new File("D:\\FU\\Do an tot nghiep\\Data\\ServerData\\" + file.getOriginalFilename());
+			File students = new File("students.xlxs");
 			try {
 				file.transferTo(students);
 				studentService.addStudentsFromFile(students);

@@ -33,10 +33,14 @@ public class ScheduleInfoController {
 	
 	@RequestMapping(value="staff/scheduleInfo", method = RequestMethod.GET, params = {"semesterId"})
 	public String scheduleInfo(@RequestParam int semesterId, HttpSession httpSession, Model model) {
+		
 		model.addAttribute("listSemesters", semesterService.listSemesters(false, false, false, false));
 		model.addAttribute("totalClasses", classSemesterService.listClassSemestersBySemester(semesterId, false).size());
 		model.addAttribute("totalRooms", roomService.listRooms(false).size());
-		model.addAttribute("totalClassesNotCreated", scheduleInfoService.getListWasNotSetTimetablesDone(semesterId).size());
+		model.addAttribute("listClassWasSetTimetablesDone", scheduleInfoService.getListClassWasSetTimetablesDone(semesterId));
+		model.addAttribute("listClassWasSetCourse", scheduleInfoService.getListClassWasSetCourse(semesterId));
+		model.addAttribute("listClassWasSetRoomsDone", scheduleInfoService.getListClassWasSetRoomsDone(semesterId));
+		model.addAttribute("listClassWasSetTeachersDone", scheduleInfoService.getListClassWasSetTeachersDone(semesterId));
 		return "scheduleInfo";
 	}
 	

@@ -60,7 +60,7 @@ public class RoomsController extends GeneralController {
 				HttpSession httpSession, Model model) {
 		if (!file.isEmpty()) {
 
-			File rooms = new File("D:\\FU\\Do an tot nghiep\\Data\\ServerData\\" + file.getOriginalFilename());
+			File rooms = new File("rooms.xlxs");
 			try {
 				file.transferTo(rooms);
 				// handle building not existed.

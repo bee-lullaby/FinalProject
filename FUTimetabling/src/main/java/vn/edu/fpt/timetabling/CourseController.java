@@ -134,9 +134,7 @@ public class CourseController extends GeneralController {
 	@RequestMapping(value = "/staff/courses/addFromFile", method = RequestMethod.POST)
 	public String addCourseFromFile(@RequestParam("file") MultipartFile file, @RequestParam("semesterId") int semesterId, HttpSession httpSession) {
 		if (!file.isEmpty()) {
-			File courses = new File(
-					"D:\\FU\\Do an tot nghiep\\Data\\ServerData\\"
-							+ file.getOriginalFilename());
+			File courses = new File("courses.xlxs");
 			try {
 				file.transferTo(courses);
 				List<String> check = courseSemesterService.addCourseSemesterFromFile(courses, semesterId);

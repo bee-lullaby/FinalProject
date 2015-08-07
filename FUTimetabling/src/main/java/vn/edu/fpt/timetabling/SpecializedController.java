@@ -64,7 +64,7 @@ public class SpecializedController extends GeneralController {
 	@RequestMapping(value = "/staff/specialized/addFromFile", method = RequestMethod.POST)
 	public String addSpecializedFromFile(@RequestParam("file") MultipartFile file) {
 		if (!file.isEmpty()) {
-			File specializeds = new File("D:\\FU\\Do an tot nghiep\\Data\\ServerData\\" + file.getOriginalFilename());
+			File specializeds = new File("specializeds.xlxs");
 			try {
 				file.transferTo(specializeds);
 				specializedService.addSpecializedFromFile(specializeds);

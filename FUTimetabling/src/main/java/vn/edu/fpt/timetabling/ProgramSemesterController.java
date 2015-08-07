@@ -1,8 +1,6 @@
 package vn.edu.fpt.timetabling;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -13,15 +11,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import vn.edu.fpt.timetabling.model.ProgramSemester;
 import vn.edu.fpt.timetabling.model.Semester;
-import vn.edu.fpt.timetabling.model.Specialized;
 import vn.edu.fpt.timetabling.service.CourseSemesterService;
 import vn.edu.fpt.timetabling.service.ProgramSemesterService;
 import vn.edu.fpt.timetabling.service.SemesterService;
@@ -84,18 +79,7 @@ public class ProgramSemesterController extends GeneralController {
 	public String addDepartmentsFromFile(@RequestParam("semesterId") int semesterId, 
 			@RequestParam("file") MultipartFile file, HttpSession httpSession) {
 		if (!file.isEmpty()) {
-
             File programSemesters = new File("programSemesters.xlxs");
-			try {
-				byte[] bytes = file.getBytes();
-				BufferedOutputStream stream = 
-	                    new BufferedOutputStream(new FileOutputStream(programSemesters));
-	            stream.write(bytes);
-	            stream.close();
-	            System.out.println(programSemesters.getAbsolutePath());
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
 			try {
 				file.transferTo(programSemesters);
 				programSemesterService.addProgramSemesterFromFile(semesterId, programSemesters);

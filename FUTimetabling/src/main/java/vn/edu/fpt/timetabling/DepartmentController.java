@@ -68,9 +68,7 @@ public class DepartmentController extends GeneralController {
 	public String addDepartmentsFromFile(
 			@RequestParam("file") MultipartFile file, HttpSession httpSession) {
 		if (!file.isEmpty()) {
-			File departments = new File(
-					"D:\\FU\\Do an tot nghiep\\Data\\ServerData\\"
-							+ file.getOriginalFilename());
+			File departments = new File("departments.xlxs");
 			try {
 				file.transferTo(departments);
 				departmentService.addDepartmentFromFile(departments);
