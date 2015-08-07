@@ -126,6 +126,7 @@ h3 {
 								<th>Specialized</th>
 								<th>Detail Specialized</th>
 								<th>Current Semester</th>
+								<th>Batch</th>
 								<th>Courses</th>
 							</tr>
 						</thead>
@@ -138,6 +139,7 @@ h3 {
 										<td>${programSemester.specialized.code}</td>
 										<td>${programSemester.detailSpecialized.code}</td>
 										<td>${programSemester.currentSemester}</td>
+										<td>${programSemester.batch}</td>
 										<td>${programSemester.programSemesterDetails}</td>
 									</tr>
 								</c:forEach>

@@ -92,14 +92,13 @@ public class ProgramSemesterServiceImpl implements ProgramSemesterService {
 		XSSFSheet sheet = workbook.getSheetAt(0);
 		Iterator<Row> rowIterator = sheet.iterator();
 		rowIterator.next();
-		for(ProgramSemester p : listProgramSemestersBySemester(semesterId)) {
-			deleteProgramSemester(p.getProgramSemesterId());
-		}
-		
 		
 		HashMap<String, List<String>> mCheckSpecializedAndCourse = new HashMap<String, List<String>>();
 		mCheckSpecializedAndCourse.put("specialized", new ArrayList<String>());
 		mCheckSpecializedAndCourse.put("course", new ArrayList<String>());
+		
+		programSemesterDetailService.deleteProgramSemesterDetailsBySemester(semesterId);
+		programSemesterDAO.deleteProgramSemestersBySemester(semesterId);
 		
 		while (rowIterator.hasNext()) {
 			Row row = rowIterator.next();			
@@ -108,6 +107,7 @@ public class ProgramSemesterServiceImpl implements ProgramSemesterService {
 			if(row.getCell(0) != null) { 
 
 				String specializedCode = row.getCell(0).getStringCellValue().trim();
+				
 				Specialized specialized = specializedService.getSpecializedByCode(specializedCode, false, false);
 				if(specialized == null) {
 					mCheckSpecializedAndCourse.get("specialized").add(specializedCode);
@@ -121,6 +121,7 @@ public class ProgramSemesterServiceImpl implements ProgramSemesterService {
 					Specialized detailSpecialized = specializedService.getSpecializedByCode(detailSpecializedCode, false, false);
 					if(detailSpecialized == null) {
 						mCheckSpecializedAndCourse.get("specialized").add(detailSpecializedCode);
+						continue;
 					} else {
 						p.setDetailSpecialized(detailSpecialized);
 					}
@@ -141,9 +142,11 @@ public class ProgramSemesterServiceImpl implements ProgramSemesterService {
 				int count = 4;
 				while(row.getCell(count) != null) {
 					String courseCode = row.getCell(count).getStringCellValue().trim();
+					if(courseCode.equals("")) break;
 					Course course = courseService.getCourseByCode(courseCode);
+					System.out.println(p.getDetailSpecialized().getCode() +" " +courseCode);
 					if(course == null) { 
-						System.out.println(courseCode);
+						mCheckSpecializedAndCourse.get("course").add(courseCode);
 						continue;
 					}
 					CourseSemester courseSemester = courseSemesterService.getCourseSemesterByCourseCodeSemester(courseCode, semesterId, false, false, false);
@@ -151,6 +154,7 @@ public class ProgramSemesterServiceImpl implements ProgramSemesterService {
 						mCheckSpecializedAndCourse.get("course").add(courseCode);
 						continue;
 					}
+					
 					ProgramSemesterDetail psd = new ProgramSemesterDetail();
 					psd.setProgramSemester(p);
 					psd.setCourseSemester(courseSemester);	
@@ -160,7 +164,6 @@ public class ProgramSemesterServiceImpl implements ProgramSemesterService {
 				}
 				
 			}
-			
 		}
 		workbook.close();
 		file.close();

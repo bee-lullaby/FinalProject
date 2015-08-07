@@ -17,6 +17,8 @@ public interface ProgramSemesterDAO {
 
 	public void deleteProgramSemester(int programSemesterId);
 
+	public void deleteProgramSemestersBySemester(int semesterId);
+	
 	public ProgramSemester getProgramSemesterBySpecializedSemester(int semesterId, int specializedId,
 			int detailSpecializedId, int semesterNumber);
 }

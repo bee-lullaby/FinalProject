@@ -41,7 +41,12 @@ public class ProgramSemesterDetailServiceImpl implements ProgramSemesterDetailSe
 	public void deleteProgramSemesterDetail(int programSemesterDetailId) {
 		programSemesterDetailDAO.deleteProgramSemesterDetail(programSemesterDetailId);
 	}
-
+	
+	@Override
+	public void deleteProgramSemesterDetailsBySemester(int semesterId) {
+		programSemesterDetailDAO.deleteProgramSemesterDetailsBySemester(semesterId);
+	}
+	
 	@Override
 	public List<ProgramSemesterDetail> listProgramSemesterDetailsBySemester(int semesterId) {
 		return programSemesterDetailDAO.listProgramSemesterDetailsBySemester(semesterId);

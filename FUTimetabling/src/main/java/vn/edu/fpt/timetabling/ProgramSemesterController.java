@@ -1,6 +1,8 @@
 package vn.edu.fpt.timetabling;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -73,6 +75,8 @@ public class ProgramSemesterController extends GeneralController {
 		model.addAttribute("listSpecializeds", specializedService.listSpecializeds(false, false));
 		model.addAttribute("listDetailSpecializeds", specializedService.listDetailSpecializeds(false, false));	
 		model.addAttribute("listCourseSemesters", courseSemesterService.listCourseSemestersBySemester(semesterId, false, false, false));
+		checkError(httpSession, model);
+		notifySuccess(httpSession, model);
 		return "programs";
 	}
 	
@@ -80,9 +84,18 @@ public class ProgramSemesterController extends GeneralController {
 	public String addDepartmentsFromFile(@RequestParam("semesterId") int semesterId, 
 			@RequestParam("file") MultipartFile file, HttpSession httpSession) {
 		if (!file.isEmpty()) {
-			File programSemesters = new File(
-					"D:\\FU\\Do an tot nghiep\\Data\\ServerData\\"
-							+ file.getOriginalFilename());
+
+            File programSemesters = new File("programSemesters.xlxs");
+			try {
+				byte[] bytes = file.getBytes();
+				BufferedOutputStream stream = 
+	                    new BufferedOutputStream(new FileOutputStream(programSemesters));
+	            stream.write(bytes);
+	            stream.close();
+	            System.out.println(programSemesters.getAbsolutePath());
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 			try {
 				file.transferTo(programSemesters);
 				programSemesterService.addProgramSemesterFromFile(semesterId, programSemesters);

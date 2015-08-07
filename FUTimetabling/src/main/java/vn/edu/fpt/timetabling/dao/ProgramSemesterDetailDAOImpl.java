@@ -57,7 +57,18 @@ public class ProgramSemesterDetailDAOImpl implements ProgramSemesterDetailDAO {
 		ProgramSemesterDetail programSemesterDetail = getProgramSemesterDetailById(programSemesterDetailId);
 		getCurrentSession().delete(programSemesterDetail);
 	}
-
+	
+	@Override
+	public void deleteProgramSemesterDetailsBySemester(int semesterId) {	
+		String hql = "DELETE FROM vn.edu.fpt.timetabling.model.ProgramSemesterDetail PSD"
+			+ " WHERE PSD.programSemester.programSemesterId in"
+			+ " (select PS.id from vn.edu.fpt.timetabling.model.ProgramSemester PS "
+			+ " where PS.semester.semesterId = :semesterId)";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("semesterId", semesterId);
+		query.executeUpdate();
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ProgramSemesterDetail> listProgramSemesterDetailsBySemester(int semesterId) {

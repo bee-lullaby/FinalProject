@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 07, 2015 at 05:06 AM
+-- Generation Time: Aug 07, 2015 at 05:12 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS `classes` (
   `batch` int(11) DEFAULT NULL,
   `batch_char` varchar(1) DEFAULT NULL,
   `number` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=228 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=235 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `classes`
@@ -75,9 +75,9 @@ INSERT INTO `classes` (`class_id`, `code`, `type`, `specialized_id`, `detail_spe
 (214, 'SE1004', 'Specialized', 1, 1, NULL, 10, 'B', 4),
 (215, 'SE1005', 'Specialized', 1, 1, NULL, 10, 'B', 5),
 (216, 'SE1006', 'Specialized', 1, 1, NULL, 10, 'B', 6),
-(217, 'SE1001', 'Specialized', 1, 1, NULL, 10, 'A', 1),
-(218, 'SE1002', 'Specialized', 1, 1, NULL, 10, 'A', 2),
-(219, 'SE1003', 'Specialized', 1, 1, NULL, 10, 'A', 3),
+(217, 'SE1001', 'Specialized', 1, 1, NULL, 9, 'A', 1),
+(218, 'SE1002', 'Specialized', 1, 1, NULL, 9, 'A', 2),
+(219, 'SE1003', 'Specialized', 1, 1, NULL, 9, 'A', 3),
 (220, 'SE0907', 'Specialized', 1, 1, NULL, 9, 'C', 7),
 (221, 'SE0908', 'Specialized', 1, 1, NULL, 9, 'C', 8),
 (222, 'SE0909', 'Specialized', 1, 1, NULL, 9, 'C', 9),
@@ -85,7 +85,14 @@ INSERT INTO `classes` (`class_id`, `code`, `type`, `specialized_id`, `detail_spe
 (224, 'SE0911', 'Specialized', 1, 1, NULL, 9, 'C', 11),
 (225, 'SE0904', 'Specialized', 1, 1, NULL, 9, 'B', 4),
 (226, 'SE0905', 'Specialized', 1, 1, NULL, 9, 'B', 5),
-(227, 'SE0906', 'Specialized', 1, 1, NULL, 9, 'B', 6);
+(227, 'SE0906', 'Specialized', 1, 1, NULL, 9, 'B', 6),
+(228, 'EC1003', 'Specialized', 1, 9, NULL, 10, 'C', 3),
+(229, 'IA1003', 'Specialized', 1, 13, NULL, 10, 'C', 3),
+(230, 'IA1002', 'Specialized', 1, 13, NULL, 10, 'B', 2),
+(231, 'EC1001', 'Specialized', 1, 9, NULL, 9, 'A', 1),
+(232, 'IA0902', 'Specialized', 1, 13, NULL, 9, 'C', 2),
+(233, 'IA0903', 'Specialized', 1, 13, NULL, 9, 'C', 3),
+(234, 'IA10901', 'Specialized', 1, 10, NULL, 9, 'B', 1);
 
 -- --------------------------------------------------------
 
@@ -219,7 +226,7 @@ CREATE TABLE IF NOT EXISTS `class_course_semester_merge` (
 `class_course_semester_merge_id` int(11) NOT NULL,
   `class_course_semester_id_1` int(11) NOT NULL,
   `class_course_semester_id_2` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_vietnamese_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_vietnamese_ci;
 
 -- --------------------------------------------------------
 
@@ -260,7 +267,7 @@ CREATE TABLE IF NOT EXISTS `class_semester` (
   `class_id` int(11) NOT NULL,
   `semester_id` int(11) NOT NULL,
   `semester` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=225 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=232 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `class_semester`
@@ -286,7 +293,14 @@ INSERT INTO `class_semester` (`class_semester_id`, `class_id`, `semester_id`, `s
 (221, 224, 1, 4),
 (222, 225, 1, 5),
 (223, 226, 1, 5),
-(224, 227, 1, 5);
+(224, 227, 1, 5),
+(225, 228, 1, 1),
+(226, 229, 1, 1),
+(227, 230, 1, 2),
+(228, 231, 1, 3),
+(229, 232, 1, 4),
+(230, 233, 1, 4),
+(231, 234, 1, 5);
 
 -- --------------------------------------------------------
 
@@ -691,33 +705,38 @@ CREATE TABLE IF NOT EXISTS `program_semester` (
   `specialized_id` int(11) NOT NULL,
   `detail_specialized_id` int(11) DEFAULT NULL,
   `batch` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=494 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `program_semester`
 --
 
 INSERT INTO `program_semester` (`program_semester_id`, `semester_id`, `current_semester`, `specialized_id`, `detail_specialized_id`, `batch`) VALUES
-(91, 1, 1, 1, 1, 10),
-(92, 1, 2, 1, 1, 10),
-(93, 1, 3, 1, 1, 10),
-(94, 1, 4, 1, 1, 9),
-(95, 1, 5, 1, 1, 9),
-(96, 1, 7, 1, 4, 8),
-(97, 1, 7, 1, 5, 8),
-(98, 1, 7, 1, 2, 8),
-(99, 1, 7, 1, 3, 8),
-(100, 1, 7, 1, 6, 8),
-(101, 1, 8, 1, 4, 8),
-(102, 1, 8, 1, 5, 8),
-(103, 1, 8, 1, 2, 8),
-(104, 1, 8, 1, 3, 8),
-(105, 1, 8, 1, 6, 8),
-(106, 1, 9, 1, 4, 8),
-(107, 1, 9, 1, 5, 8),
-(108, 1, 9, 1, 2, 8),
-(109, 1, 9, 1, 3, 8),
-(110, 1, 9, 1, 6, 8);
+(469, 1, 1, 1, 1, 10),
+(470, 1, 2, 1, 1, 10),
+(471, 1, 3, 1, 1, 10),
+(472, 1, 4, 1, 1, 9),
+(473, 1, 5, 1, 1, 9),
+(474, 1, 7, 1, 4, 8),
+(475, 1, 7, 1, 5, 8),
+(476, 1, 7, 1, 2, 8),
+(477, 1, 7, 1, 3, 8),
+(478, 1, 7, 1, 6, 8),
+(479, 1, 8, 1, 4, 8),
+(480, 1, 8, 1, 5, 8),
+(481, 1, 8, 1, 2, 8),
+(482, 1, 8, 1, 3, 8),
+(483, 1, 8, 1, 6, 8),
+(484, 1, 9, 1, 4, 8),
+(485, 1, 9, 1, 5, 8),
+(486, 1, 9, 1, 2, 8),
+(487, 1, 9, 1, 3, 8),
+(488, 1, 9, 1, 6, 8),
+(489, 1, 1, 1, 13, 10),
+(490, 1, 2, 1, 13, 10),
+(491, 1, 3, 1, 9, 10),
+(492, 1, 4, 1, 13, 9),
+(493, 1, 5, 1, 10, 9);
 
 -- --------------------------------------------------------
 
@@ -731,97 +750,122 @@ CREATE TABLE IF NOT EXISTS `program_semester_detail` (
   `program_semester_id` int(11) NOT NULL,
   `course_semester_id` int(11) NOT NULL,
   `is_semester_long` tinyint(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=495 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2128 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `program_semester_detail`
 --
 
 INSERT INTO `program_semester_detail` (`program_semester_detail_id`, `program_semester_id`, `course_semester_id`, `is_semester_long`) VALUES
-(411, 91, 131, 0),
-(412, 91, 115, 0),
-(413, 91, 221, 0),
-(414, 91, 137, 0),
-(415, 91, 182, 0),
-(416, 92, 138, 0),
-(417, 92, 139, 0),
-(418, 92, 134, 0),
-(419, 92, 222, 0),
-(420, 92, 155, 0),
-(421, 93, 214, 0),
-(422, 93, 136, 0),
-(423, 93, 127, 0),
-(424, 93, 141, 0),
-(425, 93, 156, 0),
-(426, 94, 133, 0),
-(427, 94, 124, 0),
-(428, 94, 127, 0),
-(429, 94, 125, 0),
-(430, 94, 211, 0),
-(431, 95, 230, 0),
-(432, 95, 229, 0),
-(433, 95, 201, 0),
-(434, 95, 219, 0),
-(435, 95, 140, 0),
-(436, 96, 228, 0),
-(437, 96, 179, 0),
-(438, 96, 225, 0),
-(439, 96, 89, 0),
-(440, 96, 186, 0),
-(441, 97, 228, 0),
-(442, 97, 179, 0),
-(443, 97, 225, 0),
-(444, 97, 89, 0),
-(445, 97, 191, 0),
-(446, 98, 228, 0),
-(447, 98, 179, 0),
-(448, 98, 225, 0),
-(449, 98, 184, 0),
-(450, 98, 190, 0),
-(451, 99, 228, 0),
-(452, 99, 179, 0),
-(453, 99, 225, 0),
-(454, 99, 184, 0),
-(455, 99, 190, 0),
-(456, 100, 228, 0),
-(457, 100, 179, 0),
-(458, 100, 202, 0),
-(459, 100, 203, 0),
-(460, 100, 239, 0),
-(461, 101, 227, 0),
-(462, 101, 180, 0),
-(463, 101, 239, 0),
-(464, 101, 181, 0),
-(465, 101, 123, 0),
-(466, 102, 227, 0),
-(467, 102, 180, 0),
-(468, 102, 239, 0),
-(469, 102, 181, 0),
-(470, 102, 123, 0),
-(471, 103, 227, 0),
-(472, 103, 180, 0),
-(473, 103, 239, 0),
-(474, 103, 189, 0),
-(475, 103, 185, 0),
-(476, 104, 227, 0),
-(477, 104, 180, 0),
-(478, 104, 239, 0),
-(479, 104, 189, 0),
-(480, 104, 194, 0),
-(481, 105, 227, 0),
-(482, 105, 180, 0),
-(483, 105, 205, 0),
-(484, 105, 200, 0),
-(485, 106, 129, 0),
-(486, 106, 194, 0),
-(487, 107, 129, 0),
-(488, 107, 196, 0),
-(489, 108, 186, 0),
-(490, 108, 194, 0),
-(491, 109, 186, 0),
-(492, 109, 181, 0),
-(493, 110, 193, 0),
-(494, 110, 206, 0);
+(2019, 469, 131, 0),
+(2020, 469, 115, 0),
+(2021, 469, 221, 0),
+(2022, 469, 137, 0),
+(2023, 469, 182, 0),
+(2024, 470, 138, 0),
+(2025, 470, 139, 0),
+(2026, 470, 134, 0),
+(2027, 470, 222, 0),
+(2028, 470, 155, 0),
+(2029, 471, 214, 0),
+(2030, 471, 136, 0),
+(2031, 471, 127, 0),
+(2032, 471, 141, 0),
+(2033, 471, 156, 0),
+(2034, 472, 133, 0),
+(2035, 472, 124, 0),
+(2036, 472, 127, 0),
+(2037, 472, 125, 0),
+(2038, 472, 211, 0),
+(2039, 473, 230, 0),
+(2040, 473, 229, 0),
+(2041, 473, 201, 0),
+(2042, 473, 219, 0),
+(2043, 473, 140, 0),
+(2044, 474, 228, 0),
+(2045, 474, 179, 0),
+(2046, 474, 225, 0),
+(2047, 474, 89, 0),
+(2048, 474, 186, 0),
+(2049, 475, 228, 0),
+(2050, 475, 179, 0),
+(2051, 475, 225, 0),
+(2052, 475, 89, 0),
+(2053, 475, 191, 0),
+(2054, 476, 228, 0),
+(2055, 476, 179, 0),
+(2056, 476, 225, 0),
+(2057, 476, 184, 0),
+(2058, 476, 190, 0),
+(2059, 477, 228, 0),
+(2060, 477, 179, 0),
+(2061, 477, 225, 0),
+(2062, 477, 184, 0),
+(2063, 477, 190, 0),
+(2064, 478, 228, 0),
+(2065, 478, 179, 0),
+(2066, 478, 202, 0),
+(2067, 478, 203, 0),
+(2068, 478, 239, 0),
+(2069, 479, 227, 0),
+(2070, 479, 180, 0),
+(2071, 479, 239, 0),
+(2072, 479, 181, 0),
+(2073, 479, 123, 0),
+(2074, 480, 227, 0),
+(2075, 480, 180, 0),
+(2076, 480, 239, 0),
+(2077, 480, 181, 0),
+(2078, 480, 123, 0),
+(2079, 481, 227, 0),
+(2080, 481, 180, 0),
+(2081, 481, 239, 0),
+(2082, 481, 189, 0),
+(2083, 481, 185, 0),
+(2084, 482, 227, 0),
+(2085, 482, 180, 0),
+(2086, 482, 239, 0),
+(2087, 482, 189, 0),
+(2088, 482, 194, 0),
+(2089, 483, 227, 0),
+(2090, 483, 180, 0),
+(2091, 483, 205, 0),
+(2092, 483, 200, 0),
+(2093, 484, 129, 0),
+(2094, 484, 194, 0),
+(2095, 485, 129, 0),
+(2096, 485, 196, 0),
+(2097, 486, 186, 0),
+(2098, 486, 194, 0),
+(2099, 487, 186, 0),
+(2100, 487, 181, 0),
+(2101, 488, 193, 0),
+(2102, 488, 206, 0),
+(2103, 489, 131, 0),
+(2104, 489, 115, 0),
+(2105, 489, 221, 0),
+(2106, 489, 137, 0),
+(2107, 489, 182, 0),
+(2108, 490, 138, 0),
+(2109, 490, 139, 0),
+(2110, 490, 133, 0),
+(2111, 490, 222, 0),
+(2112, 490, 155, 0),
+(2113, 491, 197, 0),
+(2114, 491, 136, 0),
+(2115, 491, 127, 0),
+(2116, 491, 141, 0),
+(2117, 491, 156, 0),
+(2118, 492, 128, 0),
+(2119, 492, 133, 0),
+(2120, 492, 238, 0),
+(2121, 492, 125, 0),
+(2122, 492, 231, 0),
+(2123, 493, 232, 0),
+(2124, 493, 233, 0),
+(2125, 493, 234, 0),
+(2126, 493, 235, 0),
+(2127, 493, 236, 0);
 
 -- --------------------------------------------------------
 
@@ -2454,7 +2498,7 @@ MODIFY `building_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 -- AUTO_INCREMENT for table `classes`
 --
 ALTER TABLE `classes`
-MODIFY `class_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=228;
+MODIFY `class_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=235;
 --
 -- AUTO_INCREMENT for table `class_course_semester`
 --
@@ -2464,7 +2508,7 @@ MODIFY `class_course_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT
 -- AUTO_INCREMENT for table `class_course_semester_merge`
 --
 ALTER TABLE `class_course_semester_merge`
-MODIFY `class_course_semester_merge_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+MODIFY `class_course_semester_merge_id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `class_course_student_semester`
 --
@@ -2479,7 +2523,7 @@ MODIFY `class_course_teacher_semester_id` int(11) NOT NULL AUTO_INCREMENT;
 -- AUTO_INCREMENT for table `class_semester`
 --
 ALTER TABLE `class_semester`
-MODIFY `class_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=225;
+MODIFY `class_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=232;
 --
 -- AUTO_INCREMENT for table `courses`
 --
@@ -2499,12 +2543,12 @@ MODIFY `department_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=14;
 -- AUTO_INCREMENT for table `program_semester`
 --
 ALTER TABLE `program_semester`
-MODIFY `program_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=111;
+MODIFY `program_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=494;
 --
 -- AUTO_INCREMENT for table `program_semester_detail`
 --
 ALTER TABLE `program_semester_detail`
-MODIFY `program_semester_detail_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=495;
+MODIFY `program_semester_detail_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2128;
 --
 -- AUTO_INCREMENT for table `rooms`
 --

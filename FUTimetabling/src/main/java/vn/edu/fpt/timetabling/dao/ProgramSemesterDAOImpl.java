@@ -72,6 +72,15 @@ public class ProgramSemesterDAOImpl implements ProgramSemesterDAO {
 		ProgramSemester programSemester = getProgramSemesterById(programSemesterId);
 		getCurrentSession().delete(programSemester);
 	}
+	
+	@Override
+	public void deleteProgramSemestersBySemester(int semesterId) {
+		String hql = "DELETE FROM vn.edu.fpt.timetabling.model.ProgramSemester PS"
+				+ " WHERE PS.semester.semesterId = :semesterId";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("semesterId", semesterId);
+		query.executeUpdate();
+	}
 
 	@Override
 	public ProgramSemester getProgramSemesterBySpecializedSemester(int semesterId, int specializedId,
