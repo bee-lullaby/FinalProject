@@ -51,4 +51,9 @@ public class ClassCourseStudentSemesterServiceImpl implements ClassCourseStudent
 	public int deleteClassCourseStudentSemesters(int semesterId) {
 		return classCourseStudentSemesterDAO.deleteClassCourseStudentSemesters(semesterId);
 	}
+
+	@Override
+	public int deleteClassCourseStudentSemesterByClass(int classSemesterId) {
+		return classCourseStudentSemesterDAO.deleteClassCourseStudentSemesterByClass(classSemesterId);
+	}
 }

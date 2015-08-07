@@ -225,4 +225,20 @@ public class StudentDAOImpl implements StudentDAO {
 		}
 		return student;
 	}
+
+	@Override
+	public int clearStudentClasses() {
+		String hql = "UPDATE vn.edu.fpt.timetabling.model.Student S SET S.classSemester = NULL";
+		Query query = getCurrentSession().createQuery(hql);
+		return query.executeUpdate();
+	}
+
+	@Override
+	public int clearStudentClass(int classSemesterId) {
+		String hql = "UPDATE vn.edu.fpt.timetabling.model.Student S SET S.classSemester = NULL"
+				+ " WHERE S.classSemester.classSemesterId = :classSemesterId";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("classSemesterId", classSemesterId);
+		return query.executeUpdate();
+	}
 }

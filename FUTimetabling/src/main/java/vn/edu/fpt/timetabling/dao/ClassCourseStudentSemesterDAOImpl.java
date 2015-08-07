@@ -70,11 +70,22 @@ public class ClassCourseStudentSemesterDAOImpl implements ClassCourseStudentSeme
 	@Override
 	public int deleteClassCourseStudentSemesters(int semesterId) {
 		String hql = "DELETE FROM vn.edu.fpt.timetabling.model.ClassCourseStudentSemester CCSS"
-				+ " WHERE CCSS.classCourseStudentSemesterId IN (SELECT CCSS2.classCourseStudentSemesterId"
-				+ " FROM vn.edu.fpt.timetabling.model.ClassCourseStudentSemester CCSS2"
-				+ " WHERE CCS2.classCourseSemester.classSemester.semester.semesterId = :semesterId)";
+				+ " WHERE CCSS.classCourseSemester.classCourseSemesterId IN (SELECT CCS.classCourseSemesterId"
+				+ " FROM vn.edu.fpt.timetabling.model.ClassCourseSemester CCS"
+				+ " WHERE CCS.classSemester.semester.semesterId = :semesterId)";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("semesterId", semesterId);
+		return query.executeUpdate();
+	}
+
+	@Override
+	public int deleteClassCourseStudentSemesterByClass(int classSemesterId) {
+		String hql = "DELETE FROM vn.edu.fpt.timetabling.model.ClassCourseStudentSemester CCSS"
+				+ " WHERE CCSS.classCourseSemester.classCourseSemesterId IN (SELECT CCS.classCourseSemesterId"
+				+ " FROM vn.edu.fpt.timetabling.model.ClassCourseSemester CCS"
+				+ " WHERE CCS.classSemester.classSemesterId = :classSemesterId)";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("classSemesterId", classSemesterId);
 		return query.executeUpdate();
 	}
 }

@@ -165,6 +165,7 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 		classFPT.setType(ClassType.SPECIALIZED);
 		classFPT.setSpecialized(specialized);
 		classFPT.setDetailSpecialized(detailSpecialized);
+		System.out.println(specializedId + " " + detailSpecializedId + " " + semesterNumber);
 		ProgramSemester programSemester = programSemesterService.getProgramSemesterBySpecializedSemester(semesterId,
 				specializedId, detailSpecializedId, semesterNumber);
 		int batch = programSemester.getBatch();
@@ -253,7 +254,10 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 			return;
 		}
 		List<Student> students = studentService.listStudentsWithoutClass();
+		int studentNumber = 0;
 		for (Student student : students) {
+			studentNumber++;
+			System.out.println("Student: " + studentNumber);
 			Specialized specialized = student.getSpecialized();
 			Specialized detailSpecialized = student.getDetailSpecialized();
 			int detailSpecializedId = 0;
@@ -263,6 +267,7 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 			int semesterNumber = student.getSemester();
 			List<ClassSemester> classSemesters = listClassSemestersBySpecializedSemester(semesterId,
 					specialized.getSpecializedId(), detailSpecializedId, semesterNumber);
+			System.out.println("Suitable class: " + classSemesters.size());
 			boolean put = false;
 			for (ClassSemester classSemester : classSemesters) {
 				Set<ClassCourseSemester> classCourseSemesters = classSemester.getClassCourseSemesters();
@@ -274,10 +279,12 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 						classCourseStudentSemesterService.addClassCourseStudentSemester(classCourseStudentSemester);
 					}
 					student.setClassSemester(classSemester);
+					System.out.println("Class: " + classSemester.getClassFPT().getCode());
 					put = true;
 					break;
 				}
 			}
+			System.out.println("Put: " + put);
 			if (!put) {
 				createNewClass(specialized, detailSpecialized, semester, semesterNumber, student);
 			}
@@ -360,6 +367,7 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 	public void addClassSemesterFromFile(File classSemesters, int semesterId) throws IOException {
 		classCourseStudentSemesterService.deleteClassCourseStudentSemesters(semesterId);
 		classCourseSemesterService.deleteClassCourseSemesters(semesterId);
+		studentService.clearStudentClasses();
 		classSemesterDAO.deleteClassSemesters(semesterId);
 		FileInputStream file = new FileInputStream(classSemesters);
 		XSSFWorkbook workbook = new XSSFWorkbook(file);
@@ -421,6 +429,7 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 				detailSpecializedId = classFPT.getDetailSpecialized().getSpecializedId();
 			}
 			int semesterNumber = classSemester.getSemesterNumber();
+			System.out.println(specializedId + " " + detailSpecializedId + " " + semesterNumber);
 			ProgramSemester programSemester = programSemesterService.getProgramSemesterBySpecializedSemester(semesterId,
 					specializedId, detailSpecializedId, semesterNumber);
 			Set<ProgramSemesterDetail> programSemesterDetails = programSemester.getProgramSemesterDetails();

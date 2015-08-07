@@ -65,27 +65,24 @@ public class StudentServiceImpl implements StudentService {
 			String account = getAccount(name, studentCode);
 			s.setAccount(account);
 			s.setEmail(account += "@fpt.edu.vn");
-			
+
 			if (row.getCell(2) != null) {
-				String specializedPrefix = row.getCell(2).getStringCellValue()
-						.trim();
-				s.setSpecialized(specializedService.getSpecializedByCode(
-						specializedPrefix, false, false));
+				String specializedPrefix = row.getCell(2).getStringCellValue().trim();
+				s.setSpecialized(specializedService.getSpecializedByCode(specializedPrefix, false, false));
 			}
-			
-			if(row.getCell(3) != null) {
+
+			if (row.getCell(3) != null) {
 				String specializedCode = row.getCell(3).getStringCellValue().trim();
-				s.setDetailSpecialized(specializedService.getSpecializedByCode(
-						specializedCode, false, false));
+				s.setDetailSpecialized(specializedService.getSpecializedByCode(specializedCode, false, false));
 			}
-			
-			if(row.getCell(4) != null) {
+
+			if (row.getCell(4) != null) {
 				Double currentSemester = row.getCell(4).getNumericCellValue();
 				s.setSemester(currentSemester.intValue());
 			}
-			
+
 			s.setBatch("NotSet");
-			
+
 			if (s.getStudentId() == 0)
 				studentDAO.addStudent(s);
 			else
@@ -123,8 +120,7 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public String getNextStudentCode(Specialized specialized) {
 		String code = specialized.getCode();
-		Student lastStudent = studentDAO.getLastStudent(specialized
-				.getSpecializedId());
+		Student lastStudent = studentDAO.getLastStudent(specialized.getSpecializedId());
 		if (lastStudent == null) {
 			code += "00000";
 		} else {
@@ -139,9 +135,8 @@ public class StudentServiceImpl implements StudentService {
 	public String getAccount(String name, String studentCode) {
 		String temp = Normalizer.normalize(name, Normalizer.Form.NFD);
 		Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-		StringTokenizer stringTokenizer = new StringTokenizer(pattern
-				.matcher(temp).replaceAll("").replaceAll("Đ", "D")
-				.replaceAll("đ", "d"));
+		StringTokenizer stringTokenizer = new StringTokenizer(
+				pattern.matcher(temp).replaceAll("").replaceAll("Đ", "D").replaceAll("đ", "d"));
 		String account = "";
 		if (stringTokenizer.hasMoreTokens()) {
 			while (true) {
@@ -165,19 +160,15 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public List<Student> listStudentsCanBeInClassCourseSemester(
-			int classSemesterId, int specializedId, int detailspecializedId,
-			int semesterNumber, int classCourseSemesterId) {
-		return studentDAO.listStudentsCanBeInClassCourseSemester(
-				classSemesterId, specializedId, detailspecializedId,
+	public List<Student> listStudentsCanBeInClassCourseSemester(int classSemesterId, int specializedId,
+			int detailspecializedId, int semesterNumber, int classCourseSemesterId) {
+		return studentDAO.listStudentsCanBeInClassCourseSemester(classSemesterId, specializedId, detailspecializedId,
 				semesterNumber, classCourseSemesterId);
 	}
 
 	@Override
-	public List<Student> listStudentsInClassCourseSemester(int classSemesterId,
-			int classCourseSemesterId) {
-		return studentDAO.listStudentsInClassCourseSemester(classSemesterId,
-				classCourseSemesterId);
+	public List<Student> listStudentsInClassCourseSemester(int classSemesterId, int classCourseSemesterId) {
+		return studentDAO.listStudentsInClassCourseSemester(classSemesterId, classCourseSemesterId);
 	}
 
 	@Override
@@ -188,5 +179,15 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public Student getStudentByEmail(String email) {
 		return studentDAO.getStudentByEmail(email);
+	}
+
+	@Override
+	public int clearStudentClasses() {
+		return studentDAO.clearStudentClasses();
+	}
+
+	@Override
+	public int clearStudentClass(int classSemesterId) {
+		return studentDAO.clearStudentClass(classSemesterId);
 	}
 }

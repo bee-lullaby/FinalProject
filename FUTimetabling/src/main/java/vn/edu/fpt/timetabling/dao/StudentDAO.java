@@ -27,4 +27,8 @@ public interface StudentDAO {
 	public List<Student> listStudentsWithoutClass();
 	
 	public Student getLastStudent(int specializedId);
+	
+	public int clearStudentClasses();
+	
+	public int clearStudentClass(int classSemesterId);
 }

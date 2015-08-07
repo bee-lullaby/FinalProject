@@ -158,11 +158,12 @@ public class ProgramSemesterServiceImpl implements ProgramSemesterService {
 					ProgramSemesterDetail psd = new ProgramSemesterDetail();
 					psd.setProgramSemester(p);
 					psd.setCourseSemester(courseSemester);	
-					
+					if(count == 8) {
+						psd.setSemesterLong(true);
+					}
 					programSemesterDetailService.addProgramSemesterDetail(psd);
 					count++;
 				}
-				
 			}
 		}
 		workbook.close();
