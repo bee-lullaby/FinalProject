@@ -66,4 +66,15 @@ public class ClassCourseStudentSemesterDAOImpl implements ClassCourseStudentSeme
 		query.setParameter("studentId", studentId);
 		return query.executeUpdate();
 	}
+
+	@Override
+	public int deleteClassCourseStudentSemesters(int semesterId) {
+		String hql = "DELETE FROM vn.edu.fpt.timetabling.model.ClassCourseStudentSemester CCSS"
+				+ " WHERE CCSS.classCourseStudentSemesterId IN (SELECT CCSS2.classCourseStudentSemesterId"
+				+ " FROM vn.edu.fpt.timetabling.model.ClassCourseStudentSemester CCSS2"
+				+ " WHERE CCS2.classCourseSemester.classSemester.semester.semesterId = :semesterId)";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("semesterId", semesterId);
+		return query.executeUpdate();
+	}
 }

@@ -13,9 +13,14 @@ public class Interceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-//		return true;
+		// return true;
 		HttpSession httpSession = request.getSession();
 		String url = request.getRequestURL().toString();
+		if (url.charAt(url.length() - 1) == '/') {
+			url = url.substring(0, url.length() - 1);
+			response.sendRedirect(url);
+			return false;
+		}
 		if (url.equals(Const.URL) || url.contains("logout") || url.equals("http://localhost:8080/Timetabling/back")) {
 			return true;
 		} else if (SessionUtils.isSessionValid(httpSession)) {

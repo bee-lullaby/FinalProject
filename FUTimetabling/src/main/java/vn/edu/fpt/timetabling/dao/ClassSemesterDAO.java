@@ -27,4 +27,6 @@ public interface ClassSemesterDAO {
 			int detailSpecializedId, int semesterNumber);
 
 	public boolean isStudentInClassSemester(int studentId, int classSemesterId);
+	
+	public int deleteClassSemesters(int semesterId);
 }

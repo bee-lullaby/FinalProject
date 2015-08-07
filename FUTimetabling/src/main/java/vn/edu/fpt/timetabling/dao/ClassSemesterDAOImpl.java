@@ -152,4 +152,15 @@ public class ClassSemesterDAOImpl implements ClassSemesterDAO {
 		List<ClassSemester> classSemesters = (List<ClassSemester>) query.list();
 		return !classSemesters.isEmpty();
 	}
+
+	@Override
+	public int deleteClassSemesters(int semesterId) {
+		String hql = "DELETE FROM vn.edu.fpt.timetabling.model.ClassSemester CS"
+				+ " WHERE CS.classSemesterId IN (SELECT CS2.classSemesterId"
+				+ " FROM vn.edu.fpt.timetabling.model.ClassSemester CS2"
+				+ " WHERE CS2.semester.semesterId = :semesterId)";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("semesterId", semesterId);
+		return query.executeUpdate();
+	}
 }

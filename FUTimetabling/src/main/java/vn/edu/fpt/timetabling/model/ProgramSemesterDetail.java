@@ -111,7 +111,7 @@ public class ProgramSemesterDetail {
 	 */
 	@Override
 	public String toString() {
-		return courseSemester.getCourse().getName();
+		return courseSemester.getCourse().getCode();
 	}
 
 }

@@ -2,7 +2,6 @@ package vn.edu.fpt.timetabling.dao;
 
 import java.util.List;
 
-import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassCourseStudentSemester;
 
 public interface ClassCourseStudentSemesterDAO {
@@ -17,4 +16,6 @@ public interface ClassCourseStudentSemesterDAO {
 	public void deleteClassCourseStudentSemester(int classCourseStudentSemesterId);
 
 	public int removeStudentFromClassCourseSemester(int studentId, int classCourseSemesterId);
+	
+	public int deleteClassCourseStudentSemesters(int semesterId);
 }

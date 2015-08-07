@@ -40,8 +40,7 @@ public class ScheduleInfoServiceImpl implements ScheduleInfoService{
 
 	@Override
 	public List<ClassSemester> getListWasNotSetRoomsDone(int semesterId) {
-		List<ClassSemester> result = new ArrayList<ClassSemester>();
-		
+		// TODO Auto-generated method stub
 		return null;
 	}
 

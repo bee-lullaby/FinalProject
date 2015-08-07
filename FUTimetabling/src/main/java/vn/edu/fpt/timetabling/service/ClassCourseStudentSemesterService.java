@@ -16,4 +16,6 @@ public interface ClassCourseStudentSemesterService {
 	public void deleteClassCourseStudentSemester(int classCourseStudentSemesterId);
 
 	public int removeStudentFromClassCourseSemester(int studentId, int classCourseSemesterId);
+
+	public int deleteClassCourseStudentSemesters(int semesterId);
 }
