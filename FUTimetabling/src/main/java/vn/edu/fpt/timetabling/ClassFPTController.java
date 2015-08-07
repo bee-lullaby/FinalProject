@@ -1,7 +1,9 @@
 package vn.edu.fpt.timetabling;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -19,17 +21,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
+import vn.edu.fpt.timetabling.model.ClassCourseStudentSemester;
 import vn.edu.fpt.timetabling.model.ClassFPT;
 import vn.edu.fpt.timetabling.model.ClassSemester;
 import vn.edu.fpt.timetabling.model.CourseSemester;
 import vn.edu.fpt.timetabling.model.Semester;
 import vn.edu.fpt.timetabling.service.ClassCourseSemesterService;
+import vn.edu.fpt.timetabling.service.ClassCourseStudentSemesterService;
 import vn.edu.fpt.timetabling.service.ClassSemesterService;
 import vn.edu.fpt.timetabling.service.ClassService;
 import vn.edu.fpt.timetabling.service.CourseSemesterService;
 import vn.edu.fpt.timetabling.service.CourseService;
 import vn.edu.fpt.timetabling.service.SemesterService;
 import vn.edu.fpt.timetabling.service.SpecializedService;
+import vn.edu.fpt.timetabling.service.StudentService;
 import vn.edu.fpt.timetabling.utils.Const.ClassType;
 
 @Controller
@@ -41,6 +46,8 @@ public class ClassFPTController extends GeneralController {
 	private ClassSemesterService classSemesterService;
 	private CourseSemesterService courseSemesterService;
 	private ClassCourseSemesterService classCourseSemesterService;
+	private StudentService studentService;
+	private ClassCourseStudentSemesterService classCourseStudentSemesterService;
 
 	@Autowired(required = true)
 	@Qualifier(value = "classService")
@@ -68,112 +75,179 @@ public class ClassFPTController extends GeneralController {
 
 	@Autowired(required = true)
 	@Qualifier(value = "classSemesterService")
-	public void setClassSemesterService(
-			ClassSemesterService classSemesterService) {
+	public void setClassSemesterService(ClassSemesterService classSemesterService) {
 		this.classSemesterService = classSemesterService;
 	}
 
 	@Autowired(required = true)
 	@Qualifier(value = "courseSemesterService")
-	public void setCourseSemesterService(
-			CourseSemesterService courseSemesterService) {
+	public void setCourseSemesterService(CourseSemesterService courseSemesterService) {
 		this.courseSemesterService = courseSemesterService;
 	}
 
 	@Autowired(required = true)
+	@Qualifier(value = "classCourseStudentSemesterService")
+	public void setClassCourseStudentSemesterService(
+			ClassCourseStudentSemesterService classCourseStudentSemesterService) {
+		this.classCourseStudentSemesterService = classCourseStudentSemesterService;
+	}
+
+	@Autowired(required = true)
+	@Qualifier(value = "studentService")
+	public void setStudentService(StudentService studentService) {
+		this.studentService = studentService;
+	}
+
+	@Autowired(required = true)
 	@Qualifier(value = "classCourseSemesterService")
-	public void setClassCourseSemesterService(
-			ClassCourseSemesterService classCourseSemesterService) {
+	public void setClassCourseSemesterService(ClassCourseSemesterService classCourseSemesterService) {
 		this.classCourseSemesterService = classCourseSemesterService;
 	}
 
 	@RequestMapping(value = "/staff/classFPTs")
 	public String classFPTinit(HttpSession httpSession, Model model) {
-		List<Semester> semesters = semesterService.listSemesters(false, false,
-				false, false);
-		int semesterId = 0;
+		List<Semester> semesters = semesterService.listSemesters(false, false, false, false);
+		int semesterId = semesters.get(0).getSemesterId();
 		if (!semesters.isEmpty())
 			semesterId = semesters.get(0).getSemesterId();
 		return "redirect:/staff/classFPTs?semesterId=" + semesterId;
 	}
 
 	@RequestMapping(value = "/staff/classFPTs", method = RequestMethod.GET, params = { "semesterId" })
-	public String classFPTs(@RequestParam int semesterId,
-			HttpSession httpSession, Model model) {
-		model.addAttribute("listSemesters",
-				semesterService.listSemesters(false, false, false, false));
-		model.addAttribute("listClassSemesters",
-				classSemesterService.listClassSemesterForView(semesterId));
-		model.addAttribute("listSpecializeds",
-				specializedService.listSpecializeds(false, false));
-		model.addAttribute("listDetailSpecializeds",
-				specializedService.listDetailSpecializeds(false, false));
-		model.addAttribute("listCourseSemesters",
-				courseSemesterService.listCourseSemesters(false, false, false));
-
+	public String classFPTs(@RequestParam int semesterId, HttpSession httpSession, Model model) {
+		model.addAttribute("listSemesters", semesterService.listSemesters(false, false, false, false));
+		model.addAttribute("listClassSemesters", classSemesterService.listClassSemesterForView(semesterId));
+		model.addAttribute("listSpecializeds", specializedService.listSpecializeds(false, false));
+		model.addAttribute("listDetailSpecializeds", specializedService.listDetailSpecializeds(false, false));
+		model.addAttribute("listCourseSemesters", courseSemesterService.listCourseSemesters(false, false, false));
+		httpSession.setAttribute("semesterId", semesterId);
 		checkError(httpSession, model);
 		notifySuccess(httpSession, model);
 		return "classFPTs";
 	}
 
-	@RequestMapping(value = "/staff/classFPTs/updateClassCourse", method = RequestMethod.POST, params = {
-			"semesterId", "classId", "courseId", "blockCondition",
-			"semesterLong" })
-	public String updateClassCourse(@RequestParam int semesterId,
-			@RequestParam int classId, @RequestParam String[] courseId,
-			@RequestParam String[] blockCondition,
-			@RequestParam String[] semesterLong, HttpSession httpSession) {
+	@RequestMapping(value = "/staff/classFPTs/createFileData", method = RequestMethod.GET)
+	public String createFileData(HttpSession httpSession, Model model) throws Exception {
+		int semesterId = semesterService.listSemesters(false, false, false, false).get(0).getSemesterId();
+		if (httpSession.getAttribute("semesterId") != null) {
+			semesterId = (int) httpSession.getAttribute("semesterId");
+		}
+		FileOutputStream courseClassStatusNumberStudent = new FileOutputStream(
+				"D:\\courseClassStatusNumberStudent.txt");
+		OutputStreamWriter outputStreamWriter = new OutputStreamWriter(courseClassStatusNumberStudent);
+		List<ClassCourseSemester> classCourseSemesters = classCourseSemesterService
+				.listClassCourseSemesterBySemester(semesterId, false, false);
+		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
+			outputStreamWriter.write(classCourseSemester.getCourseSemester().getCourse().getCode());
+			outputStreamWriter.write(" " + classCourseSemester.getClassSemester().getClassFPT().getCode());
+			if (classCourseSemester.isSemesterLong()) {
+				outputStreamWriter.write(" 3");
+			} else {
+				outputStreamWriter.write(" " + classCourseSemester.getBlockCondition());
+			}
+			outputStreamWriter.write(" "
+					+ classCourseSemesterService.getNumberOfStudents(classCourseSemester.getClassCourseSemesterId()));
+			outputStreamWriter.write("\n");
+		}
+		outputStreamWriter.close();
+		courseClassStatusNumberStudent.close();
+		FileOutputStream courseClassStudent = new FileOutputStream("D:\\courseClassStudent.txt");
+		OutputStreamWriter outputStreamWriter2 = new OutputStreamWriter(courseClassStudent);
+		List<ClassCourseStudentSemester> classCourseStudentSemesters = classCourseStudentSemesterService
+				.listClassCourseStudentSemesters();
+		for (ClassCourseStudentSemester classCourseStudentSemester : classCourseStudentSemesters) {
+			outputStreamWriter2.write(
+					classCourseStudentSemester.getClassCourseSemester().getCourseSemester().getCourse().getCode());
+			outputStreamWriter2.write(" "
+					+ classCourseStudentSemester.getClassCourseSemester().getClassSemester().getClassFPT().getCode());
+			outputStreamWriter2.write(" " + classCourseStudentSemester.getStudent().getStudentCode());
+			outputStreamWriter2.write("\n");
+		}
+		outputStreamWriter2.close();
+		courseClassStudent.close();
+		return "redirect:/staff/classFPTs?semesterId=" + semesterId;
+	}
 
-		ClassSemester classSemester = classSemesterService
-				.getClassSemesterByClassSemester(semesterId, classId, true);
+	@RequestMapping(value = "/staff/classFPTs/clearStudentClass", method = RequestMethod.GET, params = {
+			"classSemesterId" })
+	public String clearStudentClass(@RequestParam int classSemesterId, HttpSession httpSession, Model model) {
+		studentService.clearStudentClass(classSemesterId);
+		classCourseStudentSemesterService.deleteClassCourseStudentSemesterByClass(classSemesterId);
+		httpSession.setAttribute("success", "Clear students' class successful!");
+		int semesterId = semesterService.listSemesters(false, false, false, false).get(0).getSemesterId();
+		if (httpSession.getAttribute("semesterId") != null) {
+			semesterId = (int) httpSession.getAttribute("semesterId");
+		}
+		return "redirect:/staff/classFPTs?semesterId=" + semesterId;
+	}
 
-		for(ClassCourseSemester classCourseSemester: classSemester.getClassCourseSemesters()) {
+	@RequestMapping(value = "/staff/classFPTs/clearStudentClasses", method = RequestMethod.GET)
+	public String clearStudentClasses(HttpSession httpSession, Model model) {
+		int semesterId = semesterService.listSemesters(false, false, false, false).get(0).getSemesterId();
+		if (httpSession.getAttribute("semesterId") != null) {
+			semesterId = (int) httpSession.getAttribute("semesterId");
+		}
+		studentService.clearStudentClasses();
+		classCourseStudentSemesterService.deleteClassCourseStudentSemesters(semesterId);
+		httpSession.setAttribute("success", "Clear students' classes successful!");
+		return "redirect:/staff/classFPTs?semesterId=" + semesterId;
+	}
+
+	@RequestMapping(value = "/staff/classFPTs/autoStudentClass", method = RequestMethod.GET, params = {
+			"classSemesterId" })
+	public String autoStudentClass(@RequestParam int classSemesterId, HttpSession httpSession, Model model) {
+		ClassSemester classSemester = classSemesterService.getClassSemesterById(classSemesterId, false);
+		classSemesterService.autoPutStudentsIntoClassSemester(classSemesterId);
+		httpSession.setAttribute("success", "Auto put student into class successful!");
+		return "redirect:/staff/classFPTs?semesterId=" + classSemester.getSemester().getSemesterId();
+	}
+
+	@RequestMapping(value = "/staff/classFPTs/autoStudentClasses", method = RequestMethod.GET, params = {
+			"semesterId" })
+	public String autoStudentClasses(@RequestParam int semesterId, HttpSession httpSession, Model model) {
+		classSemesterService.autoPutStudentsIntoClassSemesters(semesterId);
+		httpSession.setAttribute("success", "Auto put student into classes successful!");
+		return "redirect:/staff/classFPTs?semesterId=" + semesterId;
+	}
+
+	@RequestMapping(value = "/staff/classFPTs/updateClassCourse", method = RequestMethod.POST, params = { "semesterId",
+			"classId", "courseId", "blockCondition", "semesterLong" })
+	public String updateClassCourse(@RequestParam int semesterId, @RequestParam int classId,
+			@RequestParam String[] courseId, @RequestParam String[] blockCondition, @RequestParam String[] semesterLong,
+			HttpSession httpSession) {
+		ClassSemester classSemester = classSemesterService.getClassSemesterByClassSemester(semesterId, classId, true);
+		for (ClassCourseSemester classCourseSemester : classSemester.getClassCourseSemesters()) {
 			classCourseSemesterService.deleteClassCourseSemester(classCourseSemester.getClassCourseSemesterId());
 		}
-		
 		for (int i = 0; i < courseId.length; i++) {
 			if (Integer.parseInt(courseId[i]) != -1) {
-				CourseSemester courseSemester = courseSemesterService
-						.getCourseSemesterByCourseSemester(
-								Integer.parseInt(courseId[i]), semesterId,
-								false, false, false);
-
+				CourseSemester courseSemester = courseSemesterService.getCourseSemesterByCourseSemester(
+						Integer.parseInt(courseId[i]), semesterId, false, false, false);
 				ClassCourseSemester classCourseSemester = new ClassCourseSemester();
-
 				classCourseSemester.setClassSemester(classSemester);
 				classCourseSemester.setCourseSemester(courseSemester);
-				classCourseSemester.setBlockCondition(Integer
-						.parseInt(blockCondition[i]));
+				classCourseSemester.setBlockCondition(Integer.parseInt(blockCondition[i]));
 				int semesterLongInt = Integer.parseInt(semesterLong[i]);
 				if (semesterLongInt == 1) {
 					classCourseSemester.setSemesterLong(true);
 				} else if (semesterLongInt == 0) {
 					classCourseSemester.setSemesterLong(false);
 				}
-
-				classCourseSemesterService
-						.addClassCourseSemester(classCourseSemester);
+				classCourseSemesterService.addClassCourseSemester(classCourseSemester);
 			}
 		}
-		httpSession.setAttribute("success",
-				"Courses of Class were updated successful!");
+		httpSession.setAttribute("success", "Courses of Class were updated successful!");
 		return "redirect:/staff/classFPTs";
 	}
 
-	@RequestMapping(value = "/staff/classFPTs/updateClassFPTs", method = RequestMethod.POST, params = {
-			"classId", "classSemesterId", "semesterId", "batch", "batchChar",
-			"type", "specializedId" })
-	public String updateClassFPTs(
-			@RequestParam int classId,
-			@RequestParam int classSemesterId,
-			@RequestParam int semesterId,
-			@RequestParam int batch,
-			@RequestParam char batchChar,
-			@RequestParam String type,
-			@RequestParam int specializedId,
+	@RequestMapping(value = "/staff/classFPTs/updateClassFPTs", method = RequestMethod.POST, params = { "classId",
+			"classSemesterId", "semesterId", "batch", "batchChar", "type", "specializedId" })
+	public String updateClassFPTs(@RequestParam int classId, @RequestParam int classSemesterId,
+			@RequestParam int semesterId, @RequestParam int batch, @RequestParam char batchChar,
+			@RequestParam String type, @RequestParam int specializedId,
 			@RequestParam(value = "detailSepecializedId", required = false) int detailSepecializedId,
-			@RequestParam(value = "courses", required = false) String[] courses,
-			HttpSession httpSession, Model model, HttpServletRequest request) {
+			@RequestParam(value = "courses", required = false) String[] courses, HttpSession httpSession, Model model,
+			HttpServletRequest request) {
 		if (type.equals(ClassType.SPECIALIZED)) {
 			if (specializedId < 1 || batch < 1) {
 				// return "redirect:/staff/classes";
@@ -187,40 +261,40 @@ public class ClassFPTController extends GeneralController {
 		}
 
 		ClassFPT classFPT = classService.getClassById(classId);
+		boolean update = true;
 		if (classFPT == null) {
+			update = false;
 			classFPT = new ClassFPT();
 		}
 		classFPT.setType(type);
 		String classCodePrefix;
 		String classCode = "";
 		if (type.equals(ClassType.SPECIALIZED)) {
-			classFPT.setSpecialized(specializedService.getSpecializedById(
-					specializedId, false, false));
+			classFPT.setSpecialized(specializedService.getSpecializedById(specializedId, false, false));
 			classFPT.setBatch(batch);
 			classFPT.setBatchChar(batchChar);
 			classFPT.setCourse(null);
-			classCodePrefix = classFPT.getSpecialized().getCode()
-					+ String.format("%02d", batch);
+			classCodePrefix = classFPT.getSpecialized().getCode() + String.format("%02d", batch);
 		} else {
 			classFPT.setBatch(null);
 			classFPT.setSpecialized(null);
-			classFPT.setCourse(courseService.getCourseById(Integer
-					.parseInt(courses[0])));
+			classFPT.setCourse(courseService.getCourseById(Integer.parseInt(courses[0])));
 			classCodePrefix = classFPT.getCourse().getCode();
 		}
-		classFPT.setNumber(classService.getNextClassNumber(classCodePrefix));
+		if (!update) {
+			classFPT.setNumber(classService.getNextClassNumber(classCodePrefix));
+		}
 		if (type.equals(ClassType.SPECIALIZED)) {
-			classCode = classCodePrefix
-					+ String.format("%02d", classFPT.getNumber());
+			classCode = classCodePrefix + String.format("%02d", classFPT.getNumber());
 			classFPT.setCode(classCode);
 		} else {
 			classCode = classCodePrefix + "." + classFPT.getNumber();
 			classFPT.setCode(classCode);
 		}
-		if(detailSepecializedId != -1) {
+		if (detailSepecializedId != -1) {
 			classFPT.setDetailSpecialized(specializedService.getSpecializedById(detailSepecializedId, false, false));
 		}
-		
+
 		if (classId == -1) {
 			// new class, add it
 			classService.addClass(classFPT);
@@ -231,8 +305,7 @@ public class ClassFPTController extends GeneralController {
 		}
 
 		ClassSemester classSemester = new ClassSemester();
-		classSemester.setSemester(semesterService.getSemesterById(semesterId,
-				false, false, false, false));
+		classSemester.setSemester(semesterService.getSemesterById(semesterId, false, false, false, false));
 		classSemester.setClassFPT(classFPT);
 
 		if (classSemesterId == -1) {
@@ -244,22 +317,17 @@ public class ClassFPTController extends GeneralController {
 
 		if (classId != -1 && classSemesterId != -1) {
 			Set<ClassCourseSemester> classCourseSemesters = classSemesterService
-					.getClassSemesterById(classSemesterId, true)
-					.getClassCourseSemesters();
+					.getClassSemesterById(classSemesterId, true).getClassCourseSemesters();
 			for (ClassCourseSemester ccs : classCourseSemesters) {
-				classCourseSemesterService.deleteClassCourseSemester(ccs
-						.getClassCourseSemesterId());
+				classCourseSemesterService.deleteClassCourseSemester(ccs.getClassCourseSemesterId());
 			}
 		}
 		if (courses != null) {
 			for (String course : courses) {
 				ClassCourseSemester ccs = new ClassCourseSemester();
-				ccs.setCourseSemester(courseSemesterService
-						.getCourseSemesterByCourseSemester(
-								Integer.parseInt(course), semesterId, false,
-								false, false));
-				ccs.setClassSemester(classSemesterService
-						.getClassSemesterByCode(classCode, semesterId, false));
+				ccs.setCourseSemester(courseSemesterService.getCourseSemesterByCourseSemester(Integer.parseInt(course),
+						semesterId, false, false, false));
+				ccs.setClassSemester(classSemesterService.getClassSemesterByCode(classCode, semesterId, false));
 				classCourseSemesterService.addClassCourseSemester(ccs);
 			}
 		}
@@ -268,25 +336,19 @@ public class ClassFPTController extends GeneralController {
 	}
 
 	@RequestMapping(value = "/staff/classFPTs/addFromFile", method = RequestMethod.POST)
-	public String addClassFromFile(@RequestParam("act") int act,
-			@RequestParam("file") MultipartFile file,
+	public String addClassFromFile(@RequestParam("act") int act, @RequestParam("file") MultipartFile file,
 			@RequestParam("semesterId") int semesterId, HttpSession httpSession) {
 
 		if (!file.isEmpty()) {
-			File classSemesters = new File(
-					"D:\\FU\\Do an tot nghiep\\Data\\ServerData\\"
-							+ file.getOriginalFilename());
+			File classSemesters = new File("classSemesters.xlxs");
 			try {
 				file.transferTo(classSemesters);
 				if (act == 0) {
-					classSemesterService.addClassSemesterFromFile(
-							classSemesters, semesterId);
-					httpSession.setAttribute("success",
-							"Add classes successful!");
+					classSemesterService.addClassSemesterFromFile(classSemesters, semesterId);
+					httpSession.setAttribute("success", "Add classes successful!");
 				} else if (act == 1) {
 					HashMap<String, List<String>> check = classCourseSemesterService
-							.addClassCourseSemesterFromFile(classSemesters,
-									semesterId);
+							.addClassCourseSemesterFromFile(classSemesters, semesterId);
 
 					if (!check.get("class").isEmpty()) {
 						String text = "Class " + check.get("class").get(0);
@@ -314,7 +376,7 @@ public class ClassFPTController extends GeneralController {
 						text += " not existed! Please insert course first then try again!";
 						httpSession.setAttribute("error", text);
 					}
-					if(check.get("course").isEmpty() && check.get("class").isEmpty()) {
+					if (check.get("course").isEmpty() && check.get("class").isEmpty()) {
 						httpSession.setAttribute("success", "Add Courses For Classes Successful!");
 					}
 				}
@@ -328,8 +390,7 @@ public class ClassFPTController extends GeneralController {
 	}
 
 	@RequestMapping(value = "/staff/classFPTs/deleteClassFPT", method = RequestMethod.GET, params = { "classId" })
-	public String deleteClassFPT(@RequestParam int classId,
-			HttpSession httpSession) {
+	public String deleteClassFPT(@RequestParam int classId, HttpSession httpSession) {
 		classService.deleteClass(classId);
 		httpSession.setAttribute("success", "Delete Class Successful!");
 		return "redirect:/staff/classFPTs";

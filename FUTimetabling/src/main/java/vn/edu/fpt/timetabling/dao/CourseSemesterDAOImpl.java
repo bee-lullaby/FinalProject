@@ -179,9 +179,7 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 	@Override
 	public int deleteCourseSemesters(int semesterId) {
 		String hql = "DELETE FROM vn.edu.fpt.timetabling.model.CourseSemester CS"
-				+ " WHERE CS.courseSemesterId IN (SELECT CS2.courseSemesterId"
-				+ " FROM vn.edu.fpt.timetabling.model.CourseSemester CS2"
-				+ " WHERE CS2.semester.semesterId = :semesterId)";
+				+ " WHERE CS.semester.semesterId = :semesterId)";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("semesterId", semesterId);
 		return query.executeUpdate();

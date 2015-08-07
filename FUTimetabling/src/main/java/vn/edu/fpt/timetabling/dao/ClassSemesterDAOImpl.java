@@ -107,9 +107,9 @@ public class ClassSemesterDAOImpl implements ClassSemesterDAO {
 
 	@Override
 	public long getNumberOfStudents(int classSemesterId) {
-		String hql = "SELECT COUNT(DISTINCT CCSS.student) FROM vn.edu.fpt.timetabling.model.ClassSemester CS"
-				+ " JOIN CS.classCourseSemesters CCS" + " JOIN CCS.classCourseStudentSemesters CCSS"
-				+ " WHERE CS.classSemesterId = :classSemesterId";
+		String hql = "SELECT COUNT(DISTINCT CCSS.student)"
+				+ " FROM vn.edu.fpt.timetabling.model.ClassCourseStudentSemester CCSS"
+				+ " WHERE CCSS.classCourseSemester.classSemester.classSemesterId = :classSemesterId";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("classSemesterId", classSemesterId);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -156,9 +156,7 @@ public class ClassSemesterDAOImpl implements ClassSemesterDAO {
 	@Override
 	public int deleteClassSemesters(int semesterId) {
 		String hql = "DELETE FROM vn.edu.fpt.timetabling.model.ClassSemester CS"
-				+ " WHERE CS.classSemesterId IN (SELECT CS2.classSemesterId"
-				+ " FROM vn.edu.fpt.timetabling.model.ClassSemester CS2"
-				+ " WHERE CS2.semester.semesterId = :semesterId)";
+				+ " WHERE CS.semester.semesterId = :semesterId)";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("semesterId", semesterId);
 		return query.executeUpdate();
