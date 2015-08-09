@@ -103,7 +103,8 @@ public class ScheduleController extends GeneralController {
 	}
 
 	@RequestMapping(value = "/staff/schedule/updateTimetable", method = RequestMethod.POST)
-	public String updateTimetable(@RequestParam(value = "JSONToSubmit", required = true) String JSONToSubmit,
+	public String updateTimetable(@RequestParam(value = "semesterId", required = true) int semesterId, 
+			@RequestParam(value = "JSONToSubmit", required = true) String JSONToSubmit,
 			@RequestParam(value = "JSONprev", required = true) String JSONprev, HttpServletRequest request) {
 		logger.info(JSONToSubmit);
 
@@ -114,7 +115,7 @@ public class ScheduleController extends GeneralController {
 		try {
 			daySlots = om.readValue(JSONToSubmit, typeFactory.constructCollectionType(List.class, DaySlot.class));
 			prevDaySlots = om.readValue(JSONprev, typeFactory.constructCollectionType(List.class, DaySlot.class));
-			boolean result = scheduleService.saveTimetable(daySlots, prevDaySlots);
+			boolean result = scheduleService.saveTimetable(semesterId, daySlots, prevDaySlots);
 			if (result)
 				logger.info("hameo");
 		} catch (Exception e) {

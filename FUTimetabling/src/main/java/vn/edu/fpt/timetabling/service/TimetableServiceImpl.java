@@ -118,6 +118,11 @@ public class TimetableServiceImpl implements TimetableService {
 		return timetableDAO.getTimetableByDateSlotClassCourse(date, slot,
 				classCourseSemesterId);
 	}
+	
+	@Override
+	public Timetable getTimetableByDateSlotClass(Date date, int slot, int classSemesterId) {
+		return  timetableDAO.getTimetableByDateSlotClass(date, slot, classSemesterId);
+	}
 
 	@Override
 	public List<Timetable> listTimetablesByClassCourseSemestersInWeek(
@@ -144,13 +149,6 @@ public class TimetableServiceImpl implements TimetableService {
 					.getClassCourseSemesterById(
 							classCourseSemester.getClassCourseSemesterId(),
 							true, false);
-			for (Timetable t : newClassCourseSemester.getTimetable()) {
-//				Timetable timetable = new Timetable();
-//				timetable.setTimeTableId(t.getTimeTableId());
-//				timetable.setDate(t.getDate());
-//				timetable.setSlot(t.getSlot());
-//				timetab
-			}
 			result.addAll(newClassCourseSemester.getTimetable());
 		}
 		return result;
@@ -169,5 +167,10 @@ public class TimetableServiceImpl implements TimetableService {
 	@Override
 	public void deleteTimetablesByCCS(int classCourseSemesterId) {
 		timetableDAO.deleteTimetablesByCCS(classCourseSemesterId);
+	}
+	
+	@Override
+	public void deleteTimetablesByCCSInWeek(int classSemesterId, Date startWeek, Date endWeek) {
+		timetableDAO.deleteTimetablesByCCSInWeek(classSemesterId, startWeek, endWeek);
 	}
 }

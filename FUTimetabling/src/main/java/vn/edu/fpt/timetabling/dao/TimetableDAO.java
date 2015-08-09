@@ -22,7 +22,9 @@ public interface TimetableDAO {
 	public Timetable getTimetableById(int timetableId);
 
 	public Timetable getTimetableByDateSlotClassCourse(Date date, int slot, int classCourseSemesterId);
-
+	
+	public Timetable getTimetableByDateSlotClass(Date date, int slot, int classSemesterId);
+	
 	public void deleteTimetable(int timetableId);
 
 	public List<Timetable> listTimetablesByStudent(int semesterId, Student student);
@@ -33,4 +35,6 @@ public interface TimetableDAO {
 	public List<Timetable> listTimetablesByDate(Date date);
 	
 	public void deleteTimetablesByCCS(int classCourseSemesterId);
+	
+	public void deleteTimetablesByCCSInWeek(int classSemesterId, Date startWeek, Date endWeek);
 }

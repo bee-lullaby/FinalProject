@@ -29,7 +29,9 @@ public interface TimetableService {
 	public List<Timetable> listTimetablesByCCSs(List<ClassCourseSemester> classCourseSemesters);
 
 	public Timetable getTimetableByDateSlotClassCourse(Date date, int slot, int classCourseSemesterId);
-
+	
+	public Timetable getTimetableByDateSlotClass(Date date, int slot, int classSemesterId);
+	
 	public List<Timetable> listTimetablesByClassCourseSemestersInWeek(Set<ClassCourseSemester> classCourseSemesters,
 			Date startWeek, Date endWeek);
 	
@@ -40,4 +42,6 @@ public interface TimetableService {
 	public List<Timetable> listTimetableByTeacher(int semesterId, int teacherId);
 	
 	public void deleteTimetablesByCCS(int classCourseSemesterId);
+	
+	public void deleteTimetablesByCCSInWeek(int classSemesterId, Date startWeek, Date endWeek);
 }

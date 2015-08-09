@@ -284,6 +284,13 @@
 					</div>
 					<span class="tile-label">Programs</span>
 				</div>
+				<div class="tile bg-grayLight fg-white" data-role="tile"
+					id="manage-mergeClasses">
+					<div class="tile-content iconic">
+						<span class="icon flaticon-diagram1"></span>
+					</div>
+					<span class="tile-label">Merge-Class</span>
+				</div>
 			</div>
 		</div>
 	</div>

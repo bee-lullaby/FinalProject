@@ -177,6 +177,12 @@ $(document).ready(function(){
 		_setDateTimetable();
 		_setDateHeader();
 		_setTimetable();
+		
+		var input = $("<input>").attr("type", "hidden")
+						.attr("id", "semesterId")
+						.attr("name", "semesterId").val(_urlParam("semesterId"));
+		$("#data").append($(input));
+		
 	}
 	
 	function _showDialog(id) {

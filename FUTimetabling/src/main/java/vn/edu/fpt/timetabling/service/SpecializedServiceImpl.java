@@ -41,6 +41,13 @@ public class SpecializedServiceImpl implements SpecializedService {
 			Specialized specialized = new Specialized();
 			specialized.setCode(row.getCell(0).getStringCellValue().trim());
 			specialized.setName(row.getCell(1).getStringCellValue().trim());
+			
+			Double detailSpecialized = row.getCell(2).getNumericCellValue();
+			if(detailSpecialized == 0) {
+				specialized.setDetailSpecialized(false);
+			} else {
+				specialized.setDetailSpecialized(true);
+			}
 			specializedDAO.addSpecialized(specialized);
 		}
 		workbook.close();

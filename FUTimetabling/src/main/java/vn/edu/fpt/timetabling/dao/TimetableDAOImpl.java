@@ -76,7 +76,21 @@ public class TimetableDAOImpl implements TimetableDAO {
 		query.setParameter("classCourseSemesterId", classCourseSemesterId);
 		return (Timetable) query.uniqueResult();
 	}
-
+	
+	@Override
+	public Timetable getTimetableByDateSlotClass(Date date, int slot, int classSemesterId) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T" + " WHERE T.date = :date AND T.slot = :slot"
+				+ " AND T.classCourseSemester.classCourseSemesterId IN (SELECT CCS.classCourseSemesterId"
+				+ " FROM vn.edu.fpt.timetabling.model.ClassCourseSemester CCS"
+				+ " WHERE CCS.classSemester.classSemesterId = :classSemesterId)"
+				+ " AND T.date = :date AND T.slot = :slot";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("date", date);
+		query.setParameter("slot", slot);
+		query.setParameter("classSemesterId", classSemesterId);
+		return (Timetable) query.uniqueResult();
+	}
+	
 	@Override
 	public void deleteTimetable(int timetableId) {
 		Timetable timetable = getTimetableById(timetableId);
@@ -138,6 +152,20 @@ public class TimetableDAOImpl implements TimetableDAO {
 				+ " WHERE T.classCourseSemester.classCourseSemesterId = :classCourseSemesterId";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("classCourseSemesterId", classCourseSemesterId);
+		query.executeUpdate();
+	}
+	
+	@Override
+	public void deleteTimetablesByCCSInWeek(int classSemesterId, Date startWeek, Date endWeek) {
+		String hql = "DELETE FROM vn.edu.fpt.timetabling.model.Timetable T "
+				+ " WHERE T.classCourseSemester.classCourseSemesterId IN (SELECT CCS.classCourseSemesterId"
+				+ " FROM vn.edu.fpt.timetabling.model.ClassCourseSemester CCS"
+				+ " WHERE CCS.classSemester.classSemesterId = :classSemesterId)"
+				+ " AND T.date >= :startWeek AND T.date <= :endWeek";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("classSemesterId", classSemesterId);
+		query.setParameter("startWeek", startWeek);
+		query.setParameter("endWeek", endWeek);
 		query.executeUpdate();
 	}
 }
