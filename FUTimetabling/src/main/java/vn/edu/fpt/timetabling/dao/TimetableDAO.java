@@ -31,4 +31,6 @@ public interface TimetableDAO {
 			Date startWeek, Date endWeek);
 	
 	public List<Timetable> listTimetablesByDate(Date date);
+	
+	public void deleteTimetablesByCCS(int classCourseSemesterId);
 }

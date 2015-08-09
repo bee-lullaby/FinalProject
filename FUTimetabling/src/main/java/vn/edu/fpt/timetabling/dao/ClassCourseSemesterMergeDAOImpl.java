@@ -52,6 +52,17 @@ public class ClassCourseSemesterMergeDAOImpl implements ClassCourseSemesterMerge
 	}
 
 	@Override
+	public ClassCourseSemesterMerge getClassCourseSemesterMergeBy2CCS(int classCourseSemesterId1, int classCourseSemesterId2) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.ClassCourseSemesterMerge CCSM"
+				+ " WHERE CCSM.classCourseSemester1.classCourseSemesterId = :classCourseSemesterId1"
+				+ " AND CCSM.classCourseSemester2.classCourseSemesterId = :classCourseSemesterId2";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("classCourseSemesterId1", classCourseSemesterId1);
+		query.setParameter("classCourseSemesterId2", classCourseSemesterId2);
+		return (ClassCourseSemesterMerge) query.uniqueResult();
+	}
+	
+	@Override
 	public void deleteClassCourseSemesterMerge(int classCourseSemesterMergeId) {
 		ClassCourseSemesterMerge classCourseSemesterMerge = getClassCourseSemesterMergeById(classCourseSemesterMergeId);
 		getCurrentSession().delete(classCourseSemesterMerge);

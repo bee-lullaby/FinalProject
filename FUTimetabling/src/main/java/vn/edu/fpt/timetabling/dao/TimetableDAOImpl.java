@@ -130,4 +130,14 @@ public class TimetableDAOImpl implements TimetableDAO {
 		List<Timetable> timetables = (List<Timetable>) query.list();
 		return timetables;
 	}
+
+	
+	@Override
+	public void deleteTimetablesByCCS(int classCourseSemesterId) {
+		String hql = "DELETE FROM vn.edu.fpt.timetabling.model.Timetable T "
+				+ " WHERE T.classCourseSemester.classCourseSemesterId = :classCourseSemesterId";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("classCourseSemesterId", classCourseSemesterId);
+		query.executeUpdate();
+	}
 }

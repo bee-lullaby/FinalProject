@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import vn.edu.fpt.timetabling.dao.TimetableDAO;
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassSemester;
+import vn.edu.fpt.timetabling.model.TeacherSemester;
 import vn.edu.fpt.timetabling.model.Timetable;
 
 @Service
@@ -26,6 +27,8 @@ public class TimetableServiceImpl implements TimetableService {
 	private ClassSemesterService classSemesterService;
 	@Autowired
 	private ClassCourseSemesterService classCourseSemesterService;
+	@Autowired
+	private TeacherSemesterService teacherSemesterService;
 
 	public void setTimetableDAO(TimetableDAO timetableDAO) {
 		this.timetableDAO = timetableDAO;
@@ -138,14 +141,15 @@ public class TimetableServiceImpl implements TimetableService {
 		for (ClassCourseSemester classCourseSemester : classSemester
 				.getClassCourseSemesters()) {
 			ClassCourseSemester newClassCourseSemester = classCourseSemesterService
-					.getClassCourseSemesterById(classCourseSemester.getClassCourseSemesterId(),
+					.getClassCourseSemesterById(
+							classCourseSemester.getClassCourseSemesterId(),
 							true, false);
-			for(Timetable t : newClassCourseSemester.getTimetable()) {
-				Timetable timetable = new Timetable();
-				timetable.setTimeTableId(t.getTimeTableId());
-				timetable.setDate(t.getDate());
-				timetable.setSlot(t.getSlot());
-				//..//
+			for (Timetable t : newClassCourseSemester.getTimetable()) {
+//				Timetable timetable = new Timetable();
+//				timetable.setTimeTableId(t.getTimeTableId());
+//				timetable.setDate(t.getDate());
+//				timetable.setSlot(t.getSlot());
+//				timetab
 			}
 			result.addAll(newClassCourseSemester.getTimetable());
 		}
@@ -155,7 +159,15 @@ public class TimetableServiceImpl implements TimetableService {
 	@Override
 	public List<Timetable> listTimetableByTeacher(int semesterId, int teacherId) {
 		List<Timetable> result = new ArrayList<Timetable>();
-		
+		TeacherSemester teacherSemester = teacherSemesterService
+				.getTeacherSemesterByTeacherSemester(teacherId, semesterId,
+						false, true);
+		result.addAll(teacherSemester.getTimetables());
 		return result;
+	}
+
+	@Override
+	public void deleteTimetablesByCCS(int classCourseSemesterId) {
+		timetableDAO.deleteTimetablesByCCS(classCourseSemesterId);
 	}
 }

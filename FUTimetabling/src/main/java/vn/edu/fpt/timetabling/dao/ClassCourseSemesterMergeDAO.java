@@ -15,5 +15,7 @@ public interface ClassCourseSemesterMergeDAO {
 
 	public ClassCourseSemesterMerge getClassCourseSemesterMergeById(int classCourseSemesterMergeId);
 
+	public ClassCourseSemesterMerge getClassCourseSemesterMergeBy2CCS(int classCourseSemesterId1, int classCourseSemesterId2);
+	
 	public void deleteClassCourseSemesterMerge(int classCourseSemesterMergeId);
 }
