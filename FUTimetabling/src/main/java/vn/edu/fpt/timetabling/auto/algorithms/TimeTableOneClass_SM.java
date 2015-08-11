@@ -141,8 +141,10 @@ public class TimeTableOneClass_SM {
 
 	public void copyResult_Template2() {
 		// this.stateModel_20();
-		int[] daylist_2bl_even = { 0, 2, 4, 5, 7, 9, 10, 12, 15, 17 };
-		int[] daylist_2bl_odd = { 1, 3, 6, 8, 11, 13, 14, 16, 18, 19 };
+//		int[] daylist_2bl_even = { 0, 2, 4, 5, 7, 9, 10, 12, 15, 17 };
+//		int[] daylist_2bl_odd = { 1, 3, 6, 8, 11, 13, 14, 16, 18, 19 };
+		int[] daylist_stt3_block1 = {0,1,2,3,4,5,6,7,8,9 };
+		int[] daylist_stt3_block2 = { 10,11,12,13,14,15,16,17,18,19 };
 
 		int[] daylist_b1_even;
 		int[] daylist_b1_odd;
@@ -164,10 +166,12 @@ public class TimeTableOneClass_SM {
 
 		/**/
 
-		int courseIn2Block = -1;
+//		int courseIn2Block = -1;
+		ArrayList<Integer> twoBlockCourses = new ArrayList<>();
 		for (int c = 0; c < D.nbClasscoursePerClass; c++) {
 			if (D.statusOfCourse[c] == 3) {
-				courseIn2Block = c;
+				twoBlockCourses.add(c);
+//				courseIn2Block = c;
 				// System.out.println("c = "+D.courses[c].ID+", stt = "+D.statusOfCourse[c]);
 
 				ClassCourse course = D.classCourses[c];
@@ -185,7 +189,8 @@ public class TimeTableOneClass_SM {
 
 				// System.out.println("idx = "+fcIdx+", day = "+day+", slot = "+slot+", session = "+session);
 
-				if (day % 2 == 0) {
+//				if (day % 2 == 0) {
+				if (day < 2) {
 					for (int i = 0; i < L_20.size(); i++) {
 						/*
 						 * %int fc_20 = fcList_full.get(i);
@@ -197,8 +202,7 @@ public class TimeTableOneClass_SM {
 
 						FCourse fc_20 = L_20.get(i);
 						int fcIdx_20 = D.mFCourse2Index_20.get(fc_20);
-						x_day_20[fcIdx_20]
-								.setValuePropagate(daylist_2bl_even[i]);
+						x_day_20[fcIdx_20].setValuePropagate(daylist_stt3_block1[i]);
 						x_slot_20[fcIdx_20].setValuePropagate(slot);
 						x_session_20[fcIdx_20].setValuePropagate(session);
 						// System.out.println("idx = "+fcIdx_20+", day = "+daylist_2bl_even[i]+", slot = "+slot+", session = "+session);
@@ -208,20 +212,20 @@ public class TimeTableOneClass_SM {
 						FCourse fc_20 = L_20.get(i);
 						int fcIdx_20 = D.mFCourse2Index_20.get(fc_20);
 						x_day_20[fcIdx_20]
-								.setValuePropagate(daylist_2bl_odd[i]);
+								.setValuePropagate(daylist_stt3_block2[i]);
 						x_slot_20[fcIdx_20].setValuePropagate(slot);
 						x_session_20[fcIdx_20].setValuePropagate(session);
 						// System.out.println("idx = "+fcIdx_20+", day = "+daylist_2bl_even[i]+", slot = "+slot+", session = "+session);
 					}
 				}
 
-				break;
+//				break;
 			}
 		}
 		// System.out.println("course in 2 blocks: "+courseIn2Block);
 		// nhung mon con lai
 		for (int c = 0; c < D.nbClasscoursePerClass; c++) {
-			if (c != courseIn2Block) {
+			if (!twoBlockCourses.contains(c)) {
 				ClassCourse course = D.classCourses[c];
 				ArrayList<FCourse> L = D.fCoursesOfClasscourse.get(course);
 				ArrayList<FCourse> L_20 = D.fCoursesOfCourse_20.get(course);
@@ -743,18 +747,17 @@ public class TimeTableOneClass_SM {
 
 					model.addConstraint(Choco.lt(x_day[fci], x_day[fc1i]));
 					model.addConstraint(Choco.eq(x_slot[fci], x_slot[fc1i]));
-					model.addConstraint(Choco.neq(x_slot[fci], 1));
-					model.addConstraint(Choco.neq(x_slot[fc1i], 1));
+//					model.addConstraint(Choco.neq(x_slot[fci], 1));
+//					model.addConstraint(Choco.neq(x_slot[fc1i], 1));
 
-					// Constraint c1 = Choco.eq(Choco.mod(x_day[fci], 2),0);
-					// Constraint c2 = Choco.eq(Choco.mod(x_day[fc1i], 2),0);
-					// model.addConstraint(Choco.implies(c1, c2));
-					//
-					// Constraint c3 = Choco.eq(Choco.mod(x_day[fci], 2),1);
-					// Constraint c4 = Choco.eq(Choco.mod(x_day[fc1i], 2),1);
-					//
-					// model.addConstraint(Choco.implies(c3, c4));
-					model.addConstraint(Choco.eq(Choco.plus(x_day[fci], 2),
+					 Constraint c1 = Choco.leq(x_day[fci], 1);
+					 Constraint c2 = Choco.leq(x_day[fc1i], 1);
+					 model.addConstraint(Choco.implies(c1, c2));
+					 Constraint c3 = Choco.leq(2,x_day[fci]);
+					 Constraint c4 = Choco.leq(2,x_day[fc1i]);
+					 model.addConstraint(Choco.implies(c3, c4));
+					 
+					model.addConstraint(Choco.eq(Choco.plus(x_day[fci], 1),
 							x_day[fc1i]));
 				}
 			} else {
@@ -765,8 +768,7 @@ public class TimeTableOneClass_SM {
 					int fc1i = D.mFCourse2Index.get(fc1);
 
 					model.addConstraint(Choco.eq(x_day[fci], x_day[fc1i]));
-					model.addConstraint(Choco.eq(Choco.plus(x_slot[fci], 1),
-							x_slot[fc1i]));
+					model.addConstraint(Choco.eq(Choco.plus(x_slot[fci], 1),x_slot[fc1i]));
 					if (D.statusOfCourse[i] == 1) {
 						model.addConstraint(Choco.leq(x_day[fci], 1));
 						model.addConstraint(Choco.leq(x_day[fc1i], 1));
@@ -1365,7 +1367,7 @@ public class TimeTableOneClass_SM {
 		// TODO Auto-generated method stub
 		TimeTableOneClass_SM TT = new TimeTableOneClass_SM();
 		TT.D = new DataOneClass();
-		TT.D.loadData_SM("class76.txt");
+		TT.D.loadData_SM("class6.txt");
 		/*
 		 * TT.D.cls = new entities.Class(); TT.D.cls.ID = 1; Course[] c =
 		 * TT.D.courses; for (Course course : c) {
@@ -1374,12 +1376,12 @@ public class TimeTableOneClass_SM {
 		// TT.printHTML_all("a.html", 10);
 		TT.model = new CPModel();
 		TT.solver = new CPSolver();
-		TT.stateModel_Template1();
+		TT.stateModel_Template2();
 		TT.solver.read(TT.model);
 		// boolean ok = TT.solver.solveAll();
 		// System.out.println("solveall = "+ok+", nbSolution = "+TT.solver.getNbSolutions());
 		// TT.findSolution("sol_20.html",100);
-		TT.printHTML_all_Template1("sol.html", 1);
+		TT.printHTML_all_Template2("sol.html", 3000);
 
 	}
 

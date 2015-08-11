@@ -38,7 +38,7 @@ public class AssignRoom {
 //	public boolean[] ccIsAssigned;
 //	public int[] availableCapacity;
 	
-	final static int LIMIT_NBROOM_PERCOURSETYPE = 15;	
+	final static int LIMIT_NBROOM_PERCOURSETYPE = 45;	
 	
 //////////////////////////////////////////////////////////////////////
 	LocalSearchManager ls;
@@ -509,12 +509,12 @@ public class AssignRoom {
 		}
 		System.out.println();		*/
 		//====================================================
-		DA.lClassifiedCourse = new ArrayList[DA.NB_COURSETYPE];
-		DA.lCorrespondClassifiedRoom = new ArrayList[DA.NB_COURSETYPE];
+//		DA.lClassifiedCourse = new ArrayList[DA.NB_COURSETYPE];
+//		DA.lCorrespondClassifiedRoom = new ArrayList[DA.NB_COURSETYPE];
 		for (int type = 0; type < DA.NB_COURSETYPE; type++) {
-			DA.lClassifiedCourse[type] = new ArrayList<Course>();
-			DA.lCorrespondClassifiedRoom[type] = new ArrayList<Room>();
-			DA.loadData_CourseRoom("type"+(type+1)+".txt",type);
+//			DA.lClassifiedCourse[type] = new ArrayList<Course>();
+//			DA.lCorrespondClassifiedRoom[type] = new ArrayList<Room>();
+//			DA.loadData_CourseRoom("datafall/type"+(type+1)+".txt",type);
 			
 			ArrayList<ClassCourse> classcourseList = new ArrayList<ClassCourse>();
 			for (Course c : DA.lClassifiedCourse[type]) {
@@ -822,8 +822,8 @@ public class AssignRoom {
 	public static void main(String[] args){
 		AssignRoom ar = new AssignRoom();
 //		ar.assignRoom3For();
-//		ar.assignRoomUsingFor("beingusedTT2.dat");
-		ar.testRoomClustering();
+		ar.assignRoomUsingFor("beingusedTT2.dat");
+//		ar.testRoomClustering();
 		
 	}
 }
