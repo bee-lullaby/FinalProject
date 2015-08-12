@@ -20,6 +20,7 @@ import com.mysql.fabric.xmlrpc.base.Array;
 
 import localsearch.model.VarIntLS;
 import vn.edu.fpt.timetabling.auto.algorithms.MultiKnapsack;
+import vn.edu.fpt.timetabling.auto.algorithms.P;
 
 public class DataCenter {
 
@@ -122,6 +123,7 @@ public class DataCenter {
 	// Merging
 	public HashMap<ClassFU, Integer> mClass2NBStudent;
 	public HashMap<ClassCourse, Integer> mClassCourse2nbStudent;
+	public HashMap<String, Integer> mClassCourseCode2nbStudent;
 	public ArrayList<ClassCourse> lMergedClassCourse;
 	public ArrayList<Pair_ClassCourseClass> lClassCourseGuestClass_Temp;
 	public ArrayList<Pair_ClassCourseClass> lClassCourseGuestClassPair;
@@ -2201,18 +2203,19 @@ public class DataCenter {
 
 	}
 
-	public void savedata_ClassCourse(String fn){
+	public void savedata_MergedList(String fn){
 		File f = new File(fn);
 		try {
 			FileWriter fw = new FileWriter(f);
 			BufferedWriter bw = new BufferedWriter(fw);
 			bw.write("#nbClassCourse\n");
-			bw.write(""+nbClassCourse);
+			bw.write(""+lClassCourseGuestClassPair.size());
 			bw.write("\n#ID #course #class #stt\n");
 			for (Pair_ClassCourseClass pair : lClassCourseGuestClassPair) {
 				ClassCourse cc = pair.classCourse;
-//				ClassFU 
-				bw.write(cc.ID+" "+cc.code+" "+cc.classFU.code+" "+cc.stt+"\n");				
+				ClassFU host = mClassCourse2Class.get(cc);
+				ClassFU guest = pair.guestClass;
+				bw.write(cc.code+" "+host.code+" "+guest.code+"\n");				
 			}			
 			bw.write("-1\n");
 			bw.close();
@@ -2220,8 +2223,9 @@ public class DataCenter {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
+		System.out.println("Saving merged list successfully!");
 	}
-	public void savedata_MergedList(String fn){
+	public void savedata_ClassCourse(String fn){
 		File f = new File(fn);
 		try {
 			FileWriter fw = new FileWriter(f);
@@ -2230,7 +2234,7 @@ public class DataCenter {
 			bw.write(""+nbClassCourse);
 			bw.write("\n#course #hostClass #guestClass\n");
 			for (ClassCourse cc : classCourses) {
-				bw.write(cc.code+" "+cc.classFU.code+" "+cc.stt+"\n");				
+				bw.write(cc.ID+" "+cc.code+" "+cc.classFU.code+" "+cc.stt+"\n");				
 			}			
 			bw.write("-1\n");
 			bw.close();
@@ -2238,7 +2242,71 @@ public class DataCenter {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
+		System.out.println("Saving classcourses successfully!");
 	}
+	
+	public void saveData_DeletedList(String fn){
+		File f = new File(fn);
+		try {
+			FileWriter fw = new FileWriter(f);
+			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write("#nb deleted classcourse\n");
+			bw.write(""+lneedToBeDeletedClassCourse.size());
+			bw.write("\n#course #class\n");
+			for (Pair_ClassCourseClass pair : lneedToBeDeletedClassCourse) {
+				ClassCourse cc = pair.classCourse;
+				ClassFU classFU = pair.guestClass;
+				bw.write(cc.ID+" "+cc.code+" "+cc.stt+" "+classFU.code+"\n");							
+			}			
+			bw.write("-1\n");
+			bw.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		System.out.println("Saving deleted list successfully!");
+	}
+	
+	public void loadData_DeletedList(String fn){
+		File f = new File(fn);
+		try {
+			Scanner in = new Scanner(f);
+			lneedToBeDeletedClassCourse = new ArrayList<>();
+			String line = in.nextLine();
+			System.out.println(line);
+			int size = in.nextInt();
+			line = in.nextLine();
+			System.out.println(size);
+			line = in.nextLine();
+			System.out.println(line);
+			for (int i = 0; i < size; i++) {
+				int courseID = in.nextInt();
+				if (courseID == -1) {
+					break;
+				}
+				String courseCode = in.next();
+				int block = in.nextInt();
+				String classCode = in.next();
+				Course course = mCode2Course.get(courseCode);
+				ClassFU classFU = mCode2Class.get(classCode);
+				if (course != null && classFU != null) {
+					ClassCourse classCourse = new ClassCourse(courseID, courseCode, block, classFU);
+					lneedToBeDeletedClassCourse.add(new Pair_ClassCourseClass(classCourse, classFU));
+				}
+			}
+			
+			in.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		for (Pair_ClassCourseClass pair : lneedToBeDeletedClassCourse) {
+			ClassCourse cc = pair.classCourse;
+			ClassFU classFU = pair.guestClass;
+			System.out.println(cc.ID+" "+cc.code+" "+cc.stt+" "+classFU.code+"\n");							
+		}	
+	}
+	
 	public void reloadData_ClassCourse_v2(String fn) {
 		try {
 			File file = new File(fn);
@@ -2707,9 +2775,7 @@ public class DataCenter {
 		}
 	}
 
-	public void loadData_MergedClass_v2(String fn) {
 
-	}
 
 	/**
 	 * Loading data from mannually made timetable. This function cannot be run
@@ -3212,21 +3278,28 @@ public class DataCenter {
 			e.printStackTrace();
 		}
 	}
-
-	public void mergeClassCourse() {
+	
+	public void assignStudentEachClassCourse(){
 		mClassCourse2nbStudent = new HashMap<ClassCourse, Integer>();
-		lClassCourseGuestClass_Temp = new ArrayList<>();
-		lneedToBeDeletedClassCourse = new ArrayList<>();
-		// tim nbstudent/cc
+		mClassCourseCode2nbStudent = new HashMap<String,Integer>();
 		for (int i = 0; i < nbClass; i++) {
 			ArrayList<ClassCourse> ccList = mClass2ClassCourseList.get(classes[i]);
 
 			for (int j = 0; j < ccList.size(); j++) {
 				System.out.println(ccList.get(j).code + " has " + classes[i].nbStudent);
-				mClassCourse2nbStudent.put(ccList.get(j), classes[i].nbStudent);
+				//mClassCourse2nbStudent.put(ccList.get(j), classes[i].nbStudent);
+				String str = ccList.get(j).code.concat(classes[i].code);
+				mClassCourseCode2nbStudent.put(str, classes[i].nbStudent);
 			}
 
 		}
+	}
+	public void mergeClassCourse() {
+		
+		lClassCourseGuestClass_Temp = new ArrayList<>();
+		lneedToBeDeletedClassCourse = new ArrayList<>();
+		// tim nbstudent/cc
+		
 
 		// find course need to be merged
 		// Course c = mCode2Course.get("JPS132");
@@ -3332,14 +3405,21 @@ public class DataCenter {
 		// DA.loadData_Building_v2("datafall/data_building_fall.txt");
 		// DA.loadData_Room_v2("datafall/data_room_fall.txt");
 
-		 DA.loadData_ClassCourse_v2("datafall/data_classcourse_fall.txt");
-		 DA.savedata_ClassCourse("datafall/data_classcourse_fall_saved.txt");
+//		 DA.loadData_ClassCourse_v2("datafall/data_classcourse_fall.txt");
+		 
+//		System.out.println(DA.nbClassCourse);
+//		 DA.loadData_ClassCourse_v2("datafall/data_classcourse_fall.txt");
+//		 DA.mergeClassCourse();
+//		 DA.reloadData_ClassCourse_v2("datafall/data_classcourse_fall.txt");
+//		 DA.savedata_ClassCourse("datafall/data_classcourse_fall_saved.txt");
+//		 DA.savedata_MergedList("datafall/data_mergedList_fall_saved.txt");
+//		 DA.saveData_DeletedList("datafall/data_deletedList_fall.txt");
 		System.out.println(DA.nbClassCourse);
-		// DA.loadData_ClassCourse_v2("datafall/data_classcourse_fall.txt");
-		// DA.mergeClassCourse();
-		// DA.reloadData_ClassCourse_v2("datafall/data_classcourse_fall.txt");
-		System.out.println(DA.nbClassCourse);
-
+		System.out.println("load data:");
+		DA.loadData_ClassCourse_v2("datafall/data_classcourse_fall_saved.txt");
+		DA.loadData_DeletedList("datafall/data_deletedList_fall.txt");
+		DA.loadData_mergedCases("datafall/data_mergedList_fall_saved.txt");
+//		DA.makeMustNotConflictClassCourseList();
 		// DA.testfindRoomLimitEachCourse();
 		// DA.loadData_mergedCases("datasm/data_mergedcases_sm.txt");
 		// DA.loadData_mergedCases("data_mergedCases_sample.txt");
