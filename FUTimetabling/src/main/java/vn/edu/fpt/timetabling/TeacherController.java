@@ -118,7 +118,6 @@ public class TeacherController extends GeneralController {
 		teacher.setName(name);
 		teacher.setAccount(account);
 		teacher.setEmail(email);
-		teacher.setAccountType("teacher");
 		if (teacherId == -1) {
 			teacherService.addTeacher(teacher);
 			httpSession.setAttribute("success", "Add Teacher Successful!");

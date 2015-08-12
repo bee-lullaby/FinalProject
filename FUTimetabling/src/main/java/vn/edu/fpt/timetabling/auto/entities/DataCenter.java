@@ -1626,6 +1626,40 @@ public class DataCenter {
 			e.printStackTrace();
 		}
 	}
+	
+	public void loadData_Building_v2(List<String> buildingData) {
+		try {
+			nbBuilding = buildingData.size();
+
+			buildings = new Building[nbBuilding];
+			mBuidling2Index = new HashMap<>();
+			mBuidlingID2Code = new HashMap<>();
+			mBuildingCode2ID = new HashMap<>();
+			mID2Building = new HashMap<>();
+			mCode2Building = new HashMap<>();
+
+			int idx = -1;
+			for (String string : buildingData) {
+				StringTokenizer stringTokenizer = new StringTokenizer(string, "|");
+				idx++;
+				int bID = Integer.parseInt(stringTokenizer.nextToken());
+				String bCode = stringTokenizer.nextToken();
+				Building bd = new Building(bID, bCode);
+				buildings[idx] = bd;
+				mBuidling2Index.put(bd, idx);
+				mBuidlingID2Code.put(bID, bCode);
+				mBuildingCode2ID.put(bCode, bID);
+				mID2Building.put(bID, bd);
+				mCode2Building.put(bCode, bd);
+			}
+			for (Building bd : buildings) {
+				System.out.println("id = " + bd.ID + ", code = " + bd.code);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	public void loadData_Building_v2(String fn) {
@@ -1671,6 +1705,78 @@ public class DataCenter {
 			}
 
 			in.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+	
+	public void loadData_Room_v2(List<String> roomData) {
+		try {
+
+			nbRoom = roomData.size();
+
+			rooms = new Room[nbRoom];
+			mRoom2Index = new HashMap<Room, Integer>();
+			mRoomID2Code = new HashMap<Integer, String>();
+			mRoomCode2ID = new HashMap<String, Integer>();
+			mID2Room = new HashMap<Integer, Room>();
+			mBuidling2RoomList = new HashMap<Building, ArrayList<Room>>();
+			mCode2Room = new HashMap<>();
+
+			for (int i = 0; i < buildings.length; i++) {
+				Building bd = buildings[i];
+				mBuidling2RoomList.put(bd, new ArrayList<Room>());
+			}
+
+			int idx = -1;
+			for (String string : roomData) {
+				StringTokenizer stringTokenizer = new StringTokenizer(string, "|");
+				int rID = Integer.parseInt(stringTokenizer.nextToken());
+				String rCode = stringTokenizer.nextToken().toUpperCase();
+				String bCode = stringTokenizer.nextToken().toUpperCase();
+				int capacity = Integer.parseInt(stringTokenizer.nextToken());
+				System.out.println("id = " + rID + ", code = " + rCode + ", building = " + bCode);
+
+				int buildingID = -1;
+				if (mBuildingCode2ID.get(bCode) == null) {
+					System.out.println("There is no building has code = " + bCode);
+					System.exit(1);
+				} else {
+					buildingID = mBuildingCode2ID.get(bCode);
+				}
+
+				Room r = new Room(rID, rCode, buildingID, capacity);
+				rooms[idx] = r;
+				mRoom2Index.put(r, idx);
+				mRoomCode2ID.put(rCode, rID);
+				mRoomID2Code.put(rID, rCode);
+				mID2Room.put(rID, r);
+				mCode2Room.put(rCode, r);
+
+				Building bd = mID2Building.get(buildingID);
+				if (bd != null) {
+					mBuidling2RoomList.get(bd).add(r);
+				} else {
+					System.out.println("There is no building has ID = " + buildingID);
+					System.exit(1);
+				}
+			}
+			for (int i = 0; i < rooms.length; i++) {
+				Room r = rooms[i];
+				String buildingCode = mBuidlingID2Code.get(r.buildingID);
+				System.out.println("id = " + r.ID + ", code = " + r.code + ", building = " + buildingCode);
+			}
+			System.out.println("\nBuidling:");
+			for (int i = 0; i < buildings.length; i++) {
+				Building bd = buildings[i];
+				ArrayList<Room> L = mBuidling2RoomList.get(bd);
+				System.out.print("" + bd.code + ":");
+				for (Room room : L) {
+					System.out.print(" " + room.code);
+				}
+				System.out.println();
+			}
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -2203,20 +2309,20 @@ public class DataCenter {
 
 	}
 
-	public void savedata_MergedList(String fn){
+	public void savedata_MergedList(String fn) {
 		File f = new File(fn);
 		try {
 			FileWriter fw = new FileWriter(f);
 			BufferedWriter bw = new BufferedWriter(fw);
 			bw.write("#nbClassCourse\n");
-			bw.write(""+lClassCourseGuestClassPair.size());
+			bw.write("" + lClassCourseGuestClassPair.size());
 			bw.write("\n#ID #course #class #stt\n");
 			for (Pair_ClassCourseClass pair : lClassCourseGuestClassPair) {
 				ClassCourse cc = pair.classCourse;
 				ClassFU host = mClassCourse2Class.get(cc);
 				ClassFU guest = pair.guestClass;
-				bw.write(cc.code+" "+host.code+" "+guest.code+"\n");				
-			}			
+				bw.write(cc.code + " " + host.code + " " + guest.code + "\n");
+			}
 			bw.write("-1\n");
 			bw.close();
 		} catch (Exception e) {
@@ -2225,17 +2331,18 @@ public class DataCenter {
 		}
 		System.out.println("Saving merged list successfully!");
 	}
-	public void savedata_ClassCourse(String fn){
+
+	public void savedata_ClassCourse(String fn) {
 		File f = new File(fn);
 		try {
 			FileWriter fw = new FileWriter(f);
 			BufferedWriter bw = new BufferedWriter(fw);
 			bw.write("#nbMergedCase\n");
-			bw.write(""+nbClassCourse);
+			bw.write("" + nbClassCourse);
 			bw.write("\n#course #hostClass #guestClass\n");
 			for (ClassCourse cc : classCourses) {
-				bw.write(cc.ID+" "+cc.code+" "+cc.classFU.code+" "+cc.stt+"\n");				
-			}			
+				bw.write(cc.ID + " " + cc.code + " " + cc.classFU.code + " " + cc.stt + "\n");
+			}
 			bw.write("-1\n");
 			bw.close();
 		} catch (Exception e) {
@@ -2244,20 +2351,20 @@ public class DataCenter {
 		}
 		System.out.println("Saving classcourses successfully!");
 	}
-	
-	public void saveData_DeletedList(String fn){
+
+	public void saveData_DeletedList(String fn) {
 		File f = new File(fn);
 		try {
 			FileWriter fw = new FileWriter(f);
 			BufferedWriter bw = new BufferedWriter(fw);
 			bw.write("#nb deleted classcourse\n");
-			bw.write(""+lneedToBeDeletedClassCourse.size());
+			bw.write("" + lneedToBeDeletedClassCourse.size());
 			bw.write("\n#course #class\n");
 			for (Pair_ClassCourseClass pair : lneedToBeDeletedClassCourse) {
 				ClassCourse cc = pair.classCourse;
 				ClassFU classFU = pair.guestClass;
-				bw.write(cc.ID+" "+cc.code+" "+cc.stt+" "+classFU.code+"\n");							
-			}			
+				bw.write(cc.ID + " " + cc.code + " " + cc.stt + " " + classFU.code + "\n");
+			}
 			bw.write("-1\n");
 			bw.close();
 		} catch (Exception e) {
@@ -2266,8 +2373,8 @@ public class DataCenter {
 		}
 		System.out.println("Saving deleted list successfully!");
 	}
-	
-	public void loadData_DeletedList(String fn){
+
+	public void loadData_DeletedList(String fn) {
 		File f = new File(fn);
 		try {
 			Scanner in = new Scanner(f);
@@ -2294,7 +2401,7 @@ public class DataCenter {
 					lneedToBeDeletedClassCourse.add(new Pair_ClassCourseClass(classCourse, classFU));
 				}
 			}
-			
+
 			in.close();
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -2303,10 +2410,10 @@ public class DataCenter {
 		for (Pair_ClassCourseClass pair : lneedToBeDeletedClassCourse) {
 			ClassCourse cc = pair.classCourse;
 			ClassFU classFU = pair.guestClass;
-			System.out.println(cc.ID+" "+cc.code+" "+cc.stt+" "+classFU.code+"\n");							
-		}	
+			System.out.println(cc.ID + " " + cc.code + " " + cc.stt + " " + classFU.code + "\n");
+		}
 	}
-	
+
 	public void reloadData_ClassCourse_v2(String fn) {
 		try {
 			File file = new File(fn);
@@ -2620,6 +2727,60 @@ public class DataCenter {
 
 	}
 
+	public void loadData_Teacher_v2(List<String> teacherData) {
+		try {
+			nbTeacher = teacherData.size();
+			System.out.println(nbTeacher);
+
+			teachers = new Teacher[nbTeacher];
+			mTeacher2Index = new HashMap<>();
+			mTeacherCode2ID = new HashMap<>();
+			mTeacherID2Code = new HashMap<>();
+			mID2Teacher = new HashMap<>();
+			mCode2Teacher = new HashMap<>();
+			mDepartment2TeacherList = new HashMap<>();
+			for (Department dep : departments) {
+				mDepartment2TeacherList.put(dep, new ArrayList<>());
+			}
+
+			int idx = -1;
+			for (String line : teacherData) {
+				idx++;
+				StringTokenizer stringTokenizer = new StringTokenizer(line, "|");
+				int id = Integer.parseInt(stringTokenizer.nextToken());
+				String code = stringTokenizer.nextToken().toUpperCase();
+				String department = stringTokenizer.nextToken().toUpperCase();
+				Department dep = mCode2Department.get(department);
+				if (dep != null) {
+					Teacher tc = new Teacher(id, code, dep);
+					teachers[idx] = tc;
+					mTeacher2Index.put(tc, idx);
+					mTeacherCode2ID.put(code, id);
+					mTeacherID2Code.put(id, code);
+					mID2Teacher.put(id, tc);
+					mCode2Teacher.put(code, tc);
+					mDepartment2TeacherList.get(dep).add(tc);
+				}
+			}
+			for (Teacher tc : teachers) {
+				System.out.println(tc.ID + " " + tc.code + " " + tc.department.code);
+			}
+			System.out.println();
+
+			for (Department dep : departments) {
+				ArrayList<Teacher> L = mDepartment2TeacherList.get(dep);
+				System.out.print(dep.code + "-<" + L.size() + ">:");
+				for (Teacher teacher : L) {
+					System.out.print(" " + teacher.code);
+				}
+				System.out.println();
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+
 	public void loadData_Teacher_v2(String fn) {
 		try {
 			Scanner in = new Scanner(new File(fn));
@@ -2688,6 +2849,78 @@ public class DataCenter {
 			e.printStackTrace();
 		}
 	}
+	
+	public void loadData_Course_Teacher_v2(List<String> teacherCourseData) {
+		try {
+			nbCourse = teacherCourseData.size();
+
+			mTeacher2CourseList = new HashMap<>();
+			mCourse2TeacherList = new HashMap<>();
+			teacherSupplied = new int[nbCourse];
+			// mDepartment2TeacherList = new HashMap<Department,
+			// ArrayList<Teacher>>();
+
+			for (Teacher tc : teachers) {
+				mTeacher2CourseList.put(tc, new ArrayList<Course>());
+			}
+			for (Course c : courses) {
+				mCourse2TeacherList.put(c, new ArrayList<Teacher>());
+			}
+
+			int idx = -1;
+			for (String string : teacherCourseData) {
+				StringTokenizer stringTokenizer = new StringTokenizer(string, "|");
+				idx++;
+				String cCode = stringTokenizer.nextToken();
+				if (mCourseCode2ID.get(cCode) != null) {
+					int cID = mCourseCode2ID.get(cCode);
+					Course c = mID2Course.get(cID);
+					int cIdx = mCourse2Index.get(c);
+					int supply = Integer.parseInt(stringTokenizer.nextToken());
+					int count = 0;
+					for (int i = 0; i < supply; i++) {
+						String tcCode = stringTokenizer.nextToken();
+						tcCode = tcCode.toUpperCase();
+						if (mTeacherCode2ID.get(tcCode) != null) {
+							int tID = mTeacherCode2ID.get(tcCode);
+							Teacher tc = mID2Teacher.get(tID);
+							mCourse2TeacherList.get(c).add(tc);
+							mTeacher2CourseList.get(tc).add(c);
+							count++;
+						}
+					}
+					teacherSupplied[cIdx] = count;
+				} else {
+					System.out.println("ko co course" + cCode);
+					System.exit(1);
+				}
+			}
+
+			for (int i = 0; i < nbCourse; i++) {
+				Course c = courses[i];
+				ArrayList<Teacher> L = mCourse2TeacherList.get(c);
+				System.out.print(c.code + "-<" + L.size() + ">:");
+				for (Teacher teacher : L) {
+					System.out.print(" " + teacher.code);
+				}
+				System.out.println();
+			}
+
+			System.out.println();
+			for (int i = 0; i < nbTeacher; i++) {
+				Teacher tc = teachers[i];
+				ArrayList<Course> L = mTeacher2CourseList.get(tc);
+				System.out.print(tc.code + "-<" + L.size() + ">:");
+				for (Course course : L) {
+					System.out.print(" " + course.code);
+				}
+				System.out.println();
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
 
 	public void loadData_Course_Teacher_v2(String fn) {
 		try {
@@ -2704,7 +2937,8 @@ public class DataCenter {
 			mTeacher2CourseList = new HashMap<>();
 			mCourse2TeacherList = new HashMap<>();
 			teacherSupplied = new int[nbCourse];
-			//mDepartment2TeacherList = new HashMap<Department, ArrayList<Teacher>>();
+			// mDepartment2TeacherList = new HashMap<Department,
+			// ArrayList<Teacher>>();
 
 			for (Teacher tc : teachers) {
 				mTeacher2CourseList.put(tc, new ArrayList<Course>());
@@ -2774,8 +3008,6 @@ public class DataCenter {
 			e.printStackTrace();
 		}
 	}
-
-
 
 	/**
 	 * Loading data from mannually made timetable. This function cannot be run
@@ -3278,28 +3510,29 @@ public class DataCenter {
 			e.printStackTrace();
 		}
 	}
-	
-	public void assignStudentEachClassCourse(){
+
+	public void assignStudentEachClassCourse() {
 		mClassCourse2nbStudent = new HashMap<ClassCourse, Integer>();
-		mClassCourseCode2nbStudent = new HashMap<String,Integer>();
+		mClassCourseCode2nbStudent = new HashMap<String, Integer>();
 		for (int i = 0; i < nbClass; i++) {
 			ArrayList<ClassCourse> ccList = mClass2ClassCourseList.get(classes[i]);
 
 			for (int j = 0; j < ccList.size(); j++) {
 				System.out.println(ccList.get(j).code + " has " + classes[i].nbStudent);
-				//mClassCourse2nbStudent.put(ccList.get(j), classes[i].nbStudent);
+				// mClassCourse2nbStudent.put(ccList.get(j),
+				// classes[i].nbStudent);
 				String str = ccList.get(j).code.concat(classes[i].code);
 				mClassCourseCode2nbStudent.put(str, classes[i].nbStudent);
 			}
 
 		}
 	}
+
 	public void mergeClassCourse() {
-		
+
 		lClassCourseGuestClass_Temp = new ArrayList<>();
 		lneedToBeDeletedClassCourse = new ArrayList<>();
 		// tim nbstudent/cc
-		
 
 		// find course need to be merged
 		// Course c = mCode2Course.get("JPS132");
@@ -3405,21 +3638,21 @@ public class DataCenter {
 		// DA.loadData_Building_v2("datafall/data_building_fall.txt");
 		// DA.loadData_Room_v2("datafall/data_room_fall.txt");
 
-//		 DA.loadData_ClassCourse_v2("datafall/data_classcourse_fall.txt");
-		 
-//		System.out.println(DA.nbClassCourse);
-//		 DA.loadData_ClassCourse_v2("datafall/data_classcourse_fall.txt");
-//		 DA.mergeClassCourse();
-//		 DA.reloadData_ClassCourse_v2("datafall/data_classcourse_fall.txt");
-//		 DA.savedata_ClassCourse("datafall/data_classcourse_fall_saved.txt");
-//		 DA.savedata_MergedList("datafall/data_mergedList_fall_saved.txt");
-//		 DA.saveData_DeletedList("datafall/data_deletedList_fall.txt");
+		// DA.loadData_ClassCourse_v2("datafall/data_classcourse_fall.txt");
+
+		// System.out.println(DA.nbClassCourse);
+		// DA.loadData_ClassCourse_v2("datafall/data_classcourse_fall.txt");
+		// DA.mergeClassCourse();
+		// DA.reloadData_ClassCourse_v2("datafall/data_classcourse_fall.txt");
+		// DA.savedata_ClassCourse("datafall/data_classcourse_fall_saved.txt");
+		// DA.savedata_MergedList("datafall/data_mergedList_fall_saved.txt");
+		// DA.saveData_DeletedList("datafall/data_deletedList_fall.txt");
 		System.out.println(DA.nbClassCourse);
 		System.out.println("load data:");
 		DA.loadData_ClassCourse_v2("datafall/data_classcourse_fall_saved.txt");
 		DA.loadData_DeletedList("datafall/data_deletedList_fall.txt");
 		DA.loadData_mergedCases("datafall/data_mergedList_fall_saved.txt");
-//		DA.makeMustNotConflictClassCourseList();
+		// DA.makeMustNotConflictClassCourseList();
 		// DA.testfindRoomLimitEachCourse();
 		// DA.loadData_mergedCases("datasm/data_mergedcases_sm.txt");
 		// DA.loadData_mergedCases("data_mergedCases_sample.txt");

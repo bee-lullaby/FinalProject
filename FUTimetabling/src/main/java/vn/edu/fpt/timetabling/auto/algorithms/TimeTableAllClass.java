@@ -3581,8 +3581,8 @@ public class TimeTableAllClass {
 		TA.DA.loadData_mergedCases(fn_data_mergedCases);
 
 //		 TA.DA.loadData_ClassCourse_v2(fn_data_classcourse);
-//		 TA.DA.mergeClassCourse();
-//		 TA.DA.reloadData_ClassCourse_v2(fn_data_classcourse);
+		 TA.DA.mergeClassCourse();
+		 TA.DA.reloadData_ClassCourse_v2(fn_data_classcourse);
 
 		TA.DA.loadData_Building_v2(fn_data_building);
 		TA.DA.loadData_Room_v2(fn_data_room);

@@ -47,10 +47,11 @@ public class TeacherSemesterDAOImpl implements TeacherSemesterDAO {
 		List<TeacherSemester> teacherSemesters = (List<TeacherSemester>) query.list();
 		return teacherSemesters;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<TeacherSemester> listTeacherSemestersBySemester(int semesterId, boolean jointTeacherCourseSemesters, boolean jointTimetables) { 
+	public List<TeacherSemester> listTeacherSemestersBySemester(int semesterId, boolean jointTeacherCourseSemesters,
+			boolean jointTimetables) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.TeacherSemester TS";
 		if (jointTeacherCourseSemesters) {
 			hql += " LEFT OUTER JOIN FETCH TS.teacherCourseSemesters";
@@ -65,8 +66,7 @@ public class TeacherSemesterDAOImpl implements TeacherSemesterDAO {
 		List<TeacherSemester> teacherSemesters = (List<TeacherSemester>) query.list();
 		return teacherSemesters;
 	}
-	
-	
+
 	@Override
 	public TeacherSemester getTeacherSemesterById(int teacherSemesterId, boolean jointTeacherCourseSemesters,
 			boolean jointTimetables) {
@@ -82,10 +82,10 @@ public class TeacherSemesterDAOImpl implements TeacherSemesterDAO {
 		query.setParameter("teacherSemesterId", teacherSemesterId);
 		return (TeacherSemester) query.uniqueResult();
 	}
-	
+
 	@Override
-	public TeacherSemester getTeacherSemesterByTeacherSemester(int teacherId, int semesterId,  boolean jointTeacherCourseSemesters,
-			boolean jointTimetables) {
+	public TeacherSemester getTeacherSemesterByTeacherSemester(int teacherId, int semesterId,
+			boolean jointTeacherCourseSemesters, boolean jointTimetables) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.TeacherSemester TS";
 		if (jointTeacherCourseSemesters) {
 			hql += " LEFT OUTER JOIN FETCH TS.teacherCourseSemesters";
@@ -99,10 +99,10 @@ public class TeacherSemesterDAOImpl implements TeacherSemesterDAO {
 		query.setParameter("teacherId", teacherId);
 		return (TeacherSemester) query.uniqueResult();
 	}
-	
+
 	@Override
-	public TeacherSemester getTeacherSemesterByAccount(int semesterId, String account, boolean jointTeacherCourseSemesters,
-			boolean jointTimetables) {
+	public TeacherSemester getTeacherSemesterByAccount(int semesterId, String account,
+			boolean jointTeacherCourseSemesters, boolean jointTimetables) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.TeacherSemester TS";
 		if (jointTeacherCourseSemesters) {
 			hql += " LEFT OUTER JOIN FETCH TS.teacherCourseSemesters";
@@ -121,5 +121,17 @@ public class TeacherSemesterDAOImpl implements TeacherSemesterDAO {
 	public void deleteTeacherSemester(int teacherSemesterId) {
 		TeacherSemester teacherSemester = getTeacherSemesterById(teacherSemesterId, false, false);
 		getCurrentSession().delete(teacherSemester);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<TeacherSemester> listTeacherSemestersByCourse(int courseId) {
+		String hql = "SELECT TCS.teacherSemester FROM vn.edu.fpt.timetabling.model.TeacherCourseSemester TCS"
+				+ " WHERE TCS.courseSemester.course.courseId = :courseId";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("courseId", courseId);
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<TeacherSemester> teacherSemesters = (List<TeacherSemester>) query.list();
+		return teacherSemesters;
 	}
 }

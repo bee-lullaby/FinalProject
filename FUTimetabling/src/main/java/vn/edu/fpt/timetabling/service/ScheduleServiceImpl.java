@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import vn.edu.fpt.timetabling.auto.entities.DataCenter;
+import vn.edu.fpt.timetabling.model.Building;
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassCourseSemesterMerge;
 import vn.edu.fpt.timetabling.model.ClassSemester;
@@ -26,6 +27,7 @@ import vn.edu.fpt.timetabling.model.Department;
 import vn.edu.fpt.timetabling.model.Room;
 import vn.edu.fpt.timetabling.model.Semester;
 import vn.edu.fpt.timetabling.model.TeacherCourseSemester;
+import vn.edu.fpt.timetabling.model.TeacherSemester;
 import vn.edu.fpt.timetabling.model.Timetable;
 import vn.edu.fpt.timetabling.utils.TimetableUtils;
 
@@ -48,58 +50,52 @@ public class ScheduleServiceImpl implements ScheduleService {
 	private DepartmentService departmentService;
 	@Autowired
 	private RoomService roomService;
+	@Autowired
+	private TeacherSemesterService teacherSemesterService;
+	@Autowired
+	private BuildingService buildingService;
 
 	@Override
 	public List<ClassSemester> listClassBySemester(int semesterId) {
 		List<ClassSemester> classSemesters = new ArrayList<ClassSemester>();
-		classSemesters.addAll(semesterService.getSemesterById(semesterId, true,
-				false, false, false).getClassSemesters());
+		classSemesters
+				.addAll(semesterService.getSemesterById(semesterId, true, false, false, false).getClassSemesters());
 		return classSemesters;
 	}
 
 	@Override
-	public List<ClassCourseSemester> listClassCourseSemesterByClassSemester(
-			int classId, int semesterId) {
-		ClassSemester classSemester = classSemesterService
-				.getClassSemesterByClassSemester(semesterId, classId, true);
+	public List<ClassCourseSemester> listClassCourseSemesterByClassSemester(int classId, int semesterId) {
+		ClassSemester classSemester = classSemesterService.getClassSemesterByClassSemester(semesterId, classId, true);
 		List<ClassCourseSemester> classCourseSemesters = new ArrayList<ClassCourseSemester>();
 		classCourseSemesters.addAll(classSemester.getClassCourseSemesters());
 		return classCourseSemesters;
 	}
 
 	@Override
-	public List<CourseSemester> listCourseSemesterByClass(int classId,
-			int semesterId) {
-		ClassSemester classSemester = classSemesterService
-				.getClassSemesterByClassSemester(semesterId, classId, true);
-		Set<ClassCourseSemester> classCourseSemesters = classSemester
-				.getClassCourseSemesters();
+	public List<CourseSemester> listCourseSemesterByClass(int classId, int semesterId) {
+		ClassSemester classSemester = classSemesterService.getClassSemesterByClassSemester(semesterId, classId, true);
+		Set<ClassCourseSemester> classCourseSemesters = classSemester.getClassCourseSemesters();
 		List<CourseSemester> courseSemesters = new ArrayList<CourseSemester>();
 		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
 			courseSemesters.add(courseSemesterService.getCourseSemesterById(
-					classCourseSemester.getCourseSemester()
-							.getCourseSemesterId(), true, true, false));
+					classCourseSemester.getCourseSemester().getCourseSemesterId(), true, true, false));
 		}
 		return courseSemesters;
 	}
 
 	@Override
-	public List<TeacherCourseSemester> listTeacherByCourseSemester(int classId,
-			int semesterId) {
-		List<CourseSemester> courseSemesters = listCourseSemesterByClass(
-				classId, semesterId);
+	public List<TeacherCourseSemester> listTeacherByCourseSemester(int classId, int semesterId) {
+		List<CourseSemester> courseSemesters = listCourseSemesterByClass(classId, semesterId);
 		List<TeacherCourseSemester> teacherCourseSemesters = new ArrayList<TeacherCourseSemester>();
 		for (CourseSemester courseSemester : courseSemesters) {
-			teacherCourseSemesters.addAll(courseSemester
-					.getTeacherCourseSemesters());
+			teacherCourseSemesters.addAll(courseSemester.getTeacherCourseSemesters());
 		}
 		return teacherCourseSemesters;
 	}
 
 	@Override
 	public List<DaySlot> getListDaySlot(int semesterId, int classId, int week) {
-		Semester semester = semesterService.getSemesterById(semesterId, false,
-				false, false, false);
+		Semester semester = semesterService.getSemesterById(semesterId, false, false, false, false);
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = semester.getStartDate();
@@ -108,19 +104,16 @@ public class ScheduleServiceImpl implements ScheduleService {
 		cal.set(Calendar.DATE, cal.get(Calendar.DATE) - 1 + 7 * (week - 1));
 
 		// Get List Class Course Semester based on Class//
-		List<ClassCourseSemester> classCourseSemesters = listClassCourseSemesterByClassSemester(
-				classId, semesterId);
+		List<ClassCourseSemester> classCourseSemesters = listClassCourseSemesterByClassSemester(classId, semesterId);
 
 		// Get List Timetable based on Class //
-		List<Timetable> timetableBasedClass = timetableService
-				.listTimetablesByCCSs(classCourseSemesters);
+		List<Timetable> timetableBasedClass = timetableService.listTimetablesByCCSs(classCourseSemesters);
 
 		// Create List Course Semester of Class //
 		List<CourseSemester> courseSemesters = new ArrayList<CourseSemester>();
 		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
 			courseSemesters.add(courseSemesterService.getCourseSemesterById(
-					classCourseSemester.getCourseSemester()
-							.getCourseSemesterId(), true, true, false));
+					classCourseSemester.getCourseSemester().getCourseSemesterId(), true, true, false));
 		}
 
 		// Create Map between course and timetable //
@@ -128,8 +121,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		for (CourseSemester courseSemester : courseSemesters) {
 			List<ClassCourseSemester> list = new ArrayList<ClassCourseSemester>();
 			list.addAll(courseSemester.getClassCourseSemesters());
-			mapCourseTimetable.put(courseSemester,
-					timetableService.listTimetablesByCCSs(list));
+			mapCourseTimetable.put(courseSemester, timetableService.listTimetablesByCCSs(list));
 		}
 
 		// List All Timetable
@@ -141,13 +133,11 @@ public class ScheduleServiceImpl implements ScheduleService {
 		for (Timetable t : allTimetable) {
 			String key = sdf.format(t.getDate()) + " " + t.getSlot();
 			if (mapDateAndNumberOfClasses.containsKey(key)) {
-				mapDateAndNumberOfClasses.get(key).add(
-						t.getClassCourseSemester().getClassSemester()
-								.getClassSemesterId());
+				mapDateAndNumberOfClasses.get(key)
+						.add(t.getClassCourseSemester().getClassSemester().getClassSemesterId());
 			} else {
 				Set<Integer> setClasses = new LinkedHashSet<Integer>();
-				setClasses.add(t.getClassCourseSemester().getClassSemester()
-						.getClassSemesterId());
+				setClasses.add(t.getClassCourseSemester().getClassSemester().getClassSemesterId());
 				mapDateAndNumberOfClasses.put(key, setClasses);
 
 			}
@@ -167,21 +157,18 @@ public class ScheduleServiceImpl implements ScheduleService {
 				ds.setDate(sdf.format(cal.getTime()));
 				ds.setSlot(j);
 
-				Object o = TimetableUtils.containsTimetable(
-						timetableBasedClass, cal.getTime(), j);
+				Object o = TimetableUtils.containsTimetable(timetableBasedClass, cal.getTime(), j);
 				if (o != null) {
 					Timetable t = (Timetable) o;
-					ds.setSetCourseSlot(t.getClassCourseSemester()
-							.getClassCourseSemesterId());
+					ds.setSetCourseSlot(t.getClassCourseSemester().getClassCourseSemesterId());
 				} else {
 					ds.setSetCourseSlot(-1);
 				}
 				for (CourseSemester cs : courseSemesters) {
 					DataSchedule dataS = new DataSchedule();
 					dataS.setNumOfClasses(cs.getClassCourseSemesters().size());
-					dataS.setLearnCourseInSlot(TimetableUtils
-							.findNumberSameDaySlot(mapCourseTimetable.get(cs),
-									cal.getTime(), j));
+					dataS.setLearnCourseInSlot(
+							TimetableUtils.findNumberSameDaySlot(mapCourseTimetable.get(cs), cal.getTime(), j));
 
 					// Set Rooms
 					dataS.setTotalRooms(allRooms.size());
@@ -189,8 +176,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 					// Set Remains Room for this day and this slot.
 					String key = ds.getDate() + " " + ds.getSlot();
 					if (mapDateAndNumberOfClasses.containsKey(key)) {
-						dataS.setClassesInSlot(mapDateAndNumberOfClasses.get(
-								key).size());
+						dataS.setClassesInSlot(mapDateAndNumberOfClasses.get(key).size());
 					} else {
 						dataS.setClassesInSlot(0);
 					}
@@ -198,17 +184,14 @@ public class ScheduleServiceImpl implements ScheduleService {
 					for (ClassCourseSemester ccs : classCourseSemesters) {
 						if (ccs.getCourseSemester().compareTo(cs) == 0) {
 							if (ccs.getTimetable() != null) {
-								dataS.setRemainSlots(ccs.getCourseSemester()
-										.getSlots() - ccs.getTimetable().size());
+								dataS.setRemainSlots(ccs.getCourseSemester().getSlots() - ccs.getTimetable().size());
 							} else {
-								dataS.setRemainSlots(ccs.getCourseSemester()
-										.getSlots());
+								dataS.setRemainSlots(ccs.getCourseSemester().getSlots());
 							}
 						}
 					}
 
-					dataS.setNumOfTeachers(cs.getTeacherCourseSemesters()
-							.size());
+					dataS.setNumOfTeachers(cs.getTeacherCourseSemesters().size());
 					// dataS.setNumOfTeachers(5);
 					dataSchedule.put(cs.getCourse().getCode(), dataS);
 				}
@@ -221,8 +204,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	public boolean saveTimetable(int semesterId, List<DaySlot> daySlots,
-			List<DaySlot> prevDaySlots) throws ParseException {
+	public boolean saveTimetable(int semesterId, List<DaySlot> daySlots, List<DaySlot> prevDaySlots)
+			throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 		HashMap<Integer, Set<Integer>> mMergeClass = classCourseSemesterMergeService
@@ -241,48 +224,37 @@ public class ScheduleServiceImpl implements ScheduleService {
 				date = sdf.parse(dayslot.getDate());
 
 				if (prevDaySlot.getSetCourseSlot() != -1) {
-					timetable = timetableService
-							.getTimetableByDateSlotClassCourse(date,
-									prevDaySlot.getSlot(),
-									prevDaySlot.getSetCourseSlot());
+					timetable = timetableService.getTimetableByDateSlotClassCourse(date, prevDaySlot.getSlot(),
+							prevDaySlot.getSetCourseSlot());
 					if (dayslot.getSetCourseSlot() != -1) {
 						ClassCourseSemester ccs = classCourseSemesterService
-								.getClassCourseSemesterById(
-										dayslot.getSetCourseSlot(), false,
-										false);
-						if (mMergeClass.containsKey(timetable
-								.getClassCourseSemester().getCourseSemester()
-								.getCourseSemesterId())) {
+								.getClassCourseSemesterById(dayslot.getSetCourseSlot(), false, false);
+						if (mMergeClass.containsKey(
+								timetable.getClassCourseSemester().getCourseSemester().getCourseSemesterId())) {
 							Timetable newT = new Timetable();
 							newT.setDate(timetable.getDate());
 							newT.setSlot(timetable.getSlot());
-							newT.setClassCourseSemester(timetable
-									.getClassCourseSemester());
+							newT.setClassCourseSemester(timetable.getClassCourseSemester());
 							mActionTimetable.get("delete").add(newT);
 						}
 						timetable.setClassCourseSemester(ccs);
 
-						if (mMergeClass.containsKey(ccs.getCourseSemester()
-								.getCourseSemesterId())) {
+						if (mMergeClass.containsKey(ccs.getCourseSemester().getCourseSemesterId())) {
 							mActionTimetable.get("add").add(timetable);
 						}
 						timetableService.updateTimetable(timetable);
 					} else {
-						if (mMergeClass.containsKey(timetable
-								.getClassCourseSemester().getCourseSemester()
-								.getCourseSemesterId())) {
+						if (mMergeClass.containsKey(
+								timetable.getClassCourseSemester().getCourseSemester().getCourseSemesterId())) {
 							mActionTimetable.get("delete").add(timetable);
 						}
-						timetableService.deleteTimetable(timetable
-								.getTimeTableId());
+						timetableService.deleteTimetable(timetable.getTimeTableId());
 					}
 				} else {
 					timetable = new Timetable();
 					ClassCourseSemester ccs = classCourseSemesterService
-							.getClassCourseSemesterById(
-									dayslot.getSetCourseSlot(), false, false);
-					if (mMergeClass.containsKey(ccs.getCourseSemester()
-							.getCourseSemesterId())) {
+							.getClassCourseSemesterById(dayslot.getSetCourseSlot(), false, false);
+					if (mMergeClass.containsKey(ccs.getCourseSemester().getCourseSemesterId())) {
 						mActionTimetable.get("add").add(timetable);
 					}
 					timetable.setClassCourseSemester(ccs);
@@ -297,22 +269,19 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 		// add merge class
 		for (Timetable t : mActionTimetable.get("add")) {
-			for (int ccsId : mMergeClass.get(t.getClassCourseSemester()
-					.getCourseSemester().getCourseSemesterId())) {
-				if (ccsId != t.getClassCourseSemester()
-						.getClassCourseSemesterId()) {
-					ClassCourseSemester ccsMerge = classCourseSemesterService
-							.getClassCourseSemesterById(ccsId, true, false);
+			for (int ccsId : mMergeClass.get(t.getClassCourseSemester().getCourseSemester().getCourseSemesterId())) {
+				if (ccsId != t.getClassCourseSemester().getClassCourseSemesterId()) {
+					ClassCourseSemester ccsMerge = classCourseSemesterService.getClassCourseSemesterById(ccsId, true,
+							false);
 					Timetable newTimetable = new Timetable();
 					newTimetable.setClassCourseSemester(ccsMerge);
 					newTimetable.setDate(t.getDate());
 					newTimetable.setRoom(t.getRoom());
 					newTimetable.setSlot(t.getSlot());
 					newTimetable.setTeacherSemester(t.getTeacherSemester());
-					if (timetableService.getTimetableByDateSlotClassCourse(
-							newTimetable.getDate(), newTimetable.getSlot(),
-							newTimetable.getClassCourseSemester()
-									.getClassCourseSemesterId()) == null) {
+					if (timetableService.getTimetableByDateSlotClassCourse(newTimetable.getDate(),
+							newTimetable.getSlot(),
+							newTimetable.getClassCourseSemester().getClassCourseSemesterId()) == null) {
 						timetableService.addTimetable(newTimetable);
 					}
 				}
@@ -321,13 +290,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 		// delete merge class when updated or deleted
 		for (Timetable t : mActionTimetable.get("delete")) {
-			for (int ccsId : mMergeClass.get(t.getClassCourseSemester()
-					.getCourseSemester().getCourseSemesterId())) {
-				if (ccsId != t.getClassCourseSemester()
-						.getClassCourseSemesterId()) {
-					Timetable dT = timetableService
-							.getTimetableByDateSlotClassCourse(t.getDate(),
-									t.getSlot(), ccsId);
+			for (int ccsId : mMergeClass.get(t.getClassCourseSemester().getCourseSemester().getCourseSemesterId())) {
+				if (ccsId != t.getClassCourseSemester().getClassCourseSemesterId()) {
+					Timetable dT = timetableService.getTimetableByDateSlotClassCourse(t.getDate(), t.getSlot(), ccsId);
 					if (dT != null) {
 						timetableService.deleteTimetable(dT.getTimeTableId());
 					}
@@ -338,39 +303,32 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	public boolean generateFromPreviousWeek(int semesterId, int classId,
-			int week) {
+	public boolean generateFromPreviousWeek(int semesterId, int classId, int week) {
 		if (week == 1) {
 			return true;
 		}
 
 		// Get Semester
-		Semester semester = semesterService.getSemesterById(semesterId, false,
-				false, false, false);
+		Semester semester = semesterService.getSemesterById(semesterId, false, false, false, false);
 
 		// Get Start Calendar and End Calendar
 		Date startDate = semester.getStartDate();
 		Calendar startWeek = Calendar.getInstance();
 		Calendar endWeek = Calendar.getInstance();
 		startWeek.setTime(startDate);
-		startWeek.set(Calendar.DATE, startWeek.get(Calendar.DATE) + 7
-				* (week - 2));
+		startWeek.set(Calendar.DATE, startWeek.get(Calendar.DATE) + 7 * (week - 2));
 		endWeek.setTime(startWeek.getTime());
 		endWeek.set(Calendar.DATE, endWeek.get(Calendar.DATE) + 6);
 
 		// get Class Semester
-		ClassSemester classSemester = classSemesterService
-				.getClassSemesterByClassSemester(semesterId, classId, true);
+		ClassSemester classSemester = classSemesterService.getClassSemesterByClassSemester(semesterId, classId, true);
 
 		// Get List Timetable of class in prev week
-		List<Timetable> timetableOfClassInPrevWeek = timetableService
-				.listTimetablesByClassCourseSemestersInWeek(
-						classSemester.getClassCourseSemesters(),
-						startWeek.getTime(), endWeek.getTime());
+		List<Timetable> timetableOfClassInPrevWeek = timetableService.listTimetablesByClassCourseSemestersInWeek(
+				classSemester.getClassCourseSemesters(), startWeek.getTime(), endWeek.getTime());
 		startWeek.set(Calendar.DATE, startWeek.get(Calendar.DATE) + 7);
 		endWeek.set(Calendar.DATE, endWeek.get(Calendar.DATE) + 7);
-		timetableService.deleteTimetablesByCCSInWeek(
-				classSemester.getClassSemesterId(), startWeek.getTime(),
+		timetableService.deleteTimetablesByCCSInWeek(classSemester.getClassSemesterId(), startWeek.getTime(),
 				endWeek.getTime());
 
 		HashMap<Integer, Set<Integer>> mMergeClass = classCourseSemesterMergeService
@@ -390,18 +348,16 @@ public class ScheduleServiceImpl implements ScheduleService {
 			t.setTeacherSemester(timetable.getTeacherSemester());
 			timetableService.addTimetable(t);
 
-			if (mMergeClass.containsKey(t.getClassCourseSemester()
-					.getCourseSemester().getCourseSemesterId())) {
+			if (mMergeClass.containsKey(t.getClassCourseSemester().getCourseSemester().getCourseSemesterId())) {
 				sTimetable.add(t);
 			}
 		}
 
 		for (Timetable t : sTimetable) {
-			for (int ccsId : mMergeClass.get(t.getClassCourseSemester()
-					.getCourseSemester().getCourseSemesterId())) {
-				if(t.getClassCourseSemester().getClassCourseSemesterId() != ccsId) {
-					ClassCourseSemester ccsMerge = classCourseSemesterService
-							.getClassCourseSemesterById(ccsId, true, false);
+			for (int ccsId : mMergeClass.get(t.getClassCourseSemester().getCourseSemester().getCourseSemesterId())) {
+				if (t.getClassCourseSemester().getClassCourseSemesterId() != ccsId) {
+					ClassCourseSemester ccsMerge = classCourseSemesterService.getClassCourseSemesterById(ccsId, true,
+							false);
 					Timetable newTimetable = new Timetable();
 					newTimetable.setClassCourseSemester(ccsMerge);
 					newTimetable.setDate(t.getDate());
@@ -417,72 +373,85 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Override
 	public void autoSchedule(int semesterId) {
-		Semester semester = semesterService.getSemesterById(semesterId, true,
-				true, false, false);
+		Semester semester = semesterService.getSemesterById(semesterId, true, true, false, false);
 		List<Department> departments = departmentService.listDepartments();
 		List<Room> rooms = roomService.listRooms(false);
 		Set<ClassSemester> classSemesters = semester.getClassSemesters();
 		Set<CourseSemester> courseSemesters = semester.getCourseSemesters();
+		List<TeacherSemester> teacherSemesters = teacherSemesterService.listTeacherSemestersBySemester(semesterId, true,
+				false);
 		List<ClassCourseSemesterMerge> classCourseSemesterMerges = classCourseSemesterMergeService
 				.listClassCourseSemesterMerges();
+		List<Building> buildings = buildingService.listBuildings();
 		List<String> departmentData = new ArrayList<>();
 		List<String> roomData = new ArrayList<>();
 		List<String> classData = new ArrayList<>();
 		List<String> courseData = new ArrayList<>();
 		List<String> classCourseData = new ArrayList<>();
 		List<String> mergeClassData = new ArrayList<>();
+		List<String> teacherData = new ArrayList<>();
+		List<String> buildingData = new ArrayList<>();
+		List<String> teacherCourseData = new ArrayList<>();
 		for (Department department : departments) {
-			departmentData.add(department.getDepartmentId() + "|"
-					+ department.getCode());
+			departmentData.add(department.getDepartmentId() + "|" + department.getCode());
 		}
 		for (Room room : rooms) {
-			roomData.add(room.getRoomId() + "|" + room.getCode() + "|"
-					+ room.getBuilding().getCode() + "|" + room.getCapacity());
+			roomData.add(room.getRoomId() + "|" + room.getCode() + "|" + room.getBuilding().getCode() + "|"
+					+ room.getCapacity());
 		}
 		for (ClassSemester classSemester : classSemesters) {
-			classData.add(classSemester.getClassSemesterId() + "|"
-					+ classSemester.getClassFPT().getCode());
-			Set<ClassCourseSemester> classCourseSemesters = classSemester
-					.getClassCourseSemesters();
+			classData.add(classSemester.getClassSemesterId() + "|" + classSemester.getClassFPT().getCode());
+			Set<ClassCourseSemester> classCourseSemesters = classSemester.getClassCourseSemesters();
 			for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
-				String data = classCourseSemester.getClassCourseSemesterId()
-						+ "|"
-						+ classCourseSemester.getCourseSemester().getCourse()
-								.getCode()
-						+ "|"
-						+ classCourseSemester.getClassSemester().getClassFPT()
-								.getCode() + "|";
+				int classCourseSemesterId = classCourseSemester.getClassCourseSemesterId();
+				String data = classCourseSemesterId + "|"
+						+ classCourseSemester.getCourseSemester().getCourse().getCode() + "|"
+						+ classCourseSemester.getClassSemester().getClassFPT().getCode() + "|";
 				if (classCourseSemester.isSemesterLong()) {
 					data += "3";
 				} else {
 					data += classCourseSemester.getBlockCondition();
 				}
+				data += "|" + classCourseSemesterService.getNumberOfStudents(classCourseSemesterId);
 				classCourseData.add(data);
 			}
 		}
 		for (CourseSemester courseSemester : courseSemesters) {
 			Course course = courseSemester.getCourse();
-			courseData
-					.add(courseSemester.getCourseSemesterId() + "|"
-							+ course.getCode() + "|"
-							+ course.getDepartment().getCode());
+			courseData.add(courseSemester.getCourseSemesterId() + "|" + course.getCode() + "|"
+					+ course.getDepartment().getCode());
+			List<TeacherSemester> teacherSemesterCourse = teacherSemesterService
+					.listTeacherSemestersByCourse(course.getCourseId());
+			String row = course.getCode() + "|" + teacherSemesterCourse.size();
+			for (TeacherSemester teacherSemester : teacherSemesterCourse) {
+				row += "|" + teacherSemester.getTeacher().getAccount();
+			}
+			teacherCourseData.add(row);
 		}
 		for (ClassCourseSemesterMerge classCourseSemesterMerge : classCourseSemesterMerges) {
-			mergeClassData.add(classCourseSemesterMerge
-					.getClassCourseSemester1().getCourseSemester().getCourse()
-					.getCode()
-					+ "|"
-					+ classCourseSemesterMerge.getClassCourseSemester1()
-							.getClassSemester().getClassFPT().getCode()
-					+ "|"
-					+ classCourseSemesterMerge.getClassCourseSemester2()
-							.getClassSemester().getClassFPT().getCode());
+			mergeClassData.add(
+					classCourseSemesterMerge.getClassCourseSemester1().getCourseSemester().getCourse().getCode() + "|"
+							+ classCourseSemesterMerge.getClassCourseSemester1().getClassSemester().getClassFPT()
+									.getCode()
+							+ "|" + classCourseSemesterMerge.getClassCourseSemester2().getClassSemester().getClassFPT()
+									.getCode());
+		}
+		for (TeacherSemester teacherSemester : teacherSemesters) {
+			teacherData.add(teacherSemester.getTeacherSemesterId() + "|" + teacherSemester.getTeacher().getAccount()
+					+ "|" + teacherSemester.getDepartment().getCode());
+		}
+		for (Building building : buildings) {
+			buildingData.add(building.getBuildingId() + "|" + building.getCode());
 		}
 		DataCenter dataCenter = new DataCenter();
+		dataCenter.loadData_Building_v2(buildingData);
+		dataCenter.loadData_Room_v2(roomData);
 		dataCenter.loadData_Department_v2(departmentData);
 		dataCenter.loadData_Class_v2(classData);
 		dataCenter.loadData_Course_v2(courseData);
 		dataCenter.loadData_ClassCourse_v2(classCourseData);
-		dataCenter.loadData_mergedCases(mergeClassData);
+		dataCenter.loadData_Teacher_v2(teacherData);
+		dataCenter.loadData_Course_Teacher_v2(teacherCourseData);
+		// dataCenter.loadData_mergedCases(mergeClassData);
 	}
 }

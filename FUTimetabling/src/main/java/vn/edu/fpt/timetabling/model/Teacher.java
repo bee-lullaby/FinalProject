@@ -25,10 +25,7 @@ public class Teacher {
 	private String account;
 	private String name;
 	private String email;
-	
-	@Column(name = "account_type")
-	private String accountType;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "teacher", orphanRemoval = true)
 	@OrderBy
 	Set<TeacherSemester> teacherSemesters = new LinkedHashSet<TeacherSemester>();
@@ -41,7 +38,8 @@ public class Teacher {
 	}
 
 	/**
-	 * @param teacherSemesters the teacherSemesters to set
+	 * @param teacherSemesters
+	 *            the teacherSemesters to set
 	 */
 	public void setTeacherSemesters(Set<TeacherSemester> teacherSemesters) {
 		this.teacherSemesters = teacherSemesters;
@@ -61,14 +59,12 @@ public class Teacher {
 	 * @param email
 	 * @param accountType
 	 */
-	public Teacher(int teacherId, String account, String name, String email,
-			String accountType) {
+	public Teacher(int teacherId, String account, String name, String email) {
 		super();
 		this.teacherId = teacherId;
 		this.account = account;
 		this.name = name;
 		this.email = email;
-		this.accountType = accountType;
 	}
 
 	/**
@@ -79,7 +75,8 @@ public class Teacher {
 	}
 
 	/**
-	 * @param teacherId the teacherId to set
+	 * @param teacherId
+	 *            the teacherId to set
 	 */
 	public void setTeacherId(int teacherId) {
 		this.teacherId = teacherId;
@@ -93,7 +90,8 @@ public class Teacher {
 	}
 
 	/**
-	 * @param account the account to set
+	 * @param account
+	 *            the account to set
 	 */
 	public void setAccount(String account) {
 		this.account = account;
@@ -107,7 +105,8 @@ public class Teacher {
 	}
 
 	/**
-	 * @param name the name to set
+	 * @param name
+	 *            the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -121,24 +120,10 @@ public class Teacher {
 	}
 
 	/**
-	 * @param email the email to set
+	 * @param email
+	 *            the email to set
 	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-	/**
-	 * @return the accountType
-	 */
-	public String getAccountType() {
-		return accountType;
-	}
-
-	/**
-	 * @param accountType the accountType to set
-	 */
-	public void setAccountType(String accountType) {
-		this.accountType = accountType;
-	}
-
 }
