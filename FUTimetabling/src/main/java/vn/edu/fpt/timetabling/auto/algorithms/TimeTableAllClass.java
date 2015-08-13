@@ -2616,7 +2616,7 @@ public class TimeTableAllClass {
 		System.out.println("Time-consuming: " + estimatedTime / 1000 + " secs");
 	}
 
-	public void modelling_ttb_manual() {
+	/*public void modelling_ttb_manual() {
 		DA.makeMustNotConflictClassCourseList();
 		DA.makeMustNotConflictMatrix();
 		String fn = "datasm/variable.txt";
@@ -2694,7 +2694,7 @@ public class TimeTableAllClass {
 			}
 		}
 		System.out.println("total " + count + " violated variables.");
-	}
+	}*/
 
 	public void buildTTB_manual() {
 		DA.classTTB_manual = new SingleSolution[DA.nbClass];

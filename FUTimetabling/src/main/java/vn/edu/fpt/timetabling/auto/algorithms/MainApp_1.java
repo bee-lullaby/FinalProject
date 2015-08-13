@@ -172,7 +172,7 @@ public class MainApp_1 {
 
 		DA.loadData_Course_Class(fn_data_course_class); // for all phases
 		DA.loadData_Teacher_UsingCode(fn_data_teacher); // for phase 3
-		DA.loadData_Room_Building(fn_data_room_building); // for phase 4
+		//DA.loadData_Room_Building(fn_data_room_building); // for phase 4
 		DA.loadData_mergedCases(fn_data_mergedCases); // for phase 1
 
 		// ---------------------------------------------------------------------------

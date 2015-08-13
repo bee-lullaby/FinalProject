@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import vn.edu.fpt.timetabling.auto.algorithms.TimeTableAllClass;
 import vn.edu.fpt.timetabling.auto.entities.DataCenter;
 import vn.edu.fpt.timetabling.model.Building;
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
@@ -450,8 +451,11 @@ public class ScheduleServiceImpl implements ScheduleService {
 		dataCenter.loadData_Class_v2(classData);
 		dataCenter.loadData_Course_v2(courseData);
 		dataCenter.loadData_ClassCourse_v2(classCourseData);
+		dataCenter.assignStudentEachClassCourse();
 		dataCenter.loadData_Teacher_v2(teacherData);
 		dataCenter.loadData_Course_Teacher_v2(teacherCourseData);
+		dataCenter.mergeClassCourse();
+		dataCenter.reloadData_ClassCourse_v2(classCourseData);
 		// dataCenter.loadData_mergedCases(mergeClassData);
 	}
 }
