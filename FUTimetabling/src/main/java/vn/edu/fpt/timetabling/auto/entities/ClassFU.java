@@ -7,11 +7,18 @@ public class ClassFU {
 	 */
 	public int ID;
 	public String code;
+	public int nbStudent;
 
 	public ClassFU(int iD, String code) {
 		super();
 		ID = iD;
 		this.code = code;
+	}
+	public ClassFU(int iD, String code,int nbS) {
+		super();
+		ID = iD;
+		this.code = code;
+		this.nbStudent=nbS;
 	}
 
 	public ClassFU() {

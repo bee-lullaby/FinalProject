@@ -144,7 +144,7 @@ public class HomeController {
 				session.setAttribute("email", email);
 				session.setAttribute("name", teacher.getName());
 				session.setAttribute("account", teacher.getAccount());
-				session.setAttribute("accountType", teacher.getAccountType());
+				session.setAttribute("accountType", "teacher");
 				session.setAttribute("roll", "teacher");
 				return "teacherPage";
 			} else if (student != null) {
