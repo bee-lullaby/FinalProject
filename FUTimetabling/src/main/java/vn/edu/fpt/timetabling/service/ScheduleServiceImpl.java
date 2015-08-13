@@ -9,12 +9,12 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import vn.edu.fpt.timetabling.auto.algorithms.TimeTableAllClass;
 import vn.edu.fpt.timetabling.auto.entities.DataCenter;
 import vn.edu.fpt.timetabling.model.Building;
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
@@ -397,8 +397,20 @@ public class ScheduleServiceImpl implements ScheduleService {
 			departmentData.add(department.getDepartmentId() + "|" + department.getCode());
 		}
 		for (Room room : rooms) {
-			roomData.add(room.getRoomId() + "|" + room.getCode() + "|" + room.getBuilding().getCode() + "|"
-					+ room.getCapacity());
+			String row = room.getRoomId() + "|" + room.getCode() + "|" + room.getBuilding().getCode() + "|"
+					+ room.getCapacity();
+			if (room.getCourses() == null || room.getCourses().isEmpty()) {
+				row += "|0";
+			} else {
+				StringTokenizer stringTokenizer = new StringTokenizer(room.getCourses(), " ");
+				int count = 0;
+				while (stringTokenizer.hasMoreTokens()) {
+					count++;
+					stringTokenizer.nextToken();
+				}
+				row += "|" + count + "|" + room.getCourses().replace(" ", "|");
+			}
+			roomData.add(row);
 		}
 		for (ClassSemester classSemester : classSemesters) {
 			classData.add(classSemester.getClassSemesterId() + "|" + classSemester.getClassFPT().getCode());
