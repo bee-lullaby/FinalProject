@@ -34,10 +34,6 @@ public class TeacherSemester {
 	@JoinColumn(name = "semester_id")
 	private Semester semester;
 
-	@ManyToOne
-	@JoinColumn(name = "department_id")
-	private Department department;
-
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "teacherSemester", orphanRemoval = true)
 	@OrderBy
 	Set<TeacherCourseSemester> teacherCourseSemesters = new LinkedHashSet<TeacherCourseSemester>();
@@ -45,14 +41,6 @@ public class TeacherSemester {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "teacherSemester", orphanRemoval = true)
 	@OrderBy
 	Set<Timetable> timetables = new LinkedHashSet<Timetable>();
-
-	public Department getDepartment() {
-		return department;
-	}
-
-	public void setDepartment(Department department) {
-		this.department = department;
-	}
 
 	public Set<TeacherCourseSemester> getTeacherCourseSemesters() {
 		return teacherCourseSemesters;

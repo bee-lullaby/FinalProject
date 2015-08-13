@@ -450,8 +450,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 									.getCode());
 		}
 		for (TeacherSemester teacherSemester : teacherSemesters) {
-			teacherData.add(teacherSemester.getTeacherSemesterId() + "|" + teacherSemester.getTeacher().getAccount()
-					+ "|" + teacherSemester.getDepartment().getCode());
+			teacherData.add(teacherSemester.getTeacherSemesterId() + "|" + teacherSemester.getTeacher().getAccount());
 		}
 		for (Building building : buildings) {
 			buildingData.add(building.getBuildingId() + "|" + building.getCode());
