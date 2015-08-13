@@ -82,7 +82,7 @@ table tr td {
 					<td>${fn:length(listClassWasSetCourse)}</td>
 				</tr>
 				<tr>
-					<th>Number of Classes was created timetable done:</th>
+					<th>Number of Classes was set timetable done:</th>
 					<td>${fn:length(listClassWasSetTimetablesDone)}</td>
 				</tr>
 	<!--		<tr>
@@ -96,7 +96,11 @@ table tr td {
 			<h3>Room Arrangement</h3>
 			<table class="table" style="width: 100%">
 				<tr>
-					<th>Number of Classes was created timetable done:</th>
+					<th>Total Classes:</th>
+					<td>${totalClasses}</td>
+				</tr>
+				<tr>
+					<th>Number of Classes was set timetable done:</th>
 					<td>${fn:length(listClassWasSetTimetablesDone)}</td>
 				</tr>
 				<tr>
@@ -115,7 +119,11 @@ table tr td {
 			<h3>Teacher Arrangement</h3>
 			<table class="table" style="width: 100%">
 				<tr>
-					<th>Number of Classes was created timetable done:</th>
+					<th>Total Classes:</th>
+					<td>${totalClasses}</td>
+				</tr>
+				<tr>
+					<th>Number of Classes was set timetable done:</th>
 					<td>${fn:length(listClassWasSetTimetablesDone)}</td>
 				</tr>
 				<tr>

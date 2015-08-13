@@ -87,7 +87,11 @@ public class HomeController {
 	public String logout(HttpSession session) {
 		session.removeAttribute("idToken");
 		session.removeAttribute("accessToken");
+		session.removeAttribute("id");
 		session.removeAttribute("email");
+		session.removeAttribute("name");
+		session.removeAttribute("account");
+		session.removeAttribute("accountType");
 		session.removeAttribute("roll");
 		return "home";
 	}
@@ -126,6 +130,7 @@ public class HomeController {
 			if (staff != null) {
 				session.setAttribute("idToken", token.getIdToken());
 				session.setAttribute("accessToken", token.getAccessToken());
+				session.setAttribute("id", staff.getStaffId());
 				session.setAttribute("email", email);
 				session.setAttribute("name", staff.getName());
 				session.setAttribute("account", staff.getAccount());
@@ -135,6 +140,7 @@ public class HomeController {
 			} else if (teacher != null) {
 				session.setAttribute("idToken", token.getIdToken());
 				session.setAttribute("accessToken", token.getAccessToken());
+				session.setAttribute("id", teacher.getTeacherId());
 				session.setAttribute("email", email);
 				session.setAttribute("name", teacher.getName());
 				session.setAttribute("account", teacher.getAccount());
@@ -144,6 +150,7 @@ public class HomeController {
 			} else if (student != null) {
 				session.setAttribute("idToken", token.getIdToken());
 				session.setAttribute("accessToken", token.getAccessToken());
+				session.setAttribute("id", student.getStudentId());
 				session.setAttribute("email", email);
 				session.setAttribute("name", student.getName());
 				session.setAttribute("account", student.getAccount());

@@ -87,11 +87,13 @@ public class ScheduleController extends GeneralController {
 				scheduleService.listTeacherByCourseSemester(classId, semesterId));
 
 		ObjectMapper om = new ObjectMapper();
-		StringWriter sw = new StringWriter();
-
+		StringWriter JSONdata = new StringWriter();
+		StringWriter JSONdataMergeClass = new StringWriter();
 		try {
-			om.writeValue(sw, scheduleService.getListDaySlot(semesterId, classId, week));
-			model.addAttribute("JSONdata", sw);
+			om.writeValue(JSONdata, scheduleService.getListDaySlot(semesterId, classId, week));
+			om.writeValue(JSONdataMergeClass, scheduleService.getMapCourseTimetable(semesterId, classId));
+			model.addAttribute("JSONdata", JSONdata);
+			model.addAttribute("JSONdataMergeClass", JSONdataMergeClass);
 		} catch (JsonGenerationException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {

@@ -184,7 +184,7 @@
 		<div class="tile-group double">
 			<span class="tile-group-title" style="color: black">ACTIVITIES</span>
 			<div class="tile-container">
-				<div class="tile-wide bg-cyan fg-white" data-role="tile">
+				<div class="tile-wide bg-cyan fg-white" data-role="tile" id="activity-viewTimetable">
 					<div class="tile-content iconic">
 						<div class="icon flaticon-check7"></div>
 					</div>

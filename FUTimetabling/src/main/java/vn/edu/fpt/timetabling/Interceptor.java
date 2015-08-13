@@ -13,7 +13,6 @@ public class Interceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		// return true;
 		HttpSession httpSession = request.getSession();
 		String url = request.getRequestURL().toString();
 		if (url.charAt(url.length() - 1) == '/') {

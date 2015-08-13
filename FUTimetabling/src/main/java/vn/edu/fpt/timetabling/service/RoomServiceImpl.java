@@ -62,6 +62,7 @@ public class RoomServiceImpl implements RoomService {
 					if (row.getCell(3) != null && row.getCell(3).getStringCellValue().trim().compareTo("") != 0) {
 						r.setCourses(row.getCell(3).getStringCellValue().trim());
 					}
+					r.setBuilding(building);
 					roomDAO.addRoom(r);	
 				} else {
 					r = new Room();
@@ -71,6 +72,7 @@ public class RoomServiceImpl implements RoomService {
 					if (row.getCell(3) != null && row.getCell(3).getStringCellValue().trim().compareTo("") != 0) {
 						r.setCourses(row.getCell(3).getStringCellValue().trim());
 					}
+					r.setBuilding(building);
 					roomDAO.addRoom(r);
 					
 				}

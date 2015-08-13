@@ -25,7 +25,9 @@ import vn.edu.fpt.timetabling.model.DaySlot;
 import vn.edu.fpt.timetabling.model.Department;
 import vn.edu.fpt.timetabling.model.Room;
 import vn.edu.fpt.timetabling.model.Semester;
+import vn.edu.fpt.timetabling.model.Teacher;
 import vn.edu.fpt.timetabling.model.TeacherCourseSemester;
+import vn.edu.fpt.timetabling.model.TeacherSemester;
 import vn.edu.fpt.timetabling.model.Timetable;
 import vn.edu.fpt.timetabling.utils.TimetableUtils;
 
@@ -125,13 +127,33 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 		// Create Map between course and timetable //
 		HashMap<CourseSemester, List<Timetable>> mapCourseTimetable = new HashMap<CourseSemester, List<Timetable>>();
+		HashMap<String, Set<Integer>> mMergeClass = classCourseSemesterMergeService.getMapCourseWithMergeClassInSemester(semesterId);
 		for (CourseSemester courseSemester : courseSemesters) {
 			List<ClassCourseSemester> list = new ArrayList<ClassCourseSemester>();
 			list.addAll(courseSemester.getClassCourseSemesters());
+			List<Integer> checkList = new ArrayList<Integer>();
+			for(String key : mMergeClass.keySet()) {
+				if(key.contains(Integer.toString(courseSemester.getCourseSemesterId()))) {
+					int count = 0;
+					for(int ccsId : mMergeClass.get(key)) {
+						if(count == 0) {
+							count++;
+							continue;
+						} else {
+							checkList.add(ccsId);
+						}
+					}
+				}
+			}
+			for(int i = 0; i < list.size(); i++) {
+				if(checkList.contains(list.get(i).getClassCourseSemesterId())) {
+					list.remove(i--);
+				}
+			}
 			mapCourseTimetable.put(courseSemester,
 					timetableService.listTimetablesByCCSs(list));
 		}
-
+		
 		// List All Timetable
 		List<Timetable> allTimetable = timetableService.listTimetables();
 		List<Room> allRooms = roomService.listRooms(true);
@@ -149,9 +171,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 				setClasses.add(t.getClassCourseSemester().getClassSemester()
 						.getClassSemesterId());
 				mapDateAndNumberOfClasses.put(key, setClasses);
-
 			}
-
 		}
 
 		// Map teacher with course of class
@@ -221,11 +241,133 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
+	public HashMap<Integer, Set<Timetable>> getMapCourseTimetable(
+			int semesterId, int classId) {
+		HashMap<String, Set<Integer>> mMergeClass = classCourseSemesterMergeService
+				.getMapCourseWithMergeClassInSemester(semesterId);
+		ClassSemester classSemester = classSemesterService
+				.getClassSemesterByClassSemester(semesterId, classId, true);
+		//
+		// for (ClassCourseSemester ccs :
+		// classSemester.getClassCourseSemesters()) {
+		// int csId = ccs.getCourseSemester().getCourseSemesterId();
+		// for(String key : mMergeClass.keySet()) {
+		// if(key.contains(Integer.toString(csId)) && mMergeClass.contains)
+		// }
+		// if () {
+		// mCourseTimetable.put(ccs.getCourseSemester()
+		// .getCourseSemesterId(), new LinkedHashSet<Timetable>());
+		// }
+		// }
+		//
+		// for (int csId : mCourseTimetable.keySet()) {
+		// Set<Integer> listClassCourseSemesterIds = mMergeClass.get(csId);
+		// for (int ccsId : listClassCourseSemesterIds) {
+		// if (classCourseSemesterService
+		// .getClassCourseSemesterById(ccsId, false, false)
+		// .getClassSemester().getClassSemesterId() != classSemester
+		// .getClassSemesterId()) {
+		// ClassCourseSemester ccs2 = classCourseSemesterService
+		// .getClassCourseSemesterById(ccsId, true, false);
+		// ClassSemester cs = classSemesterService
+		// .getClassSemesterById(ccs2.getClassSemester()
+		// .getClassSemesterId(), true);
+		// for (ClassCourseSemester ccs3 : cs
+		// .getClassCourseSemesters()) {
+		// if (!ccs3.getTimetable().isEmpty()) {
+		// for (Timetable t : ccs3.getTimetable()) {
+		// Timetable newTimetable = new Timetable();
+		// newTimetable
+		// .setClassCourseSemester(classCourseSemesterService.createNewCCS(t
+		// .getClassCourseSemester()));
+		// newTimetable.setDate(t.getDate());
+		// newTimetable.setRoom(t.getRoom());
+		// newTimetable.setSlot(t.getSlot());
+		// newTimetable.setTeacherSemester(t
+		// .getTeacherSemester());
+		//
+		// mCourseTimetable.get(csId).add(newTimetable);
+		// }
+		// }
+		// }
+		// }
+		// }
+		//
+		// }
+
+		// m class course Semester with Timetable of Merge Class
+		HashMap<Integer, Set<Timetable>> result = new HashMap<Integer, Set<Timetable>>();
+
+		for (ClassCourseSemester ccs : classSemester.getClassCourseSemesters()) {
+			int ccsId = ccs.getClassCourseSemesterId();
+			for (String key : mMergeClass.keySet()) {
+				if (mMergeClass.get(key).contains(ccsId)) {
+					result.put(ccs.getClassCourseSemesterId(),
+							new LinkedHashSet<Timetable>());
+					for (int ccsId2 : mMergeClass.get(key)) {
+						if (ccsId2 != ccsId) {
+							ClassCourseSemester ccs2 = classCourseSemesterService
+									.getClassCourseSemesterById(ccsId2, false,
+											false);
+							ClassSemester cs = classSemesterService
+									.getClassSemesterById(ccs2
+											.getClassSemester()
+											.getClassSemesterId(), true);
+							for (ClassCourseSemester ccs3 : cs
+									.getClassCourseSemesters()) {
+								for (Timetable t : ccs3.getTimetable()) {
+									Timetable newTimetable = new Timetable();
+									newTimetable
+											.setClassCourseSemester(classCourseSemesterService.createNewCCS(t
+													.getClassCourseSemester()));
+									newTimetable.setDate(t.getDate());
+									if (t.getRoom() != null) {
+										Room r = new Room();
+										r.setRoomId(t.getRoom().getRoomId());
+										r.setCode(t.getRoom().getCode());
+										r.setCourses(t.getRoom().getCourses());
+										newTimetable.setRoom(r);
+									}
+
+									newTimetable.setSlot(t.getSlot());
+
+									if (t.getTeacherSemester() != null) {
+										TeacherSemester ts = new TeacherSemester();
+										ts.setTeacherSemesterId(t
+												.getTeacherSemester()
+												.getTeacherSemesterId());
+										Teacher te = new Teacher();
+										te.setTeacherId(t.getTeacherSemester()
+												.getTeacher().getTeacherId());
+										te.setAccount(t.getTeacherSemester()
+												.getTeacher().getAccount());
+
+										Semester s = new Semester();
+										s.setSemesterId(t.getTeacherSemester()
+												.getSemester().getSemesterId());
+
+										ts.setTeacher(te);
+										ts.setSemester(s);
+										newTimetable.setTeacherSemester(t
+												.getTeacherSemester());
+									}
+									result.get(ccsId).add(newTimetable);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	@Override
 	public boolean saveTimetable(int semesterId, List<DaySlot> daySlots,
 			List<DaySlot> prevDaySlots) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-		HashMap<Integer, Set<Integer>> mMergeClass = classCourseSemesterMergeService
+		HashMap<String, Set<Integer>> mMergeClass = classCourseSemesterMergeService
 				.getMapCourseWithMergeClassInSemester(semesterId);
 		HashMap<String, Set<Timetable>> mActionTimetable = new HashMap<String, Set<Timetable>>();
 
@@ -250,70 +392,101 @@ public class ScheduleServiceImpl implements ScheduleService {
 								.getClassCourseSemesterById(
 										dayslot.getSetCourseSlot(), false,
 										false);
-						if (mMergeClass.containsKey(timetable
-								.getClassCourseSemester().getCourseSemester()
-								.getCourseSemesterId())) {
-							Timetable newT = new Timetable();
-							newT.setDate(timetable.getDate());
-							newT.setSlot(timetable.getSlot());
-							newT.setClassCourseSemester(timetable
-									.getClassCourseSemester());
-							mActionTimetable.get("delete").add(newT);
+						int csIdPrev = timetable.getClassCourseSemester()
+								.getCourseSemester().getCourseSemesterId();
+						for (String key : mMergeClass.keySet()) {
+							if (key.contains(Integer.toString(csIdPrev))
+									&& mMergeClass.get(key).contains(
+											prevDaySlot.getSetCourseSlot())) {
+								Timetable newT = new Timetable();
+								newT.setDate(timetable.getDate());
+								newT.setSlot(timetable.getSlot());
+								newT.setClassCourseSemester(timetable
+										.getClassCourseSemester());
+								mActionTimetable.get("delete").add(newT);
+								break;
+							}
 						}
-						timetable.setClassCourseSemester(ccs);
 
-						if (mMergeClass.containsKey(ccs.getCourseSemester()
-								.getCourseSemesterId())) {
-							mActionTimetable.get("add").add(timetable);
+						timetable.setClassCourseSemester(ccs);
+						int csIdNow = ccs.getCourseSemester()
+								.getCourseSemesterId();
+						for (String key : mMergeClass.keySet()) {
+							if (key.contains(Integer.toString(csIdNow))
+									&& mMergeClass.get(key).contains(
+											dayslot.getSetCourseSlot())) {
+								mActionTimetable.get("add").add(timetable);
+							}
 						}
 						timetableService.updateTimetable(timetable);
 					} else {
-						if (mMergeClass.containsKey(timetable
-								.getClassCourseSemester().getCourseSemester()
-								.getCourseSemesterId())) {
-							mActionTimetable.get("delete").add(timetable);
+						int csId = classCourseSemesterService
+								.getClassCourseSemesterById(
+										prevDaySlot.getSetCourseSlot(), false,
+										false).getCourseSemester()
+								.getCourseSemesterId();
+						for (String key : mMergeClass.keySet()) {
+							if (key.contains(Integer.toString(csId))
+									&& mMergeClass.get(key).contains(
+											prevDaySlot.getSetCourseSlot())) {
+								mActionTimetable.get("delete").add(timetable);
+							}
+							timetableService.deleteTimetable(timetable
+									.getTimeTableId());
 						}
-						timetableService.deleteTimetable(timetable
-								.getTimeTableId());
 					}
 				} else {
 					timetable = new Timetable();
 					ClassCourseSemester ccs = classCourseSemesterService
 							.getClassCourseSemesterById(
 									dayslot.getSetCourseSlot(), false, false);
-					if (mMergeClass.containsKey(ccs.getCourseSemester()
-							.getCourseSemesterId())) {
-						mActionTimetable.get("add").add(timetable);
+					int csId = ccs.getCourseSemester().getCourseSemesterId();
+					for (String key : mMergeClass.keySet()) {
+						if (key.contains(Integer.toString(csId))
+								&& mMergeClass.get(key).contains(
+										dayslot.getSetCourseSlot())) {
+							mActionTimetable.get("add").add(timetable);
+						}
+						timetable.setClassCourseSemester(ccs);
+						timetable.setDate(date);
+						timetable.setSlot(dayslot.getSlot());
+						timetableService.addTimetable(timetable);
 					}
-					timetable.setClassCourseSemester(ccs);
-					timetable.setDate(date);
-					timetable.setSlot(dayslot.getSlot());
-					timetableService.addTimetable(timetable);
 				}
 			}
 		}
-
 		// handle merge class
 
 		// add merge class
 		for (Timetable t : mActionTimetable.get("add")) {
-			for (int ccsId : mMergeClass.get(t.getClassCourseSemester()
-					.getCourseSemester().getCourseSemesterId())) {
-				if (ccsId != t.getClassCourseSemester()
-						.getClassCourseSemesterId()) {
-					ClassCourseSemester ccsMerge = classCourseSemesterService
-							.getClassCourseSemesterById(ccsId, true, false);
-					Timetable newTimetable = new Timetable();
-					newTimetable.setClassCourseSemester(ccsMerge);
-					newTimetable.setDate(t.getDate());
-					newTimetable.setRoom(t.getRoom());
-					newTimetable.setSlot(t.getSlot());
-					newTimetable.setTeacherSemester(t.getTeacherSemester());
-					if (timetableService.getTimetableByDateSlotClassCourse(
-							newTimetable.getDate(), newTimetable.getSlot(),
-							newTimetable.getClassCourseSemester()
-									.getClassCourseSemesterId()) == null) {
-						timetableService.addTimetable(newTimetable);
+			int ccsId = t.getClassCourseSemester().getClassCourseSemesterId();
+			int csId = t.getClassCourseSemester().getCourseSemester()
+					.getCourseSemesterId();
+			for (String key : mMergeClass.keySet()) {
+				if (key.contains(Integer.toString(csId))
+						&& mMergeClass.get(key).contains(ccsId)) {
+					for (int ccsId2 : mMergeClass.get(key)) {
+						if (ccsId2 != ccsId) {
+							ClassCourseSemester ccsMerge = classCourseSemesterService
+									.getClassCourseSemesterById(ccsId2, true,
+											false);
+							Timetable newTimetable = new Timetable();
+							newTimetable.setClassCourseSemester(ccsMerge);
+							newTimetable.setDate(t.getDate());
+							newTimetable.setRoom(t.getRoom());
+							newTimetable.setSlot(t.getSlot());
+							newTimetable.setTeacherSemester(t
+									.getTeacherSemester());
+							if (timetableService
+									.getTimetableByDateSlotClassCourse(
+											newTimetable.getDate(),
+											newTimetable.getSlot(),
+											newTimetable
+													.getClassCourseSemester()
+													.getClassCourseSemesterId()) == null) {
+								timetableService.addTimetable(newTimetable);
+							}
+						}
 					}
 				}
 			}
@@ -321,15 +494,22 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 		// delete merge class when updated or deleted
 		for (Timetable t : mActionTimetable.get("delete")) {
-			for (int ccsId : mMergeClass.get(t.getClassCourseSemester()
-					.getCourseSemester().getCourseSemesterId())) {
-				if (ccsId != t.getClassCourseSemester()
-						.getClassCourseSemesterId()) {
-					Timetable dT = timetableService
-							.getTimetableByDateSlotClassCourse(t.getDate(),
-									t.getSlot(), ccsId);
-					if (dT != null) {
-						timetableService.deleteTimetable(dT.getTimeTableId());
+			int ccsId = t.getClassCourseSemester().getClassCourseSemesterId();
+			int csId = t.getClassCourseSemester().getCourseSemester()
+					.getCourseSemesterId();
+			for (String key : mMergeClass.keySet()) {
+				if (key.contains(Integer.toString(csId))
+						&& mMergeClass.get(key).contains(ccsId)) {
+					for (int ccsId2 : mMergeClass.get(key)) {
+						if (ccsId2 != ccsId) {
+							Timetable dT = timetableService
+									.getTimetableByDateSlotClassCourse(
+											t.getDate(), t.getSlot(), ccsId2);
+							if (dT != null) {
+								timetableService.deleteTimetable(dT
+										.getTimeTableId());
+							}
+						}
 					}
 				}
 			}
@@ -373,7 +553,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 				classSemester.getClassSemesterId(), startWeek.getTime(),
 				endWeek.getTime());
 
-		HashMap<Integer, Set<Integer>> mMergeClass = classCourseSemesterMergeService
+		HashMap<String, Set<Integer>> mMergeClass = classCourseSemesterMergeService
 				.getMapCourseWithMergeClassInSemester(semesterId);
 
 		Set<Timetable> sTimetable = new LinkedHashSet<Timetable>();
@@ -390,25 +570,43 @@ public class ScheduleServiceImpl implements ScheduleService {
 			t.setTeacherSemester(timetable.getTeacherSemester());
 			timetableService.addTimetable(t);
 
-			if (mMergeClass.containsKey(t.getClassCourseSemester()
-					.getCourseSemester().getCourseSemesterId())) {
-				sTimetable.add(t);
+			int csId = t.getClassCourseSemester().getCourseSemester()
+					.getCourseSemesterId();
+			int ccsId = t.getClassCourseSemester().getClassCourseSemesterId();
+			for (String key : mMergeClass.keySet()) {
+				if (key.contains(Integer.toString(csId))
+						&& mMergeClass.get(key).contains(ccsId)) {
+					sTimetable.add(t);
+					break;
+				}
 			}
 		}
 
 		for (Timetable t : sTimetable) {
-			for (int ccsId : mMergeClass.get(t.getClassCourseSemester()
-					.getCourseSemester().getCourseSemesterId())) {
-				if(t.getClassCourseSemester().getClassCourseSemesterId() != ccsId) {
-					ClassCourseSemester ccsMerge = classCourseSemesterService
-							.getClassCourseSemesterById(ccsId, true, false);
-					Timetable newTimetable = new Timetable();
-					newTimetable.setClassCourseSemester(ccsMerge);
-					newTimetable.setDate(t.getDate());
-					newTimetable.setRoom(t.getRoom());
-					newTimetable.setSlot(t.getSlot());
-					newTimetable.setTeacherSemester(t.getTeacherSemester());
-					timetableService.addTimetable(newTimetable);
+			// get Course Semester Id and classCourseSemesterId
+			int csId = t.getClassCourseSemester().getCourseSemester()
+					.getCourseSemesterId();
+			int ccsId = t.getClassCourseSemester().getClassCourseSemesterId();
+
+			// loop through key set and find key that has this csId and ccsId
+			for (String key : mMergeClass.keySet()) {
+				if (key.contains(Integer.toString(csId))
+						&& mMergeClass.get(key).contains(ccsId)) {
+					for (int ccsId2 : mMergeClass.get(key)) {
+						if (ccsId2 != ccsId) {
+							ClassCourseSemester ccsMerge = classCourseSemesterService
+									.getClassCourseSemesterById(ccsId2, true,
+											false);
+							Timetable newTimetable = new Timetable();
+							newTimetable.setClassCourseSemester(ccsMerge);
+							newTimetable.setDate(t.getDate());
+							newTimetable.setRoom(t.getRoom());
+							newTimetable.setSlot(t.getSlot());
+							newTimetable.setTeacherSemester(t
+									.getTeacherSemester());
+							timetableService.addTimetable(newTimetable);
+						}
+					}
 				}
 			}
 		}

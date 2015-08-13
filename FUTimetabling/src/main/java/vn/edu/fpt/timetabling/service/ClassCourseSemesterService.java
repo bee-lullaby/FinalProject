@@ -40,4 +40,6 @@ public interface ClassCourseSemesterService {
 	public long getNumberOfStudents(int classCourseSemesterId);
 
 	public int deleteClassCourseSemesters(int semesterId);
+
+	public ClassCourseSemester createNewCCS(ClassCourseSemester ccs);
 }

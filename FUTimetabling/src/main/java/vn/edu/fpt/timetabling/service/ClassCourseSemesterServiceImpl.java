@@ -17,7 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import vn.edu.fpt.timetabling.dao.ClassCourseSemesterDAO;
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
+import vn.edu.fpt.timetabling.model.ClassFPT;
 import vn.edu.fpt.timetabling.model.ClassSemester;
+import vn.edu.fpt.timetabling.model.Course;
 import vn.edu.fpt.timetabling.model.CourseSemester;
 
 @Service
@@ -163,5 +165,35 @@ public class ClassCourseSemesterServiceImpl implements ClassCourseSemesterServic
 	@Override
 	public int deleteClassCourseSemesters(int semesterId) {
 		return classCourseSemesterDAO.deleteClassCourseSemesters(semesterId);
+	}
+	
+	@Override
+	public ClassCourseSemester createNewCCS(ClassCourseSemester ccs) {
+		ClassCourseSemester classCourseSemester = new ClassCourseSemester();
+		classCourseSemester.setClassCourseSemesterId(ccs
+				.getClassCourseSemesterId());
+
+		ClassSemester classSemester = new ClassSemester();
+		classSemester.setClassSemesterId(ccs.getClassSemester()
+				.getClassSemesterId());
+		ClassFPT classFPT = new ClassFPT();
+		classFPT.setClassId(ccs.getClassSemester().getClassFPT()
+				.getClassId());
+		classFPT.setCode(ccs.getClassSemester().getClassFPT().getCode());
+		classSemester.setClassFPT(classFPT);
+
+		CourseSemester courseSemester = new CourseSemester();
+		courseSemester.setCourseSemesterId(ccs.getCourseSemester()
+				.getCourseSemesterId());
+		Course course = new Course();
+		course.setCourseId(ccs.getCourseSemester().getCourse()
+				.getCourseId());
+		course.setCode(ccs.getCourseSemester().getCourse().getCode());
+		classSemester.setClassFPT(classFPT);
+		courseSemester.setCourse(course);
+
+		classCourseSemester.setClassSemester(classSemester);
+		classCourseSemester.setCourseSemester(courseSemester);
+		return classCourseSemester;
 	}
 }

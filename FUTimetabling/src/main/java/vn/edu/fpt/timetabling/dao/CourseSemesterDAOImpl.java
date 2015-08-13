@@ -168,7 +168,8 @@ public class CourseSemesterDAOImpl implements CourseSemesterDAO {
 		if (jointProgramSemesterDetails) {
 			hql += " LEFT OUTER JOIN FETCH C.programSemesterDetails";
 		}
-		hql += " WHERE C.semester.semesterId = :semesterId";
+		hql += " WHERE C.semester.semesterId = :semesterId"
+				+ " ORDER BY C.course.code";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("semesterId", semesterId);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);

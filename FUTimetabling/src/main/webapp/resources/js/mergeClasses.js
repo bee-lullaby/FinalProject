@@ -40,20 +40,13 @@ $(document).ready(function() {
 		$("#dialog-add-mergeClass #select-class-2").css("border-color", "");
 	});
 	
-	$("#dialog-add-mergeClass").on("change", $("#select-course"), function() {
-		_setDataSelect($(this));
+	$("#dialog-add-mergeClass #select-course").on("change", function() {
+		$("#dialog-add-mergeClass").find("#select-class-1 option:first").attr("selected", "selected");
+		$("#dialog-add-mergeClass").find("#select-class-2 option:first").attr("selected", "selected");
+		$("#dialog-add-mergeClass").find("select[id^='select-class'] option").hide();
+		_setDataSelect($("#dialog-add-mergeClass").find("#select-course"));
 	});
-//	$("#dialog-add-mergeClass").on("change", $("#select-class-1"), function() {
-//		_setDataSelect($("#dialog-add-mergeClass #select-course"));
-//		var value = $(this).find("option:selected").val();
-//		console.log($("#dialog-add-mergeClass #select-class-2").find("option[value='" + value+"']").val());
-//		$("#dialog-add-mergeClass #select-class-2 option[value='" + value+"']").hide();
-//	});
-//	$("#dialog-add-mergeClass").on("change", $("#select-class-2"), function() {
-//		_setDataSelect($("#dialog-add-mergeClass #select-course"));
-//		var value = $(this).find("option:selected").val();
-//		$("#dialog-add-mergeClass #select-class-1 option[value='" + value+"']").hide();
-//	});
+	
 	function _init() {
 		var table = $('#table-mergeClasses').DataTable({
 			"lengthChange": false,

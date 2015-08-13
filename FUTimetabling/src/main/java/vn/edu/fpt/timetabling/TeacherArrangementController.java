@@ -3,7 +3,9 @@ package vn.edu.fpt.timetabling;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,6 +23,7 @@ import vn.edu.fpt.timetabling.model.Course;
 import vn.edu.fpt.timetabling.model.CourseSemester;
 import vn.edu.fpt.timetabling.model.DataTeacherArrangement;
 import vn.edu.fpt.timetabling.model.Timetable;
+import vn.edu.fpt.timetabling.service.ClassCourseSemesterMergeService;
 import vn.edu.fpt.timetabling.service.CourseSemesterService;
 import vn.edu.fpt.timetabling.service.DepartmentService;
 import vn.edu.fpt.timetabling.service.SemesterService;
@@ -38,7 +41,7 @@ public class TeacherArrangementController {
 	private DepartmentService departmentService;
 	private CourseSemesterService courseSemesterService;
 	private TeacherArrangementService teacherArrangementService;
-
+	private ClassCourseSemesterMergeService classCourseSemesterMergeService;
 	private static final Logger logger = LoggerFactory
 			.getLogger(TeacherArrangementController.class);
 
@@ -68,6 +71,13 @@ public class TeacherArrangementController {
 		this.teacherArrangementService = teacherArrangementService;
 	}
 
+	@Autowired(required = true)
+	@Qualifier(value = "classCourseSemesterMergeService")
+	public void setClassCourseSemesterService(
+			ClassCourseSemesterMergeService classCourseSemesterMergeService) {
+		this.classCourseSemesterMergeService = classCourseSemesterMergeService;
+	}
+	
 	@RequestMapping(value = "/staff/teacherArrangement", method = RequestMethod.GET)
 	public String teacherArrangement(Model model) {
 		int semesterId = semesterService
@@ -79,12 +89,12 @@ public class TeacherArrangementController {
 		List<CourseSemester> courseSemesters = courseSemesterService
 				.listCourseSemestersByDepartment(semesterId, departmentId,
 						false, false, false);
-		int courseId = 0;
+		int courseSemesterId = 0;
 		if (courseSemesters.size() != 0) {
-			courseId = courseSemesters.get(0).getCourse().getCourseId();
+			courseSemesterId = courseSemesters.get(0).getCourseSemesterId();
 		}
 		return "redirect:/staff/teacherArrangement?semesterId=" + semesterId
-				+ "&departmentId=" + departmentId + "&courseId=" + courseId;
+				+ "&departmentId=" + departmentId + "&courseSemesterId=" + courseSemesterId;
 	}
 
 	@RequestMapping(value = "/staff/teacherArrangement", method = RequestMethod.GET, params = { "semesterId" })
@@ -95,12 +105,12 @@ public class TeacherArrangementController {
 		List<CourseSemester> courseSemesters = courseSemesterService
 				.listCourseSemestersByDepartment(semesterId, departmentId,
 						false, false, false);
-		int courseId = 0;
+		int courseSemesterId = 0;
 		if (courseSemesters.size() != 0) {
-			courseId = courseSemesters.get(0).getCourse().getCourseId();
+			courseSemesterId = courseSemesters.get(0).getCourseSemesterId();
 		}
 		return "redirect:/staff/teacherArrangement?semesterId=" + semesterId
-				+ "&departmentId=" + departmentId + "&courseId=" + courseId;
+				+ "&departmentId=" + departmentId + "&courseSemesterId=" + courseSemesterId;
 
 	}
 
@@ -112,28 +122,29 @@ public class TeacherArrangementController {
 		List<CourseSemester> courseSemesters = courseSemesterService
 				.listCourseSemestersByDepartment(semesterId, departmentId,
 						false, false, false);
-		int courseId = 0;
+		int courseSemesterId = 0;
 		if (courseSemesters.size() != 0) {
-			courseId = courseSemesters.get(0).getCourse().getCourseId();
+			courseSemesterId = courseSemesters.get(0).getCourseSemesterId();
 		}
 		return "redirect:/staff/teacherArrangement?semesterId=" + semesterId
-				+ "&departmentId=" + departmentId + "&courseId=" + courseId;
+				+ "&departmentId=" + departmentId + "&courseSemesterId=" + courseSemesterId;
 	}
 
 	@RequestMapping(value = "/staff/teacherArrangement", method = RequestMethod.GET, params = {
-			"semesterId", "departmentId", "courseId" })
+			"semesterId", "departmentId", "courseSemesterId" })
 	public String teacherArrangementSemesterDepartmentCourse(
 			@RequestParam int semesterId, @RequestParam int departmentId,
-			@RequestParam int courseId, Model model) {
+			@RequestParam int courseSemesterId, Model model) {
 		List<Course> coursesData;
 		CourseSemester courseSemesterData;
 		List<DataTeacherArrangement> dtaData;
-		if (courseId != 0) {
+		HashMap<String, Set<Integer>> mMergerClassData = classCourseSemesterMergeService.getMapCourseWithMergeClassInSemester(semesterId);
+		if (courseSemesterId != 0) {
 			coursesData = teacherArrangementService.getListCourse(departmentId);
 			courseSemesterData = teacherArrangementService.getCourseSemester(
-					semesterId, courseId);
+					courseSemesterId);
 			dtaData = teacherArrangementService.getDataTeacherArrangement(
-					semesterId, courseId);
+					semesterId, courseSemesterId);
 		} else {
 			coursesData = new ArrayList<Course>();
 			courseSemesterData = new CourseSemester();
@@ -143,20 +154,22 @@ public class TeacherArrangementController {
 		StringWriter coursesJSON = new StringWriter();
 		StringWriter courseSemesterJSON = new StringWriter();
 		StringWriter dtaJSON = new StringWriter();
-
+		StringWriter mMergeClassJSON = new StringWriter();
 		try {
-			if (courseId != 0) {
+			if (courseSemesterId != 0) {
 				om.writeValue(coursesJSON, coursesData);
 				om.writeValue(courseSemesterJSON, courseSemesterData);
 				om.writeValue(dtaJSON, dtaData);
+				om.writeValue(mMergeClassJSON, mMergerClassData);
 			}
 			model.addAttribute("listSemesters",
 					semesterService.listSemesters(false, false, false, false));
 			model.addAttribute("listDepartments", teacherArrangementService.getListDepartment());
-			if (courseId != 0) {
+			if (courseSemesterId != 0) {
 				model.addAttribute("coursesData", coursesJSON);
 				model.addAttribute("courseSemesterData", courseSemesterJSON);
 				model.addAttribute("dtaData", dtaJSON);
+				model.addAttribute("mMergeClassData", mMergeClassJSON); 
 			}
 		} catch (JsonGenerationException e) {
 			e.printStackTrace();
@@ -169,7 +182,7 @@ public class TeacherArrangementController {
 	}
 
 	@RequestMapping(value = "/staff/teacherArrangement/updateTimetable", method = RequestMethod.POST)
-	public String updateTimetable(
+	public String updateTimetableTeacher(
 			@RequestParam(value = "dataToSet", required = true) String dataToSet,
 			HttpServletRequest request) {
 		ObjectMapper om = new ObjectMapper();

@@ -39,7 +39,7 @@ public interface TimetableService {
 	
 	public List<Timetable> listTimetableByClass(int semesterId, int classId);
 	
-	public List<Timetable> listTimetableByTeacher(int semesterId, int teacherId);
+	public List<Timetable> listTimetableByTeacher(int teacherSemesterId);
 	
 	public void deleteTimetablesByCCS(int classCourseSemesterId);
 	

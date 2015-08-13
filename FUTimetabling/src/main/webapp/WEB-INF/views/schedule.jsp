@@ -34,6 +34,7 @@
 	<div style="display: none">
 		<form:form id="data" method="post">
 			<div id="JSONdata" style="display: none">${JSONdata}</div>
+			<div id="JSONdataMergeClass" style="display: none">${JSONdataMergeClass}</div>
 			<input type="hidden" type="text" id="JSONprev" name="JSONprev" />
 			<input type="hidden" type="text" id="JSONToSubmit"
 				name="JSONToSubmit" />
@@ -214,6 +215,7 @@
 					</div>
 					<div id="warning-set-teacher" class="fg-red" style="margin: 5px 0;">Don't have enough Teacher to set.</div>
 					<div id="warning-set-room" class="fg-red" style="margin: 5px 0;">Don't have enough Room to set.</div>
+					<div id="warning-conflict-merge-class" class="fg-red" style="margin: 5px 0;">Conflict with timetable of Merge-Class.</div>
 					<div>
 						<button id="btn-set-course" class="button" style="width: 100px">SET</button>
 						<button id="btn-cancel-set-course" class="button"

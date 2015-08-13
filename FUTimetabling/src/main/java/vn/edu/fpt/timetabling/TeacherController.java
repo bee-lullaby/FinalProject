@@ -34,7 +34,6 @@ public class TeacherController extends GeneralController {
 	private TeacherSemesterService teacherSemesterService;
 	private CourseSemesterService courseSemesterService;
 	private TeacherCourseSemesterService teacherCourseSemesterService;
-
 	@Autowired(required = true)
 	@Qualifier(value = "teacherService")
 	public void setTeacherService(TeacherService teacherService) {
@@ -67,7 +66,7 @@ public class TeacherController extends GeneralController {
 			TeacherCourseSemesterService teacherCourseSemesterService) {
 		this.teacherCourseSemesterService = teacherCourseSemesterService;
 	}
-
+	
 	@RequestMapping(value = "/staff/teachers", method = RequestMethod.GET)
 	public String teacherInit(HttpSession httpSession, Model model) {
 		List<Semester> semesters = semesterService

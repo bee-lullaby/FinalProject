@@ -75,6 +75,9 @@ public class ScheduleInfoServiceImpl implements ScheduleInfoService {
 						checkSetDone = false;
 						break;
 					}
+				} else {
+					checkSetDone = false;
+					break;
 				}
 			}
 
@@ -102,6 +105,9 @@ public class ScheduleInfoServiceImpl implements ScheduleInfoService {
 						checkSetDone = false;
 						break;
 					}
+				} else {
+					checkSetDone = false;
+					break;
 				}
 			}
 

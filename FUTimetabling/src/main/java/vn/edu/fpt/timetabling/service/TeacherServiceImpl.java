@@ -51,4 +51,6 @@ public class TeacherServiceImpl implements TeacherService {
 	public void deleteTeacher(int teacherId) {
 		teacherDAO.deleteTeacher(teacherId);
 	}
+	
+	
 }

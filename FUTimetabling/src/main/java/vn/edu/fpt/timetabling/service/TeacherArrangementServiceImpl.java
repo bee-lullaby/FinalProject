@@ -34,6 +34,9 @@ public class TeacherArrangementServiceImpl implements TeacherArrangementService 
 	private ClassCourseSemesterService classCourseSemesterService;
 
 	@Autowired
+	private ClassCourseSemesterMergeService classCourseSemesterMergeService;
+	
+	@Autowired
 	private TimetableService timetableService;
 
 	@Override
@@ -67,13 +70,12 @@ public class TeacherArrangementServiceImpl implements TeacherArrangementService 
 	}
 
 	@Override
-	public CourseSemester getCourseSemester(int semesterId, int courseId) {
+	public CourseSemester getCourseSemester(int courseSemesterId) {
 
 		CourseSemester courseSemester = new CourseSemester();
 
 		CourseSemester cs = courseSemesterService
-				.getCourseSemesterByCourseSemester(courseId, semesterId, true,
-						true, false);
+				.getCourseSemesterById(courseSemesterId, true, true, false);
 
 		// set CourseSemeter ID
 		courseSemester.setCourseSemesterId(cs.getCourseSemesterId());
@@ -221,7 +223,7 @@ public class TeacherArrangementServiceImpl implements TeacherArrangementService 
 		}
 		return dta;
 	}
-
+	
 	public Set<ClassCourseSemester> getListClassConflicts(
 			ClassCourseSemester classCourseSemester,
 			Set<ClassCourseSemester> classCourseSemesters) {
@@ -278,7 +280,6 @@ public class TeacherArrangementServiceImpl implements TeacherArrangementService 
 
 		return result;
 	}
-
 	public boolean saveTimetables(List<Timetable> timetables) {
 		for (Timetable timetable : timetables) {
 			Timetable t = timetableService.getTimetableById(timetable

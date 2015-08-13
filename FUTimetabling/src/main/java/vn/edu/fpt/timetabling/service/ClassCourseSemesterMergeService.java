@@ -19,7 +19,7 @@ public interface ClassCourseSemesterMergeService {
 	
 	public ClassCourseSemesterMerge getClassCourseSemesterMergeBy2CCS(int classCourseSemesterId1, int classCourseSemesterId2);
 	
-	public HashMap<Integer, Set<Integer>> getMapCourseWithMergeClassInSemester(int semesterId); 
+	public HashMap<String, Set<Integer>> getMapCourseWithMergeClassInSemester(int semesterId); 
 	
 	public void deleteClassCourseSemesterMerge(int classCourseSemesterMergeId);
 }

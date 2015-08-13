@@ -56,8 +56,8 @@ public class ClassCourseSemesterMergeServiceImpl implements ClassCourseSemesterM
 		return classCourseSemesterMergeDAO.listClassCourseSemesterMerges(semesterId);
 	}
 	
-	public HashMap<Integer, Set<Integer>> getMapCourseWithMergeClassInSemester(int semesterId) {
-		HashMap<Integer, Set<Integer>> mCourseWithMergeClass = new HashMap<Integer, Set<Integer>>();
+	public HashMap<String, Set<Integer>> getMapCourseWithMergeClassInSemester(int semesterId) {
+		HashMap<String, Set<Integer>> mCourseWithMergeClass = new HashMap<String, Set<Integer>>();
 		
 		List<ClassCourseSemesterMerge> list = listClassCourseSemesterMerges(semesterId);
 		for(ClassCourseSemesterMerge ccsm : list) {
@@ -65,12 +65,28 @@ public class ClassCourseSemesterMergeServiceImpl implements ClassCourseSemesterM
 			ClassCourseSemester ccs2 = ccsm.getClassCourseSemester2();
 			
 			int courseSemesterId = ccs1.getCourseSemester().getCourseSemesterId();
-			if(!mCourseWithMergeClass.containsKey(courseSemesterId)) {
-				mCourseWithMergeClass.put(courseSemesterId, new LinkedHashSet<Integer>());
+			String getKey = "";
+			int count = 0;
+			for(String key : mCourseWithMergeClass.keySet()) {
+				if(key.contains(Integer.toString(courseSemesterId))) {
+					count++;
+					if(mCourseWithMergeClass.get(key).contains(ccs1.getClassCourseSemesterId())){
+						mCourseWithMergeClass.get(key).add(ccs2.getClassCourseSemesterId());
+						getKey = key;
+						break;
+					} else if (mCourseWithMergeClass.get(key).contains(ccs2.getClassCourseSemesterId())) {
+						mCourseWithMergeClass.get(key).add(ccs1.getClassCourseSemesterId());
+						getKey = key;
+						break;
+					}
+				}
 			}
-
-			mCourseWithMergeClass.get(courseSemesterId).add(ccs1.getClassCourseSemesterId());
-			mCourseWithMergeClass.get(courseSemesterId).add(ccs2.getClassCourseSemesterId());
+			
+			if(getKey.compareTo("") == 0) {
+				mCourseWithMergeClass.put(courseSemesterId +"-" +(count+1), new LinkedHashSet<Integer>());
+				mCourseWithMergeClass.get(courseSemesterId +"-" +(count+1)).add(ccs1.getClassCourseSemesterId());
+				mCourseWithMergeClass.get(courseSemesterId +"-" +(count+1)).add(ccs2.getClassCourseSemesterId());
+			}
 		}
 		return mCourseWithMergeClass;
 		

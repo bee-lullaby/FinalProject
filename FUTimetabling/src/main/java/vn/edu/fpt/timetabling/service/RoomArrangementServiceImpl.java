@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -38,10 +39,12 @@ public class RoomArrangementServiceImpl implements RoomArrangementService {
 	@Autowired
 	private RoomService roomService;
 
+	@Autowired
+	private ClassCourseSemesterMergeService classCourseSemesterMergeService;
 	@Override
 	@Transactional
 	public List<ClassSemester> getListClassesCoursesOfSemester(int semesterId,
-			int classId) {
+			int classSemesterId) {
 		// TODO Auto-generated method stub
 
 		List<ClassSemester> classSemesters = classSemesterService
@@ -70,10 +73,11 @@ public class RoomArrangementServiceImpl implements RoomArrangementService {
 			semester.setSemesterId(cs.getSemester().getSemesterId());
 			semester.setCode(cs.getSemester().getCode());
 			classSemester.setSemester(semester);
-			if (classId == classFPT.getClassId()) {
+			if (classSemesterId == cs.getClassSemesterId()) {
 				Set<ClassCourseSemester> classCourseSemesters = new LinkedHashSet<ClassCourseSemester>();
 				for (ClassCourseSemester ccs : cs.getClassCourseSemesters()) {
 					ClassCourseSemester newCcs = new ClassCourseSemester();
+					newCcs.setClassCourseSemesterId(ccs.getClassCourseSemesterId());
 					CourseSemester courseSemesterToSet = new CourseSemester();
 					courseSemesterToSet.setCourseSemesterId(ccs
 							.getCourseSemester().getCourseSemesterId());
@@ -215,27 +219,59 @@ public class RoomArrangementServiceImpl implements RoomArrangementService {
 	@Transactional
 	public boolean saveTimetables(List<ClassSemester> data) {
 		List<Timetable> dataTimetable = new ArrayList<Timetable>();
+
+		HashMap<Integer, Room> mCCSWithRoom = new HashMap<Integer, Room>();
+		Set<ClassCourseSemester> setCCS = new LinkedHashSet<ClassCourseSemester>();
+		HashMap<String, Set<Integer>> mMergeClass = new HashMap<String, Set<Integer>>();
 		for (ClassSemester cs : data) {
 			Iterator<ClassCourseSemester> i = cs.getClassCourseSemesters()
 					.iterator();
-
+			if(mMergeClass == null || mMergeClass.isEmpty()) {
+				mMergeClass = classCourseSemesterMergeService.getMapCourseWithMergeClassInSemester(cs.getSemester().getSemesterId());
+			}
 			while (i.hasNext()) {
-				dataTimetable.addAll(i.next().getTimetable());
+				ClassCourseSemester ccs = i.next();
+				
+				dataTimetable.addAll(ccs.getTimetable());
+				if(!mCCSWithRoom.containsKey(ccs.getClassCourseSemesterId())) {
+					if(ccs.getTimetable() != null && !ccs.getTimetable().isEmpty()) {
+						setCCS.add(ccs);
+						mCCSWithRoom.put(ccs.getClassCourseSemesterId(), ccs.getTimetable().iterator().next().getRoom());
+					}
+				}
 			}
 		}
-
+		
 		for (Timetable t : dataTimetable) {
 
 			Timetable timetable = timetableService.getTimetableById(t
 					.getTimeTableId());
+			
 			if (t.getRoom() != null) {
 				timetable.setRoom(t.getRoom());
 			} else {
 				timetable.setRoom(null);
 			}
-
 			timetableService.updateTimetable(timetable);
 		}
+		
+		
+		for(ClassCourseSemester ccs : setCCS) {
+			int csId = ccs.getCourseSemester().getCourseSemesterId();
+			for(String key : mMergeClass.keySet()) {
+				if(key.contains(Integer.toString(csId)) && mMergeClass.get(key).contains(ccs.getClassCourseSemesterId())) {
+					for(int ccsId : mMergeClass.get(key)) {
+						if(ccsId != ccs.getClassCourseSemesterId()) {
+							for(Timetable t : classCourseSemesterService.getClassCourseSemesterById(ccsId, true, false).getTimetable()) {
+								t.setRoom(mCCSWithRoom.get(ccs.getClassCourseSemesterId()));
+								timetableService.updateTimetable(t);
+							}
+						}
+					}
+				}
+			}
+		}
+		
 		return true;
 	}
 
@@ -271,11 +307,11 @@ public class RoomArrangementServiceImpl implements RoomArrangementService {
 						.getClassCourseSemesterById(
 								classCourseSemester.getClassCourseSemesterId(),
 								true, false);
+
 				count += newCCS.getTimetable().size();
 				countSlotWasSet += newCCS.getTimetable().size();
 				for (Timetable timetable : newCCS.getTimetable()) {
 					if (timetable.getRoom() == null) {
-						checkDone = false;
 						countSlotWasSet--;
 						sb.append(sdf.format(timetable.getDate()) + "/"
 								+ timetable.getSlot() + "; ");
@@ -283,12 +319,17 @@ public class RoomArrangementServiceImpl implements RoomArrangementService {
 					}
 				}
 			}
-
+			
+			if(count == 0) {
+				checkDone = false;
+			} else if (countSlotWasSet < count) {
+				checkDone = false;
+			}
 			if (checkDone) {
 				dra.setNote("All Slots of this class was set room successful!");
 			} else {
 				dra.setNote("This Class still has " + (count - countSlotWasSet)
-						+ " were not set room!");
+						+ "course(s) were not set room!");
 			}
 
 			dra.setSetRoomSuccessful(checkDone);

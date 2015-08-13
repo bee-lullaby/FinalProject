@@ -75,6 +75,7 @@ h3 {
 		<div id="coursesData">${coursesData}</div>
 		<div id="courseSemesterData">${courseSemesterData}</div>
 		<div id="dtaData">${dtaData}</div>
+		<div id="mMergeClassData">${mMergeClassData}</div>
 		<form id="setTeacher" method="post">
 			<input type="text" id="dataToSet" name="dataToSet" />
 		</form>
@@ -106,7 +107,7 @@ h3 {
 				</div>
 
 			</div>
-			<div style="display: inline-block" class="left">
+			<div style="display: inline-block; width:100%;" class="left">
 				<h3>COURSES</h3>
 				<div id="select-courses" style="height: 200px;"></div>
 			</div>
@@ -131,7 +132,8 @@ h3 {
 					<thead>
 						<tr>
 							<th>Class</th>
-							<th>Class has conflict of timetable</th>
+							<th>Classes have conflict of timetable</th>
+							<th>Merge Class</th>
 							<th>Teacher</th>
 						</tr>
 					</thead>

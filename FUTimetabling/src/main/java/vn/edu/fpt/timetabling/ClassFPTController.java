@@ -181,12 +181,9 @@ public class ClassFPTController extends GeneralController {
 		return "redirect:/staff/classFPTs?semesterId=" + semesterId;
 	}
 
-	@RequestMapping(value = "/staff/classFPTs/clearStudentClasses", method = RequestMethod.GET)
-	public String clearStudentClasses(HttpSession httpSession, Model model) {
-		int semesterId = semesterService.listSemesters(false, false, false, false).get(0).getSemesterId();
-		if (httpSession.getAttribute("semesterId") != null) {
-			semesterId = (int) httpSession.getAttribute("semesterId");
-		}
+	@RequestMapping(value = "/staff/classFPTs/clearStudentClasses", method = RequestMethod.GET, params = {
+	"semesterId" })
+	public String clearStudentClasses(@RequestParam int semesterId, HttpSession httpSession, Model model) {
 		studentService.clearStudentClasses();
 		classCourseStudentSemesterService.deleteClassCourseStudentSemesters(semesterId);
 		httpSession.setAttribute("success", "Clear students' classes successful!");

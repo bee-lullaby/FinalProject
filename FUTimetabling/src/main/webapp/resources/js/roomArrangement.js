@@ -35,6 +35,8 @@ $(document).ready(
 		});
 
 		$("#select-rooms").on("change", function() {
+			$("#warning-room-arrangement").html("");
+			$("#warning").hide();
 			_setRoomForCourses();
 		});
 		
@@ -91,12 +93,15 @@ $(document).ready(
 		});
 		
 		$("#btn-submit").on("click", function() {
-			var classSelected = $("#select-classes option:selected").val(); 
 			
 			var checkError = false;
-			var classSelected = $("#select-classes option:selected").val();
-			for(var i = 0; i < classesCoursesJSON[classSelected].classCourseSemesters.length; i++) {
-				var id = "select-rooms-" +classesCoursesJSON[classSelected].classCourseSemesters[i].classCourseSemesterId;
+			var classCourseSemesters = {};
+			$.each(classesCoursesJSON, function(value, object) {
+				if(object.classSemesterId == _urlParam("classSemesterId"))
+					classCourseSemesters = object.classCourseSemesters;
+			});
+			for(var i = 0; i < classCourseSemesters.length; i++) {
+				var id = "select-rooms-" +classCourseSemesters[i].classCourseSemesterId;
 				if($("#" +id).attr("data-error")) {
 					checkError = true;
 					break;
@@ -107,21 +112,20 @@ $(document).ready(
 				 _showDialog("dialog-error");
 			} else {
 				var check = true;
-				for(var i = 0; i < classesCoursesJSON[classSelected].classCourseSemesters.length; i++) {
-					var roomSelected = $("#select-rooms-" +classesCoursesJSON[classSelected].classCourseSemesters[i].classCourseSemesterId +" option:selected").val();
-					if(classesCoursesJSON[classSelected].classCourseSemesters[i].timetable != null) {
-						for(var x = 0; x < classesCoursesJSON[classSelected].classCourseSemesters[i].timetable.length; x++) {
-							classesCoursesJSON[classSelected].classCourseSemesters[i].timetable[x].room = null;
+				for(var i = 0; i < classCourseSemesters.length; i++) {
+					var roomSelected = $("#select-rooms-" +classCourseSemesters[i].classCourseSemesterId +" option:selected").val();
+					if(classCourseSemesters[i].timetable != null) {
+						for(var x = 0; x < classCourseSemesters[i].timetable.length; x++) {
+							classCourseSemesters[i].timetable[x].room = null;
 							if(roomSelected != -1) {
 								var room = roomsJSON[roomSelected];
-								room.timetables = null;
-								classesCoursesJSON[classSelected].classCourseSemesters[i].timetable[x].room = room;
+								classCourseSemesters[i].timetable[x].room = room;
 							}	
 						}
 					}
 				}
 				$("#dataToSet").attr("value", JSON.stringify(classesCoursesJSON));
-				$("#setRooms").attr("action", "teacherArrangement/updateTimetable");
+				$("#setRooms").attr("action", "roomArrangement/updateTimetable");
 				$("#setRooms").submit();
 			}
 		});
@@ -151,30 +155,39 @@ $(document).ready(
 			_setspecialCourses();
 			
 			_setTextNoteRoomCapacity();
-			
-			_setOptionSelectClasses();
+//			
+//			_setOptionSelectClasses();
 			
 			_setOptionSelectRooms();
 			
 			_setSelectRoomForCourses();
 			
-			 _setDialogInfoClasses();
+			_setDialogInfoClasses();
+			 
+
+			$("#select-semesters").find("a[id='" +_urlParam("semesterId") +"']").addClass("active");
+
+			$("#select-classes").find("a[id='" +_urlParam("classSemesterId") +"']").addClass("active");
+			
+			$("#select-classes a").each(function() {
+				$(this).attr("href", "?semesterId=" + _urlParam("semesterId") +"&classSemesterId=" +$(this).attr("id"));
+			});
 		}
 
-		function _setOptionSelectClasses() {
-			var classId =  _urlParam("classId");
-			for (var i = 0; i < classesCoursesJSON.length; i++) {
-				if(classesCoursesJSON[i].classFPT.classId == classId)
-					$("#select-classes").append($("<option></option>")
-						.attr("value", i)
-						.attr("selected", "selected")
-						.text(classesCoursesJSON[i].classFPT.code));
-				else
-					$("#select-classes").append($("<option></option>")
-							.attr("value", i)
-							.text(classesCoursesJSON[i].classFPT.code));
-			}
-		}
+//		function _setOptionSelectClasses() {
+//			var classId =  _urlParam("classId");
+//			for (var i = 0; i < classesCoursesJSON.length; i++) {
+//				if(classesCoursesJSON[i].classFPT.classId == classId)
+//					$("#select-classes").append($("<option></option>")
+//						.attr("value", i)
+//						.attr("selected", "selected")
+//						.text(classesCoursesJSON[i].classFPT.code));
+//				else
+//					$("#select-classes").append($("<option></option>")
+//							.attr("value", i)
+//							.text(classesCoursesJSON[i].classFPT.code));
+//			}
+//		}
 
 		function _setOptionSelectRooms() {
 			for (var i = 0; i < roomsJSON.length; i++) {
@@ -184,8 +197,12 @@ $(document).ready(
 		}
 		
 		function _setSelectRoomForCourses() {
-			var selectedClass = $("#select-classes option:selected").val();
-			classCourseSemesters = classesCoursesJSON[selectedClass].classCourseSemesters;
+			var classCourseSemesters = {};
+			$.each(classesCoursesJSON, function(value, object) {
+				if(object.classSemesterId == _urlParam("classSemesterId"))
+					classCourseSemesters = object.classCourseSemesters;
+			});
+			console.log(classCourseSemesters[0]);
 			for (var x = 0; x < classCourseSemesters.length; x++) {
 				$("#courses-class").append(_getTRCoursesClass(classCourseSemesters[x]))
 				
@@ -214,14 +231,18 @@ $(document).ready(
 		
 		// Use for select-rooms change
 		function _setOptionSelectedRoomsForAllCourse() {
-			var classSelected = $("#select-classes option:selected").val();
-			for(var i = 0; i < classesCoursesJSON[classSelected].classCourseSemesters.length; i++) {
-				if(classesCoursesJSON[classSelected].classCourseSemesters[i].timetable != null
-						&& classesCoursesJSON[classSelected].classCourseSemesters[i].timetable.length > 0) {
-					var room = classesCoursesJSON[classSelected].classCourseSemesters[i].timetable[0].room;
+			var classCourseSemesters = {};
+			$.each(classesCoursesJSON, function(value, object) {
+				if(object.classSemesterId == _urlParam("classSemesterId"))
+					classCourseSemesters = object.classCourseSemesters;
+			});
+			for(var i = 0; i < classCourseSemesters.length; i++) {
+				if(classCourseSemesters[i].timetable != null
+						&& classCourseSemesters[i].timetable.length > 0) {
+					var room = classCourseSemesters[i].timetable[0].room;
 					var check = false;
 					if(room != null) {
-						var id  = classesCoursesJSON[classSelected].classCourseSemesters[i].classCourseSemesterId;
+						var id  = classCourseSemesters[i].classCourseSemesterId;
 						for(var x = 0; x < roomsJSON.length; x++) {
 							if(roomsJSON[x].roomId == room.roomId) {
 								$("#select-rooms-" +id).find("option[value='"+x+"']").attr("selected", "selected");
@@ -272,12 +293,12 @@ $(document).ready(
 	
 	function _getTRCoursesClass(classCourseSemester) {
 		var tr = "<tr>"
-				+ "<td>"
+				+ "<td " 
+				+ "data-courseSemesterId='" +classCourseSemester.courseSemester.courseSemesterId +"'>"
 				+ 	classCourseSemester.courseSemester.course.code
 				+ "</td>"
 				+ "<td><div class='input-control select'><select id='select-rooms-"
-				+ classCourseSemester.classCourseSemesterId
-				+ "'>"
+				+ classCourseSemester.classCourseSemesterId + "'>"
 				+ "<option value='-1'>...</option>"
 				+ "</select></div></td>"
 				+ "</tr>";
@@ -287,12 +308,17 @@ $(document).ready(
 	
 	
 	function _checkCustomRooms() {
+		var classCourseSemesters = {};
+		$.each(classesCoursesJSON, function(value, object) {
+			if(object.classSemesterId == _urlParam("classSemesterId"))
+				classCourseSemesters = object.classCourseSemesters;
+		});
 		var classSelected = $("#select-classes option:selected").val();
 		var check = true;
 		var value = -1;
-		var id = classesCoursesJSON[classSelected].classCourseSemesters[0].classCourseSemesterId;
-		for(var i = 1; i < classesCoursesJSON[classSelected].classCourseSemesters.length; i++) {
-			var idNext  = classesCoursesJSON[classSelected].classCourseSemesters[i].classCourseSemesterId;
+		var id = classCourseSemesters[0].classCourseSemesterId;
+		for(var i = 1; i < classCourseSemesters.length; i++) {
+			var idNext  = classCourseSemesters[i].classCourseSemesterId;
 			if($("#select-rooms-" +id +" option:selected").val() != $("#select-rooms-" +idNext +" option:selected").val()) {
 				check = false;
 				break;
@@ -309,23 +335,27 @@ $(document).ready(
 	
 	function _compareWithTimetablesRooms(id) {
 		conflictDateSlots = [];
-		var selectedClass = $("#select-classes option:selected").val();
 		var selectedRoom = $("#" +id +" option:selected").val();
 		var concflictRooms = [];
+		var classCourseSemesters = {};
+		$.each(classesCoursesJSON, function(value, object) {
+			if(value.classSemesterId == _urlParam("classSemesterId"))
+				classCourseSemesters = object.classCourseSemesters;
+		});
 		if(roomsJSON[selectedRoom] != null && roomsJSON[selectedRoom].timetables != null && roomsJSON[selectedRoom].timetables.length > 0) {
-			for(var x = 0; x < classesCoursesJSON[selectedClass].classCourseSemesters.length; x++) {
-				if(classesCoursesJSON[selectedClass].classCourseSemesters[x].timetable.length > 0) {
-					for(var y = 0; y < classesCoursesJSON[selectedClass].classCourseSemesters[x].timetable.length; y++) {
+			for(var x = 0; x < classCourseSemesters.length; x++) {
+				if(classCourseSemesters[x].timetable.length > 0) {
+					for(var y = 0; y < classCourseSemesters[x].timetable.length; y++) {
 						for(var z = 0; z < roomsJSON[selectedRoom].timetables.length; z++) {
-								if(classesCoursesJSON[selectedClass].classCourseSemesters[x].timetable[y].date == roomsJSON[selectedRoom].timetables[z].date 
-										&& classesCoursesJSON[selectedClass].classCourseSemesters[x].timetable[y].slot 
+								if(classCourseSemesters[x].timetable[y].date == roomsJSON[selectedRoom].timetables[z].date 
+										&& classCourseSemesters[x].timetable[y].slot 
 										== roomsJSON[selectedRoom].timetables[z].slot) {
-									concflictRooms.push(classesCoursesJSON[selectedClass].classCourseSemesters[x]);
+									concflictRooms.push(classCourseSemesters[x]);
 									
 									var dateSlot = new Object();
 									dateSlot.date = roomsJSON[selectedRoom].timetables[z].date;
 									dateSlot.slot = roomsJSON[selectedRoom].timetables[z].slot;
-									dateSlot.course = classesCoursesJSON[selectedClass].classCourseSemesters[x].courseSemester.course.code;
+									dateSlot.course = classCourseSemesters[x].courseSemester.course.code;
 									
 									conflictDateSlots.push(dateSlot);
 								}

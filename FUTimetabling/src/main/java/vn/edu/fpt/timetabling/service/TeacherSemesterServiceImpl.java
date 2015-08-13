@@ -59,8 +59,10 @@ public class TeacherSemesterServiceImpl implements TeacherSemesterService {
 			String name = row.getCell(1).getStringCellValue();
 			String email = row.getCell(2).getStringCellValue();
 			String accountType = row.getCell(3).getStringCellValue();
-			if(teacherService.getTeacherByAccount(account) == null) {
-				Teacher teacher = new Teacher();
+
+			Teacher teacher = teacherService.getTeacherByAccount(account);
+			if(teacher == null) {
+				teacher = new Teacher();
 				teacher.setAccount(account);
 				teacher.setName(name);
 				teacher.setEmail(email);
@@ -71,7 +73,7 @@ public class TeacherSemesterServiceImpl implements TeacherSemesterService {
 			if(getTeacherSemesterByAccount(semesterId, account, false, false) == null) {
 				TeacherSemester teacherSemester= new TeacherSemester();
 				teacherSemester.setSemester(semesterService.getSemesterById(semesterId, false, false, false, false));
-				teacherSemester.setTeacher(teacherService.getTeacherByAccount(account));
+				teacherSemester.setTeacher(teacher);
 				addTeacherSemester(teacherSemester);
 			}
 		}
@@ -163,5 +165,7 @@ public class TeacherSemesterServiceImpl implements TeacherSemesterService {
 		}
 		return result;
 	}	
+	
+	
 }
 

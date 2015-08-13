@@ -9,16 +9,19 @@ $(document).ready(function() {
 	
 	_init();
 	
-	$("#table-classes").on("click", "a[id^='edit-class']", function() {
-		_setDialogEditData($("#dialog-edit-class"), $(this).closest("tr"));
-		_showDialog("dialog-edit-class");
-	});
-	
 	$("#table-classes").on("click", "a[id^='delete-class']",function() {
 		$("#dialog-delete-class").attr("data-classId", $(this).closest("tr").attr("data-classId"));
 		_showDialog("dialog-delete-class");
 	});
 
+	$("#table-classes").on("click", "a[id='set-student']",function() {
+		window.location = "classFPTs/autoStudentClass?classSemesterId=" +$(this).closest("tr").attr("data-classSemesterId");
+	});
+	
+	$("#table-classes").on("click", "a[id='clear-student']",function() {
+		window.location = "classFPTs/clearStudentClass?classSemesterId=" +$(this).closest("tr").attr("data-classSemesterId");
+	});
+	
 	$("#btn-delete-accept").on("click", function() {
 		window.location = "classFPTs/deleteClassFPT?classId=" +$("#dialog-delete-class").attr("data-classId");
 	});
@@ -28,20 +31,12 @@ $(document).ready(function() {
 		_showDialog("dialog-delete-course");
 	});
 	
-	$("#table-classes").on("click", "#a[id='courses-class']", function() {
-		var tr = $(this).closest('tr');
-        var row = table.row( tr );
- 
-        if ( row.child.isShown() ) {
-            // This row is already open - close it
-            row.child.hide();
-            tr.removeClass('shown');
-        }
-        else {
-            // Open this row
-            row.child().show();
-            tr.addClass('shown');
-        }
+	$("#btn-auto-set-student").on("click", function() {
+		window.location = "classFPTs/autoStudentClasses?semesterId=" +_urlParam("semesterId");
+	});
+	
+	$("#btn-auto-clear-student").on("click", function() {
+		window.location = "classFPTs/clearStudentClasses?semesterId=" +_urlParam("semesterId");
 	});
 
 	$("#btn-add-class").on("click", function() {
@@ -49,19 +44,9 @@ $(document).ready(function() {
 		_showDialog("dialog-add-class");
 	});
 	
-	$("#dialog-edit-class #btn-edit-save").on("click", function() {
-		$("#form-edit-class").attr("action", "classFPTs/updateClassFPTs");
-		$("#form-edit-class").submit();
-	});
-	
 	$("#dialog-add-class #btn-add-save").on("click", function() {
 		$("#form-add-class").attr("action", "classFPTs/updateClassFPTs");
 		$("#form-add-class").submit();
-	});
-	
-	$("#dialog-edit-class #btn-edit-cancel").on("click", function() {
-		_showDialog("dialog-edit-class");
-		_clearDialogData($("#dialog-edit-class"));
 	});
 	
 	$("#dialog-add-class #btn-add-cancel").on("click", function() {
@@ -81,26 +66,11 @@ $(document).ready(function() {
 		_setTextAriaCoursesSelected($(this));
 	});
 	
-	$("#table-edit-class #select-courses").on("change", function() {
-		_setTextAriaCoursesSelected($(this));
-	});
-	
 	$("#table-classes").on("click", "#courses-class", function() {
 		var td = $(this).closest("td");
 		_setDataDialogClassCourse(td);
 		$("#dialog-class-course").attr("data-classId", $(td).closest("tr").attr("data-classId")); 
 		_showDialog("dialog-class-course");
-	});
-	
-	$("#dialog-class-course").on("click", "#btn-save", function() {
-		var semesterId = $("<input>").attr("type", "hidden")
-		                        .attr("name", "semesterId").val(_urlParam("semesterId"));
-		var classId = $("<input>").attr("type", "hidden")
-									.attr("name", "classId").val($("#dialog-class-course").attr("data-classId"));
-		$('#form-class-course').append($(semesterId));
-		$('#form-class-course').append($(classId));
-		$("#form-class-course").attr("action","classFPTs/updateClassCourse");
-		$("#form-class-course").submit();
 	});
 	
 	$("#dialog-class-course").on("click", "#btn-cancel", function() {
@@ -135,27 +105,6 @@ $(document).ready(function() {
 		});
 		
 		_setTextAriaCoursesSelected(dialog.find("#select-courses"));
-	}
-	
-	function _setDialogEditData(dialog, tr) {
-		dialog.find("#classId").attr("value", tr.attr("data-classId"));
-		dialog.find("#classSemesterId").attr("value", tr.attr("data-classSemesterId"));
-		dialog.find("#batch").attr("value", tr.find("td:eq(1)").text());
-		dialog.find("#batchChar").attr("value", tr.find("td:eq(2)").text());
-		dialog.find("#select-semester-edit").find("option:contains('" +tr.attr("data-semesterName").trim() +"')").attr("selected", "selected");
-		dialog.find("#select-specializeds").find("option:contains('" +tr.find("td:eq(3)").text().trim() +"')").attr("selected", "selected");
-		dialog.find("#select-types").find("option:contains('" +tr.find("td:eq(4)").text().trim() +"')").attr("selected", "selected");
-		
-		var listCourses = tr.find("td:eq(5)").text().split(";");
-		
-		$.each(listCourses, function(i, e) {
-			if(e != "") {
-				console.log(e.trim());
-				$("#select-courses option:contains('" +e.trim() +"')").prop("selected", true);
-			}
-		});
-
-		_setTextAriaCoursesSelected($("#table-edit-class").find("#select-courses"));
 	}
 	
 	function _setTextAriaCoursesSelected(parents) {

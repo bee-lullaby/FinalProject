@@ -7,6 +7,7 @@ public class DaySlot {
 	private int slot;
 	private int setCourseSlot;
 
+	// map between Course Code and DataSchedule
 	private HashMap<String, DataSchedule> dataSchedule;
 
 	/**
