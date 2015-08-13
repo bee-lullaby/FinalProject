@@ -56,7 +56,6 @@ public class StaffController extends GeneralController {
 		staff.setAccount(account);
 		staff.setName(name);
 		staff.setEmail(email);
-		staff.setAccountType("staff");
 
 		if (staffId == -1) {
 			staffService.addStaff(staff);

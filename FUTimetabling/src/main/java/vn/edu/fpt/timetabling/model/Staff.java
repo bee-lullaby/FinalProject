@@ -18,8 +18,6 @@ public class Staff {
 	private String account;
 	private String name;
 	private String email;
-	@Column(name = "account_type")
-	private String accountType;
 
 	/**
 	 * 
@@ -35,14 +33,12 @@ public class Staff {
 	 * @param email
 	 * @param accountType
 	 */
-	public Staff(int staffId, String account, String name, String email,
-			String accountType) {
+	public Staff(int staffId, String account, String name, String email) {
 		super();
 		this.staffId = staffId;
 		this.account = account;
 		this.name = name;
 		this.email = email;
-		this.accountType = accountType;
 	}
 
 	/**
@@ -51,12 +47,11 @@ public class Staff {
 	 * @param email
 	 * @param accountType
 	 */
-	public Staff(String account, String name, String email, String accountType) {
+	public Staff(String account, String name, String email) {
 		super();
 		this.account = account;
 		this.name = name;
 		this.email = email;
-		this.accountType = accountType;
 	}
 
 	/**
@@ -119,25 +114,8 @@ public class Staff {
 		this.email = email;
 	}
 
-	/**
-	 * @return the accountType
-	 */
-	public String getAccountType() {
-		return accountType;
-	}
-
-	/**
-	 * @param accountType
-	 *            the accountType to set
-	 */
-	public void setAccountType(String accountType) {
-		this.accountType = accountType;
-	}
-
 	@Override
 	public String toString() {
-		return "{staffId = " + staffId + ", account = " + account + ", name = "
-				+ name + ", email = " + email + ", accountType = "
-				+ accountType + "}";
+		return "{staffId = " + staffId + ", account = " + account + ", name = " + name + ", email = " + email + "}";
 	}
 }

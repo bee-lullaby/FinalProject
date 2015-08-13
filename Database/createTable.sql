@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 13, 2015 at 05:38 PM
+-- Generation Time: Aug 13, 2015 at 05:58 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `class_course_student_semester` (
 `class_course_student_semester_id` int(11) NOT NULL,
   `class_course_semester_id` int(11) NOT NULL,
   `student_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3231 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -250,8 +250,7 @@ CREATE TABLE IF NOT EXISTS `staff` (
 `staff_id` int(11) NOT NULL,
   `account` varchar(20) NOT NULL,
   `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_vietnamese_ci NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `account_type` varchar(20) NOT NULL
+  `email` varchar(50) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -301,8 +300,7 @@ CREATE TABLE IF NOT EXISTS `teachers` (
 `teacher_id` int(11) NOT NULL,
   `account` varchar(20) NOT NULL,
   `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_vietnamese_ci NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `account_type` varchar(20) NOT NULL
+  `email` varchar(50) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -511,7 +509,7 @@ MODIFY `class_course_semester_merge_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INC
 -- AUTO_INCREMENT for table `class_course_student_semester`
 --
 ALTER TABLE `class_course_student_semester`
-MODIFY `class_course_student_semester_id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `class_course_student_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3231;
 --
 -- AUTO_INCREMENT for table `class_course_teacher_semester`
 --

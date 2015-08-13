@@ -573,7 +573,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 			if (room.getCourses() == null || room.getCourses().isEmpty()) {
 				row += "|0";
 			} else {
-				StringTokenizer stringTokenizer = new StringTokenizer(room.getCourses(), " ");
+				StringTokenizer stringTokenizer = new StringTokenizer(room.getCourses(), ", ");
 				int count = 0;
 				while (stringTokenizer.hasMoreTokens()) {
 					count++;
