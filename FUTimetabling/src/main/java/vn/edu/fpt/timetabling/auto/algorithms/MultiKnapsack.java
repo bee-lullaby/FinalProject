@@ -6,7 +6,6 @@ import java.util.HashMap;
 import localsearch.constraints.basic.LessOrEqual;
 import localsearch.functions.conditionalsum.ConditionalSum;
 import localsearch.model.ConstraintSystem;
-import localsearch.model.IFunction;
 import localsearch.model.LocalSearchManager;
 import localsearch.model.VarIntLS;
 import localsearch.search.TabuSearch;
@@ -42,7 +41,7 @@ public class MultiKnapsack {
 					x[i] = new VarIntLS(ls, 0, k - 1);
 
 				for (int j = 0; j < k; j++) {
-					IFunction s = new ConditionalSum(x, w, j);
+					ConditionalSum s = new ConditionalSum(x, w, j);
 					S.post(new LessOrEqual(s, 30));
 					S.post(new LessOrEqual(15, s));
 				}
@@ -119,7 +118,7 @@ public class MultiKnapsack {
 
 		ConstraintSystem S = new ConstraintSystem(ls);
 		for (int j = 0; j < k; j++) {
-			IFunction s = new ConditionalSum(x, w, j);
+			ConditionalSum s = new ConditionalSum(x, w, j);
 			S.post(new LessOrEqual(s, 30));
 			S.post(new LessOrEqual(15, s));
 		}

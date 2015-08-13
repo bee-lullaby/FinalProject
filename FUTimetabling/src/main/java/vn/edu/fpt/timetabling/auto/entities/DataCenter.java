@@ -14,13 +14,8 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
-import org.apache.poi.util.SystemOutLogger;
-
-import com.mysql.fabric.xmlrpc.base.Array;
-
 import localsearch.model.VarIntLS;
 import vn.edu.fpt.timetabling.auto.algorithms.MultiKnapsack;
-import vn.edu.fpt.timetabling.auto.algorithms.P;
 
 public class DataCenter {
 
@@ -114,6 +109,8 @@ public class DataCenter {
 	public ArrayList<Course> lSoftSkillCourse;
 	public HashMap<Course, Integer> mCourse2RoomLimit;
 	public int[] aCourse2RoomLimit;
+	//public ArrayList<ArrayList<Course>> roomCourse;
+	public HashMap<Room,ArrayList<Course>> mRoomCourse;
 
 	public int nbCourseType;
 	public ArrayList<Course>[] lClassifiedCourse;
@@ -1650,7 +1647,7 @@ public class DataCenter {
 		try {
 
 			nbRoom = roomData.size();
-
+			
 			rooms = new Room[nbRoom];
 			mRoom2Index = new HashMap<Room, Integer>();
 			mRoomID2Code = new HashMap<Integer, String>();
@@ -1658,19 +1655,30 @@ public class DataCenter {
 			mID2Room = new HashMap<Integer, Room>();
 			mBuidling2RoomList = new HashMap<Building, ArrayList<Room>>();
 			mCode2Room = new HashMap<>();
+			mRoomCourse = new HashMap<Room,ArrayList<Course>>();
 
 			for (int i = 0; i < buildings.length; i++) {
 				Building bd = buildings[i];
 				mBuidling2RoomList.put(bd, new ArrayList<Room>());
 			}
+			
 
 			int idx = -1;
 			for (String string : roomData) {
+				idx++;
 				StringTokenizer stringTokenizer = new StringTokenizer(string, "|");
 				int rID = Integer.parseInt(stringTokenizer.nextToken());
 				String rCode = stringTokenizer.nextToken().toUpperCase();
 				String bCode = stringTokenizer.nextToken().toUpperCase();
 				int capacity = Integer.parseInt(stringTokenizer.nextToken());
+				int nbCourseInRoom = Integer.parseInt(stringTokenizer.nextToken());
+				ArrayList<Course> courseEachRoom = new ArrayList<>();
+				for(int j = 0;j<nbCourseInRoom;j++){
+					String str =  stringTokenizer.nextToken().toUpperCase();
+					courseEachRoom.add(mCode2Course.get(str));
+				}
+				
+				
 				System.out.println("id = " + rID + ", code = " + rCode + ", building = " + bCode);
 
 				int buildingID = -1;
@@ -1680,8 +1688,9 @@ public class DataCenter {
 				} else {
 					buildingID = mBuildingCode2ID.get(bCode);
 				}
-
+				
 				Room r = new Room(rID, rCode, buildingID, capacity);
+				mRoomCourse.put(r,courseEachRoom);
 				rooms[idx] = r;
 				mRoom2Index.put(r, idx);
 				mRoomCode2ID.put(rCode, rID);
@@ -2843,43 +2852,43 @@ public class DataCenter {
 			mTeacherID2Code = new HashMap<>();
 			mID2Teacher = new HashMap<>();
 			mCode2Teacher = new HashMap<>();
-			mDepartment2TeacherList = new HashMap<>();
-			for (Department dep : departments) {
+			//mDepartment2TeacherList = new HashMap<>();
+			/*for (Department dep : departments) {
 				mDepartment2TeacherList.put(dep, new ArrayList<>());
 			}
-
+*/
 			int idx = -1;
 			for (String line : teacherData) {
 				idx++;
 				StringTokenizer stringTokenizer = new StringTokenizer(line, "|");
 				int id = Integer.parseInt(stringTokenizer.nextToken());
 				String code = stringTokenizer.nextToken().toUpperCase();
-				String department = stringTokenizer.nextToken().toUpperCase();
+				/*String department = stringTokenizer.nextToken().toUpperCase();
 				Department dep = mCode2Department.get(department);
-				if (dep != null) {
-					Teacher tc = new Teacher(id, code, dep);
+				if (dep != null) {*/
+					Teacher tc = new Teacher(id, code);
 					teachers[idx] = tc;
 					mTeacher2Index.put(tc, idx);
 					mTeacherCode2ID.put(code, id);
 					mTeacherID2Code.put(id, code);
 					mID2Teacher.put(id, tc);
 					mCode2Teacher.put(code, tc);
-					mDepartment2TeacherList.get(dep).add(tc);
-				}
+					//mDepartment2TeacherList.get(dep).add(tc);
+				//}
 			}
 			for (Teacher tc : teachers) {
-				System.out.println(tc.ID + " " + tc.code + " " + tc.department.code);
+				System.out.println(tc.ID + " " + tc.code );
 			}
 			System.out.println();
 
-			for (Department dep : departments) {
+			/*for (Department dep : departments) {
 				ArrayList<Teacher> L = mDepartment2TeacherList.get(dep);
 				System.out.print(dep.code + "-<" + L.size() + ">:");
 				for (Teacher teacher : L) {
 					System.out.print(" " + teacher.code);
 				}
 				System.out.println();
-			}
+			}*/
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

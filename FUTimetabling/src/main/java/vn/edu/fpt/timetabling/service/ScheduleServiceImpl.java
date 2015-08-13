@@ -456,11 +456,11 @@ public class ScheduleServiceImpl implements ScheduleService {
 			buildingData.add(building.getBuildingId() + "|" + building.getCode());
 		}
 		DataCenter dataCenter = new DataCenter();
+		dataCenter.loadData_Department_v2(departmentData);
+		dataCenter.loadData_Course_v2(courseData);
+		dataCenter.loadData_Class_v2(classData);
 		dataCenter.loadData_Building_v2(buildingData);
 		dataCenter.loadData_Room_v2(roomData);
-		dataCenter.loadData_Department_v2(departmentData);
-		dataCenter.loadData_Class_v2(classData);
-		dataCenter.loadData_Course_v2(courseData);
 		dataCenter.loadData_ClassCourse_v2(classCourseData);
 		dataCenter.assignStudentEachClassCourse();
 		dataCenter.loadData_Teacher_v2(teacherData);
