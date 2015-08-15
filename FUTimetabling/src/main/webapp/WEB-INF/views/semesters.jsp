@@ -6,11 +6,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Semesters Page</title>
+<title>SEMESTER</title>
 
 <link href="../resources/css/metro.css" rel="stylesheet">
 <link href="../resources/css/metro-icons.css" rel="stylesheet">
 <link href="../resources/css/docs.css" rel="stylesheet">
+<link href="../resources/css/flaticon.css" rel="stylesheet">
+<link href="../resources/css/pageStyle.css" rel="stylesheet">
 
 <script src="../resources/js/jquery-2.1.3.min.js"></script>
 <script src="../resources/js/semesters.js"></script>
@@ -95,58 +97,88 @@ h3 {
 </script>
 <body>
 	<t:header />
-	<div style="width: 80%; margin: 0 auto; padding-bottom: 50px">
-		<h1>
-			<a href="/Timetabling/staff" class="nav-button transform"><span></span></a>
-			&nbsp;Semesters Management
-		</h1>
-		<div style="display: flex">
-			<div id="select-semester" class="left"
-				style="display: inline-block; width: 250px;">
-				<h3>General Management</h3>
-				<a href="staffManagement">Staff</a> <a href="building">Building</a>
-				<a href="rooms">Room</a> <a href="#" class="active">Semester</a> <a
-					href="specialized">Specialized</a> <a href="departments">Department</a>
-			</div>
-			<div style="display: inline-block; margin-left: 25px">
-				<div id="control-bar" style="width: 100%; margin-bottom: 45px;">
-					<div style="width: auto; float: right">
-						<button id="btn-add-semester" class="button" data-role="hint"
-							data-hint-background="#1CB7EC" data-hint-color="fg-white"
-							data-hint-position="top" data-hint="Add semester">
-							<span class="mif-plus"></span>
-						</button>
+	<div style="width: 100%;">
+		<div id="title" style="width: 80%; margin: 0 auto; color: #71b1d1;"
+			class="fade-in">
+			<h1>
+				<a href="/Timetabling/staff" class="nav-button transform"><span></span></a>
+				&nbsp;Semester
+			</h1>
+		</div>
+		<div id="line"
+			style="border-bottom: thin solid #000; margin-bottom: 0.625rem; padding-top: 5px; width: 100%;"></div>
+
+		<div style="width: 80%; margin: 0 auto; margin-top: 20px;"
+			class="fade-in">
+			<div style="display: flex">
+				<div id="select-semester" class="left"
+					style="display: inline-block; width: 250px;">
+					<ul class="sidebar2 ">
+						<li class="title">General Management</li>
+						<li><a href="staffManagement"><span
+								class="icon flaticon-id12"></span>Staff</a></li>
+						<li><a href="building"><span
+								class="icon flaticon-school1"></span>Building</a></li>
+						<li><a href="rooms"><span
+								class="icon flaticon-classroom"></span>Room</a></li>
+						<li  class="active"><a href="#"><span
+								class="icon flaticon-clock125"></span>Semester</a></li>
+						<li><a href="specialized"><span
+								class="icon flaticon-library58"></span>Specialized</a></li>
+						<li><a href="departments"><span
+								class="icon flaticon-business53"></span>Department</a></li>
+					</ul>
+
+					<!-- 	<h3>General Management</h3>
+					<a href="staffManagement">Staff</a> <a class="active" href="#">Building</a>
+					<a href="rooms">Room</a> <a href="semesters">Semester</a> <a
+						href="specialized">Specialized</a> <a href="departments">Department</a>  -->
+				</div>
+				<div
+					style="display: inline-block; margin-left: 25px; width: 100%; background-color: #fff; padding: 20px;">
+					<div id="control-bar" style="width: 100%;">
+						<h4 style="display: inline-block">Semesters's Data</h4>
+						<div style="width: auto; float: right">
+							<button id="btn-add-semester" class="button" data-role="hint"
+								data-hint-background="#1CB7EC" data-hint-color="fg-white"
+								data-hint-position="top" data-hint="Add semester">
+								<span class="mif-plus"></span>
+							</button>
+						</div>
+					</div>
+					<div style="width: 100%; height: 100%;">
+						<table id="table-semesters"
+							class="table striped hovered border bordered cell-hovered">
+							<thead>
+								<tr>
+									<th>Code</th>
+									<th>Name</th>
+									<th>Start Date</th>
+									<th>End Date</th>
+									<th>Delete</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:if test="${!empty listSemesters}">
+									<c:forEach items="${listSemesters}" var="semester">
+										<tr data-semesterId="${semester.semesterId}">
+											<td>${semester.code}</td>
+											<td>${semester.name}</td>
+											<td>${semester.startDate}</td>
+											<td>${semester.endDate}</td>
+											<td><a href="#"
+												id="delete-semester-${semester.semesterId}">Delete</a></td>
+										</tr>
+									</c:forEach>
+								</c:if>
+							</tbody>
+						</table>
 					</div>
 				</div>
-				<div style="width: 100%; height: 100%;">
-					<table id="table-semesters"
-						class="table striped hovered border bordered cell-hovered">
-						<thead>
-							<tr>
-								<th>Code</th>
-								<th>Name</th>
-								<th>Start Date</th>
-								<th>End Date</th>
-								<th>Delete</th>
-							</tr>
-						</thead>
-						<tbody>
-							<c:if test="${!empty listSemesters}">
-								<c:forEach items="${listSemesters}" var="semester">
-									<tr data-semesterId="${semester.semesterId}">
-										<td>${semester.code}</td>
-										<td>${semester.name}</td>
-										<td>${semester.startDate}</td>
-										<td>${semester.endDate}</td>
-										<td><a href="#"
-											id="delete-semester-${semester.semesterId}">Delete</a></td>
-									</tr>
-								</c:forEach>
-							</c:if>
-						</tbody>
-					</table>
-				</div>
 			</div>
+		</div>
+		<div id="bottom-bar" class="fade-in">
+			<div id="nav-bottom-bar"><a href="http://fpt.edu.vn">FPT University</a><a href="#">Contact</a><a href="#">About Us</a></div>
 		</div>
 	</div>
 	<div id="dialog-add-semester" data-role="dialog" class="padding20"
@@ -171,22 +203,24 @@ h3 {
 					<tr>
 						<th>Start Date</th>
 						<td>
-							<div class="input-control text" id="datePicker-start" style="width: 100%;">
-									<input type="text" name="startDate" id="startDate">
-									<button class="button">
-										<span class="mif-calendar"></span>
-									</button>
+							<div class="input-control text" id="datePicker-start"
+								style="width: 100%;">
+								<input type="text" name="startDate" id="startDate">
+								<button class="button">
+									<span class="mif-calendar"></span>
+								</button>
 							</div>
 						</td>
 					</tr>
 					<tr>
 						<th>End Date</th>
 						<td>
-							<div class="input-control text" id="datePicker-end" style="width: 100%;">
-									<input type="text" name="endDate" id="endDate">
-									<button class="button">
-										<span class="mif-calendar"></span>
-									</button>
+							<div class="input-control text" id="datePicker-end"
+								style="width: 100%;">
+								<input type="text" name="endDate" id="endDate">
+								<button class="button">
+									<span class="mif-calendar"></span>
+								</button>
 							</div>
 						</td>
 					</tr>

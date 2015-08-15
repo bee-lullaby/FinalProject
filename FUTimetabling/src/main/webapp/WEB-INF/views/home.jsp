@@ -21,13 +21,20 @@
 						});
 	}
 </script>
-<meta name="google-signin-scope" content="profile email">
+<link href="resources/css/metro.css" rel="stylesheet" type="text/css">
+<link href="resources/css/metro-icons.css" rel="stylesheet"
+	type="text/css">
+
 </head>
 <body>
-	<h1>Hello world!</h1>
-	<P>The time on the server is ${serverTime}.</P>
-	<button id="signinButton">Sign in with Google</button>
-	<label id="email"></label>
+	<div style="width: 40%; margin: 0 auto; text-align: center;">
+		<div style="margin: 25px 0;">
+			<h1>FPT UNIVERSITY</h1>
+		</div>
+		<div style="width: 100%;"></div>
+		<button class="button" id="signinButton" style="width: 200px;">
+			SIGN IN</button>
+	</div>
 	<script>
 		$('#signinButton').click(function() {
 			// signInCallback defined in step 6.
@@ -45,7 +52,8 @@
 					url : 'http://localhost:8080/Timetabling/',
 					contentType : 'application/octet-stream; charset=utf-8',
 					success : function(result) {
-						window.location = 'http://localhost:8080/Timetabling/' + result;
+						window.location = 'http://localhost:8080/Timetabling/'
+								+ result;
 					},
 					processData : false,
 					data : authResult['code']

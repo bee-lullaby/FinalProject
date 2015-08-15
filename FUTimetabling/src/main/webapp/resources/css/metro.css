@@ -5668,6 +5668,7 @@ a.shortcut-button {
   cursor: pointer;
   z-index: 2;
   position: relative;
+  color: #00aff0;
 }
 .nav-button:active,
 .nav-button:focus {

@@ -6,12 +6,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Rooms Page</title>
+<title>ROOM</title>
 
 <link href="../resources/css/metro.css" rel="stylesheet">
 <link href="../resources/css/metro-icons.css" rel="stylesheet">
 <link href="../resources/css/docs.css" rel="stylesheet">
-
+<link href="../resources/css/pageStyle.css" rel="stylesheet">
+<link href="../resources/css/flaticon.css" rel="stylesheet">
 <script src="../resources/js/jquery-2.1.3.min.js"></script>
 <script src="../resources/js/rooms.js"></script>
 <script src="../resources/js/metro.js"></script>
@@ -93,68 +94,95 @@ h3 {
 </script>
 <body>
 	<t:header />
-	<div style="width: 80%; margin: 0 auto; padding: 30px;">
-		<h1>
-			<a href="/Timetabling/staff" class="nav-button transform"><span></span></a>
-			&nbsp;Rooms Management
-		</h1>
+	<div style="width: 100%;">
+		<div id="title" style="width: 80%; margin: 0 auto; color: #71b1d1;"
+			class="fade-in">
+			<h1>
+				<a href="/Timetabling/staff" class="nav-button transform"><span></span></a>
+				&nbsp;Room
+			</h1>
+		</div>
+		<div id="line"
+			style="border-bottom: thin solid #000; margin-bottom: 0.625rem; padding-top: 5px; width: 100%;"></div>
 
-		<div style="display: flex">
-			<div id="select-semester" class="left"
-				style="display: inline-block; width: 250px;">
-				<h3>General Management</h3>
-				<a href="staffManagement">Staff</a> <a href="building">Building</a>
-				<a class="active" href="#">Room</a> <a href="semesters">Semester</a> <a
-					href="specialized">Specialized</a> <a href="departments">Department</a>
-			</div>
-			<div style="display: inline-block; margin-left: 25px; width: 100%;">
-				<div id="control-bar" style="width: 100%; margin-bottom: 45px;">
-					<div style="width: auto; float: right">
-						<button id="btn-add-room" class="button" data-role="hint"
-							data-hint-background="#1CB7EC" data-hint-color="fg-white"
-							data-hint-position="top" data-hint="Add Course">
-							<span class="mif-plus"></span>
-						</button>
-						<button id="btn-add-from-file" class="button" data-role="hint"
-							data-hint-background="#1CB7EC" data-hint-color="fg-white"
-							data-hint-position="top" data-hint="Add From File">
-							<span class="mif-file-text"></span>
-						</button>
-					</div>
+		<div style="width: 80%; margin: 0 auto; margin-top: 20px;"
+			class="fade-in">
+			<div style="display: flex">
+				<div id="select-semester" class="left"
+					style="display: inline-block; width: 250px;">
+					<ul class="sidebar2 ">
+						<li class="title">General Management</li>
+						<li><a href="staffManagement"><span
+								class="icon flaticon-id12"></span>Staff</a></li>
+						<li><a href="building"><span
+								class="icon flaticon-school1"></span>Building</a></li>
+						<li class="active"><a href="#"><span class="icon flaticon-classroom"></span>Room</a></li>
+						<li><a href="semesters"><span
+								class="icon flaticon-clock125"></span>Semester</a></li>
+						<li><a href="specialized"><span
+								class="icon flaticon-library58"></span>Specialized</a></li>
+						<li><a href="departments"><span
+								class="icon flaticon-business53"></span>Department</a></li>
+					</ul>
+
+					<!-- 	<h3>General Management</h3>
+					<a href="staffManagement">Staff</a> <a class="active" href="#">Building</a>
+					<a href="rooms">Room</a> <a href="semesters">Semester</a> <a
+						href="specialized">Specialized</a> <a href="departments">Department</a>  -->
 				</div>
-				<div style="width: 100%; height: 100%;">
-					<table id="table-rooms"
-						class="table striped hovered border bordered cell-hovered">
-						<thead>
-							<tr>
-								<th>Code</th>
-								<th>Capacity</th>
-								<th>Building</th>
-								<th>For Courses</th>
-								<th>Edit</th>
-								<th>Delete</th>
-							</tr>
-						</thead>
-						<tbody>
-							<c:if test="${!empty listRooms}">
-								<c:forEach items="${listRooms}" var="room">
-									<tr data-roomId="${room.roomId}">
-										<td>${room.code}</td>
-										<td>${room.capacity}</td>
-										<td>${room.building.code}</td>
-										<td>${room.courses}</td>
-										<td><a href="#" id="edit-room-${room.roomId}">Edit</a></td>
-										<td><a href="#" id="delete-room-${room.roomId}">Delete</a></td>
-									</tr>
-								</c:forEach>
-							</c:if>
-						</tbody>
-					</table>
+				<div
+					style="display: inline-block; margin-left: 25px; width: 100%; background-color: #fff; padding: 20px;">
+					<div id="control-bar" style="width: 100%;">
+						<h4 style="display: inline-block">Rooms's Data</h4>
+						<div style="width: auto; float: right">
+							<button id="btn-add-room" class="button" data-role="hint"
+								data-hint-background="#1CB7EC" data-hint-color="fg-white"
+								data-hint-position="top" data-hint="Add Course">
+								<span class="mif-plus"></span>
+							</button>
+							<button id="btn-add-from-file" class="button" data-role="hint"
+								data-hint-background="#1CB7EC" data-hint-color="fg-white"
+								data-hint-position="top" data-hint="Add From File">
+								<span class="mif-file-text"></span>
+							</button>
+						</div>
+					</div>
+					<div style="width: 100%; height: 100%;">
+						<table id="table-rooms"
+							class="table striped hovered border bordered cell-hovered">
+							<thead>
+								<tr>
+									<th>Code</th>
+									<th>Capacity</th>
+									<th>Building</th>
+									<th>For Courses</th>
+									<th>Edit</th>
+									<th>Delete</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:if test="${!empty listRooms}">
+									<c:forEach items="${listRooms}" var="room">
+										<tr data-roomId="${room.roomId}">
+											<td>${room.code}</td>
+											<td>${room.capacity}</td>
+											<td>${room.building.code}</td>
+											<td>${room.courses}</td>
+											<td><a href="#" id="edit-room-${room.roomId}">Edit</a></td>
+											<td><a href="#" id="delete-room-${room.roomId}">Delete</a></td>
+										</tr>
+									</c:forEach>
+								</c:if>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
+		<div id="bottom-bar" class="fade-in">
+			<div id="nav-bottom-bar"><a href="http://fpt.edu.vn">FPT University</a><a href="#">Contact</a><a href="#">About Us</a></div>
+		</div>
 	</div>
-
 	<div id="dialog-add-file" data-role="dialog" data-overlay="true"
 		data-overlay-color="op-dark" style="padding: 25px"
 		data-close-button="true">

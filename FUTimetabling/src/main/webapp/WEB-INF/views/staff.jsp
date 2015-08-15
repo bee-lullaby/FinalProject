@@ -158,7 +158,7 @@
 			<button
 				class="image-button icon-right bg-transparent bg-hover-dark no-border">
 				<span class="sub-header no-margin text-light">You are logged
-					in as ${accountType}</span> <span class="icon mif-user"></span>
+					in as <b>${account}</b></span> <span class="icon mif-user"></span>
 			</button>
 			<a href="/Timetabling/logout"
 				class="square-button bg-transparent bg-hover-dark no-border"> <span
@@ -166,7 +166,7 @@
 			</a>
 		</div>
 
-		<div class="tile-group double">
+<!-- 		<div class="tile-group double">
 			<span class="tile-group-title" style="color: black">ACCOUNT</span>
 
 			<div class="tile-container">
@@ -175,12 +175,12 @@
 					<div class="tile-content">
 						<div class="padding10">
 							<h1>${name}</h1>
-							<h5>${account}</h5>
+							<h5></h5>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+		</div>  -->
 		<div class="tile-group double">
 			<span class="tile-group-title" style="color: black">ACTIVITIES</span>
 			<div class="tile-container">
