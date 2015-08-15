@@ -1,0 +1,52 @@
+﻿thuật toán:
+- chia lớp
+- ghép lớp
+- p1: thuật toán của choko
+	+ thuat toán:
+	+ biến, invariant
+	+ constraints
+- p2: ok
+- p3: gan giao vien
+	+ tabu:
+		+ biến, invariant
+		+ constraints
+	+ score:
+		+ generate relative-score matrix
+		+ calculate
+- p4: gan phong
+	- input: list<classcourse> vs List<room>
+	- output: map<cc,room> assignedCC
+				map<cc> notYetAssignedCC
+	- 
+khac:
+- experiments:
+	+ p1: ko can
+	+ p2: ok
+		+ 
+	+ p3: 
+		+ neu dung tabu:
+			experiment theo tabu length
+		+ neu dung score
+			experiment theo weights: sameday, noon
+	+ p4: 
+		+ phần trăm số phòng được gán thành công
+		+ chạy 10-20 lần gán phòng, tính phần trăm, lấy trung bình
+
+- validation:
+	+ p1:
+	+ p2: 
+	+ p3:
+	+ p4:
+- literature review
+- slide
+- code nhom phong
+- ghép code: 
+- xóa rác
+- reference
+- conclusion
+- acknowledgement
+- học lý thuyết:
+	+ complexity: P, NP, NP-complete, NP hard
+	+ tabu search
+	+ back-tracking
+
