@@ -6,11 +6,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>ClassFPT Page</title>
+<title>CLASS</title>
 
 <link href="../resources/css/metro.css" rel="stylesheet">
 <link href="../resources/css/metro-icons.css" rel="stylesheet">
 <link href="../resources/css/docs.css" rel="stylesheet">
+<link href="../resources/css/flaticon.css" rel="stylesheet">
+<link href="../resources/css/pageStyle.css" rel="stylesheet">
 
 <script src="../resources/js/jquery-2.1.3.min.js"></script>
 <script src="../resources/js/classFPTs.js"></script>
@@ -91,104 +93,123 @@ h3 {
 </script>
 <body>
 	<t:header />
-	<div style="width: 80%; margin: 0 auto; padding-bottom: 50px;">
-		<h1>
-			<a href="/Timetabling/staff" class="nav-button transform"><span></span></a>
-			&nbsp;Classes Management
-		</h1>
-		<div style="display: flex">
-			<div id="select-semester" class="left" style="display: inline-block">
-				<h3>SEMESTER</h3>
-				<c:if test="${!empty listSemesters}">
-					<c:forEach items="${listSemesters}" var="semester">
-						<a id="${semester.semesterId}"
-							href="?semesterId=${semester.semesterId}">${semester.name}</a>
-					</c:forEach>
-				</c:if>
-			</div>
-			<div style="display: inline-block; margin-left: 25px">
-				<div id="control-bar" style="margin-bottom: 45px;">
-					<div style="width: auto; float: right">
-						<button id="btn-add-class" class="button" data-role="hint"
-							data-hint-background="#1CB7EC" data-hint-color="fg-white"
-							data-hint-position="top" data-hint="Add Class">
-							<span class="mif-plus"></span>
-						</button>
-						<button id="btn-add-from-file" class="button" data-role="hint"
-							data-hint-background="#1CB7EC" data-hint-color="fg-white"
-							data-hint-position="top" data-hint="Add From File">
-							<span class="mif-file-text"></span>
-						</button>
-						<button id="btn-auto-set-student" class="button" data-role="hint"
-							data-hint-background="#1CB7EC" data-hint-color="fg-white"
-							data-hint-position="top"
-							data-hint="Auto Set Student For All Classes">Auto Set
-							Student</button>
-						<button id="btn-auto-clear-student" class="button" data-role="hint"
-							data-hint-background="#1CB7EC" data-hint-color="fg-white"
-							data-hint-position="top"
-							data-hint="Auto Clear Student From All Classes">Auto
-							Clear Student</button>
-					</div>
-				</div>
-				<div style="width: 100%; height: 100%;">
-					<div id="table-info" style="float: left; margin-top: 20px;"></div>
-					<table id="table-classes"
-						class="table striped hovered border bordered cell-hovered">
-						<thead>
-							<tr>
-								<th>Code</th>
-								<th>Batch</th>
-								<th>Detail Specialized</th>
-								<th>Current Semester</th>
-								<th>Courses</th>
-								<th>Set Student</th>
-								<th>Clear Student</th>
-								<th>Delete</th>
-							</tr>
-						</thead>
-						<tbody>
-							<c:if test="${!empty listClassSemesters}">
-								<c:forEach items="${listClassSemesters}" var="classSemester">
-									<tr data-classSemesterId="${classSemester.classSemesterId}"
-										data-classId="${classSemester.classFPT.classId}"
-										data-semesterName="${classSemester.semester.name}">
-										<td>${classSemester.classFPT.code}</td>
-										<td>${classSemester.classFPT.batch}</td>
-										<td>${classSemester.classFPT.detailSpecialized.name}</td>
-										<td>${classSemester.semesterNumber}</td>
-										<td><a href="#" id="courses-class">Courses</a>
-											<div id="data-courses" style="display: none">
-												<c:forEach items="${classSemester.classCourseSemesters}"
-													var="classCourseSemester">
-													<div
-														id="class-course-${classCourseSemester.classCourseSemesterId}">
-														<div id="name">${classCourseSemester.courseSemester.course.code}</div>
-														<div id="blockCondition">${classCourseSemester.blockCondition}</div>
-														<div id="semesterLong">
-															<c:choose>
-																<c:when test="${classCourseSemester.semesterLong}">1</c:when>
-																<c:otherwise>0</c:otherwise>
-															</c:choose>
-														</div>
-													</div>
-												</c:forEach>
-											</div></td>
-										<td><a href="#" id="set-student">Set Student</a></td>
-										<td><a href="#" id="clear-student">Clear Student</a></td>
-										<td><a href="#"
-											id="delete-class-${classSemester.classFPT.classId}">Delete</a></td>
-									</tr>
+	<div style="width: 100%;">
+		<div id="title" style="width: 80%; margin: 0 auto; color: #71b1d1;"
+			class="fade-in">
+			<h1>
+				<a href="/Timetabling/staff" class="nav-button transform"><span></span></a>
+				&nbsp;Classes
+			</h1>
+		</div>
+		<div id="line"
+			style="border-bottom: thin solid #000; margin-bottom: 0.625rem; padding-top: 5px; width: 100%;"></div>
+
+		<div style="width: 80%; margin: 0 auto; margin-top: 20px;"
+			class="fade-in">
+				<div style="display: flex">
+					<div id="select-semester" class="left"
+						style="display: inline-block; width: 250px;">
+						<ul class="sidebar2 ">
+							<li class="title" style="padding: .75rem 2rem .75rem 2.5rem">Semester</li>
+							<c:if test="${!empty listSemesters}">
+								<c:forEach items="${listSemesters}" var="semester">
+									<li><a id="${semester.semesterId}"
+										href="?semesterId=${semester.semesterId}">${semester.name}</a></li>
 								</c:forEach>
 							</c:if>
-						</tbody>
-					</table>
+						</ul>
+					</div>
+					<div
+						style="display: inline-block; margin-left: 25px; width: 100%; background-color: #fff; padding: 20px;">
+						<div id="control-bar" style="width: 100%;">
+							<h4 style="display: inline-block">Classes's Data</h4>
+							<div style="width: auto; float: right">
+								<button id="btn-add-class" class="button" data-role="hint"
+									data-hint-background="#1CB7EC" data-hint-color="fg-white"
+									data-hint-position="top" data-hint="Add Class">
+									<span class="mif-plus"></span>
+								</button>
+								<button id="btn-add-from-file" class="button" data-role="hint"
+									data-hint-background="#1CB7EC" data-hint-color="fg-white"
+									data-hint-position="top" data-hint="Add From File">
+									<span class="mif-file-text"></span>
+								</button>
+								<button id="btn-auto-set-student" class="button"
+									data-role="hint" data-hint-background="#1CB7EC"
+									data-hint-color="fg-white" data-hint-position="top"
+									data-hint="Auto Set Student For All Classes">Auto Set
+									Student</button>
+								<button id="btn-auto-clear-student" class="button"
+									data-role="hint" data-hint-background="#1CB7EC"
+									data-hint-color="fg-white" data-hint-position="top"
+									data-hint="Auto Clear Student From All Classes">Auto
+									Clear Student</button>
+							</div>
+						</div>
+						<div style="width: 100%; height: 100%;">
+							<div id="table-info" style="float: left; margin-top: 20px;"></div>
+							<table id="table-classes"
+								class="table striped hovered border bordered cell-hovered">
+								<thead>
+									<tr>
+										<th>Code</th>
+										<th>Batch</th>
+										<th>Detail Specialized</th>
+										<th>Current Semester</th>
+										<th>Courses</th>
+										<th>Set Student</th>
+										<th>Clear Student</th>
+										<th>Delete</th>
+									</tr>
+								</thead>
+								<tbody>
+									<c:if test="${!empty listClassSemesters}">
+										<c:forEach items="${listClassSemesters}" var="classSemester">
+											<tr data-classSemesterId="${classSemester.classSemesterId}"
+												data-classId="${classSemester.classFPT.classId}"
+												data-semesterName="${classSemester.semester.name}">
+												<td>${classSemester.classFPT.code}</td>
+												<td>${classSemester.classFPT.batch}</td>
+												<td>${classSemester.classFPT.detailSpecialized.name}</td>
+												<td>${classSemester.semesterNumber}</td>
+												<td><a href="#" id="courses-class">Courses</a>
+													<div id="data-courses" style="display: none">
+														<c:forEach items="${classSemester.classCourseSemesters}"
+															var="classCourseSemester">
+															<div
+																id="class-course-${classCourseSemester.classCourseSemesterId}">
+																<div id="name">${classCourseSemester.courseSemester.course.code}</div>
+																<div id="blockCondition">${classCourseSemester.blockCondition}</div>
+																<div id="semesterLong">
+																	<c:choose>
+																		<c:when test="${classCourseSemester.semesterLong}">1</c:when>
+																		<c:otherwise>0</c:otherwise>
+																	</c:choose>
+																</div>
+															</div>
+														</c:forEach>
+													</div></td>
+												<td><a href="#" id="set-student">Set Student</a></td>
+												<td><a href="#" id="clear-student">Clear Student</a></td>
+												<td><a href="#"
+													id="delete-class-${classSemester.classFPT.classId}">Delete</a></td>
+											</tr>
+										</c:forEach>
+									</c:if>
+								</tbody>
+							</table>
+						</div>
 				</div>
+			</div>
+
+		</div>
+		<div id="bottom-bar" class="fade-in">
+			<div id="nav-bottom-bar">
+				<a href="http://fpt.edu.vn">FPT University</a><a href="#">Contact</a><a
+					href="#">About Us</a>
 			</div>
 		</div>
 	</div>
-
-
 	<div id="dialog-add-file" data-role="dialog" data-overlay="true"
 		data-overlay-color="op-dark" style="padding: 25px"
 		data-close-button="true">

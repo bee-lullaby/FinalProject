@@ -80,7 +80,7 @@ $(document).ready(function() {
 	});
 	
 	function _init() {
-		$("#select-semester").find("a[id='" +_urlParam("semesterId") +"']").addClass("active");
+		$("#select-semester").find("a[id='" +_urlParam("semesterId") +"']").closest("li").addClass("active");
 		
 		var input = $("<input>").attr("type", "hidden")
         						.attr("name", "semesterId").val(_urlParam("semesterId"));

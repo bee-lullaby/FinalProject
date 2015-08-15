@@ -6,11 +6,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Students Page</title>
+<title>STUDENT</title>
 
 <link href="../resources/css/metro.css" rel="stylesheet">
 <link href="../resources/css/metro-icons.css" rel="stylesheet">
 <link href="../resources/css/docs.css" rel="stylesheet">
+<link href="../resources/css/flaticon.css" rel="stylesheet">
+<link href="../resources/css/pageStyle.css" rel="stylesheet">
 
 <script src="../resources/js/jquery-2.1.3.min.js"></script>
 <script src="../resources/js/students.js"></script>
@@ -19,6 +21,7 @@
 <script src="../resources/js/prettify/run_prettify.js"></script>
 <script src="../resources/js/ga.js"></script>
 <script src="../resources/js/jquery.dataTables.js"></script>
+<script src="../resources/js/ellipses.js"></script>
 </head>
 <style>
 td a {
@@ -81,6 +84,17 @@ h3 {
 }
 </style>
 <script>
+	$(document).ready(function() { 
+		$('#table-students').DataTable({
+			"lengthChange": false,
+			"searching": true,
+			"paging": true,
+			"pageLength": 50,	
+			"info": true,
+			"pagingType": "full_numbers"
+	    });
+	});
+
 	function _errorNotify() {
 		var text = $("#messageError").text();
 		$.Notify({
@@ -101,65 +115,82 @@ h3 {
 </script>
 <body>
 	<t:header />
-	<div style="display: none"></div>
-	<div style="width: 80%; margin: 0 auto; padding-bottom: 50px;">
-		<h1>
-			<a href="/Timetabling/staff" class="nav-button transform"><span></span></a>
-			&nbsp;Students Management
-		</h1>
-		<div style="display: inline-block; margin-left: 25px">
-			<div id="control-bar" style="width: 100%; margin-bottom: 45px;">
-				<div style="width: auto; float: right">
-					<button id="btn-add-student" class="button" data-role="hint"
-						data-hint-background="#1CB7EC" data-hint-color="fg-white"
-						data-hint-position="top" data-hint="Add Student">
-						<span class="mif-plus"></span>
-					</button>
-					<button id="btn-add-from-file" class="button" data-role="hint"
-						data-hint-background="#1CB7EC" data-hint-color="fg-white"
-						data-hint-position="top" data-hint="Add From File">
-						<span class="mif-file-text"></span>
-					</button>
+	<div style="width: 100%;">
+		<div id="title" style="width: 80%; margin: 0 auto; color: #71b1d1;"
+			class="fade-in">
+			<h1>
+				<a href="/Timetabling/staff" class="nav-button transform"><span></span></a>
+				&nbsp;Students
+			</h1>
+		</div>
+		<div id="line"
+			style="border-bottom: thin solid #000; margin-bottom: 0.625rem; padding-top: 5px; width: 100%;"></div>
+		<div style="width: 80%; margin: 0 auto; margin-top: 20px;"
+			class="fade-in">
+			<div
+				style="display: inline-block; margin-left: 25px; width: 100%; background-color: #fff; padding: 20px;">
+				<div id="control-bar" style="width: 100%;">
+					<h4 style="display: inline-block">Students's Data</h4>
+					<div style="width: auto; float: right">
+						<button id="btn-add-student" class="button" data-role="hint"
+							data-hint-background="#1CB7EC" data-hint-color="fg-white"
+							data-hint-position="top" data-hint="Add Student">
+							<span class="mif-plus"></span>
+						</button>
+						<button id="btn-add-from-file" class="button" data-role="hint"
+							data-hint-background="#1CB7EC" data-hint-color="fg-white"
+							data-hint-position="top" data-hint="Add From File">
+							<span class="mif-file-text"></span>
+						</button>
+					</div>
+				</div>
+				<div style="width: 100%; height: 100%;">
+					<table id="table-students"
+						class="dataTable striped hovered border bordered cell-hovered">
+						<thead>
+							<tr>
+								<th>Student Code</th>
+								<th>Name</th>
+								<th>Specialized</th>
+								<th>DS</th>
+								<th>Batch</th>
+								<th>Semester</th>
+								<th>Class</th>
+								<th>Edit</th>
+								<th>Delete</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:if test="${!empty listStudents}">
+								<c:forEach items="${listStudents}" var="student">
+									<tr data-studentId="${student.studentId}"
+										data-account="${student.account}"
+										data-email="${student.email}">
+										<td>${student.studentCode}</td>
+										<td>${student.name}</td>
+										<td>${student.specialized.name}</td>
+										<td>${student.detailSpecialized.name}</td>
+										<td>${student.batch}</td>
+										<td>${student.semester}</td>
+										<td>${student.classSemester.classFPT.code}</td>
+										<td><a href="#" id="edit-student">Edit</a></td>
+										<td><a href="#" id="delete-student">Delete</a></td>
+									</tr>
+								</c:forEach>
+							</c:if>
+						</tbody>
+					</table>
 				</div>
 			</div>
-			<div style="width: 100%; height: 100%;">
-				<table id="table-students"
-					class="table striped hovered border bordered cell-hovered">
-					<thead>
-						<tr>
-							<th>Student Code</th>
-							<th>Name</th>
-							<th>Specialized</th>
-							<th>DS</th>
-							<th>Batch</th>
-							<th>Semester</th>
-							<th>Class</th>
-							<th>Edit</th>
-							<th>Delete</th>
-						</tr>
-					</thead>
-					<tbody>
-						<c:if test="${!empty listStudents}">
-							<c:forEach items="${listStudents}" var="student">
-								<tr data-studentId="${student.studentId}"
-									data-account="${student.account}" data-email="${student.email}">
-									<td>${student.studentCode}</td>
-									<td>${student.name}</td>
-									<td>${student.specialized.name}</td>
-									<td>${student.detailSpecialized.name}</td>
-									<td>${student.batch}</td>
-									<td>${student.semester}</td>
-									<td>${student.classSemester.classFPT.code}</td>
-									<td><a href="#" id="edit-student">Edit</a></td>
-									<td><a href="#" id="delete-student">Delete</a></td>
-								</tr>
-							</c:forEach>
-						</c:if>
-					</tbody>
-				</table>
+		</div>
+		<div id="bottom-bar" class="fade-in">
+			<div id="nav-bottom-bar">
+				<a href="http://fpt.edu.vn">FPT University</a><a href="#">Contact</a><a
+					href="#">About Us</a>
 			</div>
 		</div>
 	</div>
+	
 
 
 	<div id="dialog-add-file" data-role="dialog" data-overlay="true"

@@ -54,14 +54,44 @@ public class ViewTimetableController {
 			@RequestParam(value = "teacherSemesterId", required = false) Integer teacherSemesterId,
 			@RequestParam(value = "classSemesterId", required = false) Integer classSemesterId,
 			Model model, HttpSession httpSession) {
-		model.addAttribute("accountType", 1);
 		if (studentId == null && teacherSemesterId == null
 				&& classSemesterId == null) {
 			return "redirect:/staff/viewTimetable";
 		} else if (studentId != null) {
-			model.addAttribute("listStudents", studentService.listStudents());
+			if (studentId != 0) {
+				model.addAttribute("accountType", 1);
+				model.addAttribute("listSemesters", semesterService
+						.listSemesters(false, false, false, false));
+				Semester s = semesterService.getSemesterById(semesterId, false,
+						false, false, false);
+				SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+				model.addAttribute("startDate", sdf.format(s.getStartDate()));
+				model.addAttribute("endDate", sdf.format(s.getEndDate()));
+				model.addAttribute("listStudents", studentService.listStudents());
+				// timetable for student
+			} else {
+				
+				List<Student> list = studentService.listStudents();
+				if (list != null && !list.isEmpty() && list.get(0) != null) {
+					return "redirect:/staff/viewTimetable?semesterId="
+							+ semesterId + "&studentId="
+							+ list.get(0).getStudentId();
+				} else {
+					model.addAttribute("accountType", 1);
+					model.addAttribute("listSemesters", semesterService
+							.listSemesters(false, false, false, false));
+					Semester s = semesterService.getSemesterById(semesterId, false,
+							false, false, false);
+					SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+					model.addAttribute("startDate", sdf.format(s.getStartDate()));
+					model.addAttribute("endDate", sdf.format(s.getEndDate()));
+					model.addAttribute("listTeacherSemesters", list);
+					model.addAttribute("listStudents", studentService.listStudents());
+				}
+			}
 		} else if (teacherSemesterId != null) {
 			if (teacherSemesterId != 0) {
+				model.addAttribute("accountType", 1);
 				model.addAttribute("listSemesters", semesterService
 						.listSemesters(false, false, false, false));
 				Semester s = semesterService.getSemesterById(semesterId, false,
@@ -76,17 +106,28 @@ public class ViewTimetableController {
 				model.addAttribute("listTimetables", timetableService
 						.listTimetableByTeacher(teacherSemesterId));
 			} else {
+				
 				List<TeacherSemester> list = teacherSemesterService
 						.listTeacherSemestersForView(semesterId);
-				model.addAttribute("listTeacherSemesters", list);
-				if (list.get(0) != null) {
+				if (list != null && !list.isEmpty() && list.get(0) != null) {
 					return "redirect:/staff/viewTimetable?semesterId="
 							+ semesterId + "&teacherSemesterId="
 							+ list.get(0).getTeacherSemesterId();
+				} else {
+					model.addAttribute("accountType", 1);
+					model.addAttribute("listSemesters", semesterService
+							.listSemesters(false, false, false, false));
+					Semester s = semesterService.getSemesterById(semesterId, false,
+							false, false, false);
+					SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+					model.addAttribute("startDate", sdf.format(s.getStartDate()));
+					model.addAttribute("endDate", sdf.format(s.getEndDate()));
+					model.addAttribute("listTeacherSemesters", list);
 				}
 			}
 		} else if (classSemesterId != null) {
 			if (classSemesterId != 0) {
+				model.addAttribute("accountType", 1);
 				model.addAttribute("listSemesters", semesterService
 						.listSemesters(false, false, false, false));
 				Semester s = semesterService.getSemesterById(semesterId, false,
@@ -103,13 +144,23 @@ public class ViewTimetableController {
 						.listTimetablesByClassCourseSemesters(cs
 								.getClassCourseSemesters()));
 			} else {
+				
 				List<ClassSemester> list = classSemesterService
 						.listClassSemesterForView(semesterId);
-				model.addAttribute("listClassSemesters", list);
-				if (list.get(0) != null) {
+				if (list != null && !list.isEmpty() && list.get(0) != null) {
 					return "redirect:/staff/viewTimetable?semesterId="
 							+ semesterId + "&classSemesterId="
 							+ list.get(0).getClassSemesterId();
+				} else {
+					model.addAttribute("accountType", 1);
+					model.addAttribute("listSemesters", semesterService
+							.listSemesters(false, false, false, false));
+					Semester s = semesterService.getSemesterById(semesterId, false,
+							false, false, false);
+					SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+					model.addAttribute("startDate", sdf.format(s.getStartDate()));
+					model.addAttribute("endDate", sdf.format(s.getEndDate()));
+					model.addAttribute("listClassSemesters", list);
 				}
 			}
 		}
@@ -147,16 +198,16 @@ public class ViewTimetableController {
 		if (teacherSemesterId == null) {
 			return "redirect:/teacherPage/viewTimetable";
 		} else {
-				model.addAttribute("accountType", 2);
-				model.addAttribute("listSemesters", semesterService
-						.listSemesters(false, false, false, false));
-				Semester s = semesterService.getSemesterById(semesterId, false,
-						false, false, false);
-				SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-				model.addAttribute("startDate", sdf.format(s.getStartDate()));
-				model.addAttribute("endDate", sdf.format(s.getEndDate()));
-				model.addAttribute("listTimetables", timetableService
-						.listTimetableByTeacher(teacherSemesterId));
+			model.addAttribute("accountType", 2);
+			model.addAttribute("listSemesters",
+					semesterService.listSemesters(false, false, false, false));
+			Semester s = semesterService.getSemesterById(semesterId, false,
+					false, false, false);
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+			model.addAttribute("startDate", sdf.format(s.getStartDate()));
+			model.addAttribute("endDate", sdf.format(s.getEndDate()));
+			model.addAttribute("listTimetables",
+					timetableService.listTimetableByTeacher(teacherSemesterId));
 		}
 		return "viewTimetable";
 	}

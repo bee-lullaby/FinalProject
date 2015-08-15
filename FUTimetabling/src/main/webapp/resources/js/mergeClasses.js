@@ -56,7 +56,7 @@ $(document).ready(function() {
 			"pageLength": 30
 	    });
 		
-		$("#select-semester").find("a[id='" +_urlParam("semesterId") +"']").addClass("active");
+		$("#select-semester").find("a[id='" +_urlParam("semesterId") +"']").closest("li").addClass("active");
 		
 	}
 	

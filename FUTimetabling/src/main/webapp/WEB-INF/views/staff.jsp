@@ -186,9 +186,9 @@
 			<div class="tile-container">
 				<div class="tile-wide bg-cyan fg-white" data-role="tile" id="activity-viewTimetable">
 					<div class="tile-content iconic">
-						<div class="icon flaticon-check7"></div>
+						<div class="icon flaticon-calendars16"></div>
 					</div>
-					<span class="tile-label">Classes Arrangement</span>
+					<span class="tile-label">View Timetable</span>
 				</div>
 				<div class="tile-wide bg-olive fg-white" data-role="tile"
 					id="activity-schedule">

@@ -13,6 +13,7 @@
 <link href="../resources/css/docs.css" rel="stylesheet">
 <link href="../resources/css/flaticon.css" rel="stylesheet">
 <link href="../resources/css/pageStyle.css" rel="stylesheet">
+
 <script src="../resources/js/jquery-2.1.3.min.js"></script>
 <script src="../resources/js/building.js"></script>
 <script src="../resources/js/metro.js"></script>

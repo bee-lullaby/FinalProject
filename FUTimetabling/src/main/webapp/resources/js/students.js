@@ -56,15 +56,14 @@ $(document).ready(function() {
 		_showDialog("dialog-add-file");
 	});
 	
-	function _init() {
-		var table = $('#table-students').DataTable({
-			"lengthChange": false,
-			"searching": true,
-			"paging": true,
-			"pageLength": 50,	
-			"info": true
-	    });
-		
+	function _init() { 
+//		var table = $('#table-students').DataTable({
+//				"lengthChange": false,
+//				"searching": true,
+//				"paging": true,
+//				"pageLength": 50,	
+//				"info": true
+//		    });
 	}
 	
 	function _clearDialogData(dialog) {

@@ -122,7 +122,8 @@ h3 {
 					style="width: 100%; height: 3.125rem; background-color: #005696; margin: 25px 0;">
 					<div style="width: 90%; margin: 0 auto;">
 						<c:if test="${!empty listStudents}">
-							<div style="display: inline-block; line-height: 3.125rem;">
+							<div
+								style="display: inline-block; line-height: 3.125rem; float: right">
 								<font style="color: #fff; font-size: 1rem; font-weight: 600;">STUDENT:
 									&nbsp;&nbsp;</font>
 								<div class="input-control select"
@@ -185,8 +186,8 @@ h3 {
 				<h3 style="text-align: left">SEMESTER</h3>
 				<c:if test="${!empty listSemesters}">
 					<c:forEach items="${listSemesters}" var="semester">
-						<a class="active" id="${semester.semesterId}"
-							href="?semesterId=${semester.semesterId}">${semester.name}</a>
+						<a id="${semester.semesterId}"
+							href="viewTimetable?semesterId=${semester.semesterId}&classSemesterId=0">${semester.name}</a>
 					</c:forEach>
 				</c:if>
 			</div>
