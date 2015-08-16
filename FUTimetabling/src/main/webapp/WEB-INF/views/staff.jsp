@@ -2,7 +2,7 @@
 <html>
 <head lang="en">
 
-<!--     <link rel='shortcut icon' type='image/x-icon' href="resources/images/favicon.ico" /> -->
+<link rel="shortcut icon" href="resources/images/logo_fpt.png">
 <title>FPT Timetabling</title>
 
 <link href="resources/css/metro.css" rel="stylesheet" type="text/css">
@@ -152,7 +152,7 @@
 <body>
 	<div class="tile-area fg-black" style="width: 80%; margin: 0 auto;">
 		<div class="tile-area-title">
-			<img src="resources/images/logo.png" style="width: 150px; top: 40px;" />
+			<img src="resources/images/logo_fu.png" style="width: 150px; top: 40px;" />
 		</div>
 		<div class="tile-area-controls" style="top: 30px;">
 			<button

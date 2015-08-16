@@ -2,9 +2,9 @@
 <html>
 <head lang="en">
 
-<!--     <link rel='shortcut icon' type='image/x-icon' href="resources/images/favicon.ico" /> -->
 <title>FPT Timetabling</title>
 
+<link rel="shortcut icon" href="resources/images/logo_fpt.png">
 <link href="resources/css/metro.css" rel="stylesheet" type="text/css">
 <link href="resources/css/metro-icons.css" rel="stylesheet"
 	type="text/css">
@@ -158,13 +158,13 @@
 <body>
 	<div class="tile-area fg-black" style="width: 80%; margin: 0 auto;">
 		<div class="tile-area-title">
-			<img src="resources/images/logo.png" style="width: 150px; top: 40px;" />
+			<img src="resources/images/logo_fu.png" style="width: 150px; top: 40px;" />
 		</div>
 		<div class="tile-area-controls" style="top: 30px;">
 			<button
 				class="image-button icon-right bg-transparent bg-hover-dark no-border">
 				<span class="sub-header no-margin text-light">You are logged
-					in as ${accountType}</span> <span class="icon mif-user"></span>
+					in as <b>${account}</b></span> <span class="icon mif-user"></span>
 			</button>
 			<a href="/Timetabling/logout"
 				class="square-button bg-transparent bg-hover-dark no-border"> <span
@@ -172,21 +172,6 @@
 			</a>
 		</div>
 
-		<div class="tile-group double">
-			<span class="tile-group-title" style="color: black">ACCOUNT</span>
-
-			<div class="tile-container">
-				<div class="tile-large fg-white" data-role="tile"
-					style="background: url(resources/images/testAvatar.jpg) top left no-repeat; background-size: cover">
-					<div class="tile-content">
-						<div class="padding10">
-							<h1>${name}</h1>
-							<h5>${account}</h5>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
 		<div class="tile-group double">
 			<span class="tile-group-title" style="color: black">ACTIVITIES</span>
 			<div class="tile-container">

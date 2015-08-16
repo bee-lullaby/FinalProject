@@ -9,7 +9,7 @@
 <html>
 <head>
 <title>Timetable</title>
-
+<link rel="shortcut icon" href="../resources/images/logo_fpt.png">
 <link href="../resources/css/schedule.css" rel="stylesheet">
 <link href="../resources/css/metro.css" rel="stylesheet">
 <link href="../resources/css/metro-icons.css" rel="stylesheet">

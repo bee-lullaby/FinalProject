@@ -9,6 +9,7 @@
 <head>
 <title>Schedule Infomation</title>
 
+<link rel="shortcut icon" href="../resources/images/logo_fpt.png">
 <link href="../resources/css/metro.css" rel="stylesheet">
 <link href="../resources/css/metro-icons.css" rel="stylesheet">
 <link href="../resources/css/docs.css" rel="stylesheet">
