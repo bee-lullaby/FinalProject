@@ -152,7 +152,7 @@
 <body>
 	<div class="tile-area fg-black" style="width: 80%; margin: 0 auto;">
 		<div class="tile-area-title">
-			<img src="resources/images/logo_fu.png" style="width: 150px; top: 40px;" />
+			<img src="resources/images/logo_fu_home.png" style="width: 150px; top: 40px;" />
 		</div>
 		<div class="tile-area-controls" style="top: 30px;">
 			<button
@@ -184,18 +184,25 @@
 		<div class="tile-group double">
 			<span class="tile-group-title" style="color: black">ACTIVITIES</span>
 			<div class="tile-container">
-				<div class="tile-wide bg-cyan fg-white" data-role="tile" id="activity-viewTimetable">
+				<div class="tile bg-cyan fg-white" data-role="tile" id="activity-viewTimetable">
 					<div class="tile-content iconic">
 						<div class="icon flaticon-calendars16"></div>
 					</div>
 					<span class="tile-label">View Timetable</span>
 				</div>
-				<div class="tile-wide bg-olive fg-white" data-role="tile"
-					id="activity-schedule">
+				<div class="tile bg-olive fg-white" data-role="tile"
+					id="activity-scheduleInfo">
 					<div class="tile-content iconic">
 						<div class="icon flaticon-calendar-icons"></div>
 					</div>
 					<span class="tile-label">Schedule</span>
+				</div>
+				<div class="tile-wide bg-lightRed fg-white" data-role="tile"
+					id="activity-addStudentToClass">
+					<div class="tile-content iconic">
+						<div class="icon flaticon-add156"></div>
+					</div>
+					<span class="tile-label">Add Student To Class</span>
 				</div>
 			</div>
 		</div>

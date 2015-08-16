@@ -14,14 +14,6 @@ $(document).ready(function() {
 		_showDialog("dialog-delete-class");
 	});
 
-	$("#table-classes").on("click", "a[id='set-student']",function() {
-		window.location = "classFPTs/autoStudentClass?classSemesterId=" +$(this).closest("tr").attr("data-classSemesterId");
-	});
-	
-	$("#table-classes").on("click", "a[id='clear-student']",function() {
-		window.location = "classFPTs/clearStudentClass?classSemesterId=" +$(this).closest("tr").attr("data-classSemesterId");
-	});
-	
 	$("#btn-delete-accept").on("click", function() {
 		window.location = "classFPTs/deleteClassFPT?classId=" +$("#dialog-delete-class").attr("data-classId");
 	});
@@ -31,14 +23,6 @@ $(document).ready(function() {
 		_showDialog("dialog-delete-course");
 	});
 	
-	$("#btn-auto-set-student").on("click", function() {
-		window.location = "classFPTs/autoStudentClasses?semesterId=" +_urlParam("semesterId");
-	});
-	
-	$("#btn-auto-clear-student").on("click", function() {
-		window.location = "classFPTs/clearStudentClasses?semesterId=" +_urlParam("semesterId");
-	});
-
 	$("#btn-add-class").on("click", function() {
 		_clearDialogData($("#dialog-add-class"));
 		_showDialog("dialog-add-class");

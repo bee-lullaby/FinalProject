@@ -46,7 +46,6 @@ public class ClassFPTController extends GeneralController {
 	private ClassSemesterService classSemesterService;
 	private CourseSemesterService courseSemesterService;
 	private ClassCourseSemesterService classCourseSemesterService;
-	private StudentService studentService;
 	private ClassCourseStudentSemesterService classCourseStudentSemesterService;
 
 	@Autowired(required = true)
@@ -90,12 +89,6 @@ public class ClassFPTController extends GeneralController {
 	public void setClassCourseStudentSemesterService(
 			ClassCourseStudentSemesterService classCourseStudentSemesterService) {
 		this.classCourseStudentSemesterService = classCourseStudentSemesterService;
-	}
-
-	@Autowired(required = true)
-	@Qualifier(value = "studentService")
-	public void setStudentService(StudentService studentService) {
-		this.studentService = studentService;
 	}
 
 	@Autowired(required = true)
@@ -165,45 +158,6 @@ public class ClassFPTController extends GeneralController {
 		}
 		outputStreamWriter2.close();
 		courseClassStudent.close();
-		return "redirect:/staff/classFPTs?semesterId=" + semesterId;
-	}
-
-	@RequestMapping(value = "/staff/classFPTs/clearStudentClass", method = RequestMethod.GET, params = {
-			"classSemesterId" })
-	public String clearStudentClass(@RequestParam int classSemesterId, HttpSession httpSession, Model model) {
-		studentService.clearStudentClass(classSemesterId);
-		classCourseStudentSemesterService.deleteClassCourseStudentSemesterByClass(classSemesterId);
-		httpSession.setAttribute("success", "Clear students' class successful!");
-		int semesterId = semesterService.listSemesters(false, false, false, false).get(0).getSemesterId();
-		if (httpSession.getAttribute("semesterId") != null) {
-			semesterId = (int) httpSession.getAttribute("semesterId");
-		}
-		return "redirect:/staff/classFPTs?semesterId=" + semesterId;
-	}
-
-	@RequestMapping(value = "/staff/classFPTs/clearStudentClasses", method = RequestMethod.GET, params = {
-	"semesterId" })
-	public String clearStudentClasses(@RequestParam int semesterId, HttpSession httpSession, Model model) {
-		studentService.clearStudentClasses();
-		classCourseStudentSemesterService.deleteClassCourseStudentSemesters(semesterId);
-		httpSession.setAttribute("success", "Clear students' classes successful!");
-		return "redirect:/staff/classFPTs?semesterId=" + semesterId;
-	}
-
-	@RequestMapping(value = "/staff/classFPTs/autoStudentClass", method = RequestMethod.GET, params = {
-			"classSemesterId" })
-	public String autoStudentClass(@RequestParam int classSemesterId, HttpSession httpSession, Model model) {
-		ClassSemester classSemester = classSemesterService.getClassSemesterById(classSemesterId, false);
-		classSemesterService.autoPutStudentsIntoClassSemester(classSemesterId);
-		httpSession.setAttribute("success", "Auto put student into class successful!");
-		return "redirect:/staff/classFPTs?semesterId=" + classSemester.getSemester().getSemesterId();
-	}
-
-	@RequestMapping(value = "/staff/classFPTs/autoStudentClasses", method = RequestMethod.GET, params = {
-			"semesterId" })
-	public String autoStudentClasses(@RequestParam int semesterId, HttpSession httpSession, Model model) {
-		classSemesterService.autoPutStudentsIntoClassSemesters(semesterId);
-		httpSession.setAttribute("success", "Auto put student into classes successful!");
 		return "redirect:/staff/classFPTs?semesterId=" + semesterId;
 	}
 

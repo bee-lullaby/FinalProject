@@ -135,16 +135,6 @@ h3 {
 									data-hint-position="top" data-hint="Add From File">
 									<span class="mif-file-text"></span>
 								</button>
-								<button id="btn-auto-set-student" class="button"
-									data-role="hint" data-hint-background="#1CB7EC"
-									data-hint-color="fg-white" data-hint-position="top"
-									data-hint="Auto Set Student For All Classes">Auto Set
-									Student</button>
-								<button id="btn-auto-clear-student" class="button"
-									data-role="hint" data-hint-background="#1CB7EC"
-									data-hint-color="fg-white" data-hint-position="top"
-									data-hint="Auto Clear Student From All Classes">Auto
-									Clear Student</button>
 							</div>
 						</div>
 						<div style="width: 100%; height: 100%;">
@@ -158,8 +148,6 @@ h3 {
 										<th>Detail Specialized</th>
 										<th>Current Semester</th>
 										<th>Courses</th>
-										<th>Set Student</th>
-										<th>Clear Student</th>
 										<th>Delete</th>
 									</tr>
 								</thead>
@@ -190,8 +178,6 @@ h3 {
 															</div>
 														</c:forEach>
 													</div></td>
-												<td><a href="#" id="set-student">Set Student</a></td>
-												<td><a href="#" id="clear-student">Clear Student</a></td>
 												<td><a href="#"
 													id="delete-class-${classSemester.classFPT.classId}">Delete</a></td>
 											</tr>
