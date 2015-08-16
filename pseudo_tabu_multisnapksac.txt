@@ -1,0 +1,101 @@
+%Why we need to merge classcourse?
+%problem statement:
+input:	
+	k: number of expected classes to be openned.
+	- min: lowerbound of k;
+	- max: upperbound of k;
+	K = {1,..,k}: a set of expected classes to be openned
+	N = {1,..,n}: a set of classcourse need to be merged.
+	w[i]: number of student of of classcourse i, i in N.
+
+	%variables
+	x[i] present class which classcourse i will be join in, 
+	domain of x[i] is K, i in N.
+
+	%invariants
+	sl(j): is sum of student of expected class j, j in K.
+	vi(x[i]): specify how x[i] violates constraints, vi(i) is non-negative integer.
+	s(x): sum of vi(x[i]), i in N.
+
+	%constraints
+	15 <= sl(j) <= 30
+	s(x) = 0;
+	vi(x[i]) = 0;
+output:
+	best global solution: x;
+
+%We solve merging problem using Tabu Search. We denote:
+	- x*: the best global solution.
+	- vi[x[i] <- v]: is an array in which x[i] is reassigned to v. vi[x[i] <- v] in K.
+
+	
+k <- min;
+while k < max
+	InitRandomSolution();
+	x* <- x;
+	s(x*) <- s(x);
+	FindFeasibleSolutionUsingTabuSearch();
+	if s(x*) = 0
+		return <s(x*), x*>;
+	end
+	k <- k+1;
+end
+FindOptimalSolution():
+
+
+input: K
+output: a global solution 
+for i = 1:N
+	x[i] = random element from K;
+end
+InitRandomSolution():
+
+input:
+	- K
+	- tabu: represents the tabu list,
+	- tbl: length of the tabu list,
+	- nic: number of consecutive iterations that best solution is
+	not improved
+	- maxStable: if the best solution is not improved after
+	maxStable iterations, then the search is restarted
+	- maxIter: limit of number of iterations.
+output: 
+	feasible global solution of k class.
+	
+it <- 0;
+while(it < maxIter && s(x*) > 0)
+	F1 <- {x[i] in x | tabu[i] < it && vi(x[i]) is maximal};
+	if F1 is empty
+		InitRandomSolution();
+	end
+	x[i] <- random element of F1;
+	F2 ← {v in K| vi[x[i] <- v] is minimal};
+	if F2 is empty
+		InitRandomSolution();
+	else
+		v <- random element of F2;
+		x[i] <- v;
+		if s(x*) < s(x)
+			s(x*) <- s(x);
+			nic <- 1;
+		else
+			nic++;
+			if nic > maxStable
+				InitRandomSolution();
+				nic <- 1;
+				if s(x*) < s(x)
+					x* <- x;
+					s(x*) <- s(x);
+				end				
+			end
+		end		
+		tabu[i] <- it + tbl;
+	end	
+end
+return <s(x*), x*>;
+FindFeasibleSolution();
+
+
+
+
+
