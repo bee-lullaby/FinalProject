@@ -30,7 +30,7 @@ output:
 
 	
 k <- min;
-while k < max
+while k <= max
 	InitRandomSolution();
 	x* <- x;
 	s(x*) <- s(x);
@@ -96,6 +96,119 @@ return <s(x*), x*>;
 FindFeasibleSolution();
 
 
+%LATEX CODE
+
+
+\documentclass[a4paper,12pt]{article} 
+%\pagestyle{empty}
+\usepackage[linesnumbered,lined,commentsnumbered]{algorithm2e}
+
+\begin{document}
+
+\paragraph{Problem Statement}
+    \textbf{\newline Input:} 
+    \begin{itemize}
+    \item \textit{k} : number of expected classes to be openned.
+	\item \textit{min} : lowerbound of k.
+	\item \textit{max} : upperbound of k.
+	\item K = {1,..,k}: a set of expected classes to be openned.
+	\item N = {1,..,n}: a set of classcourse need to be merged.
+	\item w[i]: number of student of of classcourse i, i $\in$ N.
+    \end{itemize}
+    \textit{Variables:} 
+    \begin{itemize}
+	\item \textit{x}[i] present class which classcourse i will be join in, domain of \textit{x}[i] is K, i $\in$ N.
+    \end{itemize}
+    \textit{Invariants:} 
+    \begin{itemize}
+	\item sl(j) $=\sum_{i=1}^{n}w[i]\enspace where\enspace x[i] = j$, j $\in$ K.
+	\item vi(\textit{x}[i]): specify how much \textit{x}[i] violates constraints, vi(\textit{x}[i]) is non-negative integer.
+	\item s(\textit{x}): $=\sum_{i=1}^{n}vi(x[i])$, i $\in$ N.
+    \end{itemize}
+    \textit{Constraints:} 
+    \begin{itemize}
+	\item 15 $\le$ sl(j) $\le$ 30.
+	\end{itemize}
+    \textbf{Output:} 
+    \begin{itemize}
+    \item Best global solution: \textit{x}
+    \end{itemize}
+    
+    
+\begin{algorithm}[]
+\SetAlgoLined
+\KwIn{As problem statement}
+\KwOut{As problem statement}
+$k \leftarrow min$\;
+\While{$k \le max$}{
+    InitRandomSolution()\;
+    $ x* \leftarrow x $\;
+	$s(x\ast) \leftarrow s(x)$\;
+	FindSolutionUsingTabuSearch()\;
+	$k \leftarrow k+1 $\;
+    \If{$s(x*) = 0$}{
+        return $\langle$ x*, s(x*)$\rangle$\;
+    }
+}
+$\textbf{return} \langle x*, s(x*)\rangle$\;
+\caption{FindOptimalSolution();}
+\end{algorithm}
+
+\begin{algorithm}[]
+\SetAlgoLined
+\KwIn{K = \{1,...,k\}}
+\KwOut{A global solution: x}
+\For{$i \le n$}{
+    $x[i] \leftarrow random element of K$\;
+}
+\caption{InitRandomSolution()}
+\end{algorithm}
 
 
 
+
+\begin{algorithm}[]
+\SetAlgoLined
+\KwIn{K = \{1,...,k\}. \newline
+	\textit{tabu}: represents the tabu list.\newline
+	\textit{tbl}: length of the tabu list.\newline
+	\textit{nic}: number of consecutive iterations that best solution is not improved. \newline
+	\textit{maxStable}: if the best solution is not improved after \textit{maxStable} iterations, then the search is restarted. \newline
+	\textit{maxIter}: limit of number of iterations.\newline}
+\KwOut{Best global solution: \textit{x}}
+$it \leftarrow 0$\;
+\While{$it \le max$}{
+	$F1 \leftarrow \{x[i] \in x \mid tabu[i] < it  \wedge  vi(x[i])\enspace is \enspace maximal\}$\;
+	\If{$F1 = \emptyset$}{
+	    InitRandomSolution()\;
+	}
+	$x[i] \leftarrow random\enspace element\enspace of\enspace F1$\;
+	$F2 \leftarrow \{v \in K \mid vi[x[i] \leftarrow v]\enspace is\enspace minimal\}$\;
+	\eIf{$F2 = \emptyset$}{
+	    InitRandomSolution()\;
+	}{
+	    $ v \leftarrow random\enspace element\enspace of\enspace F2$\;
+	    $x[i] \leftarrow v$\;
+		\eIf{$s(x*) < s(x)$}{
+		    $s(x*) \leftarrow s(x)$\;
+		    $nic \leftarrow 1$\;
+		}{
+		    $nic \leftarrow nic + 1$\;
+		    \If{$nic > maxStable$}{
+		        InitRandomSolution()\;
+		        $nic \leftarrow 1$\;
+		        \If{$s(x*) < s(x)$}{
+		            $x* \leftarrow x$\;
+        		    $s(x*) \leftarrow s(x)$\;
+        		}
+		    }
+		}
+		$tabu[i] \leftarrow it + tbl$\;
+	} 
+
+}
+\caption{FindFeasibleSolutionUsingTabuSearch();}
+\end{algorithm}
+
+
+\end{document}

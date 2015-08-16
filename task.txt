@@ -1,11 +1,15 @@
 ﻿thuật toán:
-- chia lớp
-- ghép lớp
+- chia lớp:
+	
+- ghép lớp: %ok
+	+ multiknapsac:
+	+ tabu
+	+ variable, invariant, constraints
 - p1: thuật toán của choko
 	+ thuat toán:
 	+ biến, invariant
 	+ constraints
-- p2: ok
+- p2: %ok
 - p3: gan giao vien
 	+ tabu:
 		+ biến, invariant
@@ -17,19 +21,26 @@
 	- input: list<classcourse> vs List<room>
 	- output: map<cc,room> assignedCC
 				map<cc> notYetAssignedCC
-	- 
+	- thuat toan:
 khac:
 - experiments:
 	+ p1: ko can
 	+ p2: ok
 		+ 
-	+ p3: 
+	+ p3:
 		+ neu dung tabu:
 			experiment theo tabu length
-		+ neu dung score
+		+ neu dung score:
 			experiment theo weights: sameday, noon
-	+ p4: 
-		+ phần trăm số phòng được gán thành công
+		+ objective function: 
+			với số giáo viên đó thì bao nhiêu cc được gán.
+			so sánh 2 thuật toán.
+			ko tính phần trăm vì đó ko phải là độ chính xác.
+			ít môn đc gán ko có nghĩa là độ chính xác thấp.
+			nếu dùng tabu thì sẽ có độ sai khi gán -> lúc này mới có %
+	+ p4: với timetable dựng lên đó thì:
+		+ check xem phòng đủ chưa
+		+ bao nhiêu phần trăm số phòng được gán thành công
 		+ chạy 10-20 lần gán phòng, tính phần trăm, lấy trung bình
 
 - validation:
@@ -40,7 +51,10 @@ khac:
 - literature review
 - slide
 - code nhom phong
-- ghép code: 
+	+ phòng nào giống list course thì cho vào 1 nhóm
+	+ dùng hàm containAll của ArrayList + so sánh size 2 list.
+- ghép code:
+	+ chạy thử phase 1 vs 2.
 - xóa rác
 - reference
 - conclusion
