@@ -14,7 +14,7 @@
 	+ tabu:
 		+ biến, invariant
 		+ constraints
-	+ score:
+	+ score: %OK
 		+ generate relative-score matrix
 		+ calculate
 - p4: gan phong

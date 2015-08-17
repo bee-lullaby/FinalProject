@@ -28,7 +28,7 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="D:/FU/Do an tot nghiep/FUTimetabling/libs/choco-solver-2.1.5.jar"/>
-	<classpathentry kind="lib" path="D:/FU/Do an tot nghiep/FUTimetabling/libs/open-cbls-2015-03-18.jar"/>
+	<classpathentry kind="lib" path="C:/Users/BENBLACK/Documents/GitHub/FinalProject/FUTimetabling/libs/choco-solver-2.1.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/BENBLACK/Documents/GitHub/FinalProject/FUTimetabling/libs/open-cbls-2015-03-18.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
