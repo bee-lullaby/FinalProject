@@ -1,0 +1,73 @@
+%assign teacher
+
+%problem statement:
+input:	
+	- a set of professor: T = {1,..,T};
+	- TL(c): list of professors who can instruct course c, c in C, TL(c) is subset of T.
+	- s*: timetable of all classes from stage 2.
+	- for each pair course c in C and professor t in T, ins(t,c) = true indicates professor t can instruct course c, otherwise false.
+	- 
+	
+	variables:
+	- gv[cc]: presents professor who will instructs classcourse cc. Domain of gv[cc] is T, cc in CC.
+	
+	invariants:	
+	- target(t): minimum number of classcourse that professor t target to instruct.
+	- AS(t): is subset of CC, is a list of classcourses that are assigned to professor t in T.
+	- card(AS(t)): cardinality of AS(t).
+	
+	constraints:
+	- target(t) <= card(AS(t)) <= 12.
+	
+output:
+	- best global solution of gv.
+
+Idea: For each classcourse cc we pick the most appropriate professor t in TL(c(cc)) and assign to this classcourse. Picking the most appropriate professor is based on a score between cc and t, called pick-score. The professor with highest pick-score among candidates (professors in TL(c(cc)) ) will be picked:
+	pick-score(t,cc) = target-score(t) + suitable-score(t,cc).
+where:
+	+ target-score(t) = target(t)-card(AS(t)). 
+	+ suitable-score(t,cc) in R, indicates the suitability of professor t in TL(c(cc)) and classcourse cc in CC. suitable-score(t,cc) is calculated based on relative-score(cc,cc1), cc1 in AS(t). 
+	+ relative-score(cc1,cc2) indicates relationship of classcourse cc1 and classcourse cc2 in timetable. 
+		relative-score(cc1,cc2) = w1*sameday(cc1,cc2) + w2*samenoon(cc1,cc2).
+		where:
+			+ sameday(cc1,cc2) = 1 if cc1 and cc2 are taken place on the same day, otherwise 0.
+			+ samenoon(cc1,cc2) = 1 if cc1 and cc2 are taken place on the same day and both at slot 3 or slot 4, otherwise 0.
+			+ w1: weight of sameday(cc1,cc2). This weight specifies how much we favor the case that a professor will instruct two classcourses on the same day.
+			+ w2: weight of samenoon(cc1,cc2). This weight specifies how much we against the case that a professor will instruct two classcourses at slot 3 and 4 consecutively on the same day.
+			
+------------------------------
+input: as problem statement
+output: as problem statement
+
+for cc = 1:nbcc
+	F <- empty; //candidate professors.
+	course <- c(cc);
+	if TL(course) is not empty
+		for each t' in TL(course)
+			if isPossible(t',cc) = true
+				F = F union {t'};
+			end
+		end
+		if F is not empty
+			F1 <- {t in F | pick-score(t,cc) is maximal};
+			t' <- random element from F1;
+			gv[cc] = t';
+		end
+	end	
+end
+algorithm 1: assign professor
+-----------------------------------
+input: 	+ classcourse cc
+		+ teacher t.
+		+ conflict matrix cf.
+output: 
+	+ return true if assigning teacher t to classcourse cc is posible, else false
+	
+for each cc' in AS(t)
+	if cf(cc',cc) = true
+		return false;
+	end
+end
+return true;
+algorithm: is feasible(t,cc);
+------------------------------------
