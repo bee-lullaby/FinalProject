@@ -1,0 +1,86 @@
+problem statement:
+input:
+	+ given a set of room: R = {1,..,NR}.
+	+ given inputs from phase 2.
+	+ dpl(i) in P, repsents the place classcourse i demands.
+	+ spl(r) is subset of P, repsents set of places that room r supplies. spl(r)[i] repsents place i of room r, spl(r)[i] in P.		
+	variables:
+		+ x_r[i] presents a room that is assigned to classcourse i, i in CC, x_r[i] in R.
+	invariants:
+		+ mark(r)[i] in {true, false}, repsents status of place i of room r. mark(r)[i] = true if place i of room r is acquired, else equal false.
+output:
+	+ global solution x_r
+	
+for each cl in CL
+	F1 <- {cc| cl(cc) = cl};
+	for each cc in F1 	
+		p <- dpl(cc);
+		for each r in R
+			if p in spl(r) && mark(r)[p] = false
+				mark(r)[p] = true.
+				x_r[cc] = r.
+			end
+		end
+	end
+end
+al 1: assigning room.
+
+
+%latex code
+%% Compile and read me!
+\documentclass[a4paper,12pt]{article}
+\pagestyle{empty}
+\usepackage{color}
+\usepackage[linesnumbered,lined,commentsnumbered]{algorithm2e}
+\usepackage{ifxetex}
+\ifxetex\usepackage{fontspec}\setmainfont[Ligatures=TeX]{CMU Serif}
+  \def\Hello{Welcome! Привет! Γειά σου! \fontspec{WenQuanYi Micro Hei} 你好!}
+\else\usepackage[utf8]{inputenc}\usepackage[T2A]{fontenc}
+  \def\Hello{Welcome! Привет!}
+\fi
+
+\begin{document}
+\paragraph{Problem Statement}
+    \textbf{\newline Input:} 
+    \begin{itemize}
+    \item Given inputs from phase 2.
+    \item Given a set of room: R = \{1,$\dots$,NB\}.
+    \item \textit{dpl}(cc) represents place which classcourse cc demands. Domain of \textit{dpl}(cc) is P, cc $\in$ CC.
+    \item \textit{spl}(r) $\subset$ of P, repsents set of places that room r supplies. \textit{spl}(r)[i] repsents place i of room r, \textit{spl}(r)[i] $\in$ P.	
+    \end{itemize}
+    \textit{Variables:} 
+    \begin{itemize}
+    \item \textit{x\_r}[i] presents a room that is assigned to classcourse i, i in CC, \textit{x\_r}[i] in R.
+    \end{itemize}
+    \textit{Invariants:} 
+   \begin{itemize}
+    \item \textit{mark}(r)[i] $\in$ \{\textit{true, false}\}, repsents status of place i of room r. \textit{mark}(r)[i] equals \textit{true} if place i of room r is acquired, else equals \textit{false}.
+    \end{itemize}
+    \textbf{Output:} 
+    \begin{itemize}
+    \item Global solution: \textit{x\_r}
+    \end{itemize}
+    
+\begin{algorithm}[]
+\SetAlgoLined
+\KwIn{As problem statement}
+\KwOut{As problem statement}
+\ForEach{class $\in$ CL}{
+    $F \leftarrow \{cc \in CC\mid cl(cc) = class\}$\;
+    \ForEach{cc $\in$ F}{
+        $p \leftarrow \textit{dpl}(cc)$\;
+        \ForEach{$r \in R$}{
+            \If{$p \in spl(r) \wedge mark(r)[p] = false$}{
+				$mark(r)[p] = true$\;
+				$x\_r[cc] = r$\;
+            }
+        }
+    }
+}
+\caption{AssigningRoom\(\)}
+\end{algorithm}
+
+\end{document}
+
+
+
