@@ -71,3 +71,93 @@ end
 return true;
 algorithm: is feasible(t,cc);
 ------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%% Compile and read me!
+\documentclass[a4paper,12pt]{article}
+\pagestyle{empty}
+\usepackage{color}
+\usepackage[linesnumbered,lined,commentsnumbered]{algorithm2e}
+\usepackage{ifxetex}
+\ifxetex\usepackage{fontspec}\setmainfont[Ligatures=TeX]{CMU Serif}
+  \def\Hello{Welcome! Привет! Γειά σου! \fontspec{WenQuanYi Micro Hei} 你好!}
+\else\usepackage[utf8]{inputenc}\usepackage[T2A]{fontenc}
+  \def\Hello{Welcome! Привет!}
+\fi
+
+\begin{document}
+
+begin{document}
+
+\paragraph{Problem Statement}
+    \textbf{\newline Input:} 
+    Nhu trong file text.\newline
+    \textit{Variables:} 
+    Nhu trong file text.\newline
+    \textit{Invariants:} 
+    Nhu trong file text.\newline
+    \textit{Constraints:} 
+    Nhu trong file text.\newline
+    \textbf{Output:} 
+    Nhu trong file text.\newline
+    
+\begin{algorithm}[]
+\SetAlgoLined
+\KwIn{As problem statement}
+\KwOut{As problem statement}
+\ForEach{cc = 1,$\dots$, n}{
+    $F \leftarrow \emptyset$\;
+    $course \leftarrow c(cc)$\;
+    \If{$TL(course) \neq \emptyset$}{
+        \ForEach{$t' \in TL(course)$}{
+            \If{$isFeasibleToAssign(t',cc) = true$}{
+                $F \leftarrow F \cup \{t'\}$\;
+            }
+        }
+        \If{$F \neq \emptyset$}{
+			$F1 \leftarrow \{t \in F \mid pickScore(t,cc)\enspace is\enspace maximal\} $\;
+			$t' \leftarrow random\enspace element\enspace of\enspace F1$\;
+			$gv[cc] \leftarrow t'$\;
+        }
+    }
+}
+\textbf{return} $gv$\;
+\caption{AssigningTeacher\(\)}
+\end{algorithm}
+
+
+
+
+\begin{algorithm}[]
+\SetAlgoLined
+\KwIn{classcourse \textit{cc}.\newline
+    teacher \textit{t}.\newline
+    conflict matrix \textit{cf}.
+}
+\KwOut{Return \textit{true} if it is possible to assign teacher \textit{t} to classcourse \textit{cc}, else return \textit{false}.}
+\ForEach{cc' $\in$ AS(t)}{
+    \If{$cf(cc,cc') = true$}{
+        \textbf{return} \textit{false}\;
+    }
+}
+\textbf{return} \textit{true};
+\caption{IsFeasibleToAssign(t,cc)}
+\end{algorithm}
+
+\end{document}
+
+
+
