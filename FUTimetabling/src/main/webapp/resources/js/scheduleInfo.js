@@ -21,24 +21,44 @@
 	}
 
 	function _stepper_on_step_click(index, step) {
-		if (index == 1) {
+		if (index == 0) {
 			$("#btn-prev").attr("disabled", true);
 			$("#btn-next").attr("disabled", false);
 			$("#div-create-timetable").show();
 			$("#div-room-arrangement").hide();
 			$("#div-teacher-arrangement").hide();
-		} else if (index == 2) {
+			if($("#setCourse").text() == "N/A" || $("#setCourse").text() == 0) {
+				$("#btn-manual").attr("disabled", true);
+				$("#btn-automatic").attr("disabled", true);
+				$.Notify({type: 'alert', caption: 'Alert', content: "Can't use schedule method because you dont have enough data!!!"});
+			} else {
+				$("#btn-manual").attr("disabled", false);
+				$("#btn-automatic").attr("disabled", false);
+			}
+		} else if (index == 1) {
 			$("#btn-prev").attr("disabled", false);
 			$("#btn-next").attr("disabled", false);
 			$("#div-create-timetable").hide();
 			$("#div-room-arrangement").show();
 			$("#div-teacher-arrangement").hide();
-		} else if (index == 3) {
+			if($("#setTimetable").text() == "N/A" || $("#setTimetable").text() == 0) {
+				$("#btn-manual").attr("disabled", true);
+				$.Notify({type: 'alert', caption: 'Alert', content: "Can't use room arrangement method because you dont have enough data!!!"});
+			} else {
+				$("#btn-manual").attr("disabled", false);
+			}
+		} else if (index == 2) {
 			$("#btn-prev").attr("disabled", false);
 			$("#btn-next").attr("disabled", true);
 			$("#div-create-timetable").hide();
 			$("#div-room-arrangement").hide();
 			$("#div-teacher-arrangement").show();
+			if($("#setTimetable").text() == "N/A" || $("#setTimetable").text() == 0) {
+//				$("#btn-manual").attr("disabled", true);
+//				$.Notify({type: 'alert', caption: 'Alert', content: "Can't use teacher arrangement method because you dont have enough data!!!"});
+//			} else {
+				$("#btn-manual").attr("disabled", false);
+			}
 		}
 
 		$("#stepper").stepper('stepTo', index + 1);
@@ -64,8 +84,20 @@
 			}
 		});
 		
+		$("#select-semester").on("change", function() {
+			window.location = "scheduleInfo?semesterId=" +$(this).find("option:selected").val();
+		});
+		
 		function _init() {
 			$("#select-semester").find("option[value='" +_urlParam("semesterId") +"']").attr("selected", "selected");
+			if($("#setCourse").text() == "N/A" || $("#setCourse").text() == 0) {
+				$("#btn-manual").attr("disabled", true);
+				$("#btn-automatic").attr("disabled", true);
+				$.Notify({type: 'alert', caption: 'Alert', content: "Can't use schedule method because you dont have enough data!!!"});
+			} else {
+				$("#btn-manual").attr("disabled", false);
+				$("#btn-automatic").attr("disabled", false);
+			}
 		}
 		
 		function _urlParam(param) {

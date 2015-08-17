@@ -142,7 +142,7 @@ h3 {
 									<th>Course</th>
 									<th>Class 1</th>
 									<th>Class 2</th>
-									<th>Delete</th>
+									<th style="width: 100px;">Delete</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -152,7 +152,9 @@ h3 {
 											<td>${ccsm.classCourseSemester1.courseSemester.course.code}</td>
 											<td>${ccsm.classCourseSemester1.classSemester.classFPT.code}</td>
 											<td>${ccsm.classCourseSemester2.classSemester.classFPT.code}</td>
-											<td><a href="#" id="delete-mergeClass">Delete</a></td>
+											<td><a href="#" style="color: #000; text-align: center;"
+												id="delete-mergeClass"><span
+													class="icon flaticon-rubbish12"></span></a></td>
 										</tr>
 									</c:forEach>
 								</c:if>

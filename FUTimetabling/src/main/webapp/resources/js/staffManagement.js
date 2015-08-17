@@ -39,12 +39,14 @@ $(document).ready(function() {
 			$("#dialog-add-staff #account").css("border-color", "red");
 		} else {
 			if($("#dialog-add-staff #name").val() == "") {
+				$("#dialog-add-staff #account").css("border-color", "");
 				$.Notify({type: 'alert', caption: 'Alert', content: "Your Name can not be empty!!!"});
 				$("#dialog-add-staff #name").css("border-color", "red");
 			} else {
 				if(_isFPTEmail($("#dialog-add-staff #email").val())) {
 					$("#form-add-staff").submit();
 				} else {
+					$("#dialog-add-staff #name").css("border-color", "");
 					$.Notify({type: 'alert', caption: 'Alert', content: "Your Email is not FPT University's mail!!!"});
 					$("#dialog-add-staff #email").css("border-color", "red");
 				}

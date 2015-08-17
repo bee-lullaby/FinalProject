@@ -152,8 +152,8 @@ h3 {
 									<c:forEach items="${listBuildings}" var="building">
 										<tr data-buildingId="${building.buildingId}">
 											<td>${building.code}</td>
-											<td><a href="#"
-												id="delete-building-${building.buildingId}">Delete</a></td>
+											<td><a href="#" style="color: #000; text-align: center;" 
+												id="delete-building-${building.buildingId}"><span class="icon flaticon-rubbish12"></span></a></td>
 										</tr>
 									</c:forEach>
 								</c:if>

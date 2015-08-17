@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import vn.edu.fpt.timetabling.model.ClassSemester;
 import vn.edu.fpt.timetabling.model.DataRoomArrangement;
 import vn.edu.fpt.timetabling.model.Room;
-import vn.edu.fpt.timetabling.model.Semester;
 import vn.edu.fpt.timetabling.service.ClassSemesterService;
 import vn.edu.fpt.timetabling.service.RoomArrangementService;
 import vn.edu.fpt.timetabling.service.ScheduleService;
@@ -37,14 +36,9 @@ public class RoomArrangementController {
 	private SemesterService semesterService;
 	@Autowired
 	private ClassSemesterService classSemesterService;
-	
-	@RequestMapping(value = "/staff/roomArrangement", method = RequestMethod.GET)
-	public String roomInit(Model model) {
-		List<Semester> semesters = semesterService.listSemesters(false, false,
-				false, false);
-		int semesterId = semesters.get(0).getSemesterId();
-		if (!semesters.isEmpty())
-			semesterId = semesters.get(0).getSemesterId();
+
+	@RequestMapping(value = "/staff/roomArrangement", method = RequestMethod.GET, params = { "semesterId" })
+	public String roomInit(@RequestParam int semesterId, Model model) {
 		List<ClassSemester> list = scheduleService
 				.listClassBySemester(semesterId);
 		return "redirect:/staff/roomArrangement?semesterId=" + semesterId
@@ -76,9 +70,11 @@ public class RoomArrangementController {
 			model.addAttribute("classesCourses", classesCoursesJSON);
 			model.addAttribute("rooms", roomsJSON);
 			model.addAttribute("dataRoomArrangements", drasJSON);
-			model.addAttribute("listSemesters", semesterService.listSemesters(false, false, false, false));
-			model.addAttribute("listClassSemesters", classSemesterService.listClassSemestersBySemester(semesterId, false));
-		} catch (JsonGenerationException e) {	
+			model.addAttribute("listSemesters",
+					semesterService.listSemesters(false, false, false, false));
+			model.addAttribute("listClassSemesters", classSemesterService
+					.listClassSemestersBySemester(semesterId, false));
+		} catch (JsonGenerationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JsonMappingException e) {

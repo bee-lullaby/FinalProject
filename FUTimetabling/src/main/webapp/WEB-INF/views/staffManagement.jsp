@@ -154,7 +154,6 @@ h3 {
 									<th>Account</th>
 									<th>Name</th>
 									<th>E-mail</th>
-									<th>Edit</th>
 									<th>Delete</th>
 								</tr>
 							</thead>
@@ -165,8 +164,7 @@ h3 {
 											<td>${staff.account}</td>
 											<td>${staff.name}</td>
 											<td>${staff.email}</td>
-											<td><a href="#" id="edit-staff-${staff.staffId}">Edit</a></td>
-											<td><a href="#" id="delete-staff-${staff.staffId}">Delete</a></td>
+											<td><a href="#" style="color: #000; text-align: center;" id="delete-staff-${staff.staffId}"><span class="icon flaticon-rubbish12"></span></a></td>
 										</tr>
 									</c:forEach>
 								</c:if>

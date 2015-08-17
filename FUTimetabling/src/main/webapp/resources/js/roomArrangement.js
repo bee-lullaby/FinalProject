@@ -42,12 +42,14 @@ $(document).ready(
 		
 		$("select[id^='select-rooms-']").on("change", function () {
 			_compareWithTimetablesRooms($(this).attr("id"));
+
+			console.log(conflictDateSlots);
 			if (conflictDateSlots.length > 0) {
 				var text = "<b>+</b> Timetable of Room " +$(this).find("option:selected").text() +" has "+conflictDateSlots.length +" slots conflict with Timetable of <br>&nbsp;&nbsp;Course " 
 							+$(this).closest("tr td:first").text();
 				$("#warning-room-arrangement").html(text);
 				$("#warning").show();
-				
+				$(this).find("option:first").attr("selected", "selected");
 				$(this).attr("data-error", "error");
 			} else if(specialCourses.indexOf(courseCode) > 0) {
 				var courseCode = $(this).closest("tr").find("td:nth-child(1)").text();
@@ -69,7 +71,6 @@ $(document).ready(
 					$("#warning").show();
 					$(this).attr("data-error", "error");
 				} else {
-					console.log($(this).attr("data-error"));
 					if($(this).attr("data-error") == "error") {
 						$("#warning-room-arrangement").html("");
 						$("#warning").hide();
@@ -79,7 +80,6 @@ $(document).ready(
 					}
 				}
 			} else {
-				console.log($(this).attr("data-error"));
 				if($(this).attr("data-error") == "error") {
 					$("#warning-room-arrangement").html("");
 					$("#warning").hide();
@@ -202,7 +202,6 @@ $(document).ready(
 				if(object.classSemesterId == _urlParam("classSemesterId"))
 					classCourseSemesters = object.classCourseSemesters;
 			});
-			console.log(classCourseSemesters[0]);
 			for (var x = 0; x < classCourseSemesters.length; x++) {
 				$("#courses-class").append(_getTRCoursesClass(classCourseSemesters[x]))
 				
@@ -337,10 +336,11 @@ $(document).ready(
 		conflictDateSlots = [];
 		var selectedRoom = $("#" +id +" option:selected").val();
 		var concflictRooms = [];
-		var classCourseSemesters = {};
+		var classCourseSemesters = [];
 		$.each(classesCoursesJSON, function(value, object) {
-			if(value.classSemesterId == _urlParam("classSemesterId"))
-				classCourseSemesters = object.classCourseSemesters;
+			if(object.classSemesterId == _urlParam("classSemesterId")) {
+				$.merge(classCourseSemesters, object.classCourseSemesters);
+			}
 		});
 		if(roomsJSON[selectedRoom] != null && roomsJSON[selectedRoom].timetables != null && roomsJSON[selectedRoom].timetables.length > 0) {
 			for(var x = 0; x < classCourseSemesters.length; x++) {

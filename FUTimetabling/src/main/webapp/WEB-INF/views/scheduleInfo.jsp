@@ -63,6 +63,7 @@ table tr td {
 					</c:if>
 				</select>
 			</div>
+			<button class="button" id="btn-automatic" style="width: 100px;">Automatic</button>
 		</div>
 	
 		<div class="stepper" id="stepper" style="width:1048px;"
@@ -80,7 +81,7 @@ table tr td {
 				</tr>
 				<tr>
 					<th>Total Classes was set courses:</th>
-					<td>${fn:length(listClassWasSetCourse)}</td>
+					<td id="setCourse">${fn:length(listClassWasSetCourse)}</td>
 				</tr>
 				<tr>
 					<th>Number of Classes was set timetable done:</th>
@@ -102,7 +103,7 @@ table tr td {
 				</tr>
 				<tr>
 					<th>Number of Classes was set timetable done:</th>
-					<td>${fn:length(listClassWasSetTimetablesDone)}</td>
+					<td id="setTimetable">${fn:length(listClassWasSetTimetablesDone)}</td>
 				</tr>
 				<tr>
 					<th>Number of Classes was set room done:</th>
@@ -140,7 +141,6 @@ table tr td {
 		<div id="btn-group" style="margin: 0 auto; text-align: center;">
 			<button class="button" id="btn-back" style="width: 100px;">Back</button>
  			<button class="button" id="btn-manual" style="width: 100px;">Manual</button>
-			<button class="button" id="btn-automatic" style="width: 100px;">Automatic</button>
 		</div>
 	</div>
 </body>

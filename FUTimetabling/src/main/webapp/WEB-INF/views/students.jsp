@@ -174,8 +174,10 @@ h3 {
 										<td>${student.batch}</td>
 										<td>${student.semester}</td>
 										<td>${student.classSemester.classFPT.code}</td>
-										<td><a href="#" id="edit-student">Edit</a></td>
-										<td><a href="#" id="delete-student">Delete</a></td>
+										<td><a href="#" style="color: #000; text-align: center;"
+											id="edit-student"><span class="icon flaticon-pencil43"></span></a></td>
+										<td><a href="#" style="color: #000; text-align: center;"
+											id="delete-student"><span class="icon flaticon-rubbish12"></span></a></td>
 									</tr>
 								</c:forEach>
 							</c:if>
@@ -191,7 +193,7 @@ h3 {
 			</div>
 		</div>
 	</div>
-	
+
 
 
 	<div id="dialog-add-file" data-role="dialog" data-overlay="true"

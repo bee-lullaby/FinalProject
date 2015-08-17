@@ -138,7 +138,7 @@ h3 {
 						<div style="width: auto; float: right">
 							<button id="btn-add-room" class="button" data-role="hint"
 								data-hint-background="#1CB7EC" data-hint-color="fg-white"
-								data-hint-position="top" data-hint="Add Course">
+								data-hint-position="top" data-hint="Add Room">
 								<span class="mif-plus"></span>
 							</button>
 							<button id="btn-add-from-file" class="button" data-role="hint"
@@ -169,8 +169,8 @@ h3 {
 											<td>${room.capacity}</td>
 											<td>${room.building.code}</td>
 											<td>${room.courses}</td>
-											<td><a href="#" id="edit-room-${room.roomId}">Edit</a></td>
-											<td><a href="#" id="delete-room-${room.roomId}">Delete</a></td>
+											<td><a href="#" style="color: #000; text-align: center;" id="edit-room-${room.roomId}"><span class="icon flaticon-pencil43"></span></a></td>
+											<td><a href="#" style="color: #000; text-align: center;" id="delete-room-${room.roomId}"><span class="icon flaticon-rubbish12"></span></a></td>
 										</tr>
 									</c:forEach>
 								</c:if>

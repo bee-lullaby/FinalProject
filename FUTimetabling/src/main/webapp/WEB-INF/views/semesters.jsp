@@ -120,9 +120,8 @@ h3 {
 								class="icon flaticon-id12"></span>Staff</a></li>
 						<li><a href="building"><span
 								class="icon flaticon-school1"></span>Building</a></li>
-						<li><a href="rooms"><span
-								class="icon flaticon-classroom"></span>Room</a></li>
-						<li  class="active"><a href="#"><span
+						<li><a href="rooms"><span class="icon flaticon-classroom"></span>Room</a></li>
+						<li class="active"><a href="#"><span
 								class="icon flaticon-clock125"></span>Semester</a></li>
 						<li><a href="specialized"><span
 								class="icon flaticon-library58"></span>Specialized</a></li>
@@ -167,8 +166,10 @@ h3 {
 											<td>${semester.name}</td>
 											<td>${semester.startDate}</td>
 											<td>${semester.endDate}</td>
-											<td><a href="#"
-												id="delete-semester-${semester.semesterId}">Delete</a></td>
+											<td><a href="#" style="color: #000; text-align: center;"
+												id="delete-semester-${semester.semesterId}"><span
+													class="icon flaticon-rubbish12"></span></a></td>
+
 										</tr>
 									</c:forEach>
 								</c:if>
@@ -179,7 +180,10 @@ h3 {
 			</div>
 		</div>
 		<div id="bottom-bar" class="fade-in">
-			<div id="nav-bottom-bar"><a href="http://fpt.edu.vn">FPT University</a><a href="#">Contact</a><a href="#">About Us</a></div>
+			<div id="nav-bottom-bar">
+				<a href="http://fpt.edu.vn">FPT University</a><a href="#">Contact</a><a
+					href="#">About Us</a>
+			</div>
 		</div>
 	</div>
 	<div id="dialog-add-semester" data-role="dialog" class="padding20"

@@ -13,6 +13,7 @@
 <link href="../resources/css/metro.css" rel="stylesheet">
 <link href="../resources/css/metro-icons.css" rel="stylesheet">
 <link href="../resources/css/docs.css" rel="stylesheet">
+<link href="../resources/css/pageStyle.css" rel="stylesheet">
 
 <script src="../resources/js/jquery-2.1.3.min.js"></script>
 <script src="../resources/js/roomArrangement.js"></script>
@@ -66,7 +67,6 @@ h3 {
 	border-bottom: 1px #d9d9d9 solid;
 	text-align: left;
 	margin: .15625rem 0;
-	background-color: #ffffff;
 }
 </style>
 <script>
@@ -123,82 +123,82 @@ h3 {
 						</c:forEach>
 					</c:if>
 				</div>
-				<h3 style="width:100%;">Arrangement</h3>
-				<div style="width: 100%;">
-					<div style="width: 100%; margin-top:10px;">
-						<div style="display: inline-block; float: left">
-						Select Room: &nbsp;&nbsp;
-							<div class="input-control select">
-								<select id="select-rooms">
-									<option value="-1">...</option>
-									<option value="custom">CUSTOM</option>
-								</select>
-							</div>
-							<button id="btn-submit" class="button" data-role="hint"
-								data-hint-background="#1CB7EC" data-hint-color="fg-white"
-								data-hint-position="top" data-hint="Submit">
-								<span class="mif-download"></span>
-							</button>
-						</div>
+
+			</div>
+		</div>
+		<h3 style="width: 100%;">Arrangement</h3>
+		<div style="width: 100%;">
+			<div style="width: 100%; margin-top: 10px;">
+				<div style="display: inline-block; float: left">
+					Select Room: &nbsp;&nbsp;
+					<div class="input-control select">
+						<select id="select-rooms">
+							<option value="-1">...</option>
+							<option value="custom">CUSTOM</option>
+						</select>
+					</div>
+					<button id="btn-submit" class="button" data-role="hint"
+						data-hint-background="#1CB7EC" data-hint-color="fg-white"
+						data-hint-position="top" data-hint="Submit">
+						<span class="mif-download"></span>
+					</button>
+				</div>
+			</div>
+
+			<div id="arrange-room"
+				style="margin-top: 10px; width: 100%; display: flex;">
+				<div style="display: inline-block;">
+					<table id="example_table"
+						class="table striped hovered border bordered" style="width: auto;">
+						<thead>
+							<tr>
+								<th>Course</th>
+								<th>Room</th>
+							</tr>
+						</thead>
+						<tbody id="courses-class">
+
+						</tbody>
+					</table>
+				</div>
+
+				<div class="example" data-text="note"
+					style="text-align: left; width: auto; display: inline-block; margin: 0.65rem 1rem; flex: 1; float: right; word-wrap: break-word;">
+					<div style="display: inline-block; margin-right: 25px">
+						<b>Number of Classes:</b>&nbsp;&nbsp;
+						<button class="button" id="btn-num-classes"></button>
+					</div>
+					<div style="display: inline-block">
+						<b>Number of Rooms:</b>&nbsp;&nbsp;
+						<button class="button" id="btn-num-rooms"></button>
 					</div>
 
-					<div id="arrange-room"
-						style="margin-top: 10px; width: 100%; display: flex;">
-						<div style="display: inline-block;">
-							<table id="example_table"
-								class="table striped hovered border bordered"
-								style="width: auto;">
-								<thead>
-									<tr>
-										<th>Course</th>
-										<th>Room</th>
-									</tr>
-								</thead>
-								<tbody id="courses-class">
-
-								</tbody>
-							</table>
-						</div>
-
-						<div class="example" data-text="note"
-							style="text-align:left; width: auto; display: inline-block; margin: 0.65rem 1rem; flex: 1; float: right; word-wrap: break-word;">
-							<div style="display: inline-block; margin-right: 25px">
-								<b>Number of Classes:</b>&nbsp;&nbsp;
-								<button class="button" id="btn-num-classes"></button>
-							</div>
-							<div style="display: inline-block">
-								<b>Number of Rooms:</b>&nbsp;&nbsp;
-								<button class="button" id="btn-num-rooms"></button>
-							</div>
-
-							<div>
-								<div id="warning">
-									<h5>WARNING:</h5>
-									<div class="listview set-border padding10" data-role="listview">
-										<div class="list-group">
-											<div class="list-group-content" style="margin-top: 0;">
-												<pre id="warning-room-arrangement" class="fg-red"
-													style="margin-left: 25px; font-size: 1rem"></pre>
-											</div>
-										</div>
+					<div>
+						<div id="warning">
+							<h5>WARNING:</h5>
+							<div class="listview set-border padding10" data-role="listview">
+								<div class="list-group">
+									<div class="list-group-content" style="margin-top: 0;">
+										<pre id="warning-room-arrangement" class="fg-red"
+											style="margin-left: 25px; font-size: 1rem"></pre>
 									</div>
 								</div>
+							</div>
+						</div>
 
-								<h5>SPECIAL ROOMS:</h5>
-								<div class="listview set-border padding10" data-role="listview">
-									<div class="list-group">
-										<span class="list-group-toggle">The seating capacity of
-											the rooms is more than 30:</span>
-										<div class="list-group-content" style="margin-top: 0;">
-											<pre id="more-than-30" style="margin-left: 48px"></pre>
-										</div>
-									</div>
-									<div class="list-group">
-										<span class="list-group-toggle"> For Courses: </span>
-										<div class="list-group-content" style="margin-top: 0;">
-											<pre id="courses-only" style="margin-left: 48px"></pre>
-										</div>
-									</div>
+						<h5>SPECIAL ROOMS:</h5>
+						<div class="listview set-border padding10" data-role="listview">
+							<div class="list-group">
+								<span class="list-group-toggle">The seating capacity of
+									the rooms is more than 30:</span>
+								<div class="list-group-content" style="margin-top: 0;">
+									<pre id="more-than-30" style="margin-left: 48px"></pre>
+								</div>
+							</div>
+							<div class="list-group">
+								<span class="list-group-toggle"> For Courses: </span>
+								<div class="list-group-content" style="margin-top: 0;">
+									<pre id="courses-only" style="margin-left: 48px"></pre>
 								</div>
 							</div>
 						</div>
@@ -206,7 +206,15 @@ h3 {
 				</div>
 			</div>
 		</div>
+
+		<div id="bottom-bar" class="fade-in">
+			<div id="nav-bottom-bar">
+				<a href="http://fpt.edu.vn">FPT University</a><a href="#">Contact</a><a
+					href="#">About Us</a>
+			</div>
+		</div>
 	</div>
+
 
 
 	<!-- dialog -->

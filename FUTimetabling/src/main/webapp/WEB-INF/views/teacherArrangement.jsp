@@ -15,6 +15,7 @@
 <link href="../resources/css/metro.css" rel="stylesheet">
 <link href="../resources/css/metro-icons.css" rel="stylesheet">
 <link href="../resources/css/docs.css" rel="stylesheet">
+<link href="../resources/css/stylePage.css" rel="stylesheet">
 
 <script src="../resources/js/jquery-2.1.3.min.js"></script>
 <script src="../resources/js/teacherArrangement.js"></script>

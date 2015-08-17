@@ -117,75 +117,76 @@ h3 {
 
 		<div style="width: 80%; margin: 0 auto; margin-top: 20px;"
 			class="fade-in">
-				<div style="display: flex">
-					<div id="select-semester" class="left"
-						style="display: inline-block; width: 250px;">
-						<ul class="sidebar2 ">
-							<li class="title" style="padding: .75rem 2rem .75rem 2.5rem">Semester</li>
-							<c:if test="${!empty listSemesters}">
-								<c:forEach items="${listSemesters}" var="semester">
-									<li><a id="${semester.semesterId}"
-										href="?semesterId=${semester.semesterId}">${semester.name}</a></li>
-								</c:forEach>
-							</c:if>
-						</ul>
+			<div style="display: flex">
+				<div id="select-semester" class="left"
+					style="display: inline-block; width: 250px;">
+					<ul class="sidebar2 ">
+						<li class="title" style="padding: .75rem 2rem .75rem 2.5rem">Semester</li>
+						<c:if test="${!empty listSemesters}">
+							<c:forEach items="${listSemesters}" var="semester">
+								<li><a id="${semester.semesterId}"
+									href="?semesterId=${semester.semesterId}">${semester.name}</a></li>
+							</c:forEach>
+						</c:if>
+					</ul>
+				</div>
+				<div
+					style="display: inline-block; margin-left: 25px; width: 100%; background-color: #fff; padding: 20px;">
+					<div id="control-bar" style="width: 100%;">
+						<h4 style="display: inline-block">Courses's Data</h4>
+						<div style="width: auto; float: right">
+							<button id="btn-add-course" class="button" data-role="hint"
+								data-hint-background="#1CB7EC" data-hint-color="fg-white"
+								data-hint-position="top" data-hint="Add Course">
+								<span class="mif-plus"></span>
+							</button>
+							<button id="btn-add-from-file" class="button" data-role="hint"
+								data-hint-background="#1CB7EC" data-hint-color="fg-white"
+								data-hint-position="top" data-hint="Add From File">
+								<span class="mif-file-text"></span>
+							</button>
+						</div>
 					</div>
-					<div
-						style="display: inline-block; margin-left: 25px; width: 100%; background-color: #fff; padding: 20px;">
-						<div id="control-bar" style="width: 100%;">
-							<h4 style="display: inline-block">Courses's Data</h4>
-							<div style="width: auto; float: right">
-								<button id="btn-add-course" class="button" data-role="hint"
-									data-hint-background="#1CB7EC" data-hint-color="fg-white"
-									data-hint-position="top" data-hint="Add Course">
-									<span class="mif-plus"></span>
-								</button>
-								<button id="btn-add-from-file" class="button" data-role="hint"
-									data-hint-background="#1CB7EC" data-hint-color="fg-white"
-									data-hint-position="top" data-hint="Add From File">
-									<span class="mif-file-text"></span>
-								</button>
-							</div>
-						</div>
-						<div style="width: 100%; height: 100%;">
-							<table id="table-courses"
-								class="table striped hovered border bordered cell-hovered">
-								<thead>
-									<tr>
-										<th>Course</th>
-										<th>Code</th>
-										<th>Department</th>
-										<th>Slots</th>
-										<th>Course Condition</th>
-										<th>Edit</th>
-										<th>Delete</th>
-									</tr>
-								</thead>
-								<tbody>
-									<c:if test="${!empty listCourseSemesters}">
-										<c:forEach items="${listCourseSemesters}" var="courseSemester">
-											<tr
-												data-courseSemesterId="${courseSemester.courseSemesterId}"
-												data-courseId="${courseSemester.course.courseId}"
-												data-semesterName="${courseSemester.semester.name}">
-												<td>${courseSemester.course.name}</td>
-												<td>${courseSemester.course.code}</td>
-												<td>${courseSemester.course.department.code}</td>
-												<td>${courseSemester.slots}</td>
-												<td>${courseSemester.courseCondition.code}</td>
-												<td><a href="#"
-													id="edit-course-${courseSemester.course.courseId}">Edit</a></td>
-												<td><a href="#"
-													id="delete-course-${courseSemester.course.courseId}">Delete</a></td>
-											</tr>
-										</c:forEach>
-									</c:if>
-								</tbody>
-							</table>
-						</div>
+					<div style="width: 100%; height: 100%;">
+						<table id="table-courses"
+							class="table striped hovered border bordered cell-hovered">
+							<thead>
+								<tr>
+									<th>Course</th>
+									<th>Code</th>
+									<th>Department</th>
+									<th>Slots</th>
+									<th>Course Condition</th>
+									<th>Edit</th>
+									<th>Delete</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:if test="${!empty listCourseSemesters}">
+									<c:forEach items="${listCourseSemesters}" var="courseSemester">
+										<tr data-courseSemesterId="${courseSemester.courseSemesterId}"
+											data-courseId="${courseSemester.course.courseId}"
+											data-semesterName="${courseSemester.semester.name}">
+											<td>${courseSemester.course.name}</td>
+											<td>${courseSemester.course.code}</td>
+											<td>${courseSemester.course.department.code}</td>
+											<td>${courseSemester.slots}</td>
+											<td>${courseSemester.courseCondition.code}</td>
+											<td><a href="#" style="color: #000; text-align: center;"
+												id="edit-course-${courseSemester.course.courseId}"><span
+													class="icon flaticon-pencil43"></span></a></td>
+											<td><a href="#" style="color: #000; text-align: center;"
+												id="delete-course-${courseSemester.course.courseId}"><span
+													class="icon flaticon-rubbish12"></span></a></td>
+										</tr>
+									</c:forEach>
+								</c:if>
+							</tbody>
+						</table>
 					</div>
 				</div>
 			</div>
+		</div>
 		<div id="bottom-bar" class="fade-in">
 			<div id="nav-bottom-bar">
 				<a href="http://fpt.edu.vn">FPT University</a><a href="#">Contact</a><a

@@ -319,7 +319,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 										ts.setTeacher(te);
 										ts.setSemester(s);
-										newTimetable.setTeacherSemester(t.getTeacherSemester());
+										newTimetable.setTeacherSemester(ts);
 									}
 									result.get(ccsId).add(newTimetable);
 								}

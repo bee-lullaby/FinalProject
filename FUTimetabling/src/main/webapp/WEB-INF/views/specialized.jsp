@@ -156,7 +156,7 @@ h3 {
 								<tr>
 									<th>Code</th>
 									<th>Name</th>
-									<th>Delete</th>
+									<th style="width: 100px;">Delete</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -165,8 +165,9 @@ h3 {
 										<tr data-specializedId="${specialized.specializedId}">
 											<td>${specialized.code}</td>
 											<td>${specialized.name}</td>
-											<td><a href="#"
-												id="delete-specialized-${specialized.specializedId}">Delete</a></td>
+											<td><a href="#" style="color: #000; text-align: center;"
+												id="delete-specialized-${specialized.specializedId}"><span
+													class="icon flaticon-rubbish12"></span></a></td>
 										</tr>
 									</c:forEach>
 								</c:if>
@@ -175,8 +176,9 @@ h3 {
 										<tr data-specializedId="${specialized.specializedId}">
 											<td>${specialized.code}</td>
 											<td>${specialized.name}</td>
-											<td><a href="#"
-												id="delete-specialized-${specialized.specializedId}">Delete</a></td>
+											<td><a href="#" style="color: #000; text-align: center;"
+												id="delete-specialized-${specialized.specializedId}"><span
+													class="icon flaticon-rubbish12"></span></a></td>
 										</tr>
 									</c:forEach>
 								</c:if>

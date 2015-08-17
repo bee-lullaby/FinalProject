@@ -112,85 +112,87 @@ h3 {
 		<div style="width: 80%; margin: 0 auto; margin-top: 20px;"
 			class="fade-in">
 			<div style="display: flex">
-					<div id="select-semester" class="left"
-						style="display: inline-block; width: 250px;">
-						<ul class="sidebar2 ">
-							<li class="title" style="padding: .75rem 2rem .75rem 2.5rem">Semester</li>
-							<c:if test="${!empty listSemesters}">
-								<c:forEach items="${listSemesters}" var="semester">
-									<li><a id="${semester.semesterId}"
-										href="?semesterId=${semester.semesterId}">${semester.name}</a></li>
-								</c:forEach>
-							</c:if>
-						</ul>
-					</div>
-					<div
-						style="display: inline-block; margin-left: 25px; width: 100%; background-color: #fff; padding: 20px;">
-						<div id="control-bar" style="width: 100%;">
-							<h4 style="display: inline-block">Teachers's Data</h4>
-							<div style="width: auto; float: right">
-								<button id="btn-add-teacher" class="button" data-role="hint"
-									data-hint-background="#1CB7EC" data-hint-color="fg-white"
-									data-hint-position="top" data-hint="Add Teacher">
-									<span class="mif-plus"></span>
-								</button>
-								<button id="btn-add-from-file" class="button" data-role="hint"
-									data-hint-background="#1CB7EC" data-hint-color="fg-white"
-									data-hint-position="top" data-hint="Add From File">
-									<span class="mif-file-text"></span>
-								</button>
-							</div>
+				<div id="select-semester" class="left"
+					style="display: inline-block; width: 250px;">
+					<ul class="sidebar2 ">
+						<li class="title" style="padding: .75rem 2rem .75rem 2.5rem">Semester</li>
+						<c:if test="${!empty listSemesters}">
+							<c:forEach items="${listSemesters}" var="semester">
+								<li><a id="${semester.semesterId}"
+									href="?semesterId=${semester.semesterId}">${semester.name}</a></li>
+							</c:forEach>
+						</c:if>
+					</ul>
+				</div>
+				<div
+					style="display: inline-block; margin-left: 25px; width: 100%; background-color: #fff; padding: 20px;">
+					<div id="control-bar" style="width: 100%;">
+						<h4 style="display: inline-block">Teachers's Data</h4>
+						<div style="width: auto; float: right">
+							<button id="btn-add-teacher" class="button" data-role="hint"
+								data-hint-background="#1CB7EC" data-hint-color="fg-white"
+								data-hint-position="top" data-hint="Add Teacher">
+								<span class="mif-plus"></span>
+							</button>
+							<button id="btn-add-from-file" class="button" data-role="hint"
+								data-hint-background="#1CB7EC" data-hint-color="fg-white"
+								data-hint-position="top" data-hint="Add From File">
+								<span class="mif-file-text"></span>
+							</button>
 						</div>
-						<div style="width: 100%; height: 100%;">
-							<table id="table-teachers"
-								class="table striped hovered border bordered cell-hovered">
-								<thead>
-									<tr>
-										<th>Account</th>
-										<th>Name</th>
-										<th>E-mail</th>
-										<th>Semester</th>
-										<th>Courses</th>
-										<th>Edit</th>
-										<th>Delete</th>
-									</tr>
-								</thead>
-								<tbody>
-									<c:if test="${!empty listTeacherSemesters}">
-										<c:forEach items="${listTeacherSemesters}"
-											var="teacherSemester">
-											<tr
-												data-teacherSemesterId="${teacherSemester.teacherSemesterId}"
-												data-teacherId="${teacherSemester.teacher.teacherId}">
-												<td>${teacherSemester.teacher.account}</td>
-												<td>${teacherSemester.teacher.name}</td>
-												<td>${teacherSemester.teacher.email}</td>
-												<td>${teacherSemester.semester.name}</td>
-												<td><c:if
-														test="${!empty teacherSemester.teacherCourseSemesters}">
-														<c:forEach
-															items="${teacherSemester.teacherCourseSemesters}"
-															var="teacherCourseSemester" varStatus="loop">
-															<c:choose>
-																<c:when test="${loop.last}">
+					</div>
+					<div style="width: 100%; height: 100%;">
+						<table id="table-teachers"
+							class="table striped hovered border bordered cell-hovered">
+							<thead>
+								<tr>
+									<th>Account</th>
+									<th>Name</th>
+									<th>E-mail</th>
+									<th>Semester</th>
+									<th>Courses</th>
+									<th>Edit</th>
+									<th>Delete</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:if test="${!empty listTeacherSemesters}">
+									<c:forEach items="${listTeacherSemesters}"
+										var="teacherSemester">
+										<tr
+											data-teacherSemesterId="${teacherSemester.teacherSemesterId}"
+											data-teacherId="${teacherSemester.teacher.teacherId}">
+											<td>${teacherSemester.teacher.account}</td>
+											<td>${teacherSemester.teacher.name}</td>
+											<td>${teacherSemester.teacher.email}</td>
+											<td>${teacherSemester.semester.name}</td>
+											<td><c:if
+													test="${!empty teacherSemester.teacherCourseSemesters}">
+													<c:forEach
+														items="${teacherSemester.teacherCourseSemesters}"
+														var="teacherCourseSemester" varStatus="loop">
+														<c:choose>
+															<c:when test="${loop.last}">
 															${teacherCourseSemester.courseSemester.course.code}
 														</c:when>
-																<c:otherwise>
+															<c:otherwise>
 															${teacherCourseSemester.courseSemester.course.code};
 														</c:otherwise>
-															</c:choose>
-														</c:forEach>
-													</c:if></td>
-												<td><a href="#"
-													id="edit-teacher-${teacherSemester.teacher.teacherId}">Edit</a></td>
-												<td><a href="#"
-													id="delete-teacher-${teacherSemester.teacher.teacherId}">Delete</a></td>
-											</tr>
-										</c:forEach>
-									</c:if>
-								</tbody>
-							</table>
-						</div>
+														</c:choose>
+													</c:forEach>
+												</c:if></td>
+											<td><a href="#" style="color: #000; text-align: center;"
+												id="edit-teacher-${teacherSemester.teacher.teacherId}"><span
+													class="icon flaticon-pencil43"></span></a></td>
+											<td><a href="#" style="color: #000; text-align: center;"
+												id="delete-teacher-${teacherSemester.teacher.teacherId}"><span
+													class="icon flaticon-rubbish12"></span></a></td>
+										</tr>
+									</c:forEach>
+								</c:if>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>

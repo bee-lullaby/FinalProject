@@ -34,7 +34,6 @@ import vn.edu.fpt.timetabling.service.CourseSemesterService;
 import vn.edu.fpt.timetabling.service.CourseService;
 import vn.edu.fpt.timetabling.service.SemesterService;
 import vn.edu.fpt.timetabling.service.SpecializedService;
-import vn.edu.fpt.timetabling.service.StudentService;
 import vn.edu.fpt.timetabling.utils.Const.ClassType;
 
 @Controller
