@@ -11,36 +11,32 @@
 	+ constraints
 - p2: %ok
 - p3: gan giao vien
-	+ tabu:
-		+ biến, invariant
-		+ constraints
-	+ score: %OK
+	+ using score: %OK
 		+ generate relative-score matrix
 		+ calculate
-- p4: gan phong
-	- input: list<classcourse> vs List<room>
-	- output: map<cc,room> assignedCC
-				map<cc> notYetAssignedCC
+- p4: gan phong %OK
+	- input: 
+	- output: 
 	- thuat toan:
 khac:
-- experiments:
-	+ p1: ko can
-	+ p2: ok
-		+ 
+- experiments: TRÊN DATA FALL-2015
+	+ p1: %ko can
+	+ p2: %ok (riêng cái này thì chạy summer 2015)
 	+ p3:
-		+ neu dung tabu:
-			experiment theo tabu length
-		+ neu dung score:
-			experiment theo weights: sameday, noon
-		+ objective function: 
-			với số giáo viên đó thì bao nhiêu cc được gán.
-			so sánh 2 thuật toán.
+		+ dung score:
+			experiment theo weights: w1, w2
+			case 1: w1 = w2: quan trọng như nhau
+			case 2: w1 < w2: chú trọng tránh dạy slot 3-4 liên tiếp
+			case 3: w1 > w2: chú trọng gán những môn cùng ngày cho giáo viên.
+			mỗi case 5 lần là đủ.
+		+ objective: 
+			đưa ra thống kê:
+				+ trên tổng số ngày đi dạy, bao nhiêu ngày giáo viên phải dạy slot 3-4 liên tiếp.
+				+ bao nhiêu classcourse được gán, bao nhiêu chưa đc gán.
 			ko tính phần trăm vì đó ko phải là độ chính xác.
-			ít môn đc gán ko có nghĩa là độ chính xác thấp.
-			nếu dùng tabu thì sẽ có độ sai khi gán -> lúc này mới có %
 	+ p4: với timetable dựng lên đó thì:
-		+ check xem phòng đủ chưa
-		+ bao nhiêu phần trăm số phòng được gán thành công
+		+ check xem phòng đủ chưa: tính chặn trên bằng số lớp/2. vs chặn dưới như trong file problem solving outline + explaination.
+		+ bao nhiêu phần trăm số classcourse được gán thành công
 		+ chạy 10-20 lần gán phòng, tính phần trăm, lấy trung bình
 
 - validation:
