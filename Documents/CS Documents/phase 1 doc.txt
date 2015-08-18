@@ -1,0 +1,149 @@
+%problem statement
+input: 
+	+ ds lớp: CL.
+	+ ds classcourse: CC
+	+ ds course: C.
+	+ places: P
+	+ nbcc(cl) represents number of classcourse of class cl.
+	variables:
+		+ global variable S(k): is the set of solutions for class k, ∀k in CL
+	auxilary variables:
+			+ (p1,..,pi) is a set which represents a solution of a class. p1,..,pi in P. (p1,..,pi) is equivalent to s in S(k), i = 0...nbcc(cl). Each pi in (p1,..,pi) represents place of classcourse i'th of class cl.
+	invariants:
+		+ vi(p): specify how p violates constraints, vi(p) is non-negative integer, p in each (p1,..,pi).
+	constraints:
+		+ constraint (1) and (2).
+output:
+	+  a set S(k) of solutions for each class k, ∀k in CL.
+
+%notation
+---------------------------------------------
+%for all classes
+input: As problem statement
+output: As problem statement
+for each cl in CL
+	S(cl) <- \emptyset;
+	findSolutionOneClass(\emptyset);
+end
+al 1: findSolution	
+---------------------------------------------
+%for one class
+input:
+	+ class cl;
+output:
+	+S(cl)
+	
+findSolutionOneClass(p1,..,pi) 
+if isASolution(p1,..,pi) then 
+	S(cl) union (p1,..,pi);
+	return;
+end
+for each p in P 
+	findSolutionOneClass(p1,..,pi,p);
+end 
+
+al 2: findSolutionOneClass(p1,..,pi)
+---------------------------------------------
+input: 
+	+ s = (p1,..,pi)
+	+ class cl
+output: return true if (p1,..,pi) is a solution of class cl, else return false.
+%all places have to be different
+
+if size(s) != nbcc(cl)
+	return false;
+else
+	for each p in s
+		if vi(p) != 0
+			return false;
+		end
+	end
+end
+return true;
+al 3: isASolution(p1,..,pi)
+
+
+
+
+
+
+
+%% Compile and read me!
+\documentclass[a4paper,12pt]{article}
+\pagestyle{empty}
+\usepackage{color}
+\usepackage[linesnumbered,lined,commentsnumbered]{algorithm2e}
+\usepackage{ifxetex}
+\ifxetex\usepackage{fontspec}\setmainfont[Ligatures=TeX]{CMU Serif}
+  \def\Hello{Welcome! Привет! Γειά σου! \fontspec{WenQuanYi Micro Hei} 你好!}
+\else\usepackage[utf8]{inputenc}\usepackage[T2A]{fontenc}
+  \def\Hello{Welcome! Привет!}
+\fi
+
+\begin{document}
+
+begin{document}
+
+\paragraph{Problem Statement}
+    \textbf{\newline Input:} 
+    Nhu trong file text.\newline
+    \textit{Variables:} 
+    Nhu trong file text.\newline
+    \textit{Invariants:} 
+    Nhu trong file text.\newline
+    \textit{Constraints:} 
+    Nhu trong file text.\newline
+    \textbf{Output:} 
+    Nhu trong file text.\newline
+    
+\begin{algorithm}[]
+\SetAlgoLined
+\KwIn{As problem statement}
+\KwOut{As problem statement}
+\ForEach{k $\in$ CL}{
+    $S(k) \leftarrow \emptyset$\;
+    findSolutionOneClass($\emptyset$)\;
+}
+\caption{findSolution\(\)}
+\end{algorithm}
+
+
+
+
+\begin{algorithm}[]
+\SetAlgoLined
+\KwIn{Class \textit{k}.
+}
+\KwOut{\textit{S(k)}}
+findSolutionOneClass($p1,\dots,pi$)\;
+\If{$isASolution(p1,\dots,pi)$}{
+    $S(k) \leftarrow S(k) \cup (p1,\dots,pi)$\;
+    \textbf{return}\;
+}
+\ForEach{$p \in P$}{
+    findSolutionOneClass($p1,\dots,pi,p$)\;
+}
+\caption{findSolutionOneClass($p1,\dots,pi$)}
+\end{algorithm}
+
+\begin{algorithm}[]
+\SetAlgoLined
+\KwIn{$(p1,\dots,pi)$.\newline
+    Class \textit{k}.
+}
+\KwOut{Return \textit{true} if $(p1,\dots,pi)$ is a solution of class \textit{k}, else return \textit{false}}
+
+\eIf{$size(p1,\dots,pi) \neq nbcc(k)$}{
+    \textbf{return} \textit{false}\;
+}{
+    \ForEach{$p \in (p1,\dots,pi)$}{
+        \If{$vi(p) \neq 0$}{
+            \textbf{return} \textit{false}\;
+        }
+    }
+}
+\textbf{return} \textit{true}\;
+\caption{isASoluton($p1,\dots,pi$)}
+\end{algorithm}
+
+\end{document}

@@ -5,7 +5,7 @@
 	+ multiknapsac:
 	+ tabu
 	+ variable, invariant, constraints
-- p1: thuật toán của choko
+- p1: thuật toán của choko %OK
 	+ thuat toán:
 	+ biến, invariant
 	+ constraints
