@@ -28,7 +28,15 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/BENBLACK/Documents/GitHub/FinalProject/FUTimetabling/libs/choco-solver-2.1.5.jar"/>
-	<classpathentry kind="lib" path="C:/Users/BENBLACK/Documents/GitHub/FinalProject/FUTimetabling/libs/open-cbls-2015-03-18.jar"/>
+	<classpathentry kind="lib" path="D:/Capstone Project/FU Timetable/FinalProject/FUTimetabling/libs/choco-solver-2.1.5.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="D:/Capstone Project/FU Timetable/FinalProject/FUTimetabling/libs/open-cbls-2015-03-18.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

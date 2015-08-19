@@ -198,7 +198,7 @@
 										<td>${student.studentCode}</td>
 										<td>${student.name}</td>
 										<td><a
-											href="<c:url value='/staff/classCourseStudentSemester/add/${student.studentId}' />">Add</a></td>
+											href="<c:url value='/staff/addStudentToClass/add/${student.studentId}' />">Add</a></td>
 									</tr>
 								</c:forEach>
 							</c:if>
@@ -229,7 +229,7 @@
 										<td>${student.studentCode}</td>
 										<td>${student.name}</td>
 										<td><a
-											href="<c:url value='/staff/classCourseStudentSemester/remove/${student.studentId}' />">Remove</a></td>
+											href="<c:url value='/staff/addStudentToClass/remove/${student.studentId}' />">Remove</a></td>
 									</tr>
 								</c:forEach>
 							</c:if>
