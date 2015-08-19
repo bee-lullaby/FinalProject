@@ -1,0 +1,11 @@
+#nbDepartment	
+7
+#ID	#code
+0	CF
+1	FSOFT
+2	ITS
+3	JPN
+4	Math
+5	SE
+6	SS
+-1	

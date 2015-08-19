@@ -1,0 +1,13 @@
+it = 1;
+minViolations = MAX_INT;
+while(time < timeLimit){
+	F <- {(x[i],v)| (tabu[i,v] < it || violations(s[x[i]<-v]) < minViolations) and 
+			violations(s[x[i]<-v]) is minimal};// collect all potnerial moves
+	(x[i],v) <- selectRandom(F);
+	x[i] <- v;
+	tabu[i,v] <- it + tblen;// update tabu structure
+	if(violations(s) < minViolations) then
+		minViolations = violations(s);
+	endif
+	it++;
+}

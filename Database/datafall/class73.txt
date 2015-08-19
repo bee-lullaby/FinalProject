@@ -1,0 +1,18 @@
+#nbCourses
+0
+#courses
+
+#status
+
+#nbFCourses_short
+0
+#FCourses_short
+
+#FCourse_short Course
+-1
+nbFCourses
+0
+FCourses
+
+#FCourse Course
+-1

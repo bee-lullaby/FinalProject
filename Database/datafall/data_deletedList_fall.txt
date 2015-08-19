@@ -1,0 +1,5 @@
+#nb deleted classcourse
+1
+#course #class
+76 IAO101 0 EC1001
+-1

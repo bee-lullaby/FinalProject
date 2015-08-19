@@ -1,0 +1,37 @@
+#nbCourse					
+33					
+#course	#suipply	#teacher			
+CSI101	2	DungLM	DuyDT		
+PRO201	2	DuyDT	ChiLP		
+DBI202	2	DuyDT	ChiLP		
+CSD202	2	CauPD	DuyDT		
+PRO192	4	CauPD	DuyDT	ChiLP	DungLM
+OSG202	2	VuNH	BangBH		
+PRN292	2	HuongNT7	LamPT		
+CSD201	2	CauPD	DuyDT		
+PRF192	2	DungLM	VuNH		
+PRJ311	4	DuyDT	BinhNV2	VuNH	CauPD
+NWC202	2	VuNH	BangBH		
+PRJ321	2	DuyDT	BinhNV2		
+LAB101	1	LAB_tc1		
+LAB211	1	LAB_tc2			
+CEA201	2	HungPD	SonHX		
+CES201	1	TrungNQ			
+JPD111	4	CuongN	ThuLX	VanDT	HuyenTT
+JPS132	4	CuongN	ThuLX	VanDT	HuyenTT
+JPD131	4	CuongN	ThuLX	VanDT	HuyenTT
+MAE101	3	TrungDT	MaiVTT	QuyPH	
+MAD101	3	TrungDT	MaiVTT	DungNT	
+MAS291	3	TrungDT	VietNK	DungNT	
+PHY101	2	KhuongPD	DuanTC		
+IAO101	1	HieuLD2			
+SWR301	2	SangNV	AnhPT		
+IAA301	1	IAA301_tc			
+SWQ391	2	SangNV	TrungNT		
+IAA201	1	IAA201_tc			
+IAP201	1	AnhPT			
+IAP301	1	AnhPT			
+SRE301	1	SRE301_tc			
+OSP201	1	OSP201_tc			
+SSG101	2	MaiTT	HienDTT		
+-1

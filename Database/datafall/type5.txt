@@ -1,0 +1,14 @@
+#type no.
+5
+#nbCourse
+2
+#code
+LAB101
+LAB211
+-1
+#nbRoom
+2
+#code
+HB/202R
+HB/301R
+-1

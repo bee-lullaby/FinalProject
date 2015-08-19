@@ -1,0 +1,6 @@
+#nbBuilding	
+2	
+#ID	#code
+0	GD
+1	HB
+-1	

@@ -1,0 +1,38 @@
+#nbTeacher		
+34
+#ID	#code	
+1	AnhPT	SE
+2	BangBH	CF
+3	BinhNV2	CF
+4	CauPD	CF
+5	CuongN	JPN
+6	ChiLP	CF
+7	DuanTC	Math
+8	DungLM	CF
+9	DungNT	Math
+10	DuyDT	CF
+11	HienDTT	SS
+12	HieuLD2	SE
+13	HungPD	ITS
+14	HuongNT7	CF
+15	HuyenTT	JPN
+16	IAA201_tc	SE
+17	IAA301_tc	SE
+18	KhuongPD	Math
+19	lab_tc	FSOFT
+21	LamPT	CF
+22	MaiTT	SS
+23	MaiVTT	MATH
+24	OSP201_tc	SE
+25	QuyPH	Math
+26	SangNV	SE
+27	SonHX	ITS
+28	SRE301_tc	SE
+29	ThuLX	JPN
+30	TrungDT	Math
+31	TrungNQ	ITS
+32	TrungNT	SE
+33	VanDT	JPN
+34	VietNK	Math
+35	VuNH	CF
+-1		

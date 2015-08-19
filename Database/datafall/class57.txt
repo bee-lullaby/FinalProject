@@ -1,0 +1,42 @@
+#nbCourses
+2
+#courses
+178 261 
+#status
+0 0 
+#nbFCourses_short
+4
+#FCourses_short
+0 1 2 3 
+#FCourse_short Course
+0 178
+1 178
+2 261
+3 261
+-1
+nbFCourses
+20
+FCourses
+0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 
+#FCourse Course
+0 178
+1 178
+2 178
+3 178
+4 178
+5 178
+6 178
+7 178
+8 178
+9 178
+10 261
+11 261
+12 261
+13 261
+14 261
+15 261
+16 261
+17 261
+18 261
+19 261
+-1

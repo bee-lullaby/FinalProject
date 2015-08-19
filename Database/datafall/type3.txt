@@ -1,0 +1,13 @@
+#type no.
+3
+#nbCourse
+2
+#code
+MLN101
+VNR201/HCM201
+-1
+#nbRoom
+1
+#code
+HB/303R-305R
+-1

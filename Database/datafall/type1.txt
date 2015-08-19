@@ -1,0 +1,16 @@
+#type no.
+1
+#nbCourse
+3
+#code
+SSG101 
+SSC102
+SSC101
+-1
+#nbSoftSkillRoom
+3
+#code
+P201
+P202
+P203
+-1
