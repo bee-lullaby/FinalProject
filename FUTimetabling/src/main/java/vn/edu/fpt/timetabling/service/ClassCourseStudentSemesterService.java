@@ -20,4 +20,8 @@ public interface ClassCourseStudentSemesterService {
 	public int deleteClassCourseStudentSemesters(int semesterId);
 
 	public int deleteClassCourseStudentSemesterByClass(int classSemesterId);
+	
+	public void autoPutStudentsIntoClassSemesters(int semesterId);
+	
+	public void autoPutStudentsIntoClassSemester(int classSemesterId);
 }

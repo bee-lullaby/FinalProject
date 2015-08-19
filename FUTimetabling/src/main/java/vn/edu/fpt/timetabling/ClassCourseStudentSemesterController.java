@@ -275,7 +275,7 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 			"classSemesterId" })
 	public String autoStudentClass(@RequestParam int classSemesterId, HttpSession httpSession, Model model) {
 		ClassSemester classSemester = classSemesterService.getClassSemesterById(classSemesterId, false);
-		classSemesterService.autoPutStudentsIntoClassSemester(classSemesterId);
+		classCourseStudentSemesterService.autoPutStudentsIntoClassSemester(classSemesterId);
 		httpSession.setAttribute("success", "Auto put student into class successful!");
 		return "redirect:/staff/addStudentToClass?semesterId=" + classSemester.getSemester().getSemesterId();
 	}
@@ -283,7 +283,7 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 	@RequestMapping(value = "/staff/addStudentToClass/autoStudentClasses", method = RequestMethod.GET, params = {
 			"semesterId" })
 	public String autoStudentClasses(@RequestParam int semesterId, HttpSession httpSession, Model model) {
-		classSemesterService.autoPutStudentsIntoClassSemesters(semesterId);
+		classCourseStudentSemesterService.autoPutStudentsIntoClassSemesters(semesterId);
 		httpSession.setAttribute("success", "Auto put student into classes successful!");
 		return "redirect:/staff/addStudentToClass?semesterId=" + semesterId;
 	}

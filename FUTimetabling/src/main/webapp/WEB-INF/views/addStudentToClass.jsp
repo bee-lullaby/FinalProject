@@ -136,7 +136,7 @@
 				<button id="btn-set-student-semester" class="button" data-role="hint"
 					data-hint-background="#1CB7EC" data-hint-color="fg-white"
 					data-hint-position="top"
-					data-hint="Auto Set Students For All Classes">Set Students
+					data-hint="Auto Set Classes For All Students">Set Students
 					For Semester</button>
 				<button id="btn-clear-student-semester" class="button" data-role="hint"
 					data-hint-background="#1CB7EC" data-hint-color="fg-white"
