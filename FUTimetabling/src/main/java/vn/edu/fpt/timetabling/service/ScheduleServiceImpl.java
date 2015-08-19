@@ -528,8 +528,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 					count++;
 					stringTokenizer.nextToken();
 				}
-				row += "|" + count + "|" + room.getCourses().replace(" ", "|");
+				row += "|" + count + "|" + room.getCourses().replace(", ", "|");
 			}
+			System.out.println(row);
 			roomData.add(row);
 		}
 		for (ClassSemester classSemester : classSemesters) {
@@ -575,18 +576,18 @@ public class ScheduleServiceImpl implements ScheduleService {
 		for (Building building : buildings) {
 			buildingData.add(building.getBuildingId() + "|" + building.getCode());
 		}
-		DataCenter dataCenter = new DataCenter();
-		dataCenter.loadData_Department_v2(departmentData);
-		dataCenter.loadData_Course_v2(courseData);
-		dataCenter.loadData_Class_v2(classData);
-		dataCenter.loadData_Building_v2(buildingData);
-		dataCenter.loadData_Room_v2(roomData);
-		dataCenter.loadData_ClassCourse_v2(classCourseData);
-		dataCenter.assignStudentEachClassCourse();
-		dataCenter.loadData_Teacher_v2(teacherData);
-		dataCenter.loadData_Course_Teacher_v2(teacherCourseData);
-		dataCenter.mergeClassCourse();
-		dataCenter.reloadData_ClassCourse_v2(classCourseData);
+//		DataCenter dataCenter = new DataCenter();
+//		dataCenter.loadData_Department_v2(departmentData);
+//		dataCenter.loadData_Course_v2(courseData);
+//		dataCenter.loadData_Class_v2(classData);
+//		dataCenter.loadData_Building_v2(buildingData);
+//		dataCenter.loadData_Room_v2(roomData);
+//		dataCenter.loadData_ClassCourse_v2(classCourseData);
+//		dataCenter.assignStudentEachClassCourse();
+//		dataCenter.loadData_Teacher_v2(teacherData);
+//		dataCenter.loadData_Course_Teacher_v2(teacherCourseData);
+//		dataCenter.mergeClassCourse();
+//		dataCenter.reloadData_ClassCourse_v2(classCourseData);
 		// dataCenter.loadData_mergedCases(mergeClassData);
 	}
 }

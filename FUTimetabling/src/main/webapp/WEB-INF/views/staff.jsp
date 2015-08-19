@@ -202,7 +202,7 @@
 					<div class="tile-content iconic">
 						<div class="icon flaticon-add156"></div>
 					</div>
-					<span class="tile-label">Add Student To Class</span>
+					<span class="tile-label">Add Students To Class</span>
 				</div>
 			</div>
 		</div>

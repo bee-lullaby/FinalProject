@@ -8,7 +8,7 @@
 <html>
 <head>
 
-<title>Add Student To Class</title>
+<title>Add Students To Class</title>
 
 
 <link rel="shortcut icon" href="../resources/images/logo_fpt.png">
@@ -116,7 +116,7 @@
 			class="fade-in">
 			<h1>
 				<a href="/Timetabling/staff" class="nav-button transform"><span></span></a>
-				&nbsp;Add Student To Class
+				&nbsp;Add Students To Class
 			</h1>
 		</div>
 		<div id="line"
@@ -136,13 +136,13 @@
 				<button id="btn-set-student-semester" class="button" data-role="hint"
 					data-hint-background="#1CB7EC" data-hint-color="fg-white"
 					data-hint-position="top"
-					data-hint="Auto Set Student For All Classes">Set Student
+					data-hint="Auto Set Students For All Classes">Set Students
 					For Semester</button>
 				<button id="btn-clear-student-semester" class="button" data-role="hint"
 					data-hint-background="#1CB7EC" data-hint-color="fg-white"
 					data-hint-position="top"
-					data-hint="Auto Clear Student From All Classes">Clear
-					Student Of Semester</button>
+					data-hint="Auto Clear Students From All Classes">Clear
+					Students Of Semester</button>
 			</div>
 			<div style="width: 100%;">
 				<div style="width: 100px; text-align: left; display: inline-block">CLASS:</div>
@@ -157,13 +157,13 @@
 				<button id="btn-set-student-class" class="button" data-role="hint"
 					data-hint-background="#1CB7EC" data-hint-color="fg-white"
 					data-hint-position="top"
-					data-hint="Auto Set Student For All Classes">Set Student
+					data-hint="Auto Set Students For A Class">Set Students
 					For Class</button>
 				<button id="btn-clear-student-class" class="button" data-role="hint"
 					data-hint-background="#1CB7EC" data-hint-color="fg-white"
 					data-hint-position="top"
-					data-hint="Auto Clear Student From All Classes">Clear
-					Student Of Class</button>
+					data-hint="Auto Clear Students From A Class">Clear
+					Students Of Class</button>
 			</div>
 			<div style="width: 100%;">
 				<div style="width: 100px; text-align: left; display: inline-block">Course:</div>
