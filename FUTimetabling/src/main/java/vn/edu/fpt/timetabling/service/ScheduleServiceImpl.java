@@ -229,53 +229,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 		HashMap<String, Set<Integer>> mMergeClass = classCourseSemesterMergeService
 				.getMapCourseWithMergeClassInSemester(semesterId);
 		ClassSemester classSemester = classSemesterService.getClassSemesterByClassSemester(semesterId, classId, true);
-		//
-		// for (ClassCourseSemester ccs :
-		// classSemester.getClassCourseSemesters()) {
-		// int csId = ccs.getCourseSemester().getCourseSemesterId();
-		// for(String key : mMergeClass.keySet()) {
-		// if(key.contains(Integer.toString(csId)) && mMergeClass.contains)
-		// }
-		// if () {
-		// mCourseTimetable.put(ccs.getCourseSemester()
-		// .getCourseSemesterId(), new LinkedHashSet<Timetable>());
-		// }
-		// }
-		//
-		// for (int csId : mCourseTimetable.keySet()) {
-		// Set<Integer> listClassCourseSemesterIds = mMergeClass.get(csId);
-		// for (int ccsId : listClassCourseSemesterIds) {
-		// if (classCourseSemesterService
-		// .getClassCourseSemesterById(ccsId, false, false)
-		// .getClassSemester().getClassSemesterId() != classSemester
-		// .getClassSemesterId()) {
-		// ClassCourseSemester ccs2 = classCourseSemesterService
-		// .getClassCourseSemesterById(ccsId, true, false);
-		// ClassSemester cs = classSemesterService
-		// .getClassSemesterById(ccs2.getClassSemester()
-		// .getClassSemesterId(), true);
-		// for (ClassCourseSemester ccs3 : cs
-		// .getClassCourseSemesters()) {
-		// if (!ccs3.getTimetable().isEmpty()) {
-		// for (Timetable t : ccs3.getTimetable()) {
-		// Timetable newTimetable = new Timetable();
-		// newTimetable
-		// .setClassCourseSemester(classCourseSemesterService.createNewCCS(t
-		// .getClassCourseSemester()));
-		// newTimetable.setDate(t.getDate());
-		// newTimetable.setRoom(t.getRoom());
-		// newTimetable.setSlot(t.getSlot());
-		// newTimetable.setTeacherSemester(t
-		// .getTeacherSemester());
-		//
-		// mCourseTimetable.get(csId).add(newTimetable);
-		// }
-		// }
-		// }
-		// }
-		// }
-		//
-		// }
 
 		// m class course Semester with Timetable of Merge Class
 		HashMap<Integer, Set<Timetable>> result = new HashMap<Integer, Set<Timetable>>();
@@ -333,7 +286,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	public boolean saveTimetable(int semesterId, List<DaySlot> daySlots, List<DaySlot> prevDaySlots)
+	public boolean updateTimetable(int semesterId, List<DaySlot> daySlots, List<DaySlot> prevDaySlots)
 			throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -462,10 +415,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Override
 	public boolean generateFromPreviousWeek(int semesterId, int classId, int week) {
-		if (week == 1) {
-			return true;
-		}
-
 		// Get Semester
 		Semester semester = semesterService.getSemesterById(semesterId, false, false, false, false);
 

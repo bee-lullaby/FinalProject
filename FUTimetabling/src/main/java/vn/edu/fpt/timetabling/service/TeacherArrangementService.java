@@ -22,5 +22,5 @@ public interface TeacherArrangementService {
 	
 	public Set<ClassCourseSemester> getListClassConflicts(ClassCourseSemester classCourseSemester, Set<ClassCourseSemester> classCourseSemesters);
 
-	public boolean saveTimetables(List<Timetable> timetables);
+	public boolean updateTimetable(List<Timetable> timetables);
 }

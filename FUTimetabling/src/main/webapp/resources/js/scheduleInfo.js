@@ -54,9 +54,9 @@
 			$("#div-room-arrangement").hide();
 			$("#div-teacher-arrangement").show();
 			if($("#setTimetable").text() == "N/A" || $("#setTimetable").text() == 0) {
-//				$("#btn-manual").attr("disabled", true);
-//				$.Notify({type: 'alert', caption: 'Alert', content: "Can't use teacher arrangement method because you dont have enough data!!!"});
-//			} else {
+				$("#btn-manual").attr("disabled", true);
+				$.Notify({type: 'alert', caption: 'Alert', content: "Can't use teacher arrangement method because you dont have enough data!!!"});
+			} else {
 				$("#btn-manual").attr("disabled", false);
 			}
 		}

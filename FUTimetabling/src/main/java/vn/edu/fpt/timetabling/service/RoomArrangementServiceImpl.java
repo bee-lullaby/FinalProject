@@ -217,7 +217,7 @@ public class RoomArrangementServiceImpl implements RoomArrangementService {
 
 	@Override
 	@Transactional
-	public boolean saveTimetables(List<ClassSemester> data) {
+	public boolean updateTimetable(List<ClassSemester> data) {
 		List<Timetable> dataTimetable = new ArrayList<Timetable>();
 
 		HashMap<Integer, Room> mCCSWithRoom = new HashMap<Integer, Room>();

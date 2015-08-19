@@ -8,9 +8,8 @@ import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -35,15 +34,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
 @Controller
-public class TeacherArrangementController {
+public class TeacherArrangementController extends GeneralController {
 
 	private SemesterService semesterService;
 	private DepartmentService departmentService;
 	private CourseSemesterService courseSemesterService;
 	private TeacherArrangementService teacherArrangementService;
 	private ClassCourseSemesterMergeService classCourseSemesterMergeService;
-	private static final Logger logger = LoggerFactory
-			.getLogger(TeacherArrangementController.class);
 
 	@Autowired(required = true)
 	@Qualifier(value = "semesterService")
@@ -134,7 +131,7 @@ public class TeacherArrangementController {
 			"semesterId", "departmentId", "courseSemesterId" })
 	public String teacherArrangementSemesterDepartmentCourse(
 			@RequestParam int semesterId, @RequestParam int departmentId,
-			@RequestParam int courseSemesterId, Model model) {
+			@RequestParam int courseSemesterId, Model model, HttpSession httpSession) {
 		List<Course> coursesData;
 		CourseSemester courseSemesterData;
 		List<DataTeacherArrangement> dtaData;
@@ -171,6 +168,8 @@ public class TeacherArrangementController {
 				model.addAttribute("dtaData", dtaJSON);
 				model.addAttribute("mMergeClassData", mMergeClassJSON); 
 			}
+			checkError(httpSession, model);
+			notifySuccess(httpSession, model);
 		} catch (JsonGenerationException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
@@ -184,17 +183,16 @@ public class TeacherArrangementController {
 	@RequestMapping(value = "/staff/teacherArrangement/updateTimetable", method = RequestMethod.POST)
 	public String updateTimetableTeacher(
 			@RequestParam(value = "dataToSet", required = true) String dataToSet,
-			HttpServletRequest request) {
+			HttpServletRequest request, HttpSession httpSession) {
 		ObjectMapper om = new ObjectMapper();
 		TypeFactory typeFactory = om.getTypeFactory();
 		List<Timetable> data;
 		try {
 			data = om.readValue(dataToSet, typeFactory.constructCollectionType(
 					List.class, Timetable.class));
-			logger.info(dataToSet);
-			boolean result = teacherArrangementService.saveTimetables(data);
-			if (result)
-				logger.info(dataToSet);
+			boolean result = teacherArrangementService.updateTimetable(data);
+			if (result) 
+				httpSession.setAttribute("success", "Update Teacher for Timetable successful!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

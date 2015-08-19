@@ -12,7 +12,7 @@ public interface RoomArrangementService {
 	
 	public List<Room> getListRoomsOfSemester(int semesterId);
 	
-	public boolean saveTimetables(List<ClassSemester> data);
+	public boolean updateTimetable(List<ClassSemester> data);
 	
 	public List<DataRoomArrangement> getDataRoomArrangement(int semesterId);
 }

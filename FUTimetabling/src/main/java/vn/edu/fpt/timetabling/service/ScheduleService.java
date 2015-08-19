@@ -28,7 +28,7 @@ public interface ScheduleService {
 	
 	public HashMap<Integer, Set<Timetable>> getMapCourseTimetable(int semesterId, int classId);
 	
-	public boolean saveTimetable(int semesterId, List<DaySlot> daySlots,
+	public boolean updateTimetable(int semesterId, List<DaySlot> daySlots,
 			List<DaySlot> prevDaySlots) throws ParseException;
 
 	public boolean generateFromPreviousWeek(int semesterId, int classId,

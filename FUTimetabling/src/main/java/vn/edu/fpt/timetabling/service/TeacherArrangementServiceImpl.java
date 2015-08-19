@@ -237,7 +237,7 @@ public class TeacherArrangementServiceImpl implements TeacherArrangementService 
 		return result;
 	}
 
-	public boolean saveTimetables(List<Timetable> timetables) {
+	public boolean updateTimetable(List<Timetable> timetables) {
 		for (Timetable timetable : timetables) {
 			Timetable t = timetableService.getTimetableById(timetable.getTimeTableId());
 

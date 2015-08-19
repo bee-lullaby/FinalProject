@@ -2,6 +2,7 @@ package vn.edu.fpt.timetabling.model;
 
 public class DataRoomArrangement {
 
+	
 	private ClassSemester classSemester;
 	private boolean setRoomSuccessful;
 	private int numberOfSlots;
