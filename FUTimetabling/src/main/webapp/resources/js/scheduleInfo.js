@@ -88,6 +88,10 @@
 			window.location = "scheduleInfo?semesterId=" +$(this).find("option:selected").val();
 		});
 		
+		$("#btn-automatic").on("click", function() {
+			window.location = "/Timetabling/staff/automaticTimetabling?semesterId=" +_urlParam("semesterId");
+		})
+		
 		function _init() {
 			$("#select-semester").find("option[value='" +_urlParam("semesterId") +"']").attr("selected", "selected");
 			if($("#setCourse").text() == "N/A" || $("#setCourse").text() == 0) {
