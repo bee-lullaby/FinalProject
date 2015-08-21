@@ -45,7 +45,7 @@ import vn.edu.fpt.timetabling.auto.entities.Teacher;
 import vn.edu.fpt.timetabling.auto.userdefinefunction.AtMostOneInTwo;
 
 public class AssignTeacher {
-	DataCenter DA;
+	public DataCenter DA;
 	CPSolver solver;
 	CPModel model;
 	IntegerVariable[] x; // x[i] = a: the a'th teacher will teach class-course i

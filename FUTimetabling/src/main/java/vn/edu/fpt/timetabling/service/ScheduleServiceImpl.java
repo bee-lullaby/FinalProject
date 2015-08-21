@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import vn.edu.fpt.timetabling.auto.algorithms.AssignRoom;
+import vn.edu.fpt.timetabling.auto.algorithms.AssignTeacher;
 import vn.edu.fpt.timetabling.auto.algorithms.TimeTableAllClass;
 import vn.edu.fpt.timetabling.auto.entities.ClassCourse;
 import vn.edu.fpt.timetabling.auto.entities.DataCenter;
@@ -712,6 +713,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 		if (TA.isTimeTableCorrect("D:/datafall/data_conflictMatrix_Temp2.txt")) {
 			System.out.println("Timetable is correct.");
 			TA.printTimeTableAllClass("D:/datafall/optimizedTTB_fall.html", TA.beingUsedTimeTable);
+			AssignTeacher teacherAssigner = new AssignTeacher();
+			teacherAssigner.DA = TA.DA;
+			teacherAssigner.assignTeacherUsingScore("D:/datafall/data_conflictMatrix_Temp2.txt", "D:/datafall/data_beingusedTT_Temp2.dat", "D:/datafall/data_scoreMatrix.txt", teacherAssigner.DA.classCourses);
+			// TA.DA.mClassCourse2AssignedTeacher.get(0);
 			AssignRoom roomAssigner;
 			roomAssigner = new AssignRoom();
 			roomAssigner.DA = TA.DA;
@@ -725,7 +730,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 			System.out.println("chieu = " + ss[1]);
 			TA.testDepartMentDemand(ttb);
 			mergeCourses = TA.recoverTimeTableMergedCase(ttb);
-			TA.PoiWriteExcelFile(TA, "D:/datafall/ttb.xls", TA.beingUsedTimeTable);
+			//TA.PoiWriteExcelFile(TA, "D:/datafall/ttb.xls", TA.beingUsedTimeTable);
 		} else {
 			System.out.println("Timetable is incorrect.");
 		}
