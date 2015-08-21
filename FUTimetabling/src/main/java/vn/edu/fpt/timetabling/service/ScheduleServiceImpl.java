@@ -1,5 +1,6 @@
 package vn.edu.fpt.timetabling.service;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,7 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import vn.edu.fpt.timetabling.auto.algorithms.AssignRoom;
+import vn.edu.fpt.timetabling.auto.algorithms.TimeTableAllClass;
 import vn.edu.fpt.timetabling.auto.entities.DataCenter;
+import vn.edu.fpt.timetabling.auto.entities.SingleSolution;
 import vn.edu.fpt.timetabling.model.Building;
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassCourseSemesterMerge;
@@ -576,18 +580,67 @@ public class ScheduleServiceImpl implements ScheduleService {
 		for (Building building : buildings) {
 			buildingData.add(building.getBuildingId() + "|" + building.getCode());
 		}
-		DataCenter dataCenter = new DataCenter();
-		dataCenter.loadData_Department_v2(departmentData);
-		dataCenter.loadData_Course_v2(courseData);
-		dataCenter.loadData_Class_v2(classData);
-		dataCenter.loadData_Building_v2(buildingData);
-		dataCenter.loadData_Room_v2(roomData);
-		dataCenter.loadData_ClassCourse_v2(classCourseData);
-		dataCenter.assignStudentEachClassCourse();
-		dataCenter.loadData_Teacher_v2(teacherData);
-		dataCenter.loadData_Course_Teacher_v2(teacherCourseData);
-		dataCenter.mergeClassCourse();
-		dataCenter.reloadData_ClassCourse_v2(classCourseData);
-		dataCenter.loadData_mergedCases(mergeClassData);
+
+		TimeTableAllClass TA = new TimeTableAllClass();
+		TA.DA = new DataCenter();
+		TA.DA .loadData_Department_v2(departmentData);
+		TA.DA .loadData_Course_v2(courseData);
+		TA.DA .loadData_Class_v2(classData);
+		TA.DA .loadData_Building_v2(buildingData);
+		TA.DA .loadData_Room_v2(roomData);
+		TA.DA .loadData_ClassCourse_v2(classCourseData);
+		TA.DA .assignStudentEachClassCourse();
+		TA.DA .loadData_Teacher_v2(teacherData);
+		TA.DA .loadData_Course_Teacher_v2(teacherCourseData);
+		TA.DA .mergeClassCourse();
+		TA.DA .reloadData_ClassCourse_v2(classCourseData);
+		TA.DA .loadData_RoomEachCourse();
+		if (!TA.DA.isDataValidForTemplate2()) {
+			System.out.println("Not feasible to make timetable.");
+			System.exit(1);
+		}
+		
+		TA.makeSolutionWarehouse_Template2("D:/datafall/data_solutionWarehouses_Temp2.dat");
+		TA.stateModel("D:/datafall/data_solutionWarehouses_Temp2.dat");
+		TA.initRandom();
+		TA.findRandomFeasibleSolution();
+		TA.demand_OfACourse = TA.calculateTeacherDemand(TA.beingUsedTimeTable);
+		TA.totalDemand = TA.sumArray(TA.demand_OfACourse);
+		TA.fStar = TA.totalDemand;
+		TA.sStar = TA.beingUsedTimeTable;
+		try {
+			TA.findOptimalTimetable_TabuSearch2();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		TA.savebeingUsedTimeTable("D:/datafall/data_beingusedTT_Temp2.dat");
+		SingleSolution[] ttb = TA.loadbeingUsedTimeTable("D:/datafall/data_beingusedTT_Temp2.dat");
+		TA.beingUsedTimeTable = ttb;
+		TA.writeMatrix2File("D:/datafall/data_conflictMatrix_Temp2.txt", TA.beingUsedTimeTable);
+		if (TA.isTimeTableCorrect("D:/datafall/data_conflictMatrix_Temp2.txt")) {
+			System.out.println("Timetable is correct.");
+			TA.printTimeTableAllClass("D:/datafall/optimizedTTB_fall.html", TA.beingUsedTimeTable);
+			AssignRoom roomAssigner;
+			roomAssigner = new AssignRoom();
+			roomAssigner.DA = TA.DA;
+			roomAssigner.assignRoomUsingFor("D:/datafall/data_beingusedTT_Temp2.dat");
+			TA.calRoomDemandEverySlot(TA.beingUsedTimeTable);
+			System.out.println();
+			TA.demand_OfACourse = new int[TA.DA.nbCourse];
+			TA.demand_OfACourse = TA.calculateTeacherDemand(ttb);
+			int[] ss = TA.findSessionAllClass(ttb);
+			System.out.println("sang = " + ss[0]);
+			System.out.println("chieu = " + ss[1]);
+			TA.testDepartMentDemand(ttb);
+			TA.recoverTimeTableMergedCase(ttb);
+			TA.PoiWriteExcelFile(TA, "D:/datafall/ttb.xls", TA.beingUsedTimeTable);
+		} else {
+			System.out.println("Timetable is incorrect.");
+		}
+
+		// TA.modelling_ttb_manual();
+		// TA.buildTTB_manual();
+		
+		
 	}
 }

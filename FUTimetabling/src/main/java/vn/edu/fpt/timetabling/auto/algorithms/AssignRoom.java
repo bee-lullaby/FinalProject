@@ -26,8 +26,8 @@ import vn.edu.fpt.timetabling.auto.entities.SingleSolution;
 import vn.edu.fpt.timetabling.auto.entities.Teacher;
 
 public class AssignRoom {
-	DataCenter DA;
-	SingleSolution[] sol;
+	public DataCenter DA;
+	public SingleSolution[] sol;
 	
 	public HashMap<Room, ArrayList<DaySlot>> mRoom2DaySlotList; 
 	public HashMap<ClassCourse, ArrayList<DaySlot>> mClassCourse2DaySlotList;
@@ -511,7 +511,7 @@ public class AssignRoom {
 		//====================================================
 //		DA.lClassifiedCourse = new ArrayList[DA.NB_COURSETYPE];
 //		DA.lCorrespondClassifiedRoom = new ArrayList[DA.NB_COURSETYPE];
-		for (int type = 0; type < DA.NB_COURSETYPE; type++) {
+		for (int type = 0; type < DA.nbRoomTypes; type++) {
 //			DA.lClassifiedCourse[type] = new ArrayList<Course>();
 //			DA.lCorrespondClassifiedRoom[type] = new ArrayList<Room>();
 //			DA.loadData_CourseRoom("datafall/type"+(type+1)+".txt",type);
@@ -535,7 +535,7 @@ public class AssignRoom {
 		}
 		
 		
-		for (int type = 0; type < DataCenter.NB_COURSETYPE; type++) {
+		for (int type = 0; type < DA.nbRoomTypes; type++) {
 			System.out.println("\nType no."+(type+1)+": ");
 			System.out.print("Course:"+"<"+DA.lClassifiedCourse[type].size()+">: ");
 			for (Course c : DA.lClassifiedCourse[type]) {

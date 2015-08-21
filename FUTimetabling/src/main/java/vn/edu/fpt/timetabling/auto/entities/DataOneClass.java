@@ -127,6 +127,102 @@ public class DataOneClass implements Serializable{
 		}
 	}
 	/////////////////////////////////
+	
+	public void loadData(List<String> data){
+		nbClasscoursePerClass = Integer.parseInt(data.get(0));
+		String row = data.get(1);
+		classCourses = new ClassCourse[nbClasscoursePerClass];
+		mID2Course = new HashMap<Integer, ClassCourse>();
+		mCourse2Index = new HashMap<ClassCourse, Integer>();
+		String[] str1 = row.split(" ");
+		
+		for(int i = 0; i < nbClasscoursePerClass; i++){
+			int id = Integer.parseInt(str1[i]);
+//			System.out.println("Course " + id);
+			ClassCourse c = new ClassCourse();
+			c.ID = id;
+			classCourses[i] = c;
+			mID2Course.put(id, c);
+			mCourse2Index.put(c, i);
+		}
+		
+		statusOfCourse = new int[nbClasscoursePerClass];
+		row = data.get(2);
+		String[] str2 = row.split(" ");
+		for (int i = 0; i < nbClasscoursePerClass; i++) {
+			int stt = Integer.parseInt(str2[i]);
+			statusOfCourse[i] = stt;
+//			System.out.println("Course " + classCourses[i].ID +", stt = "+ stt);
+		}
+		row = data.get(3);
+		nbFCourses = Integer.parseInt(row);
+		
+		fCourses = new FCourse[nbFCourses];
+		mID2FCourse = new HashMap<Integer, FCourse>();
+		mFCourse2Index = new HashMap<FCourse, Integer>();
+		
+		
+		for(int i = 0; i < nbFCourses; i++){
+			int id = i;
+			FCourse fc = new FCourse();
+			fc.ID = id;
+			fCourses[i] = fc;
+			mID2FCourse.put(id, fc);
+			mFCourse2Index.put(fc, i);
+		}
+		
+		row = data.get(4);
+		String[] str3 = row.split(" ");
+		fCoursesOfClasscourse = new HashMap<ClassCourse, ArrayList<FCourse>>();
+		for(int i = 0; i < nbClasscoursePerClass; i++){				
+			fCoursesOfClasscourse.put(classCourses[i], new ArrayList<FCourse>());
+		}
+		courseOfFCourse= new HashMap<FCourse, ClassCourse>();
+		for(int i = 0; i < nbClasscoursePerClass; i++){
+			int fcID = i;
+			int cID = Integer.parseInt(str3[i]);
+			ClassCourse c = mID2Course.get(cID);
+			FCourse fc = mID2FCourse.get(fcID);
+			fCoursesOfClasscourse.get(c).add(fc);
+			courseOfFCourse.put(fc, c);
+		}
+		
+		row = data.get(5);
+		nbFCourses_20 = Integer.parseInt(row);
+		fCourses_20 = new FCourse[nbFCourses_20];
+		mID2FCourse_20 = new HashMap<Integer, FCourse>();
+		mFCourse2Index_20 = new HashMap<FCourse, Integer>();
+		
+		for(int i = 0; i < nbFCourses_20; i++){
+			int id = i;
+//			System.out.println("FCourse " + id);
+			FCourse fc = new FCourse();
+			fc.ID = id;
+			fCourses_20[i] = fc;
+			mID2FCourse_20.put(id, fc);
+			mFCourse2Index_20.put(fc, i);
+		}
+		
+		row = data.get(6);
+		String[] str4 = row.split(" ");
+		
+		fCoursesOfCourse_20 = new HashMap<ClassCourse, ArrayList<FCourse>>();
+		for(int i = 0; i < nbClasscoursePerClass; i++){				
+			fCoursesOfCourse_20.put(classCourses[i], new ArrayList<FCourse>());
+		}
+		courseOfFCourse_20 = new HashMap<FCourse, ClassCourse>();
+		for(int i = 0; i < nbFCourses_20; i++){
+			int fcID = i;
+			int cID = Integer.parseInt(str4[i]);
+//			System.out.println("FCourse " + fcID + ", Course " + cID);
+			ClassCourse c = mID2Course.get(cID);
+			FCourse fc = mID2FCourse_20.get(fcID);
+			fCoursesOfCourse_20.get(c).add(fc);
+			courseOfFCourse_20.put(fc, c);
+		}		
+		
+	}
+	
 	public void loadData_SM(String fn){
 		try{
 			Scanner in = new Scanner(new File(fn));
@@ -150,6 +246,8 @@ public class DataOneClass implements Serializable{
 				mID2Course.put(id, c);
 				mCourse2Index.put(c, i);
 			}
+			
+			
 			
 			//status
 			line = in.nextLine();
@@ -195,6 +293,7 @@ public class DataOneClass implements Serializable{
 				fCoursesOfClasscourse.put(classCourses[i], new ArrayList<FCourse>());
 			}
 			courseOfFCourse= new HashMap<FCourse, ClassCourse>();
+			
 			while(true){
 				int fcID = in.nextInt();
 				if(fcID == -1) break;
@@ -229,7 +328,6 @@ public class DataOneClass implements Serializable{
 				mID2FCourse_20.put(id, fc);
 				mFCourse2Index_20.put(fc, i);
 			}
-			
 			//fcourse-course 20 days
 			line = in.nextLine();
 			line = in.nextLine();
@@ -256,13 +354,13 @@ public class DataOneClass implements Serializable{
 		}
 	}
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		DataOneClass d = new DataOneClass();
-//		d.loadData("1.txt");
+
 		d.loadData_SM("dataOneClass.txt");
 		for (int i = 0; i < d.nbClasscoursePerClass; i++) {
 			System.out.println("c = "+d.classCourses[i].ID+", stt = "+d.statusOfCourse[i]);
 		}
+		
 	}
 
 }

@@ -52,19 +52,19 @@ public class TimeTableAllClass {
 	public TimeTableOneClass_SM[] timeTable_WareHouse;
 	public SingleSolution[] beingUsedTimeTable;
 	public int[] backUpTimeTable;
-	int[] demand_OfACourse;
-	int[] demand_Department;
-	int[] supply_Department;
-	int fStar;
+	public int[] demand_OfACourse;
+	public int[] demand_Department;
+	public int[] supply_Department;
+	public int fStar;
 	public SingleSolution[] sStar;
-	int totalDemand;
-	int totalSupply;
-	int[] supplyTeacher4Optimization;
-	int[] supplyTeacherFromData;
-	int[] marginDemand_OfACourse;
-	int totalNb_OfViolatedCourse;
-	int[] nbOfViolatedCourse_OfAClass;
-	int[] marginDemand_OfAClass;
+	public int totalDemand;
+	public int totalSupply;
+	public int[] supplyTeacher4Optimization;
+	public int[] supplyTeacherFromData;
+	public int[] marginDemand_OfACourse;
+	public int totalNb_OfViolatedCourse;
+	public int[] nbOfViolatedCourse_OfAClass;
+	public int[] marginDemand_OfAClass;
 
 	final static int SLOT_1 = 0;
 	final static int SLOT_2 = 1;
@@ -436,10 +436,13 @@ public class TimeTableAllClass {
 		for (int cl = 0; cl < DA.nbClass; cl++) {
 			timeTable_WareHouse[cl] = new TimeTableOneClass_SM();
 			timeTable_WareHouse[cl].D = new DataOneClass();
+			//timeTable_WareHouse[cl].D.loadData(DA.genStringDataOneClass[cl]);
 			timeTable_WareHouse[cl].D.loadData_SM(DataCenter.FILENAME_PREFIX_DATAONECLASS + cl + ".txt");
 			System.out.println("Done class " + cl);
+			
+			
 		}
-
+//		System.out.println("DEN DUOC DAY ROI");
 		for (int cl = 0; cl < DA.nbClass; cl++) {
 			ClassFU cls = DA.classes[cl];
 			ArrayList<ClassCourse> L = DA.mClass2ClassCourseList.get(cls);
@@ -2907,14 +2910,18 @@ public class TimeTableAllClass {
 
 			//
 			HSSFSheet viewByRoom = workbook.createSheet("View by Room");
-			for (int i = 1; i <= DA.nbRoom; i++) {
+			for (int i = 0; i <= DA.nbRoom; i++) {
 				HSSFRow row1 = viewByRoom.createRow(i);
 
 				for (int j = 0; j <= 6 * 20; j++) {
 					HSSFCell cell1 = row1.createCell(j);
 				}
 				HSSFCell cell1 = row1.getCell(0);
-				cell1.setCellValue(DA.mID2Room.get(i - 1).code);
+				Room room = new Room();
+				if (DA.mIDx2Room.get(i-1)==null){
+					//cell1.setCellValue("No room");
+				}
+				else cell1.setCellValue(DA.mIDx2Room.get(i - 1).code);
 			}
 
 			for (int icl = 0; icl < DA.nbClass; icl++) {
@@ -2926,8 +2933,12 @@ public class TimeTableAllClass {
 							ClassCourse cc = DA.mID2ClassCourse.get(s.T[slot][day]);
 							if (DA.mClassCourse2AssignedRoom.get(cc) != null) {
 								Room room = DA.mClassCourse2AssignedRoom.get(cc);
-								int idxr = room.ID;
+								int idxr = DA.mRoom2Index.get(room);
+								//DA.mClassCourse2AssignedTeacher.get(0);
 								HSSFRow row1 = viewByRoom.getRow(idxr + 1);
+								
+								System.out.println("Row : "+(idxr+1));
+								System.out.println("Cell: "+ 1+day*6+slot);
 								HSSFCell cell1 = row1.getCell(1 + day * 6 + slot);
 								String str = cell1.getStringCellValue();
 								str = str + "," + code;
@@ -3135,7 +3146,7 @@ public class TimeTableAllClass {
 
 	public void findOptimalTimetable_TabuSearch2() throws IOException {
 		// OPTIMIZING
-		File f = new File("datasm/log_exp.txt");
+		File f = new File("D:/datafall/log_exp.txt");
 		FileWriter fw = new FileWriter(f);
 		BufferedWriter bw = new BufferedWriter(fw);
 		int iter = 0;
@@ -3597,7 +3608,7 @@ public class TimeTableAllClass {
 		// TA.DA.savedata_MergedList(fn_data_mergedCases);
 		// TA.DA.saveData_DeletedList("datafall/data_deletedList_fall.txt");
 
-//		TA.makeSolutionWarehouse_Template2(fn_classTimeTableSolutions_Temp2);
+		TA.makeSolutionWarehouse_Template2(fn_classTimeTableSolutions_Temp2);
 		//
 //		TA.init(fn_classTimeTableSolutions_Temp2, "");
 
@@ -3609,11 +3620,9 @@ public class TimeTableAllClass {
 		TA.totalDemand = TA.sumArray(TA.demand_OfACourse);
 		TA.fStar = TA.totalDemand;
 		TA.sStar = TA.beingUsedTimeTable;
-//		TA.findOptimalTimetable_TabuSearch();
 		try {
 			TA.findOptimalTimetable_TabuSearch2();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

@@ -19,7 +19,7 @@ import vn.edu.fpt.timetabling.auto.algorithms.MultiKnapsack;
 
 public class DataCenter {
 
-	public static final String FILENAME_PREFIX_DATAONECLASS = "datasm/class";
+	public static final String FILENAME_PREFIX_DATAONECLASS = "D:/datafall/class";
 	// public static final String FILENAME_PREFIX_DATAONECLASS =
 	// "datafall/class";
 	public static final String FILENAME_PREFIX_ROOMCLUSTER = "data_room_cluster";
@@ -27,8 +27,11 @@ public class DataCenter {
 	public static final int NB_FRAGMENT_PERCOURSE_FULLMODEL = 10;
 	public static final int LIMIT_NBROOM_PERCOURSE = 12;
 	public static final int NB_COURSETYPE = 5;
+	public int nbRoomTypes;
 	public static final boolean BLOCKCLASSIFYING = false;
-
+	
+	public List<String>[] genStringDataOneClass ;
+	
 	public int nbDays_20 = 20;
 	public int nbSlotsPerHalfDay = 3;
 
@@ -98,6 +101,7 @@ public class DataCenter {
 	public Room[] rooms;
 	public HashMap<Room, Integer> mRoom2Index;
 	public HashMap<Integer, Room> mID2Room;
+	public HashMap<Integer, Room> mIDx2Room;
 	public HashMap<String, Integer> mRoomCode2ID;
 	public HashMap<Integer, String> mRoomID2Code;
 	public HashMap<Room, ArrayList<DaySlot>> mRoom2DaySlotList;
@@ -357,11 +361,87 @@ public class DataCenter {
 
 		// make each class data file
 		// write to FINAME_frefix+'classidx'.txt
+		genStringDataOneClass = new ArrayList[nbClass];
 		for (int cl = 0; cl < nbClass; cl++) {
 			genDataOneClassFile(FILENAME_PREFIX_DATAONECLASS, cl);
+			//genStringDataOneClass[cl] = new ArrayList<>();
+			//genDataOneClass(genStringDataOneClass[cl], cl);
+			
+			
 		}
 	}
 
+	public void genDataOneClass(List<String> data, int clIdx){
+		//data = new ArrayList<>();
+		ClassFU cls = classes[clIdx];
+		ArrayList<ClassCourse> L = mClass2ClassCourseList.get(cls);
+		if (clIdx == 25){
+			System.out.println(cls.code);
+			System.out.println(L);
+		}
+		String str = String.valueOf(L.size());
+		data.add(str);
+		str="";
+		for (int i = 0; i < L.size(); i++) {
+			ClassCourse cc = L.get(i);
+			str += cc.ID + " "; 
+		}
+		data.add(str);
+		str="";
+		for (int i = 0; i < L.size(); i++) {
+			ClassCourse cc = L.get(i);
+			str+= cc.stt + " ";
+		}
+		data.add(str);
+		int nbfc_s = L.size() * NB_FRAGMENT_PERCOURSE_SHORTMODEL;
+		str= String.valueOf(nbfc_s);
+		data.add(str);
+//		str="";
+//		for (int fc = 0; fc < nbfc_s; fc++) {
+//			str+= fc + " ";
+//		}
+//		data.add(str);
+		str="";
+		int idC = -1;
+		// int nbfc = L.size()*2;
+		for (int i = 0; i < nbfc_s; i++) {
+
+			if (i % NB_FRAGMENT_PERCOURSE_SHORTMODEL == 0) {
+				idC++;
+			}
+			str+=L.get(idC).ID +" ";
+			
+		}
+		data.add(str);
+
+		int nbfc_f = L.size() * NB_FRAGMENT_PERCOURSE_FULLMODEL;
+		
+		str="";
+		str=String.valueOf(nbfc_f);
+		data.add(str);
+		str="";
+		
+//		for (int i = 0; i < nbfc_f; i++) {	
+//			str+=i + " ";		
+//		}
+//		data.add(str);
+
+		idC = -1;
+		// int nbfc = L.size()*2;
+		for (int i = 0; i < nbfc_f; i++) {
+			if (i % NB_FRAGMENT_PERCOURSE_FULLMODEL == 0) {
+				idC++;
+			}
+			str+= L.get(idC).ID +" ";
+
+		}
+		data.add(str);
+//
+//		for (String  x : data) {
+//			System.out.println(x);
+//		}
+	}
+	
 	public void genDataOneClassFile(String fnPrefix, int clIdx) {
 		File f = new File(fnPrefix + clIdx + ".txt");
 		try {
@@ -1653,6 +1733,7 @@ public class DataCenter {
 			mRoomID2Code = new HashMap<Integer, String>();
 			mRoomCode2ID = new HashMap<String, Integer>();
 			mID2Room = new HashMap<Integer, Room>();
+			mIDx2Room = new HashMap<Integer, Room>();
 			mBuidling2RoomList = new HashMap<Building, ArrayList<Room>>();
 			mCode2Room = new HashMap<>();
 			mRoomCourse = new HashMap<Room,ArrayList<Course>>();
@@ -1673,10 +1754,14 @@ public class DataCenter {
 				int capacity = Integer.parseInt(stringTokenizer.nextToken());
 				int nbCourseInRoom = Integer.parseInt(stringTokenizer.nextToken());
 				ArrayList<Course> courseEachRoom = new ArrayList<>();
-				for(int j = 0;j<nbCourseInRoom;j++){
-					String str =  stringTokenizer.nextToken().toUpperCase();
-					courseEachRoom.add(mCode2Course.get(str));
+					for(int j = 0;j<nbCourseInRoom;j++){
+						String str =  stringTokenizer.nextToken().toUpperCase();
+						if (mCode2Course.get(str)!=null){
+							courseEachRoom.add(mCode2Course.get(str));
+						}
+									
 				}
+				
 				
 				
 				System.out.println("id = " + rID + ", code = " + rCode + ", building = " + bCode);
@@ -1696,6 +1781,7 @@ public class DataCenter {
 				mRoomCode2ID.put(rCode, rID);
 				mRoomID2Code.put(rID, rCode);
 				mID2Room.put(rID, r);
+				mIDx2Room.put(idx, r);
 				mCode2Room.put(rCode, r);
 
 				Building bd = mID2Building.get(buildingID);
@@ -1706,10 +1792,21 @@ public class DataCenter {
 					System.exit(1);
 				}
 			}
+			
+			
+			
 			for (int i = 0; i < rooms.length; i++) {
 				Room r = rooms[i];
 				String buildingCode = mBuidlingID2Code.get(r.buildingID);
-				System.out.println("id = " + r.ID + ", code = " + r.code + ", building = " + buildingCode);
+				System.out.print("id = " + r.ID + ", code = " + r.code + ", building = " + buildingCode+":  ");
+				ArrayList<Course> lc = new ArrayList<>();
+				lc = mRoomCourse.get(r);
+				for (Course course : lc) {
+					System.out.print(course.code+" ");
+				}
+				System.out.println();
+				
+				
 			}
 			System.out.println("\nBuidling:");
 			for (int i = 0; i < buildings.length; i++) {
@@ -1939,7 +2036,6 @@ public class DataCenter {
 					mCourseCode2ID.put(cCode, ID);
 					mCourseID2Code.put(ID, cCode);
 					mCode2Course.put(cCode, c);
-
 					mCourse2Department.put(c, d);
 					mDepartment2CourseList.get(d).add(c);
 
@@ -3645,7 +3741,7 @@ public class DataCenter {
 	public void findRoomLimitEachCourse() {
 		aCourse2RoomLimit = new int[nbCourse];
 		// int nbType = lClassifiedCourse.length;
-		for (int i = 0; i < NB_COURSETYPE; i++) {
+		for (int i = 0; i < nbRoomTypes; i++) {
 			ArrayList<Course> cList = lClassifiedCourse[i];
 			ArrayList<Room> rList = lCorrespondClassifiedRoom[i];
 			int roomLimit = rList.size();
@@ -3668,6 +3764,78 @@ public class DataCenter {
 			lCorrespondClassifiedRoom[type] = new ArrayList<Room>();
 			loadData_CourseRoom("datafall/type" + (type + 1) + ".txt", type);
 		}
+		findRoomLimitEachCourse();
+	}
+	
+	public void loadData_RoomEachCourse(){
+		nbRoomTypes =0;
+		ArrayList<Course> lSpecificCourse = new ArrayList<Course>();
+		for (int i =0; i<nbRoom;i++) {
+			ArrayList<Course> lCoursei = new ArrayList<Course>();
+			if( mRoomCourse.get(rooms[i])!=null)
+				lCoursei = mRoomCourse.get(rooms[i]);
+			if((!lSpecificCourse.containsAll(lCoursei)) && (!lCoursei.isEmpty())){
+				nbRoomTypes++;
+				lSpecificCourse.addAll(lCoursei);
+			}
+
+		}
+		nbRoomTypes++;
+		
+		
+		lClassifiedCourse = new ArrayList[nbRoomTypes];
+		lCorrespondClassifiedRoom = new ArrayList[nbRoomTypes];
+		lSpecificCourse = new ArrayList<Course>();
+		int idx =-1;
+		for (int i =0; i<nbRoom;i++) {
+			ArrayList<Course> lCoursei = new ArrayList<Course>();
+			if( mRoomCourse.get(rooms[i])!=null)
+				lCoursei = mRoomCourse.get(rooms[i]);
+			if((!lSpecificCourse.containsAll(lCoursei)) && (!lCoursei.isEmpty())){
+				idx++;
+				lClassifiedCourse[idx] = new ArrayList<Course>();
+				lCorrespondClassifiedRoom[idx] = new ArrayList<Room>();
+				lClassifiedCourse[idx]=lCoursei;
+				ArrayList<Room> listRoom = new ArrayList<Room>();
+				listRoom.add(rooms[i]);
+				for( int j =i+1; j<nbRoom;j++){
+					if (mRoomCourse.get(rooms[j]).containsAll(lCoursei) ){
+						listRoom.add(rooms[j]);
+					}
+				}
+				lCorrespondClassifiedRoom[idx]=listRoom;
+				lSpecificCourse.addAll(lCoursei);
+			}
+		}
+		
+		ArrayList<Course> lCourse = new ArrayList<Course>();
+		ArrayList<Room> lRoom = new ArrayList<Room>();
+		for (Course course : courses) {
+			if (!lSpecificCourse.contains(course)){
+				lCourse.add(course);
+			}
+		}
+		
+		for (int i =0; i<nbRoom;i++) {
+			if( mRoomCourse.get(rooms[i]).isEmpty()){
+				lRoom.add(rooms[i]);
+			}
+		}
+		lClassifiedCourse[idx+1]=lCourse;
+		lCorrespondClassifiedRoom[idx+1]=lRoom;
+		
+		for (int i =0; i <nbRoomTypes; i++){
+			System.out.println("Type "+i);
+			for (Room room : lCorrespondClassifiedRoom[i]) {
+				System.out.print(room.code+ " ");
+			}
+			System.out.print(":::");
+			for (Course course : lClassifiedCourse[i]) {
+				System.out.print(course.code+ " ");
+			}
+			System.out.println();
+		}
+		
 		findRoomLimitEachCourse();
 	}
 
@@ -3697,14 +3865,14 @@ public class DataCenter {
 		DA.loadData_Department_v2("datafall/data_department_fall.txt");
 		DA.loadData_Course_v2("datafall/data_course_fall.txt");
 
-		DA.loadData_Teacher_v2("datafall/data_teacher_fall.txt");
-
-		DA.loadData_Course_Teacher_v2("datafall/data_course_teacher_fall.txt");
-		// DA.loadData_Building_v2("datafall/data_building_fall.txt");
+//		DA.loadData_Teacher_v2("datafall/data_teacher_fall.txt");
+//
+//		DA.loadData_Course_Teacher_v2("datafall/data_course_teacher_fall.txt");
+//		// DA.loadData_Building_v2("datafall/data_building_fall.txt");
 		// DA.loadData_Room_v2("datafall/data_room_fall.txt");
 
-		// DA.loadData_ClassCourse_v2("datafall/data_classcourse_fall.txt");
-
+		 DA.loadData_ClassCourse_v2("datafall/data_classcourse_fall.txt");
+		DA.blockClassifyANDGenOneClassData();
 		// System.out.println(DA.nbClassCourse);
 		// DA.loadData_ClassCourse_v2("datafall/data_classcourse_fall.txt");
 		// DA.mergeClassCourse();
@@ -3712,11 +3880,12 @@ public class DataCenter {
 		// DA.savedata_ClassCourse("datafall/data_classcourse_fall_saved.txt");
 		// DA.savedata_MergedList("datafall/data_mergedList_fall_saved.txt");
 		// DA.saveData_DeletedList("datafall/data_deletedList_fall.txt");
-		System.out.println(DA.nbClassCourse);
-		System.out.println("load data:");
-		DA.loadData_ClassCourse_v2("datafall/data_classcourse_fall_saved.txt");
-		DA.loadData_DeletedList("datafall/data_deletedList_fall.txt");
-		DA.loadData_mergedCases("datafall/data_mergedList_fall_saved.txt");
+//		System.out.println(DA.nbClassCourse);
+//		System.out.println("load data:");
+//		DA.loadData_ClassCourse_v2("datafall/data_classcourse_fall_saved.txt");
+//		DA.loadData_DeletedList("datafall/data_deletedList_fall.txt");
+//		DA.loadData_mergedCases("datafall/data_mergedList_fall_saved.txt");
+		
 		// DA.makeMustNotConflictClassCourseList();
 		// DA.testfindRoomLimitEachCourse();
 		// DA.loadData_mergedCases("datasm/data_mergedcases_sm.txt");
