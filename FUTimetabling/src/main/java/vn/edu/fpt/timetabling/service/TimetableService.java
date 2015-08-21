@@ -25,23 +25,27 @@ public interface TimetableService {
 	public void deleteTimetable(int timetableId);
 
 	public List<Timetable> listTimetablesByClassCourseSemesters(Set<ClassCourseSemester> classCourseSemesters);
-	
+
 	public List<Timetable> listTimetablesByCCSs(List<ClassCourseSemester> classCourseSemesters);
 
 	public Timetable getTimetableByDateSlotClassCourse(Date date, int slot, int classCourseSemesterId);
-	
+
 	public Timetable getTimetableByDateSlotClass(Date date, int slot, int classSemesterId);
-	
+
 	public List<Timetable> listTimetablesByClassCourseSemestersInWeek(Set<ClassCourseSemester> classCourseSemesters,
 			Date startWeek, Date endWeek);
-	
+
 	public List<Timetable> listTimetablesByDate(Date date);
-	
+
 	public List<Timetable> listTimetableByClass(int semesterId, int classId);
-	
+
 	public List<Timetable> listTimetableByTeacher(int teacherSemesterId);
-	
+
 	public void deleteTimetablesByCCS(int classCourseSemesterId);
-	
+
 	public void deleteTimetablesByCCSInWeek(int classSemesterId, Date startWeek, Date endWeek);
+
+	public List<Timetable> listTimetablesByClassAndCourseCode(int semesterId, String classCode, String courseCode);
+
+	public int deleteTimetablesBySemester(int semesterId);
 }

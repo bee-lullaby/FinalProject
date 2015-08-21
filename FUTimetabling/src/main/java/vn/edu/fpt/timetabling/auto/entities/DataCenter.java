@@ -2534,9 +2534,10 @@ public class DataCenter {
 				for (Pair_ClassCourseClass pair : lClassCourseGuestClass_Temp) {
 					ClassCourse classCourseInPair = pair.classCourse;
 					ClassFU classFUInPair = pair.guestClass;
+					ClassFU classFU2 = mClassCourse2Class.get(classCourseInPair);
 					if (cCode.compareToIgnoreCase(classCourseInPair.code) == 0
 							&& clCode.compareToIgnoreCase(classFUInPair.code) == 0) {
-						System.out.println("Merged " + cCode + " " + clCode);
+						System.out.println("Merged " + cCode + " " + classFU2.code + " " + clCode);
 						y = true;
 						break;
 					}
@@ -3728,7 +3729,8 @@ public class DataCenter {
 		for (Pair_ClassCourseClass pair : lneedToBeDeletedClassCourse) {
 			ClassCourse classCourse = pair.classCourse;
 			ClassFU classFU = pair.guestClass;
-			System.out.println(classCourse.code + "-" + classFU.code);
+			ClassFU classFU2 = mClassCourse2Class.get(classCourse);
+			System.out.println(classCourse.code + "-" + classFU2.code + "-" + classFU.code);
 		}
 	}
 

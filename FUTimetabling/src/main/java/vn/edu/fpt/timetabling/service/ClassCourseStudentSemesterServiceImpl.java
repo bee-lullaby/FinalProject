@@ -39,8 +39,6 @@ public class ClassCourseStudentSemesterServiceImpl implements ClassCourseStudent
 	private ClassService classService;
 	@Autowired
 	private ClassCourseSemesterService classCourseSemesterService;
-	@Autowired
-	private ClassCourseStudentSemesterService classCourseStudentSemesterService;
 
 	public void setClassCourseStudentSemesterDAO(ClassCourseStudentSemesterDAO classCourseStudentSemesterDAO) {
 		this.classCourseStudentSemesterDAO = classCourseStudentSemesterDAO;
@@ -175,7 +173,7 @@ public class ClassCourseStudentSemesterServiceImpl implements ClassCourseStudent
 				ClassCourseStudentSemester classCourseStudentSemester = new ClassCourseStudentSemester();
 				classCourseStudentSemester.setClassCourseSemester(classCourseSemester);
 				classCourseStudentSemester.setStudent(student);
-				classCourseStudentSemesterService.addClassCourseStudentSemester(classCourseStudentSemester);
+				addClassCourseStudentSemester(classCourseStudentSemester);
 			}
 		}
 	}
@@ -209,7 +207,7 @@ public class ClassCourseStudentSemesterServiceImpl implements ClassCourseStudent
 						ClassCourseStudentSemester classCourseStudentSemester = new ClassCourseStudentSemester();
 						classCourseStudentSemester.setClassCourseSemester(classCourseSemester);
 						classCourseStudentSemester.setStudent(student);
-						classCourseStudentSemesterService.addClassCourseStudentSemester(classCourseStudentSemester);
+						addClassCourseStudentSemester(classCourseStudentSemester);
 					}
 					student.setClassSemester(classSemester);
 					System.out.println("Class: " + classSemester.getClassFPT().getCode());
@@ -247,7 +245,7 @@ public class ClassCourseStudentSemesterServiceImpl implements ClassCourseStudent
 						ClassCourseStudentSemester classCourseStudentSemester = new ClassCourseStudentSemester();
 						classCourseStudentSemester.setClassCourseSemester(classCourseSemester);
 						classCourseStudentSemester.setStudent(student);
-						classCourseStudentSemesterService.addClassCourseStudentSemester(classCourseStudentSemester);
+						addClassCourseStudentSemester(classCourseStudentSemester);
 					}
 					student.setClassSemester(classSemester);
 					if (isMaxStudent(classCourseSemesters)) {

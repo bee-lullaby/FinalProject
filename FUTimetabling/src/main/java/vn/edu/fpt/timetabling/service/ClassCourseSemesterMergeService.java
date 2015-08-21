@@ -16,10 +16,13 @@ public interface ClassCourseSemesterMergeService {
 	public List<ClassCourseSemesterMerge> listClassCourseSemesterMerges(int semesterId);
 
 	public ClassCourseSemesterMerge getClassCourseSemesterMergeById(int classCourseSemesterMergeId);
-	
-	public ClassCourseSemesterMerge getClassCourseSemesterMergeBy2CCS(int classCourseSemesterId1, int classCourseSemesterId2);
-	
-	public HashMap<String, Set<Integer>> getMapCourseWithMergeClassInSemester(int semesterId); 
-	
+
+	public ClassCourseSemesterMerge getClassCourseSemesterMergeBy2CCS(int classCourseSemesterId1,
+			int classCourseSemesterId2);
+
+	public HashMap<String, Set<Integer>> getMapCourseWithMergeClassInSemester(int semesterId);
+
 	public void deleteClassCourseSemesterMerge(int classCourseSemesterMergeId);
+
+	public int deleteClassCourseSemesterMerges(int semesterId);
 }

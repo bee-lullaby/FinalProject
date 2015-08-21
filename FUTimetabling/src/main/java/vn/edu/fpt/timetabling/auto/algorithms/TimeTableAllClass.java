@@ -13,6 +13,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -21,8 +22,6 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.CellRangeAddress;
-
-import com.mysql.fabric.xmlrpc.base.Array;
 
 import choco.cp.model.CPModel;
 import choco.cp.solver.CPSolver;
@@ -2976,23 +2975,37 @@ public class TimeTableAllClass {
 	}
 
 	//////////////////////////////////////////////////////////////////////////////
-	public void recoverTimeTableMergedCase(SingleSolution[] timetable) {
+	public List<List<String>> recoverTimeTableMergedCase(SingleSolution[] timetable) {
 		// public ArrayList<Pair_ClassCourseClass> lClassCourseGuestClassPair;
+		List<List<String>> mergeCourses = new ArrayList<>();
 		for (Pair_ClassCourseClass pair : DA.lClassCourseGuestClassPair) {
 			ClassCourse classCourse = pair.classCourse;
 			ClassFU guestClass = pair.guestClass;
 			ClassFU hostClass = DA.mClassCourse2Class.get(classCourse);
 			int hostIndex = DA.mClass2Index.get(hostClass);
 			int guestIndex = DA.mClass2Index.get(guestClass);
+			List<String> mergeCourse = new ArrayList<String>();
+			mergeCourse.add(classCourse.code);
+			mergeCourse.add(hostClass.code);
+			mergeCourse.add(guestClass.code);
+			mergeCourses.add(mergeCourse);
+			System.out.println("Lop ghep: "+ classCourse.code+hostClass.code+ guestClass.code);
 			for (int slot = 0; slot < DA.nbSlotsPerHalfDay * 2; slot++) {
 				for (int day = 0; day < DA.nbDays_20; day++) {
 					if (timetable[hostIndex].T[slot][day] == classCourse.ID) {
-						timetable[guestIndex].T[slot][day] = classCourse.ID;
+						ArrayList<ClassCourse> ccl = DA.mClass2ClassCourseList.get(guestClass);
+						for (ClassCourse classCourse2 : ccl) {
+							if( classCourse2.code.compareTo(classCourse.code)==0){
+								timetable[guestIndex].T[slot][day] = classCourse2.ID;
+							}
+						}
+						
 					}
 				}
 			}
 			//
 		}
+		return mergeCourses;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -3645,7 +3658,7 @@ public class TimeTableAllClass {
 			System.out.println("sang = " + ss[0]);
 			System.out.println("chieu = " + ss[1]);
 			TA.testDepartMentDemand(ttb);
-			TA.recoverTimeTableMergedCase(ttb);
+			//TA.recoverTimeTableMergedCase(ttb);
 			TA.PoiWriteExcelFile(TA, "ttb.xls", TA.beingUsedTimeTable);
 		} else {
 			System.out.println("Timetable is incorrect.");

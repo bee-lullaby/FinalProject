@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import vn.edu.fpt.timetabling.auto.algorithms.AssignRoom;
 import vn.edu.fpt.timetabling.auto.algorithms.TimeTableAllClass;
+import vn.edu.fpt.timetabling.auto.entities.ClassCourse;
 import vn.edu.fpt.timetabling.auto.entities.DataCenter;
 import vn.edu.fpt.timetabling.auto.entities.SingleSolution;
 import vn.edu.fpt.timetabling.model.Building;
@@ -35,6 +37,7 @@ import vn.edu.fpt.timetabling.model.Teacher;
 import vn.edu.fpt.timetabling.model.TeacherCourseSemester;
 import vn.edu.fpt.timetabling.model.TeacherSemester;
 import vn.edu.fpt.timetabling.model.Timetable;
+import vn.edu.fpt.timetabling.utils.Const;
 import vn.edu.fpt.timetabling.utils.TimetableUtils;
 
 @Service
@@ -496,6 +499,95 @@ public class ScheduleServiceImpl implements ScheduleService {
 		return true;
 	}
 
+	private void buildTimetable(Semester semester, SingleSolution[] singleSolutions,
+			HashMap<ClassCourse, vn.edu.fpt.timetabling.auto.entities.Room> roomMap, DataCenter dataCenter,
+			List<List<String>> mergeCourses) {
+		int semesterId = semester.getSemesterId();
+		timetableService.deleteTimetablesBySemester(semesterId);
+		classCourseSemesterMergeService.deleteClassCourseSemesterMerges(semesterId);
+		Date startDate = semester.getStartDate();
+		Calendar calendar = Calendar.getInstance();
+		HashMap<ClassCourseSemester, Room> roomMapConverted = new HashMap<>();
+		for (Entry<ClassCourse, vn.edu.fpt.timetabling.auto.entities.Room> entry : roomMap.entrySet()) {
+			ClassCourseSemester classCourseSemester = classCourseSemesterService
+					.getClassCourseSemesterById(entry.getKey().ID, false, false);
+			Room room = roomService.getRoomById(entry.getValue().ID, false);
+			roomMapConverted.put(classCourseSemester, room);
+		}
+		for (SingleSolution singleSolution : singleSolutions) {
+			int[][] classCourses = singleSolution.T;
+			for (int weekDiff = 0; weekDiff < Const.Timetable.NUMBER_WEEKS_DIFF; weekDiff++) {
+				int baseDay = weekDiff * Const.Timetable.NUMBER_WORKING_DAYS_IN_WEEK;
+				for (int dayInWeek = 0; dayInWeek < Const.Timetable.NUMBER_WORKING_DAYS_IN_WEEK; dayInWeek++) {
+					int day = baseDay + dayInWeek;
+					for (int slot = 0; slot < Const.Timetable.NUMBER_SLOTS_PER_DAY; slot++) {
+						int classCourseId = classCourses[slot][day];
+						if (classCourseId == -1) {
+							continue;
+						}
+						ClassCourseSemester classCourseSemester = classCourseSemesterService
+								.getClassCourseSemesterById(classCourseId, false, false);
+						for (int week = 0; week < Const.Timetable.NUMBER_WEEKS_SIMILAR; week++) {
+							int dayFromStart = weekDiff * Const.Timetable.NUMBER_WEEKS_SIMILAR
+									* Const.Timetable.NUMBER_DAYS_IN_WEEK + dayInWeek
+									+ week * Const.Timetable.NUMBER_DAYS_IN_WEEK;
+							if (weekDiff * Const.Timetable.NUMBER_WEEKS_SIMILAR
+									+ week >= Const.Timetable.NUMBER_WEEKS_PER_BLOCK) {
+								dayFromStart += Const.Timetable.NUMBER_WEEKS_BETWEEN_BLOCK
+										* Const.Timetable.NUMBER_DAYS_IN_WEEK;
+							}
+							calendar.setTime(startDate);
+							calendar.add(Calendar.DATE, dayFromStart);
+							calendar.set(Calendar.HOUR_OF_DAY, Const.Timetable.SLOT_TIME_MAP[slot][0]);
+							calendar.set(Calendar.MINUTE, Const.Timetable.SLOT_TIME_MAP[slot][1]);
+							Date date = calendar.getTime();
+							Timetable timetable = new Timetable();
+							timetable.setDate(date);
+							timetable.setSlot(slot + 1);
+							timetable.setClassCourseSemester(classCourseSemester);
+							timetable.setRoom(roomMapConverted.get(classCourseSemester));
+							timetableService.addTimetable(timetable);
+						}
+					}
+				}
+			}
+		}
+		for (List<String> list : mergeCourses) {
+			String courseCode = list.get(0);
+			String hostClassCode = list.get(1);
+			String guestClassCode = list.get(2);
+			ClassSemester hostClassSemester = classSemesterService.getClassSemesterByCode(hostClassCode, semesterId,
+					false);
+			ClassSemester guestClassSemester = classSemesterService.getClassSemesterByCode(guestClassCode, semesterId,
+					false);
+			CourseSemester courseSemester = courseSemesterService.getCourseSemesterByCourseCodeSemester(courseCode,
+					semesterId, false, false, false);
+			ClassCourseSemester hostClassCourseSemester = classCourseSemesterService
+					.getClassCourseSemesterByClassAndCourseSemester(hostClassSemester.getClassSemesterId(),
+							courseSemester.getCourseSemesterId(), false, false);
+			ClassCourseSemester guestClassCourseSemester = classCourseSemesterService
+					.getClassCourseSemesterByClassAndCourseSemester(guestClassSemester.getClassSemesterId(),
+							courseSemester.getCourseSemesterId(), false, false);
+			ClassCourseSemesterMerge classCourseSemesterMerge = new ClassCourseSemesterMerge();
+			classCourseSemesterMerge.setClassCourseSemester1(hostClassCourseSemester);
+			classCourseSemesterMerge.setClassCourseSemester2(guestClassCourseSemester);
+			classCourseSemesterMergeService.addClassCourseSemesterMerge(classCourseSemesterMerge);
+			Set<ClassCourseSemester> hostClassCourseSemesters = new LinkedHashSet<>();
+			hostClassCourseSemesters.add(hostClassCourseSemester);
+			List<Timetable> hostTimetables = timetableService
+					.listTimetablesByClassCourseSemesters(hostClassCourseSemesters);
+			for (Timetable hostTimetable : hostTimetables) {
+				Timetable guestTimetable = new Timetable();
+				guestTimetable.setDate(hostTimetable.getDate());
+				guestTimetable.setSlot(hostTimetable.getSlot());
+				guestTimetable.setRoom(hostTimetable.getRoom());
+				guestTimetable.setClassCourseSemester(guestClassCourseSemester);
+				guestTimetable.setTeacherSemester(hostTimetable.getTeacherSemester());
+				timetableService.addTimetable(guestTimetable);
+			}
+		}
+	}
+
 	@Override
 	public void autoSchedule(int semesterId) {
 		Semester semester = semesterService.getSemesterById(semesterId, true, true, false, false);
@@ -534,7 +626,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 				}
 				row += "|" + count + "|" + room.getCourses().replace(", ", "|");
 			}
-			System.out.println(row);
 			roomData.add(row);
 		}
 		for (ClassSemester classSemester : classSemesters) {
@@ -583,23 +674,23 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 		TimeTableAllClass TA = new TimeTableAllClass();
 		TA.DA = new DataCenter();
-		TA.DA .loadData_Department_v2(departmentData);
-		TA.DA .loadData_Course_v2(courseData);
-		TA.DA .loadData_Class_v2(classData);
-		TA.DA .loadData_Building_v2(buildingData);
-		TA.DA .loadData_Room_v2(roomData);
-		TA.DA .loadData_ClassCourse_v2(classCourseData);
-		TA.DA .assignStudentEachClassCourse();
-		TA.DA .loadData_Teacher_v2(teacherData);
-		TA.DA .loadData_Course_Teacher_v2(teacherCourseData);
-		TA.DA .mergeClassCourse();
-		TA.DA .reloadData_ClassCourse_v2(classCourseData);
-		TA.DA .loadData_RoomEachCourse();
+		TA.DA.loadData_Department_v2(departmentData);
+		TA.DA.loadData_Course_v2(courseData);
+		TA.DA.loadData_Class_v2(classData);
+		TA.DA.loadData_Building_v2(buildingData);
+		TA.DA.loadData_Room_v2(roomData);
+		TA.DA.loadData_ClassCourse_v2(classCourseData);
+		TA.DA.assignStudentEachClassCourse();
+		TA.DA.loadData_Teacher_v2(teacherData);
+		TA.DA.loadData_Course_Teacher_v2(teacherCourseData);
+		TA.DA.mergeClassCourse();
+		TA.DA.reloadData_ClassCourse_v2(classCourseData);
+		TA.DA.loadData_RoomEachCourse();
 		if (!TA.DA.isDataValidForTemplate2()) {
 			System.out.println("Not feasible to make timetable.");
 			System.exit(1);
 		}
-		
+
 		TA.makeSolutionWarehouse_Template2("D:/datafall/data_solutionWarehouses_Temp2.dat");
 		TA.stateModel("D:/datafall/data_solutionWarehouses_Temp2.dat");
 		TA.initRandom();
@@ -617,6 +708,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		SingleSolution[] ttb = TA.loadbeingUsedTimeTable("D:/datafall/data_beingusedTT_Temp2.dat");
 		TA.beingUsedTimeTable = ttb;
 		TA.writeMatrix2File("D:/datafall/data_conflictMatrix_Temp2.txt", TA.beingUsedTimeTable);
+		List<List<String>> mergeCourses = new ArrayList<>();
 		if (TA.isTimeTableCorrect("D:/datafall/data_conflictMatrix_Temp2.txt")) {
 			System.out.println("Timetable is correct.");
 			TA.printTimeTableAllClass("D:/datafall/optimizedTTB_fall.html", TA.beingUsedTimeTable);
@@ -632,15 +724,11 @@ public class ScheduleServiceImpl implements ScheduleService {
 			System.out.println("sang = " + ss[0]);
 			System.out.println("chieu = " + ss[1]);
 			TA.testDepartMentDemand(ttb);
-			TA.recoverTimeTableMergedCase(ttb);
+			mergeCourses = TA.recoverTimeTableMergedCase(ttb);
 			TA.PoiWriteExcelFile(TA, "D:/datafall/ttb.xls", TA.beingUsedTimeTable);
 		} else {
 			System.out.println("Timetable is incorrect.");
 		}
-
-		// TA.modelling_ttb_manual();
-		// TA.buildTTB_manual();
-		
-		
+		buildTimetable(semester, ttb, TA.DA.mClassCourse2AssignedRoom, TA.DA, mergeCourses);
 	}
 }

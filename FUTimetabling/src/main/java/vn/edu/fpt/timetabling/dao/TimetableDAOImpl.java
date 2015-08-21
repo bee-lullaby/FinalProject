@@ -76,7 +76,7 @@ public class TimetableDAOImpl implements TimetableDAO {
 		query.setParameter("classCourseSemesterId", classCourseSemesterId);
 		return (Timetable) query.uniqueResult();
 	}
-	
+
 	@Override
 	public Timetable getTimetableByDateSlotClass(Date date, int slot, int classSemesterId) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T" + " WHERE T.date = :date AND T.slot = :slot"
@@ -90,7 +90,7 @@ public class TimetableDAOImpl implements TimetableDAO {
 		query.setParameter("classSemesterId", classSemesterId);
 		return (Timetable) query.uniqueResult();
 	}
-	
+
 	@Override
 	public void deleteTimetable(int timetableId) {
 		Timetable timetable = getTimetableById(timetableId);
@@ -133,19 +133,17 @@ public class TimetableDAOImpl implements TimetableDAO {
 		List<Timetable> timetables = (List<Timetable>) query.list();
 		return timetables;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Timetable> listTimetablesByDate(Date date) {
-		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T "
-				+ " WHERE T.date = :date";
+		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T " + " WHERE T.date = :date";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("date", date);
 		List<Timetable> timetables = (List<Timetable>) query.list();
 		return timetables;
 	}
 
-	
 	@Override
 	public void deleteTimetablesByCCS(int classCourseSemesterId) {
 		String hql = "DELETE FROM vn.edu.fpt.timetabling.model.Timetable T "
@@ -154,7 +152,7 @@ public class TimetableDAOImpl implements TimetableDAO {
 		query.setParameter("classCourseSemesterId", classCourseSemesterId);
 		query.executeUpdate();
 	}
-	
+
 	@Override
 	public void deleteTimetablesByCCSInWeek(int classSemesterId, Date startWeek, Date endWeek) {
 		String hql = "DELETE FROM vn.edu.fpt.timetabling.model.Timetable T "
@@ -167,5 +165,31 @@ public class TimetableDAOImpl implements TimetableDAO {
 		query.setParameter("startWeek", startWeek);
 		query.setParameter("endWeek", endWeek);
 		query.executeUpdate();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Timetable> listTimetablesByClassAndCourseCode(int semesterId, String classCode, String courseCode) {
+		String hql = "DELETE FROM vn.edu.fpt.timetabling.model.Timetable T "
+				+ " WHERE T.classCourseSemester.classSemester.semester.semesterId = :semesterId"
+				+ " AND T.classCourseSemester.classSemester.classFPT.code = :classCode"
+				+ " AND T.classCourseSemester.courseSemester.course.code = :courseCode";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("semesterId", semesterId);
+		query.setParameter("classCode", classCode);
+		query.setParameter("courseCode", courseCode);
+		List<Timetable> timetables = (List<Timetable>) query.list();
+		return timetables;
+	}
+
+	@Override
+	public int deleteTimetablesBySemester(int semesterId) {
+		String hql = "DELETE FROM vn.edu.fpt.timetabling.model.Timetable T"
+				+ " WHERE T.classCourseSemester.classCourseSemesterId IN (SELECT CCS.classCourseSemesterId"
+				+ " FROM vn.edu.fpt.timetabling.model.ClassCourseSemester CCS"
+				+ " WHERE CCS.classSemester.semester.semesterId = :semesterId)";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("semesterId", semesterId);
+		return query.executeUpdate();
 	}
 }
