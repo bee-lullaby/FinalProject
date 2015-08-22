@@ -74,15 +74,15 @@ public class AssignTeacher {
 	boolean[] isAlreadyPicked;
 
 	public double[][] scoreMatrix;
-	final static int WEIGHT_BLOCK = 1;
-	final static int WEIGHT_SESSION = 5;
-	final static int WEIGHT_DAY = 10; // old = 2
-	final static int WEIGHT_NOON = -5;
-	final static int WEIGHT_BEGINENDDAY = -3;
-	final static int WEIGHT_TARGETREMAIN = 2;
-	final static int WEIGHT_RELATIVE = 10;
+//	final static int WEIGHT_BLOCK = 1;
+//	final static int WEIGHT_SESSION = 5;
+	final static int WEIGHT_DAY = 10; // w1
+	final static int WEIGHT_NOON = -5; //w2
+//	final static int WEIGHT_BEGINENDDAY = -3;
+//	final static int WEIGHT_TARGETREMAIN = 2;
+//	final static int WEIGHT_RELATIVE = 10;
 	// final static int MAX_PICKSCORE = 1000;
-	final static boolean FAVOR_THEBESTCASE = true;
+	final static boolean FAVOR_THEBESTCASE = false;
 
 	final static int SCORERANGE = 8;
 
@@ -1329,7 +1329,7 @@ public class AssignTeacher {
 			// System.out.println("chua day mon nao ca, nbc =
 			// "+mTeacher2AssignedCC.get(tc).size());
 			// return MAX_PICKSCORE;
-			return WEIGHT_TARGETREMAIN * target; // co 2 nguoi chua dc gan thi
+			return  target; // co 2 nguoi chua dc gan thi
 													// nguoi nao can nhieu hon
 													// dc gan truoc
 		} else {
@@ -1355,7 +1355,7 @@ public class AssignTeacher {
 				return 0;
 			}
 			double S = Math.sqrt(remain * remain + relaScore * relaScore);
-			return WEIGHT_TARGETREMAIN * (double) remain / S + WEIGHT_RELATIVE * (double) relaScore / S;
+			return (double) remain / S +  (double) relaScore / S;
 		}
 	}
 
@@ -1368,7 +1368,7 @@ public class AssignTeacher {
 			// System.out.println("chua day mon nao ca, nbc =
 			// "+mTeacher2AssignedCC.get(tc).size());
 			// return MAX_PICKSCORE;
-			return WEIGHT_TARGETREMAIN * target; // co 2 nguoi chua dc gan thi
+			return target; // co 2 nguoi chua dc gan thi
 													// nguoi nao can nhieu hon
 													// dc gan truoc
 		} else {
@@ -1396,7 +1396,7 @@ public class AssignTeacher {
 			double S = Math.sqrt(remain * remain + relaScore * relaScore);
 			// return WEIGHT_TARGETREMAIN*(double)remain/S +
 			// WEIGHT_RELATIVE*(double)relaScore/S;
-			return WEIGHT_TARGETREMAIN * (double) remain + WEIGHT_RELATIVE * (double) relaScore;
+			return  (double) remain + (double) relaScore;
 		}
 	}
 

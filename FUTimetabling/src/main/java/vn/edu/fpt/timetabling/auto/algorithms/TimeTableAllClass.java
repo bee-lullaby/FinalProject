@@ -85,7 +85,7 @@ public class TimeTableAllClass {
 	final static int LIMIT_ROOMALLOWANCE = 1;
 	final static int LIMIT_SESSIONALLOWANCE = 1;
 	final static int LIMIT_DEMANDTEACHER_PERCOURSE = 2;
-	final static int NB_ITERATION = 1000;
+	final static int NB_ITERATION = 1500;
 	final static int MAX_NBCOURSEPERSEMESTER = 8;
 	////////////////////////////////////////////////////////////////////////////
 	final static int NB_FRAGMENT_PERCOURSE = DataCenter.NB_FRAGMENT_PERCOURSE_FULLMODEL;
@@ -2801,17 +2801,22 @@ public class TimeTableAllClass {
 		ses2 = rowbl23.createCell(c2);
 
 		for (int i = 10; i < 20; i++) {
-			String rc = "No room";
+			
 			int p = 0;
 			for (int j = 0; j < 2 * TA.DA.nbSlotsPerHalfDay; j++) {
 				String str = "";
+				String rc = "Not Assigned";
 				if (sol.T[j][i] >= 0) {
 
 					ClassCourse cc = DA.mID2ClassCourse.get(sol.T[j][i]);
 					Course course = DA.mClassCourse2Course.get(cc);
-					if (DA.mClassCourse2AssignedRoom.get(cc) != null) {
-						Room room = DA.mClassCourse2AssignedRoom.get(cc);
-						rc = room.code;
+//					if (DA.mClassCourse2AssignedRoom.get(cc) != null) {
+//						Room room = DA.mClassCourse2AssignedRoom.get(cc);
+//						rc = room.code;
+//					}
+					if(DA.mClassCourse2AssignedTeacher.get(cc)!=null){
+						Teacher tc = DA.mClassCourse2AssignedTeacher.get(cc);
+						rc= tc.code;
 					}
 					str = course.code;
 					if (j < 3) {

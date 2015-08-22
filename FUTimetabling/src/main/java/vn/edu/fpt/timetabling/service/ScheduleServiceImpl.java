@@ -741,7 +741,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 			System.out.println("chieu = " + ss[1]);
 			TA.testDepartMentDemand(ttb);
 			mergeCourses = TA.recoverTimeTableMergedCase(ttb);
-			// TA.PoiWriteExcelFile(TA, "D:/datafall/ttb.xls",
+			TA.PoiWriteExcelFile(TA, "D:/datafall/ttb.xls",ttb);
 			// TA.beingUsedTimeTable);
 		} else {
 			System.out.println("Timetable is incorrect.");
