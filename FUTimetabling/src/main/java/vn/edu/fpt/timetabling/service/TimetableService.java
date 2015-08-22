@@ -14,7 +14,7 @@ public interface TimetableService {
 
 	public List<Timetable> listTimetables();
 
-	public Set<Timetable> listTimetablesBySemester(int semesterId);
+	public List<Timetable> listTimetablesBySemester(int semesterId);
 
 	public Set<Timetable> listTimetablesByClassCourse(int classCourseSemesterId);
 
@@ -48,4 +48,8 @@ public interface TimetableService {
 	public List<Timetable> listTimetablesByClassAndCourseCode(int semesterId, String classCode, String courseCode);
 
 	public int deleteTimetablesBySemester(int semesterId);
+
+	public long countNumberSlots(int semesterId, boolean haveTeacher);
+
+	public long countNumberSlots34(int semesterId);
 }

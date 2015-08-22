@@ -29,6 +29,8 @@ public interface TimetableDAO {
 
 	public List<Timetable> listTimetablesByStudent(int semesterId, Student student);
 
+	public List<Timetable> listTimetablesBySemester(int semesterId);
+
 	public List<Timetable> listTimetablesByClassCourseSemestersInWeek(Set<ClassCourseSemester> classCourseSemesters,
 			Date startWeek, Date endWeek);
 
@@ -43,4 +45,6 @@ public interface TimetableDAO {
 	public List<Timetable> listTimetablesByTeacher(int teacherSemesterId);
 	
 	public int deleteTimetablesBySemester(int semesterId);
+
+	public long countNumberSlots(int semesterId, boolean haveTeacher);
 }

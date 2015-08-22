@@ -205,4 +205,29 @@ public class TimetableDAOImpl implements TimetableDAO {
 		query.setParameter("semesterId", semesterId);
 		return query.executeUpdate();
 	}
+
+	@Override
+	public long countNumberSlots(int semesterId, boolean haveTeacher) {
+		String hql = "SELECT COUNT(T) FROM vn.edu.fpt.timetabling.model.Timetable T"
+				+ " WHERE T.classCourseSemester.classSemester.semester.semesterId = :semesterId";
+		if(haveTeacher) {
+			hql += " AND T.teacherSemester IS NOT NULL";
+		}
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("semesterId", semesterId);
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		Long result = (Long) query.uniqueResult();
+		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Timetable> listTimetablesBySemester(int semesterId) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T"
+				+ " WHERE T.classCourseSemester.classSemester.semester.semesterId = :semesterId";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("semesterId", semesterId);
+		List<Timetable> timetables = (List<Timetable>) query.list();
+		return timetables;
+	}
 }

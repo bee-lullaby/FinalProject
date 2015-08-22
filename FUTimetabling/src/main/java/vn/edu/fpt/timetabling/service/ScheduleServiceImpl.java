@@ -597,6 +597,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 				timetableService.addTimetable(guestTimetable);
 			}
 		}
+		System.out.println("Number of slot 3+4: " + timetableService.countNumberSlots34(semesterId) + "/"
+				+ timetableService.countNumberSlots(semesterId, true));
 	}
 
 	@Override
@@ -741,7 +743,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 			System.out.println("chieu = " + ss[1]);
 			TA.testDepartMentDemand(ttb);
 			mergeCourses = TA.recoverTimeTableMergedCase(ttb);
-			TA.PoiWriteExcelFile(TA, "D:/datafall/ttb.xls",ttb);
+			TA.PoiWriteExcelFile(TA, "D:/datafall/ttb.xls", ttb);
 			// TA.beingUsedTimeTable);
 		} else {
 			System.out.println("Timetable is incorrect.");
