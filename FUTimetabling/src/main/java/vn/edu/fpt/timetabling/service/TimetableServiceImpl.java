@@ -49,22 +49,8 @@ public class TimetableServiceImpl implements TimetableService {
 	}
 
 	@Override
-	public Set<Timetable> listTimetablesBySemester(int semesterId) {
-		Set<ClassSemester> classSemesters = semesterService.getSemesterById(
-				semesterId, true, false, false, false).getClassSemesters();
-		Iterator<ClassSemester> classSemester = classSemesters.iterator();
-		Set<ClassCourseSemester> classCourseSemesters = new LinkedHashSet<ClassCourseSemester>();
-		while (classSemester.hasNext()) {
-			classCourseSemesters.addAll(classSemester.next()
-					.getClassCourseSemesters());
-		}
-		Iterator<ClassCourseSemester> classCourseSemester = classCourseSemesters
-				.iterator();
-		Set<Timetable> timetable = new LinkedHashSet<Timetable>();
-		while (classCourseSemester.hasNext()) {
-			timetable.addAll(classCourseSemester.next().getTimetable());
-		}
-		return timetable;
+	public List<Timetable> listTimetablesBySemester(int semesterId) {
+		return timetableDAO.listTimetablesBySemester(semesterId);
 	}
 
 	@Override
@@ -136,32 +122,7 @@ public class TimetableServiceImpl implements TimetableService {
 
 	@Override
 	public List<Timetable> listTimetableByTeacher(int teacherSemesterId) {
-		List<Timetable> result = new ArrayList<Timetable>();
-		// TeacherSemester teacherSemester =
-		// teacherSemesterService.getTeacherSemesterById(teacherSemesterId,
-		// false, true);
-		// for (Timetable t : teacherSemester.getTimetables()) {
-		// Timetable newT = new Timetable();
-		// newT.setDate(t.getDate());
-		// newT.setSlot(t.getSlot());
-		//
-		// ClassCourseSemester newCCS =
-		// classCourseSemesterService.createNewCCS(t.getClassCourseSemester());
-		// newT.setClassCourseSemester(newCCS);
-		// newT.setRoom(t.getRoom());
-		//
-		// TeacherSemester ts = new TeacherSemester();
-		// ts.setTeacherSemesterId(teacherSemester.getTeacherSemesterId());
-		// Teacher te = new Teacher();
-		// te.setTeacherId(teacherSemester.getTeacher().getTeacherId());
-		// te.setAccount(teacherSemester.getTeacher().getAccount());
-		// ts.setTeacher(te);
-		// newT.setTeacherSemester(ts);
-		//
-		// result.add(newT);
-		// }
-		result.addAll(timetableDAO.listTimetablesByTeacher(teacherSemesterId));
-		return result;
+		return timetableDAO.listTimetablesByTeacher(teacherSemesterId);
 	}
 
 	@Override
@@ -199,5 +160,39 @@ public class TimetableServiceImpl implements TimetableService {
 	@Override
 	public int deleteTimetablesBySemester(int semesterId) {
 		return timetableDAO.deleteTimetablesBySemester(semesterId);
+	}
+	
+	@Override
+	public long countNumberSlots(int semesterId, boolean haveTeacher) {
+		return timetableDAO.countNumberSlots(semesterId, haveTeacher);
+	}
+
+	@Override
+	public long countNumberSlots34(int semesterId) {
+		List<Timetable> timetables = listTimetablesBySemester(semesterId);
+		HashMap<String, Integer> slotMap = new HashMap<>();
+		for (Timetable timetable : timetables) {
+			int slot = timetable.getSlot();
+			TeacherSemester teacherSemester = timetable.getTeacherSemester();
+			if ((slot == 3 || slot == 4) && teacherSemester != null) {
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(timetable.getDate());
+				String keyString = calendar.get(Calendar.YEAR) + "/" + calendar.get(Calendar.MONTH) + "/"
+						+ calendar.get(Calendar.DAY_OF_MONTH) + "/" + teacherSemester.getTeacher().getAccount();
+				int sum = 0;
+				if (slotMap.containsKey(keyString)) {
+					sum = slotMap.get(keyString);
+				}
+				sum += slot;
+				slotMap.put(keyString, sum);
+			}
+		}
+		int count = 0;
+		for (int sum : slotMap.values()) {
+			if (sum == 7) {
+				count++;
+			}
+		}
+		return count;
 	}
 }
