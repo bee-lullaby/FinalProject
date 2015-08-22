@@ -1,9 +1,9 @@
 package vn.edu.fpt.timetabling.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import vn.edu.fpt.timetabling.dao.TimetableDAO;
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassSemester;
+import vn.edu.fpt.timetabling.model.TeacherSemester;
 import vn.edu.fpt.timetabling.model.Timetable;
 
 @Service
@@ -21,13 +22,9 @@ import vn.edu.fpt.timetabling.model.Timetable;
 public class TimetableServiceImpl implements TimetableService {
 	private TimetableDAO timetableDAO;
 	@Autowired
-	private SemesterService semesterService;
-	@Autowired
 	private ClassSemesterService classSemesterService;
 	@Autowired
 	private ClassCourseSemesterService classCourseSemesterService;
-	@Autowired
-	private TeacherSemesterService teacherSemesterService;
 
 	public void setTimetableDAO(TimetableDAO timetableDAO) {
 		this.timetableDAO = timetableDAO;
@@ -55,8 +52,7 @@ public class TimetableServiceImpl implements TimetableService {
 
 	@Override
 	public Set<Timetable> listTimetablesByClassCourse(int classCourseSemesterId) {
-		return classCourseSemesterService.getClassCourseSemesterById(
-				classCourseSemesterId, true, false).getTimetable();
+		return classCourseSemesterService.getClassCourseSemesterById(classCourseSemesterId, true, false).getTimetable();
 	}
 
 	@Override
@@ -70,38 +66,29 @@ public class TimetableServiceImpl implements TimetableService {
 	}
 
 	@Override
-	public List<Timetable> listTimetablesByClassCourseSemesters(
-			Set<ClassCourseSemester> classCourseSemesters) {
-		return timetableDAO
-				.listTimetablesByClassCourseSemesters(classCourseSemesters);
+	public List<Timetable> listTimetablesByClassCourseSemesters(Set<ClassCourseSemester> classCourseSemesters) {
+		return timetableDAO.listTimetablesByClassCourseSemesters(classCourseSemesters);
 	}
 
 	@Override
-	public List<Timetable> listTimetablesByCCSs(
-			List<ClassCourseSemester> classCourseSemesters) {
+	public List<Timetable> listTimetablesByCCSs(List<ClassCourseSemester> classCourseSemesters) {
 		return timetableDAO.listTimetablesByCCSs(classCourseSemesters);
 	}
 
 	@Override
-	public Timetable getTimetableByDateSlotClassCourse(Date date, int slot,
-			int classCourseSemesterId) {
-		return timetableDAO.getTimetableByDateSlotClassCourse(date, slot,
-				classCourseSemesterId);
+	public Timetable getTimetableByDateSlotClassCourse(Date date, int slot, int classCourseSemesterId) {
+		return timetableDAO.getTimetableByDateSlotClassCourse(date, slot, classCourseSemesterId);
 	}
 
 	@Override
-	public Timetable getTimetableByDateSlotClass(Date date, int slot,
-			int classSemesterId) {
-		return timetableDAO.getTimetableByDateSlotClass(date, slot,
-				classSemesterId);
+	public Timetable getTimetableByDateSlotClass(Date date, int slot, int classSemesterId) {
+		return timetableDAO.getTimetableByDateSlotClass(date, slot, classSemesterId);
 	}
 
 	@Override
-	public List<Timetable> listTimetablesByClassCourseSemestersInWeek(
-			Set<ClassCourseSemester> classCourseSemesters, Date startWeek,
-			Date endWeek) {
-		return timetableDAO.listTimetablesByClassCourseSemestersInWeek(
-				classCourseSemesters, startWeek, endWeek);
+	public List<Timetable> listTimetablesByClassCourseSemestersInWeek(Set<ClassCourseSemester> classCourseSemesters,
+			Date startWeek, Date endWeek) {
+		return timetableDAO.listTimetablesByClassCourseSemestersInWeek(classCourseSemesters, startWeek, endWeek);
 	}
 
 	@Override
@@ -112,8 +99,7 @@ public class TimetableServiceImpl implements TimetableService {
 	@Override
 	public List<Timetable> listTimetableByClass(int classSemesterId) {
 		List<Timetable> result = new ArrayList<Timetable>();
-		ClassSemester classSemester = classSemesterService
-				.getClassSemesterById(classSemesterId, true);
+		ClassSemester classSemester = classSemesterService.getClassSemesterById(classSemesterId, true);
 		List<ClassCourseSemester> ccss = new ArrayList<ClassCourseSemester>();
 		ccss.addAll(classSemester.getClassCourseSemesters());
 		result.addAll(timetableDAO.listTimetablesByCCSs(ccss));
@@ -132,8 +118,7 @@ public class TimetableServiceImpl implements TimetableService {
 		List<ClassCourseSemester> classCourseSemesters = classCourseSemesterService
 				.listClassCourseSemesterByStudent(semesterId, studentId);
 		if (!classCourseSemesters.isEmpty()) {
-			result.addAll(timetableDAO
-					.listTimetablesByCCSs(classCourseSemesters));
+			result.addAll(timetableDAO.listTimetablesByCCSs(classCourseSemesters));
 		}
 		return result;
 	}
@@ -144,24 +129,20 @@ public class TimetableServiceImpl implements TimetableService {
 	}
 
 	@Override
-	public void deleteTimetablesByCCSInWeek(int classSemesterId,
-			Date startWeek, Date endWeek) {
-		timetableDAO.deleteTimetablesByCCSInWeek(classSemesterId, startWeek,
-				endWeek);
+	public void deleteTimetablesByCCSInWeek(int classSemesterId, Date startWeek, Date endWeek) {
+		timetableDAO.deleteTimetablesByCCSInWeek(classSemesterId, startWeek, endWeek);
 	}
 
 	@Override
-	public List<Timetable> listTimetablesByClassAndCourseCode(int semesterId,
-			String classCode, String courseCode) {
-		return timetableDAO.listTimetablesByClassAndCourseCode(semesterId,
-				classCode, courseCode);
+	public List<Timetable> listTimetablesByClassAndCourseCode(int semesterId, String classCode, String courseCode) {
+		return timetableDAO.listTimetablesByClassAndCourseCode(semesterId, classCode, courseCode);
 	}
 
 	@Override
 	public int deleteTimetablesBySemester(int semesterId) {
 		return timetableDAO.deleteTimetablesBySemester(semesterId);
 	}
-	
+
 	@Override
 	public long countNumberSlots(int semesterId, boolean haveTeacher) {
 		return timetableDAO.countNumberSlots(semesterId, haveTeacher);
@@ -194,5 +175,10 @@ public class TimetableServiceImpl implements TimetableService {
 			}
 		}
 		return count;
+	}
+
+	@Override
+	public List<Timetable> listTimetablesByClassSemester(int classSemesterId) {
+		return timetableDAO.listTimetablesByClassSemester(classSemesterId);
 	}
 }

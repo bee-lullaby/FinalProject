@@ -1,7 +1,10 @@
 package vn.edu.fpt.timetabling.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,8 +87,8 @@ public class ClassCourseStudentSemesterServiceImpl implements ClassCourseStudent
 		return classCourseStudentSemesterDAO.deleteClassCourseStudentSemesterByClass(classSemesterId);
 	}
 
-	private void createNewClass(Specialized specialized, Specialized detailSpecialized, Semester semester,
-			int semesterNumber, Student student) {
+	private ClassSemester createNewClass(Specialized specialized, Specialized detailSpecialized, Semester semester,
+			int semesterNumber) {
 		int specializedId = specialized.getSpecializedId();
 		int detailSpecializedId = 0;
 		int semesterId = semester.getSemesterId();
@@ -96,7 +99,8 @@ public class ClassCourseStudentSemesterServiceImpl implements ClassCourseStudent
 		classFPT.setType(ClassType.SPECIALIZED);
 		classFPT.setSpecialized(specialized);
 		classFPT.setDetailSpecialized(detailSpecialized);
-		System.out.println(specializedId + " " + detailSpecializedId + " " + semesterNumber);
+		System.out.println("Create new class: " + specialized.getCode() + "/" + detailSpecialized.getCode() + "/"
+				+ semesterNumber);
 		ProgramSemester programSemester = programSemesterService.getProgramSemesterBySpecializedSemester(semesterId,
 				specializedId, detailSpecializedId, semesterNumber);
 		int batch = programSemester.getBatch();
@@ -157,6 +161,7 @@ public class ClassCourseStudentSemesterServiceImpl implements ClassCourseStudent
 		courseSemestersTemp.add(allBlock);
 		courseSemestersTemp.add(block1);
 		courseSemestersTemp.add(block2);
+		Set<ClassCourseSemester> classCourseSemesters = new HashSet<>();
 		for (List<CourseSemester> list : courseSemestersTemp) {
 			for (CourseSemester courseSemester : list) {
 				ClassCourseSemester classCourseSemester = new ClassCourseSemester();
@@ -170,55 +175,102 @@ public class ClassCourseStudentSemesterServiceImpl implements ClassCourseStudent
 					classCourseSemester.setSemesterLong(false);
 				}
 				classCourseSemesterService.addClassCourseSemester(classCourseSemester);
-				ClassCourseStudentSemester classCourseStudentSemester = new ClassCourseStudentSemester();
-				classCourseStudentSemester.setClassCourseSemester(classCourseSemester);
-				classCourseStudentSemester.setStudent(student);
-				addClassCourseStudentSemester(classCourseStudentSemester);
+				classCourseSemesters.add(classCourseSemester);
 			}
+		}
+		classSemester.setClassCourseSemesters(classCourseSemesters);
+		return classSemester;
+	}
+
+	public void addClassCourseStudentSemesters(ClassSemester classSemester, Student student) {
+		System.out.println("Put student: " + student.getAccount() + " in " + classSemester.getClassFPT().getCode());
+		for (ClassCourseSemester classCourseSemester : classSemester.getClassCourseSemesters()) {
+			ClassCourseStudentSemester classCourseStudentSemester = new ClassCourseStudentSemester();
+			classCourseStudentSemester.setClassCourseSemester(classCourseSemester);
+			classCourseStudentSemester.setStudent(student);
+			addClassCourseStudentSemester(classCourseStudentSemester);
 		}
 	}
 
 	@Override
 	public void autoPutStudentsIntoClassSemesters(int semesterId) {
-		Semester semester = semesterService.getSemesterById(semesterId, false, false, false, false);
+		deleteClassCourseStudentSemesters(semesterId);
+		Semester semester = semesterService.getSemesterById(semesterId, true, false, false, false);
 		if (semester == null) {
 			return;
 		}
 		List<Student> students = studentService.listStudentsWithoutClass();
-		int studentNumber = 0;
+		HashMap<String, List<Student>> studentsMap = new HashMap<>();
 		for (Student student : students) {
-			studentNumber++;
-			System.out.println("Student: " + studentNumber);
-			Specialized specialized = student.getSpecialized();
-			Specialized detailSpecialized = student.getDetailSpecialized();
-			int detailSpecializedId = 0;
-			if (detailSpecialized != null) {
-				detailSpecializedId = detailSpecialized.getSpecializedId();
+			String key = student.getSpecialized().getCode() + "/" + student.getDetailSpecialized().getCode() + "/"
+					+ student.getSemester();
+			List<Student> studentsGroup;
+			if (studentsMap.containsKey(key)) {
+				studentsGroup = studentsMap.get(key);
+			} else {
+				studentsGroup = new ArrayList<>();
+				studentsMap.put(key, studentsGroup);
 			}
-			int semesterNumber = student.getSemester();
+			studentsGroup.add(student);
+		}
+		for (Entry<String, List<Student>> entry : studentsMap.entrySet()) {
+			System.out.println("Group student: " + entry.getKey());
+			List<Student> studentsGroup = entry.getValue();
+			Student temp = studentsGroup.get(0);
+			Specialized specialized = temp.getSpecialized();
+			Specialized detailSpecialized = temp.getDetailSpecialized();
+			int semesterNumber = temp.getSemester();
 			List<ClassSemester> classSemesters = classSemesterService.listClassSemestersBySpecializedSemester(
-					semesterId, specialized.getSpecializedId(), detailSpecializedId, semesterNumber);
-			System.out.println("Suitable class: " + classSemesters.size());
-			boolean put = false;
-			for (ClassSemester classSemester : classSemesters) {
-				Set<ClassCourseSemester> classCourseSemesters = classSemester.getClassCourseSemesters();
-				if (!isMaxStudent(classCourseSemesters)) {
-					for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
-						ClassCourseStudentSemester classCourseStudentSemester = new ClassCourseStudentSemester();
-						classCourseStudentSemester.setClassCourseSemester(classCourseSemester);
-						classCourseStudentSemester.setStudent(student);
-						addClassCourseStudentSemester(classCourseStudentSemester);
+					semesterId, specialized.getSpecializedId(), detailSpecialized.getSpecializedId(), semesterNumber);
+			int size = studentsGroup.size();
+			if (size > 2 * Const.StudentNumber.MAX_NUMBER_OF_STUDENTS_IN_CLASS) {
+				int numberClassFull = size / Const.StudentNumber.MAX_NUMBER_OF_STUDENTS_IN_CLASS - 1;
+				int numberOldClassUsed = Math.min(numberClassFull, classSemesters.size());
+				for (int i = 0; i < numberOldClassUsed; i++) {
+					ClassSemester classSemester = classSemesters.remove(0);
+					for (int j = 0; j < Const.StudentNumber.MAX_NUMBER_OF_STUDENTS_IN_CLASS; j++) {
+						addClassCourseStudentSemesters(classSemester, studentsGroup.remove(0));
 					}
-					student.setClassSemester(classSemester);
-					System.out.println("Class: " + classSemester.getClassFPT().getCode());
-					put = true;
-					break;
+				}
+				int numberNewFullClasses = numberClassFull - numberOldClassUsed;
+				for (int i = 0; i < numberNewFullClasses; i++) {
+					ClassSemester classSemester = createNewClass(specialized, detailSpecialized, semester,
+							semesterNumber);
+					for (int j = 0; j < Const.StudentNumber.MAX_NUMBER_OF_STUDENTS_IN_CLASS; j++) {
+						addClassCourseStudentSemesters(classSemester, studentsGroup.remove(0));
+					}
 				}
 			}
-			System.out.println("Put: " + put);
-			if (!put) {
-				createNewClass(specialized, detailSpecialized, semester, semesterNumber, student);
+			size = studentsGroup.size();
+			if (2 * Const.StudentNumber.MAX_NUMBER_OF_STUDENTS_IN_CLASS >= size
+					&& size > Const.StudentNumber.MAX_NUMBER_OF_STUDENTS_IN_CLASS) {
+				int sizeOne = (int) Math.ceil(size / 2.0);
+				ClassSemester classSemester;
+				if (classSemesters.size() > 0) {
+					classSemester = classSemesters.remove(0);
+				} else {
+					classSemester = createNewClass(specialized, detailSpecialized, semester, semesterNumber);
+				}
+				for (int i = 0; i < sizeOne; i++) {
+					addClassCourseStudentSemesters(classSemester, studentsGroup.remove(0));
+				}
 			}
+			if (Const.StudentNumber.MAX_NUMBER_OF_STUDENTS_IN_CLASS >= studentsGroup.size()) {
+				ClassSemester classSemester;
+				if (classSemesters.size() > 0) {
+					classSemester = classSemesters.remove(0);
+				} else {
+					classSemester = createNewClass(specialized, detailSpecialized, semester, semesterNumber);
+
+				}
+				for (Student studentTemp : studentsGroup) {
+					addClassCourseStudentSemesters(classSemester, studentTemp);
+				}
+			}
+		}
+		for (ClassSemester classSemester : semester.getClassSemesters()) {
+			System.out.println("Number of student in class " + classSemester.getClassFPT().getCode() + ": "
+					+ classSemesterService.getNumberOfStudents(classSemester.getClassSemesterId()));
 		}
 	}
 
@@ -237,32 +289,10 @@ public class ClassCourseStudentSemesterServiceImpl implements ClassCourseStudent
 		int semesterNumber = classSemester.getSemesterNumber();
 		List<Student> students = studentService.listStudentsCanBeInClassCourseSemester(classSemesterId, specializedId,
 				detailSpecializedId, semesterNumber, 0);
-		Set<ClassCourseSemester> classCourseSemesters = classSemester.getClassCourseSemesters();
-		if (!isMaxStudent(classCourseSemesters)) {
-			if (students.size() > 0) {
-				for (Student student : students) {
-					for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
-						ClassCourseStudentSemester classCourseStudentSemester = new ClassCourseStudentSemester();
-						classCourseStudentSemester.setClassCourseSemester(classCourseSemester);
-						classCourseStudentSemester.setStudent(student);
-						addClassCourseStudentSemester(classCourseStudentSemester);
-					}
-					student.setClassSemester(classSemester);
-					if (isMaxStudent(classCourseSemesters)) {
-						break;
-					}
-				}
-			}
+		while (classSemesterService
+				.getNumberOfStudents(classSemesterId) < Const.StudentNumber.MAX_NUMBER_OF_STUDENTS_IN_CLASS
+				&& !students.isEmpty()) {
+			addClassCourseStudentSemesters(classSemester, students.remove(0));
 		}
-	}
-
-	private boolean isMaxStudent(Set<ClassCourseSemester> classCourseSemesters) {
-		for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
-			if (classCourseSemesterService.getNumberOfStudents(classCourseSemester
-					.getClassCourseSemesterId()) >= Const.StudentNumber.OPTIMAL_NUMBER_OF_STUDENTS_IN_CLASS) {
-				return true;
-			}
-		}
-		return false;
 	}
 }

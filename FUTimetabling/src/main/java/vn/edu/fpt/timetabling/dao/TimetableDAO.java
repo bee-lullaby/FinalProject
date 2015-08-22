@@ -30,6 +30,8 @@ public interface TimetableDAO {
 	public List<Timetable> listTimetablesByStudent(int semesterId, Student student);
 
 	public List<Timetable> listTimetablesBySemester(int semesterId);
+	
+	public List<Timetable> listTimetablesByClassSemester(int classSemesterId);
 
 	public List<Timetable> listTimetablesByClassCourseSemestersInWeek(Set<ClassCourseSemester> classCourseSemesters,
 			Date startWeek, Date endWeek);

@@ -14,7 +14,6 @@ public class Const {
 
 	public class StudentNumber {
 		public static final int MAX_DISPLAY_STUDENT = 50;
-		public static final int OPTIMAL_NUMBER_OF_STUDENTS_IN_CLASS = 30;
 		public static final int MAX_NUMBER_OF_STUDENTS_IN_CLASS = 30;
 	}
 

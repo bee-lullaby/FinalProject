@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 21, 2015 at 06:49 PM
+-- Generation Time: Aug 23, 2015 at 01:46 AM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `class_course_semester_merge` (
 `class_course_semester_merge_id` int(11) NOT NULL,
   `class_course_semester_id_1` int(11) NOT NULL,
   `class_course_semester_id_2` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=97 DEFAULT CHARSET=utf8 COLLATE=utf8_vietnamese_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=189 DEFAULT CHARSET=utf8 COLLATE=utf8_vietnamese_ci;
 
 -- --------------------------------------------------------
 
@@ -92,21 +92,7 @@ CREATE TABLE IF NOT EXISTS `class_course_student_semester` (
 `class_course_student_semester_id` int(11) NOT NULL,
   `class_course_semester_id` int(11) NOT NULL,
   `student_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=13076 DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `class_course_teacher_semester`
---
-
-DROP TABLE IF EXISTS `class_course_teacher_semester`;
-CREATE TABLE IF NOT EXISTS `class_course_teacher_semester` (
-`class_course_teacher_semester_id` int(11) NOT NULL,
-  `class_semester_id` int(11) NOT NULL,
-  `course_semester_id` int(11) NOT NULL,
-  `teacher_semester_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16306 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -276,22 +262,6 @@ CREATE TABLE IF NOT EXISTS `students` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `student_course`
---
-
-DROP TABLE IF EXISTS `student_course`;
-CREATE TABLE IF NOT EXISTS `student_course` (
-`student_course_id` int(11) NOT NULL,
-  `student_id` int(11) NOT NULL,
-  `course_id` int(11) NOT NULL,
-  `class_semester_id` int(11) NOT NULL,
-  `grade` int(11) NOT NULL,
-  `passed` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `teachers`
 --
 
@@ -343,7 +313,7 @@ CREATE TABLE IF NOT EXISTS `time_table` (
   `slot` int(11) NOT NULL,
   `room_id` int(11) DEFAULT NULL,
   `teacher_semester_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=32380 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=66490 DEFAULT CHARSET=latin1;
 
 --
 -- Indexes for dumped tables
@@ -378,12 +348,6 @@ ALTER TABLE `class_course_semester_merge`
 --
 ALTER TABLE `class_course_student_semester`
  ADD PRIMARY KEY (`class_course_student_semester_id`), ADD UNIQUE KEY `class_course_student_semester_idx` (`class_course_semester_id`,`student_id`), ADD KEY `class_course_semester_id` (`class_course_semester_id`), ADD KEY `student_id` (`student_id`);
-
---
--- Indexes for table `class_course_teacher_semester`
---
-ALTER TABLE `class_course_teacher_semester`
- ADD PRIMARY KEY (`class_course_teacher_semester_id`), ADD KEY `class_semester_id` (`class_semester_id`), ADD KEY `course_semester_id` (`course_semester_id`), ADD KEY `teacher_semester_id` (`teacher_semester_id`);
 
 --
 -- Indexes for table `class_semester`
@@ -452,12 +416,6 @@ ALTER TABLE `students`
  ADD PRIMARY KEY (`student_id`), ADD UNIQUE KEY `account` (`account`,`email`,`student_code`), ADD KEY `class_semester_id` (`class_semester_id`), ADD KEY `specialized_id` (`specialized_id`), ADD KEY `detail_specialized_id` (`detail_specialized_id`);
 
 --
--- Indexes for table `student_course`
---
-ALTER TABLE `student_course`
- ADD PRIMARY KEY (`student_course_id`), ADD KEY `student_id` (`student_id`,`course_id`,`class_semester_id`), ADD KEY `course_id` (`course_id`), ADD KEY `class_semester_id` (`class_semester_id`);
-
---
 -- Indexes for table `teachers`
 --
 ALTER TABLE `teachers`
@@ -504,17 +462,12 @@ MODIFY `class_course_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT
 -- AUTO_INCREMENT for table `class_course_semester_merge`
 --
 ALTER TABLE `class_course_semester_merge`
-MODIFY `class_course_semester_merge_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=97;
+MODIFY `class_course_semester_merge_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=189;
 --
 -- AUTO_INCREMENT for table `class_course_student_semester`
 --
 ALTER TABLE `class_course_student_semester`
-MODIFY `class_course_student_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13076;
---
--- AUTO_INCREMENT for table `class_course_teacher_semester`
---
-ALTER TABLE `class_course_teacher_semester`
-MODIFY `class_course_teacher_semester_id` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `class_course_student_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=16306;
 --
 -- AUTO_INCREMENT for table `class_semester`
 --
@@ -571,11 +524,6 @@ MODIFY `staff_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 ALTER TABLE `students`
 MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=647;
 --
--- AUTO_INCREMENT for table `student_course`
---
-ALTER TABLE `student_course`
-MODIFY `student_course_id` int(11) NOT NULL AUTO_INCREMENT;
---
 -- AUTO_INCREMENT for table `teachers`
 --
 ALTER TABLE `teachers`
@@ -594,7 +542,7 @@ MODIFY `teacher_semester_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=73;
 -- AUTO_INCREMENT for table `time_table`
 --
 ALTER TABLE `time_table`
-MODIFY `time_table_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=32380;
+MODIFY `time_table_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=66490;
 --
 -- Constraints for dumped tables
 --
@@ -627,14 +575,6 @@ ADD CONSTRAINT `class_course_semester_merge_ibfk_2` FOREIGN KEY (`class_course_s
 ALTER TABLE `class_course_student_semester`
 ADD CONSTRAINT `class_course_student_semester_ibfk_1` FOREIGN KEY (`class_course_semester_id`) REFERENCES `class_course_semester` (`class_course_semester_id`),
 ADD CONSTRAINT `class_course_student_semester_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`);
-
---
--- Constraints for table `class_course_teacher_semester`
---
-ALTER TABLE `class_course_teacher_semester`
-ADD CONSTRAINT `class_course_teacher_semester_ibfk_1` FOREIGN KEY (`class_semester_id`) REFERENCES `class_semester` (`class_semester_id`),
-ADD CONSTRAINT `class_course_teacher_semester_ibfk_2` FOREIGN KEY (`course_semester_id`) REFERENCES `course_semester` (`course_semester_id`),
-ADD CONSTRAINT `class_course_teacher_semester_ibfk_3` FOREIGN KEY (`teacher_semester_id`) REFERENCES `teacher_semester` (`teacher_semester_id`);
 
 --
 -- Constraints for table `class_semester`
@@ -685,14 +625,6 @@ ALTER TABLE `students`
 ADD CONSTRAINT `students_ibfk_1` FOREIGN KEY (`class_semester_id`) REFERENCES `class_semester` (`class_semester_id`),
 ADD CONSTRAINT `students_ibfk_2` FOREIGN KEY (`specialized_id`) REFERENCES `specialized` (`specialized_id`),
 ADD CONSTRAINT `students_ibfk_3` FOREIGN KEY (`detail_specialized_id`) REFERENCES `specialized` (`specialized_id`);
-
---
--- Constraints for table `student_course`
---
-ALTER TABLE `student_course`
-ADD CONSTRAINT `student_course_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`),
-ADD CONSTRAINT `student_course_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
-ADD CONSTRAINT `student_course_ibfk_3` FOREIGN KEY (`class_semester_id`) REFERENCES `class_semester` (`class_semester_id`);
 
 --
 -- Constraints for table `teacher_course_semester`

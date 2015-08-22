@@ -52,8 +52,7 @@ public class TimetableDAOImpl implements TimetableDAO {
 	@Override
 	public List<Timetable> listTimetablesByCCSs(List<ClassCourseSemester> classCourseSemesters) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T "
-				+ "WHERE T.classCourseSemester IN (:classCourseSemesters) "
-				+ "ORDER BY T.date, T.slot";
+				+ "WHERE T.classCourseSemester IN (:classCourseSemesters) " + "ORDER BY T.date, T.slot";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameterList("classCourseSemesters", classCourseSemesters);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -182,19 +181,18 @@ public class TimetableDAOImpl implements TimetableDAO {
 		List<Timetable> timetables = (List<Timetable>) query.list();
 		return timetables;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Timetable> listTimetablesByTeacher(int teacherSemesterId) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T "
-				+ " WHERE T.teacherSemester.teacherSemesterId = :teacherSemesterId"
-				+ " ORDER BY T.date, T.slot";
+				+ " WHERE T.teacherSemester.teacherSemesterId = :teacherSemesterId" + " ORDER BY T.date, T.slot";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("teacherSemesterId", teacherSemesterId);
 		List<Timetable> timetables = (List<Timetable>) query.list();
 		return timetables;
 	}
-	
+
 	@Override
 	public int deleteTimetablesBySemester(int semesterId) {
 		String hql = "DELETE FROM vn.edu.fpt.timetabling.model.Timetable T"
@@ -210,7 +208,7 @@ public class TimetableDAOImpl implements TimetableDAO {
 	public long countNumberSlots(int semesterId, boolean haveTeacher) {
 		String hql = "SELECT COUNT(T) FROM vn.edu.fpt.timetabling.model.Timetable T"
 				+ " WHERE T.classCourseSemester.classSemester.semester.semesterId = :semesterId";
-		if(haveTeacher) {
+		if (haveTeacher) {
 			hql += " AND T.teacherSemester IS NOT NULL";
 		}
 		Query query = getCurrentSession().createQuery(hql);
@@ -227,6 +225,17 @@ public class TimetableDAOImpl implements TimetableDAO {
 				+ " WHERE T.classCourseSemester.classSemester.semester.semesterId = :semesterId";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("semesterId", semesterId);
+		List<Timetable> timetables = (List<Timetable>) query.list();
+		return timetables;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Timetable> listTimetablesByClassSemester(int classSemesterId) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T"
+				+ " WHERE T.classCourseSemester.classSemester.classSemesterId = :classSemesterId" + " ORDER BY T.date";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("classSemesterId", classSemesterId);
 		List<Timetable> timetables = (List<Timetable>) query.list();
 		return timetables;
 	}
