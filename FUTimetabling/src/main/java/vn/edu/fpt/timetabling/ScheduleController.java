@@ -143,10 +143,10 @@ public class ScheduleController extends GeneralController {
 		return "redirect:" + referer;
 	}
 
-	@RequestMapping(value = "/staff/schedule/auto", method = RequestMethod.GET)
-	public String autoSchedule(@RequestParam(value = "semesterId", required = true) int semesterId, Model model) {
-		scheduleService.autoSchedule(semesterId);
-		return "home";
-		//return "redirect:/staff/schedule?semesterId=" + semesterId;
-	}
+//	@RequestMapping(value = "/staff/schedule/auto", method = RequestMethod.GET)
+//	public String autoSchedule(@RequestParam(value = "semesterId", required = true) int semesterId, Model model) {
+//		scheduleService.autoSchedule(semesterId);
+//		return "home";
+//		//return "redirect:/staff/schedule?semesterId=" + semesterId;
+//	}
 }

@@ -16,8 +16,6 @@ public interface TimetableService {
 
 	public Set<Timetable> listTimetablesBySemester(int semesterId);
 
-	public Set<Timetable> listTimetablesByClass(int classId, int semesterId);
-
 	public Set<Timetable> listTimetablesByClassCourse(int classCourseSemesterId);
 
 	public Timetable getTimetableById(int timetableId);
@@ -37,9 +35,11 @@ public interface TimetableService {
 
 	public List<Timetable> listTimetablesByDate(Date date);
 
-	public List<Timetable> listTimetableByClass(int semesterId, int classId);
+	public List<Timetable> listTimetableByClass(int classSemesterId);
 
 	public List<Timetable> listTimetableByTeacher(int teacherSemesterId);
+
+	public List<Timetable> listTimetableByStudent(int semesterId, int studentId);
 
 	public void deleteTimetablesByCCS(int classCourseSemesterId);
 

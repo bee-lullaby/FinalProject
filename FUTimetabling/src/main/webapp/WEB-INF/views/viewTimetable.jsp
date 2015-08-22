@@ -187,7 +187,7 @@ h3 {
 				<c:if test="${!empty listSemesters}">
 					<c:forEach items="${listSemesters}" var="semester">
 						<a id="${semester.semesterId}"
-							href="viewTimetable?semesterId=${semester.semesterId}&classSemesterId=0">${semester.name}</a>
+							href="#">${semester.name}</a>
 					</c:forEach>
 				</c:if>
 			</div>

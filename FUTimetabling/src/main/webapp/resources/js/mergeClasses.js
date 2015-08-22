@@ -21,6 +21,18 @@ $(document).ready(function() {
 		_showDialog("dialog-add-mergeClass");
 	});
 	
+	$("#btn-clear-mergeClass").on("click", function() {
+		_showDialog("dialog-clear-mergeClass");
+	});
+	
+	$("#btn-clear-accept").on("click", function() {
+		window.location = "mergeClasses/clear?semesterId=" +_urlParam("semesterId");
+	});
+	
+	$("#btn-clear-decline").on("click", function() {
+		_showDialog("dialog-clear-mergeClass");
+	});
+	
 	$("#dialog-add-mergeClass #btn-add-save").on("click", function() {
 		if($("#dialog-add-mergeClass #select-class-1 option:selected").val() 
 				== $("#dialog-add-mergeClass #select-class-2 option:selected").val()) {

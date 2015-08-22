@@ -132,6 +132,11 @@ h3 {
 								data-hint-position="top" data-hint="Add Merge Class">
 								<span class="mif-plus"></span>
 							</button>
+							<button id="btn-clear-mergeClass" class="button" data-role="hint"
+								data-hint-background="#1CB7EC" data-hint-color="fg-white"
+								data-hint-position="top" data-hint="Clear Merge Class">
+								<span class="icon flaticon-rubbish12"></span>
+							</button>
 						</div>
 					</div>
 					<div style="width: 100%; height: 100%;">
@@ -240,6 +245,18 @@ h3 {
 			<div id="btn-group" style="margin-top: 25px;">
 				<button class="button" id="btn-delete-accept">ACCEPT</button>
 				<button class="button" id="btn-delete-decline">DECLINE</button>
+			</div>
+		</div>
+	</div>
+	
+	<div id="dialog-clear-mergeClass" data-role="dialog" class="padding20"
+		data-overlay="true" data-overlay-color="op-dark"
+		data-windows-style="true">
+		<div style="width: 500px; margin: 0 auto; text-align: center;">
+			<h2>Are you sure to delete all Merge Class?</h2>
+			<div id="btn-group" style="margin-top: 25px;">
+				<button class="button" id="btn-clear-accept">ACCEPT</button>
+				<button class="button" id="btn-clear-decline">DECLINE</button>
 			</div>
 		</div>
 	</div>

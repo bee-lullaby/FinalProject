@@ -87,10 +87,18 @@ public class MergeClassController extends GeneralController {
 	}
 	
 	@RequestMapping(value = "/staff/mergeClasses/deleteMergeClass", method = RequestMethod.GET, params = { "mergeClassId" })
-	public String deleteCourse(@RequestParam int mergeClassId,
+	public String deleteMergeClass(@RequestParam int mergeClassId,
 			HttpSession httpSession) {
 		classCourseSemesterMergeService.deleteClassCourseSemesterMerge(mergeClassId);
 		httpSession.setAttribute("success", "Delete Course Successful!");
+		return "redirect:/staff/mergeClasses";
+	}
+	
+	@RequestMapping(value = "/staff/mergeClasses/clear", method = RequestMethod.GET, params = { "semesterId" })
+	public String clearMergeClasses(@RequestParam int semesterId,
+			HttpSession httpSession) {
+		classCourseSemesterMergeService.deleteClassCourseSemesterMerges(semesterId);
+		httpSession.setAttribute("success", "Clear all Merge-Class Successful!");
 		return "redirect:/staff/mergeClasses";
 	}
 	

@@ -126,7 +126,7 @@ h3 {
 
 			</div>
 		</div>
-		<h3 style="width: 100%;">Arrangement</h3>
+		<h3 style="width: 100%;">Arrangement - <font id="className"></font></h3>
 		<div style="width: 100%;">
 			<div style="width: 100%; margin-top: 10px;">
 				<div style="display: inline-block; float: left">

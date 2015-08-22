@@ -80,11 +80,11 @@ table tr td {
 					<td>${totalClasses}</td>
 				</tr>
 				<tr>
-					<th>Total Classes was set courses:</th>
+					<th>Total ClassCourse:</th>
 					<td id="setCourse">${fn:length(listClassWasSetCourse)}</td>
 				</tr>
 				<tr>
-					<th>Number of Classes was set timetable done:</th>
+					<th>Number of ClassCourses was set timetable done:</th>
 					<td>${fn:length(listClassWasSetTimetablesDone)}</td>
 				</tr>
 	<!--		<tr>
@@ -102,11 +102,11 @@ table tr td {
 					<td>${totalClasses}</td>
 				</tr>
 				<tr>
-					<th>Number of Classes was set timetable done:</th>
+					<th>Number of ClassCourses was set timetable done:</th>
 					<td id="setTimetable">${fn:length(listClassWasSetTimetablesDone)}</td>
 				</tr>
 				<tr>
-					<th>Number of Classes was set room done:</th>
+					<th>Number of ClassCourses was set room done:</th>
 					<td>${fn:length(listClassWasSetRoomsDone)}</td>
 				</tr>
 					<!--		<tr>
@@ -125,11 +125,11 @@ table tr td {
 					<td>${totalClasses}</td>
 				</tr>
 				<tr>
-					<th>Number of Classes was set timetable done:</th>
+					<th>Number of ClassCourses was set timetable done:</th>
 					<td>${fn:length(listClassWasSetTimetablesDone)}</td>
 				</tr>
 				<tr>
-					<th>Number of Classes was set teacher done:</th>
+					<th>Number of ClassCourses was set teacher done:</th>
 					<td>${fn:length(listClassWasSetTeachersDone)}</td>
 				</tr>
 					<!--		<tr>

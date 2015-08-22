@@ -39,6 +39,8 @@ public interface TimetableDAO {
 	public void deleteTimetablesByCCSInWeek(int classSemesterId, Date startWeek, Date endWeek);
 
 	public List<Timetable> listTimetablesByClassAndCourseCode(int semesterId, String classCode, String courseCode);
-
+	
+	public List<Timetable> listTimetablesByTeacher(int teacherSemesterId);
+	
 	public int deleteTimetablesBySemester(int semesterId);
 }

@@ -1,12 +1,30 @@
 $(document).ready(function() {
 	
 	
-	$("#select-student").select2({
-		"placeholder" : ""
-	});
-	
 	$("#select-teacher").on("change", function() {
 		window.location = "viewTimetable?semesterId=" + _urlParam("semesterId") +"&teacherSemesterId=" + $(this).val();
+	});
+	
+	$("#select-class").on("change", function() {
+		window.location = "viewTimetable?semesterId=" + _urlParam("semesterId") +"&classSemesterId=" + $(this).val();
+	});
+	
+	$("#select-student").on("change", function() {
+		window.location = "viewTimetable?semesterId=" + _urlParam("semesterId") +"&studentId=" + $(this).val();
+	});
+	
+	$("#select-semester").on("click", "a", function() {
+		var url = "viewTimetable?semesterId=" + $(this).attr("id");
+		
+		if(_urlParam("classSemesterId") != undefined) {
+			url += "&classSemesterId=0"; 
+		} else if (_urlParam("teacherSemesterId") != undefined) {
+			url += "&teacherSemesterId=0"; 
+		} else if (_urlParam("studentId") != undefined) {
+			url += "&studentId=0"; 
+		}
+		
+		window.location = url;
 	});
 	
 	_init();	

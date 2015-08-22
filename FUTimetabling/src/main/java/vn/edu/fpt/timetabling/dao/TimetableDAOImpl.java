@@ -52,7 +52,8 @@ public class TimetableDAOImpl implements TimetableDAO {
 	@Override
 	public List<Timetable> listTimetablesByCCSs(List<ClassCourseSemester> classCourseSemesters) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T "
-				+ "WHERE T.classCourseSemester IN (:classCourseSemesters)";
+				+ "WHERE T.classCourseSemester IN (:classCourseSemesters) "
+				+ "ORDER BY T.date, T.slot";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameterList("classCourseSemesters", classCourseSemesters);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -170,7 +171,7 @@ public class TimetableDAOImpl implements TimetableDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Timetable> listTimetablesByClassAndCourseCode(int semesterId, String classCode, String courseCode) {
-		String hql = "DELETE FROM vn.edu.fpt.timetabling.model.Timetable T "
+		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T "
 				+ " WHERE T.classCourseSemester.classSemester.semester.semesterId = :semesterId"
 				+ " AND T.classCourseSemester.classSemester.classFPT.code = :classCode"
 				+ " AND T.classCourseSemester.courseSemester.course.code = :courseCode";
@@ -181,7 +182,19 @@ public class TimetableDAOImpl implements TimetableDAO {
 		List<Timetable> timetables = (List<Timetable>) query.list();
 		return timetables;
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Timetable> listTimetablesByTeacher(int teacherSemesterId) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T "
+				+ " WHERE T.teacherSemester.teacherSemesterId = :teacherSemesterId"
+				+ " ORDER BY T.date, T.slot";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("teacherSemesterId", teacherSemesterId);
+		List<Timetable> timetables = (List<Timetable>) query.list();
+		return timetables;
+	}
+	
 	@Override
 	public int deleteTimetablesBySemester(int semesterId) {
 		String hql = "DELETE FROM vn.edu.fpt.timetabling.model.Timetable T"

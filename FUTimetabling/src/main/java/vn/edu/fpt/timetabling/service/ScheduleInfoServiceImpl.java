@@ -18,15 +18,15 @@ public class ScheduleInfoServiceImpl implements ScheduleInfoService {
 
 	// Get List Class Was Set Course
 	@Override
-	public List<ClassSemester> getListClassWasSetCourse(int semesterId) {
+	public List<ClassCourseSemester> getListClassWasSetCourse(int semesterId) {
 
-		List<ClassSemester> result = new ArrayList<ClassSemester>();
+		List<ClassCourseSemester> result = new ArrayList<ClassCourseSemester>();
 		List<ClassSemester> classSemesters = classSemesterService
 				.listClassSemestersBySemester(semesterId, true);
 
 		for (ClassSemester classSemester : classSemesters) {
 			if (!classSemester.getClassCourseSemesters().isEmpty())
-				result.add(classSemester);
+				result.addAll(classSemester.getClassCourseSemesters());
 		}
 
 		return result;
@@ -34,9 +34,9 @@ public class ScheduleInfoServiceImpl implements ScheduleInfoService {
 
 	// Get List From ClassSemester and check set timetable
 	@Override
-	public List<ClassSemester> getListClassWasSetTimetablesDone(int semesterId) {
+	public List<ClassCourseSemester> getListClassWasSetTimetablesDone(int semesterId) {
 
-		List<ClassSemester> result = new ArrayList<ClassSemester>();
+		List<ClassCourseSemester> result = new ArrayList<ClassCourseSemester>();
 		List<ClassSemester> classSemesters = classSemesterService
 				.listClassSemestersBySemester(semesterId, true);
 
@@ -47,21 +47,22 @@ public class ScheduleInfoServiceImpl implements ScheduleInfoService {
 				if (classCourseSemester.getTimetable().size() < classCourseSemester
 						.getCourseSemester().getSlots()) {
 					checkSetDone = false;
-					break;
+				}
+
+				if (checkSetDone) {
+					result.add(classCourseSemester);
 				}
 			}
 
-			if (checkSetDone)
-				result.add(classSemester);
 		}
 
 		return result;
 	}
 
 	@Override
-	public List<ClassSemester> getListClassWasSetRoomsDone(int semesterId) {
+	public List<ClassCourseSemester> getListClassWasSetRoomsDone(int semesterId) {
 		// TODO Auto-generated method stub
-		List<ClassSemester> result = new ArrayList<ClassSemester>();
+		List<ClassCourseSemester> result = new ArrayList<ClassCourseSemester>();
 		List<ClassSemester> classSemesters = classSemesterService
 				.listClassSemestersBySemester(semesterId, true);
 
@@ -79,19 +80,20 @@ public class ScheduleInfoServiceImpl implements ScheduleInfoService {
 					checkSetDone = false;
 					break;
 				}
+				if (checkSetDone)
+					result.add(classCourseSemester);
 			}
 
-			if (checkSetDone)
-				result.add(classSemester);
+			
 		}
 
 		return result;
 	}
 
 	@Override
-	public List<ClassSemester> getListClassWasSetTeachersDone(int semesterId) {
+	public List<ClassCourseSemester> getListClassWasSetTeachersDone(int semesterId) {
 		// TODO Auto-generated method stub
-		List<ClassSemester> result = new ArrayList<ClassSemester>();
+		List<ClassCourseSemester> result = new ArrayList<ClassCourseSemester>();
 		List<ClassSemester> classSemesters = classSemesterService
 				.listClassSemestersBySemester(semesterId, true);
 
@@ -109,10 +111,11 @@ public class ScheduleInfoServiceImpl implements ScheduleInfoService {
 					checkSetDone = false;
 					break;
 				}
+
+				if (checkSetDone)
+					result.add(classCourseSemester);
 			}
 
-			if (checkSetDone)
-				result.add(classSemester);
 		}
 
 		return result;

@@ -68,22 +68,11 @@ $(document).ready(function() {
 	    if (i<10) {i = "0" + i};  // add zero in front of numbers < 10
 	    return i;
 	}
-	$("#btn-timetabling").on("click", function() {
-		_showDialog("dialog-timetabling");
-		$("#start-time").text("Start time: " +$("#clock").text());
-		window.location = "automaticTimetabling/auto?semesterId=" +${semesterId};
+	$("#btn-finish").on("click", function() {
+		window.location = "/Timetabling/staff"
 	});
-	$("#btn-back").on("click", function() {
-		window.location = "scheduleInfo"
-	});
-	$("#btn-clear").on("click", function() {
-		_showDialog("dialog-clear");	
-	});
-	$("#btn-clear-accept").on("click", function() {
-		window.location = "automaticTimetabling/clear?semesterId=" +${semesterId};
-	});
-	$("#btn-clear-decline").on("click", function() {
-		_showDialog("dialog-clear");
+	$("#btn-download").on("click", function() {
+		alert("download");
 	});
 	
 	function _showDialog(id) {
@@ -119,67 +108,34 @@ function _successNotify() {
 	<div style="width: 100%; padding-bottom: 50px; text-align: center">
 		<div id="head"
 			style="width: 80%; text-align: center; margin: 0 auto; margin-top: 50px;">
-			<h1>Automatic Timetabling</h1>
+			<h1>Automatic Timetabling Result</h1>
 			<h6 id="clock" class="fg-steel"></h6>
 		</div>
 
 
-		<h5 style="margin-top: 30px;">Data will be used to schedule</h5>
+		<h5 style="margin-top: 30px;">Data result for ClassCourses of ${semesterName}</h5>
 		<div id="line"
 			style="border-bottom: 2px solid #999999; width: 50%; margin: 0 auto;"></div>
 		<div style="width: 50%; text-align: center; margin: 0 auto;">
-
 			<table id="dataAuto" class="table">
 				<thead>
 					<tr>
-						<th>Semester:</th>
-						<td>${semesterName}</td>
+						<th>Set Timetable:</th>
+						<td>${fn:length(listClassWasSetTimetablesDone)}</td>
 					</tr>
 					<tr>
-						<th>Total classes:</th>
-						<td>${totalClasses}</td>
+						<th>Set Room:</th>
+						<td>${fn:length(listClassWasSetRoomsDone)}</td>
 					</tr>
 					<tr>
-						<th>Total class-course:</th>
-						<td>${totalClassCourses}</td>
-					</tr>
-					<tr>
-						<th>Total teachers:</th>
-						<td>${totalTeachers}</td>
-					</tr>
-					<tr>
-						<th>Total rooms:</th>
-						<td>${totalRooms}</td>
+						<th>Set Teacher:</th>
+						<td>${fn:length(listClassWasSetTeachersDone)}</td>
 					</tr>
 				</thead>
 			</table>
-			<button class="button" id="btn-back">Back</button>
-			<button class="button" id="btn-timetabling">Timetabling</button>
-			<button class="button" id="btn-clear">Clear Timetable</button>
+			<button class="button" id="btn-finish">Finish</button>
+			<button class="button" id="btn-download">Download</button>
 		</div>
 	</div>
-	
-	<div id="dialog-timetabling" data-role="dialog" class="padding20"
-		data-overlay="true" data-overlay-color="op-dark"
-		data-windows-style="true">
-		<div style="width: 500px; margin: 0 auto; text-align: center;">
-			<h6 style="float: left; margin-bottom: 30px;" id="start-time"></h6>
-			<div data-role="preloader" data-type="metro" data-style="dark"></div>
-			<h6 id="text-processing">Timetabling...</h6>
-		</div>
-	</div>
-	
-	<div id="dialog-clear" data-role="dialog" class="padding20"
-		data-overlay="true" data-overlay-color="op-dark"
-		data-windows-style="true">
-		<div style="width: 500px; margin: 0 auto; text-align: center;">
-			<h2>Are you sure to clear all timetable of this semester?</h2>
-			<div id="btn-group" style="margin-top: 25px;">
-				<button class="button" id="btn-clear-accept">ACCEPT</button>
-				<button class="button" id="btn-clear-decline">DECLINE</button>
-			</div>
-		</div>
-	</div>
-	
 </body>
 </html>

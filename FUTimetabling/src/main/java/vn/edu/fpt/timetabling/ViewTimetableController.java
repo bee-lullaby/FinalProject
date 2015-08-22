@@ -67,10 +67,13 @@ public class ViewTimetableController {
 				SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 				model.addAttribute("startDate", sdf.format(s.getStartDate()));
 				model.addAttribute("endDate", sdf.format(s.getEndDate()));
-				model.addAttribute("listStudents", studentService.listStudents());
+				model.addAttribute("listStudents",
+						studentService.listStudents());
 				// timetable for student
+				model.addAttribute("listTimetables", timetableService
+						.listTimetableByStudent(semesterId, studentId));
 			} else {
-				
+
 				List<Student> list = studentService.listStudents();
 				if (list != null && !list.isEmpty() && list.get(0) != null) {
 					return "redirect:/staff/viewTimetable?semesterId="
@@ -80,13 +83,15 @@ public class ViewTimetableController {
 					model.addAttribute("accountType", 1);
 					model.addAttribute("listSemesters", semesterService
 							.listSemesters(false, false, false, false));
-					Semester s = semesterService.getSemesterById(semesterId, false,
-							false, false, false);
+					Semester s = semesterService.getSemesterById(semesterId,
+							false, false, false, false);
 					SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-					model.addAttribute("startDate", sdf.format(s.getStartDate()));
+					model.addAttribute("startDate",
+							sdf.format(s.getStartDate()));
 					model.addAttribute("endDate", sdf.format(s.getEndDate()));
 					model.addAttribute("listTeacherSemesters", list);
-					model.addAttribute("listStudents", studentService.listStudents());
+					model.addAttribute("listStudents",
+							studentService.listStudents());
 				}
 			}
 		} else if (teacherSemesterId != null) {
@@ -106,7 +111,7 @@ public class ViewTimetableController {
 				model.addAttribute("listTimetables", timetableService
 						.listTimetableByTeacher(teacherSemesterId));
 			} else {
-				
+
 				List<TeacherSemester> list = teacherSemesterService
 						.listTeacherSemestersForView(semesterId);
 				if (list != null && !list.isEmpty() && list.get(0) != null) {
@@ -117,10 +122,11 @@ public class ViewTimetableController {
 					model.addAttribute("accountType", 1);
 					model.addAttribute("listSemesters", semesterService
 							.listSemesters(false, false, false, false));
-					Semester s = semesterService.getSemesterById(semesterId, false,
-							false, false, false);
+					Semester s = semesterService.getSemesterById(semesterId,
+							false, false, false, false);
 					SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-					model.addAttribute("startDate", sdf.format(s.getStartDate()));
+					model.addAttribute("startDate",
+							sdf.format(s.getStartDate()));
 					model.addAttribute("endDate", sdf.format(s.getEndDate()));
 					model.addAttribute("listTeacherSemesters", list);
 				}
@@ -140,11 +146,10 @@ public class ViewTimetableController {
 						classSemesterId, true);
 				model.addAttribute("listClassSemesters", classSemesterService
 						.listClassSemesterForView(semesterId));
-				model.addAttribute("listTimetables", timetableService
-						.listTimetablesByClassCourseSemesters(cs
-								.getClassCourseSemesters()));
+				model.addAttribute("listTimetables",
+						timetableService.listTimetableByClass(classSemesterId));
 			} else {
-				
+
 				List<ClassSemester> list = classSemesterService
 						.listClassSemesterForView(semesterId);
 				if (list != null && !list.isEmpty() && list.get(0) != null) {
@@ -155,10 +160,11 @@ public class ViewTimetableController {
 					model.addAttribute("accountType", 1);
 					model.addAttribute("listSemesters", semesterService
 							.listSemesters(false, false, false, false));
-					Semester s = semesterService.getSemesterById(semesterId, false,
-							false, false, false);
+					Semester s = semesterService.getSemesterById(semesterId,
+							false, false, false, false);
 					SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-					model.addAttribute("startDate", sdf.format(s.getStartDate()));
+					model.addAttribute("startDate",
+							sdf.format(s.getStartDate()));
 					model.addAttribute("endDate", sdf.format(s.getEndDate()));
 					model.addAttribute("listClassSemesters", list);
 				}
