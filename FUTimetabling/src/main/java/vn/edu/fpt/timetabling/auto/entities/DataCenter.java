@@ -3127,6 +3127,35 @@ public class DataCenter {
 				}
 				System.out.println();
 			}
+			lowerBoundnbClassCourseOfATeacher = new int[nbTeacher];
+			for (Teacher t : teachers) {
+				ArrayList<Course> L = mTeacher2CourseList.get(t);
+				int count = 0;
+				int temp1 = 0;
+				int temp2 = 0;
+				for (Course co : L) {
+					ArrayList<ClassCourse> CCL = mCourse2ClassCourseList.get(co);
+					ArrayList<Teacher> TL = mCourse2TeacherList.get(co);
+					if (!TL.isEmpty()) {
+						if (CCL.size() > TL.size()) {
+							count += (int) Math.floor((double) CCL.size() / TL.size());
+						} else {
+							temp1 += CCL.size();
+							if (temp2 < TL.size()) {
+								temp2 = TL.size();
+							}
+						}
+					}
+				}
+				count += (int) Math.floor((double) temp1 / temp2);
+				int tIdx = mTeacher2Index.get(t);
+				if (count < 4) {
+					lowerBoundnbClassCourseOfATeacher[tIdx] = count;
+				} else {
+					lowerBoundnbClassCourseOfATeacher[tIdx] = 4;
+				}
+				System.out.println("tc = " + t.code + ": " + lowerBoundnbClassCourseOfATeacher[tIdx] + "");
+			}
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

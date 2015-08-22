@@ -501,7 +501,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	private void buildTimetable(Semester semester, SingleSolution[] singleSolutions,
-			HashMap<ClassCourse, vn.edu.fpt.timetabling.auto.entities.Room> roomMap, DataCenter dataCenter,
+			HashMap<ClassCourse, vn.edu.fpt.timetabling.auto.entities.Room> roomMap,
+			HashMap<ClassCourse, vn.edu.fpt.timetabling.auto.entities.Teacher> teacherMap, DataCenter dataCenter,
 			List<List<String>> mergeCourses) {
 		int semesterId = semester.getSemesterId();
 		timetableService.deleteTimetablesBySemester(semesterId);
@@ -509,11 +510,19 @@ public class ScheduleServiceImpl implements ScheduleService {
 		Date startDate = semester.getStartDate();
 		Calendar calendar = Calendar.getInstance();
 		HashMap<ClassCourseSemester, Room> roomMapConverted = new HashMap<>();
+		HashMap<ClassCourseSemester, TeacherSemester> teacherMapConverted = new HashMap<>();
 		for (Entry<ClassCourse, vn.edu.fpt.timetabling.auto.entities.Room> entry : roomMap.entrySet()) {
 			ClassCourseSemester classCourseSemester = classCourseSemesterService
 					.getClassCourseSemesterById(entry.getKey().ID, false, false);
 			Room room = roomService.getRoomById(entry.getValue().ID, false);
 			roomMapConverted.put(classCourseSemester, room);
+		}
+		for (Entry<ClassCourse, vn.edu.fpt.timetabling.auto.entities.Teacher> entry : teacherMap.entrySet()) {
+			ClassCourseSemester classCourseSemester = classCourseSemesterService
+					.getClassCourseSemesterById(entry.getKey().ID, false, false);
+			TeacherSemester teacherSemester = teacherSemesterService.getTeacherSemesterById(entry.getValue().ID, false,
+					false);
+			teacherMapConverted.put(classCourseSemester, teacherSemester);
 		}
 		for (SingleSolution singleSolution : singleSolutions) {
 			int[][] classCourses = singleSolution.T;
@@ -547,6 +556,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 							timetable.setSlot(slot + 1);
 							timetable.setClassCourseSemester(classCourseSemester);
 							timetable.setRoom(roomMapConverted.get(classCourseSemester));
+							timetable.setTeacherSemester(teacherMapConverted.get(classCourseSemester));
 							timetableService.addTimetable(timetable);
 						}
 					}
@@ -715,8 +725,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 			TA.printTimeTableAllClass("D:/datafall/optimizedTTB_fall.html", TA.beingUsedTimeTable);
 			AssignTeacher teacherAssigner = new AssignTeacher();
 			teacherAssigner.DA = TA.DA;
-			teacherAssigner.assignTeacherUsingScore("D:/datafall/data_conflictMatrix_Temp2.txt", "D:/datafall/data_beingusedTT_Temp2.dat", "D:/datafall/data_scoreMatrix.txt", teacherAssigner.DA.classCourses);
-			// TA.DA.mClassCourse2AssignedTeacher.get(0);
+			teacherAssigner.assignTeacherUsingScore("D:/datafall/data_conflictMatrix_Temp2.txt",
+					"D:/datafall/data_beingusedTT_Temp2.dat", "D:/datafall/data_scoreMatrix.txt",
+					teacherAssigner.DA.classCourses);
 			AssignRoom roomAssigner;
 			roomAssigner = new AssignRoom();
 			roomAssigner.DA = TA.DA;
@@ -730,10 +741,12 @@ public class ScheduleServiceImpl implements ScheduleService {
 			System.out.println("chieu = " + ss[1]);
 			TA.testDepartMentDemand(ttb);
 			mergeCourses = TA.recoverTimeTableMergedCase(ttb);
-			//TA.PoiWriteExcelFile(TA, "D:/datafall/ttb.xls", TA.beingUsedTimeTable);
+			// TA.PoiWriteExcelFile(TA, "D:/datafall/ttb.xls",
+			// TA.beingUsedTimeTable);
 		} else {
 			System.out.println("Timetable is incorrect.");
 		}
-		buildTimetable(semester, ttb, TA.DA.mClassCourse2AssignedRoom, TA.DA, mergeCourses);
+		buildTimetable(semester, ttb, TA.DA.mClassCourse2AssignedRoom, TA.DA.mClassCourse2AssignedTeacher, TA.DA,
+				mergeCourses);
 	}
 }
