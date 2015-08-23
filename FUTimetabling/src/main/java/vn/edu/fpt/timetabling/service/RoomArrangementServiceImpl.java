@@ -41,6 +41,7 @@ public class RoomArrangementServiceImpl implements RoomArrangementService {
 
 	@Autowired
 	private ClassCourseSemesterMergeService classCourseSemesterMergeService;
+
 	@Override
 	@Transactional
 	public List<ClassSemester> getListClassesCoursesOfSemester(int semesterId,
@@ -77,7 +78,8 @@ public class RoomArrangementServiceImpl implements RoomArrangementService {
 				Set<ClassCourseSemester> classCourseSemesters = new LinkedHashSet<ClassCourseSemester>();
 				for (ClassCourseSemester ccs : cs.getClassCourseSemesters()) {
 					ClassCourseSemester newCcs = new ClassCourseSemester();
-					newCcs.setClassCourseSemesterId(ccs.getClassCourseSemesterId());
+					newCcs.setClassCourseSemesterId(ccs
+							.getClassCourseSemesterId());
 					CourseSemester courseSemesterToSet = new CourseSemester();
 					courseSemesterToSet.setCourseSemesterId(ccs
 							.getCourseSemester().getCourseSemesterId());
@@ -114,7 +116,6 @@ public class RoomArrangementServiceImpl implements RoomArrangementService {
 						ClassSemester classSemesterNew = new ClassSemester();
 						classSemesterNew.setClassSemesterId(ccs
 								.getClassSemester().getClassSemesterId());
-
 						if (timetable.getRoom() != null) {
 							Room r = new Room();
 							r.setRoomId(timetable.getRoom().getRoomId());
@@ -226,27 +227,30 @@ public class RoomArrangementServiceImpl implements RoomArrangementService {
 		for (ClassSemester cs : data) {
 			Iterator<ClassCourseSemester> i = cs.getClassCourseSemesters()
 					.iterator();
-			if(mMergeClass == null || mMergeClass.isEmpty()) {
-				mMergeClass = classCourseSemesterMergeService.getMapCourseWithMergeClassInSemester(cs.getSemester().getSemesterId());
+			if (mMergeClass == null || mMergeClass.isEmpty()) {
+				mMergeClass = classCourseSemesterMergeService
+						.getMapCourseWithMergeClassInSemester(cs.getSemester()
+								.getSemesterId());
 			}
 			while (i.hasNext()) {
 				ClassCourseSemester ccs = i.next();
-				
+
 				dataTimetable.addAll(ccs.getTimetable());
-				if(!mCCSWithRoom.containsKey(ccs.getClassCourseSemesterId())) {
-					if(ccs.getTimetable() != null && !ccs.getTimetable().isEmpty()) {
+				if (!mCCSWithRoom.containsKey(ccs.getClassCourseSemesterId())) {
+					if (ccs.getTimetable() != null
+							&& !ccs.getTimetable().isEmpty()) {
 						setCCS.add(ccs);
-						mCCSWithRoom.put(ccs.getClassCourseSemesterId(), ccs.getTimetable().iterator().next().getRoom());
+						mCCSWithRoom.put(ccs.getClassCourseSemesterId(), ccs
+								.getTimetable().iterator().next().getRoom());
 					}
 				}
 			}
 		}
-		
+
 		for (Timetable t : dataTimetable) {
 
 			Timetable timetable = timetableService.getTimetableById(t
 					.getTimeTableId());
-			
 			if (t.getRoom() != null) {
 				timetable.setRoom(t.getRoom());
 			} else {
@@ -254,16 +258,20 @@ public class RoomArrangementServiceImpl implements RoomArrangementService {
 			}
 			timetableService.updateTimetable(timetable);
 		}
-		
-		
-		for(ClassCourseSemester ccs : setCCS) {
+
+		for (ClassCourseSemester ccs : setCCS) {
 			int csId = ccs.getCourseSemester().getCourseSemesterId();
-			for(String key : mMergeClass.keySet()) {
-				if(key.contains(Integer.toString(csId)) && mMergeClass.get(key).contains(ccs.getClassCourseSemesterId())) {
-					for(int ccsId : mMergeClass.get(key)) {
-						if(ccsId != ccs.getClassCourseSemesterId()) {
-							for(Timetable t : classCourseSemesterService.getClassCourseSemesterById(ccsId, true, false).getTimetable()) {
-								t.setRoom(mCCSWithRoom.get(ccs.getClassCourseSemesterId()));
+			for (String key : mMergeClass.keySet()) {
+				if (key.contains(Integer.toString(csId))
+						&& mMergeClass.get(key).contains(
+								ccs.getClassCourseSemesterId())) {
+					for (int ccsId : mMergeClass.get(key)) {
+						if (ccsId != ccs.getClassCourseSemesterId()) {
+							for (Timetable t : classCourseSemesterService
+									.getClassCourseSemesterById(ccsId, true,
+											false).getTimetable()) {
+								t.setRoom(mCCSWithRoom.get(ccs
+										.getClassCourseSemesterId()));
 								timetableService.updateTimetable(t);
 							}
 						}
@@ -271,7 +279,7 @@ public class RoomArrangementServiceImpl implements RoomArrangementService {
 				}
 			}
 		}
-		
+
 		return true;
 	}
 
@@ -319,8 +327,8 @@ public class RoomArrangementServiceImpl implements RoomArrangementService {
 					}
 				}
 			}
-			
-			if(count == 0) {
+
+			if (count == 0) {
 				checkDone = false;
 			} else if (countSlotWasSet < count) {
 				checkDone = false;

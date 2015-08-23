@@ -109,7 +109,6 @@ $(document).ready(
 					break;
 				}
 			}
-			
 			if(checkError) {
 				 _showDialog("dialog-error");
 			} else {
@@ -120,9 +119,11 @@ $(document).ready(
 						for(var x = 0; x < classCourseSemesters[i].timetable.length; x++) {
 							classCourseSemesters[i].timetable[x].room = null;
 							if(roomSelected != -1) {
-								var room = roomsJSON[roomSelected];
+								var room = new Object();
+								room.roomId = roomsJSON[roomSelected].roomId;
+								room.code = roomsJSON[roomSelected].code;
 								classCourseSemesters[i].timetable[x].room = room;
-							}	
+							}
 						}
 					}
 				}
@@ -391,6 +392,7 @@ $(document).ready(
 						var roomId = roomsJSON[r].roomId;
 						if(classCourseSemester.timetable[y].date == roomsJSON[r].timetables[z].date 
 								&& classCourseSemester.timetable[y].slot == roomsJSON[r].timetables[z].slot 
+								&& classCourseSemester.timetable[y].room != null 
 								&& classCourseSemester.timetable[y].room.roomId != roomId) {
 							
 							if(listRoomsCantSet.indexOf(roomId) < 0) {
@@ -478,7 +480,7 @@ $(document).ready(
 		}
 		
 		tr += "<td>" +dataRoomArrangementsJSON[position].numberOfSlots +"</td>" +
-			"<td>" +dataRoomArrangementsJSON[position].numberOfSlots_WereSetSuccessful +"</td>" +
+			"<td>" +(dataRoomArrangementsJSON[position].numberOfSlots - dataRoomArrangementsJSON[position].numberOfSlots_WereSetSuccessful) +"</td>" +
 			"<td></td>";
 		
 		return tr;

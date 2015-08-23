@@ -63,12 +63,11 @@ public class TeacherArrangementServiceImpl implements TeacherArrangementService 
 	}
 
 	@Override
-	public CourseSemester getCourseSemester(int courseSemesterId) {
+	public CourseSemester getCourseSemester(int semesterId, int courseId) {
 
 		CourseSemester courseSemester = new CourseSemester();
 
-		CourseSemester cs = courseSemesterService.getCourseSemesterById(courseSemesterId, true, true, false);
-
+		CourseSemester cs = courseSemesterService.getCourseSemesterByCourseSemester(courseId, semesterId, true, true, false);
 		// set CourseSemeter ID
 		courseSemester.setCourseSemesterId(cs.getCourseSemesterId());
 

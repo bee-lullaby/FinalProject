@@ -41,18 +41,21 @@ public class ScheduleInfoServiceImpl implements ScheduleInfoService {
 				.listClassSemestersBySemester(semesterId, true);
 
 		for (ClassSemester classSemester : classSemesters) {
-			boolean checkSetDone = true;
+			
 			for (ClassCourseSemester classCourseSemester : classSemester
 					.getClassCourseSemesters()) {
+				boolean checkSetDone = true;
+				
 				if (classCourseSemester.getTimetable().size() < classCourseSemester
 						.getCourseSemester().getSlots()) {
 					checkSetDone = false;
 				}
-
+				
 				if (checkSetDone) {
 					result.add(classCourseSemester);
 				}
 			}
+			
 
 		}
 
@@ -67,24 +70,21 @@ public class ScheduleInfoServiceImpl implements ScheduleInfoService {
 				.listClassSemestersBySemester(semesterId, true);
 
 		for (ClassSemester classSemester : classSemesters) {
-			boolean checkSetDone = true;
 			for (ClassCourseSemester classCourseSemester : classSemester
 					.getClassCourseSemesters()) {
+				boolean checkSetDone = true;
 				if (!classCourseSemester.getTimetable().isEmpty()) {
 					if (classCourseSemester.getTimetable().iterator().next()
 							.getRoom() == null) {
 						checkSetDone = false;
-						break;
 					}
 				} else {
 					checkSetDone = false;
-					break;
 				}
-				if (checkSetDone)
+				if (checkSetDone) {
 					result.add(classCourseSemester);
+				}
 			}
-
-			
 		}
 
 		return result;
@@ -98,22 +98,22 @@ public class ScheduleInfoServiceImpl implements ScheduleInfoService {
 				.listClassSemestersBySemester(semesterId, true);
 
 		for (ClassSemester classSemester : classSemesters) {
-			boolean checkSetDone = true;
+			
 			for (ClassCourseSemester classCourseSemester : classSemester
 					.getClassCourseSemesters()) {
+				boolean checkSetDone = true;
 				if (!classCourseSemester.getTimetable().isEmpty()) {
 					if (classCourseSemester.getTimetable().iterator().next()
 							.getTeacherSemester() == null) {
 						checkSetDone = false;
-						break;
 					}
 				} else {
 					checkSetDone = false;
-					break;
 				}
 
-				if (checkSetDone)
+				if (checkSetDone) {
 					result.add(classCourseSemester);
+				}
 			}
 
 		}

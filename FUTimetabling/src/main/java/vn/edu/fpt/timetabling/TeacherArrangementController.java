@@ -86,12 +86,12 @@ public class TeacherArrangementController extends GeneralController {
 		List<CourseSemester> courseSemesters = courseSemesterService
 				.listCourseSemestersByDepartment(semesterId, departmentId,
 						false, false, false);
-		int courseSemesterId = 0;
+		int courseId = 0;
 		if (courseSemesters.size() != 0) {
-			courseSemesterId = courseSemesters.get(0).getCourseSemesterId();
+			courseId = courseSemesters.get(0).getCourse().getCourseId();
 		}
 		return "redirect:/staff/teacherArrangement?semesterId=" + semesterId
-				+ "&departmentId=" + departmentId + "&courseSemesterId=" + courseSemesterId;
+				+ "&departmentId=" + departmentId + "&courseId=" + courseId;
 	}
 
 	@RequestMapping(value = "/staff/teacherArrangement", method = RequestMethod.GET, params = { "semesterId" })
@@ -102,12 +102,12 @@ public class TeacherArrangementController extends GeneralController {
 		List<CourseSemester> courseSemesters = courseSemesterService
 				.listCourseSemestersByDepartment(semesterId, departmentId,
 						false, false, false);
-		int courseSemesterId = 0;
+		int courseId = 0;
 		if (courseSemesters.size() != 0) {
-			courseSemesterId = courseSemesters.get(0).getCourseSemesterId();
+			courseId = courseSemesters.get(0).getCourse().getCourseId();
 		}
 		return "redirect:/staff/teacherArrangement?semesterId=" + semesterId
-				+ "&departmentId=" + departmentId + "&courseSemesterId=" + courseSemesterId;
+				+ "&departmentId=" + departmentId + "&courseId=" + courseId;
 
 	}
 
@@ -119,29 +119,29 @@ public class TeacherArrangementController extends GeneralController {
 		List<CourseSemester> courseSemesters = courseSemesterService
 				.listCourseSemestersByDepartment(semesterId, departmentId,
 						false, false, false);
-		int courseSemesterId = 0;
+		int courseId = 0;
 		if (courseSemesters.size() != 0) {
-			courseSemesterId = courseSemesters.get(0).getCourseSemesterId();
+			courseId = courseSemesters.get(0).getCourse().getCourseId();
 		}
 		return "redirect:/staff/teacherArrangement?semesterId=" + semesterId
-				+ "&departmentId=" + departmentId + "&courseSemesterId=" + courseSemesterId;
+				+ "&departmentId=" + departmentId + "&courseId=" + courseId;
 	}
 
 	@RequestMapping(value = "/staff/teacherArrangement", method = RequestMethod.GET, params = {
-			"semesterId", "departmentId", "courseSemesterId" })
+			"semesterId", "departmentId", "courseId" })
 	public String teacherArrangementSemesterDepartmentCourse(
 			@RequestParam int semesterId, @RequestParam int departmentId,
-			@RequestParam int courseSemesterId, Model model, HttpSession httpSession) {
+			@RequestParam int courseId, Model model, HttpSession httpSession) {
 		List<Course> coursesData;
 		CourseSemester courseSemesterData;
 		List<DataTeacherArrangement> dtaData;
 		HashMap<String, Set<Integer>> mMergerClassData = classCourseSemesterMergeService.getMapCourseWithMergeClassInSemester(semesterId);
-		if (courseSemesterId != 0) {
+		if (courseId != 0) {
 			coursesData = teacherArrangementService.getListCourse(departmentId);
-			courseSemesterData = teacherArrangementService.getCourseSemester(
-					courseSemesterId);
+			courseSemesterData = teacherArrangementService.getCourseSemester(semesterId, 
+					courseId);
 			dtaData = teacherArrangementService.getDataTeacherArrangement(
-					semesterId, courseSemesterId);
+					semesterId, courseId);
 		} else {
 			coursesData = new ArrayList<Course>();
 			courseSemesterData = new CourseSemester();
@@ -153,7 +153,7 @@ public class TeacherArrangementController extends GeneralController {
 		StringWriter dtaJSON = new StringWriter();
 		StringWriter mMergeClassJSON = new StringWriter();
 		try {
-			if (courseSemesterId != 0) {
+			if (courseId != 0) {
 				om.writeValue(coursesJSON, coursesData);
 				om.writeValue(courseSemesterJSON, courseSemesterData);
 				om.writeValue(dtaJSON, dtaData);
@@ -162,7 +162,7 @@ public class TeacherArrangementController extends GeneralController {
 			model.addAttribute("listSemesters",
 					semesterService.listSemesters(false, false, false, false));
 			model.addAttribute("listDepartments", teacherArrangementService.getListDepartment());
-			if (courseSemesterId != 0) {
+			if (courseId != 0) {
 				model.addAttribute("coursesData", coursesJSON);
 				model.addAttribute("courseSemesterData", courseSemesterJSON);
 				model.addAttribute("dtaData", dtaJSON);

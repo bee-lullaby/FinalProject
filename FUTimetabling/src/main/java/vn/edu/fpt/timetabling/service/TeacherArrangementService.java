@@ -16,7 +16,7 @@ public interface TeacherArrangementService {
 	
 	public List<Course> getListCourse(int departmentId);
 	
-	public CourseSemester getCourseSemester(int courseSemesterId);
+	public CourseSemester getCourseSemester(int semesterId, int courseId);
 	
 	public List<DataTeacherArrangement> getDataTeacherArrangement(int semesterId, int courseId);
 	
