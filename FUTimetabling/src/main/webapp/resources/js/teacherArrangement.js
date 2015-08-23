@@ -182,23 +182,23 @@ $(document).ready(function() {
 	}
 	
 	function _setDataTableClasses() {
-		if(courseSemesterJSON != undefined && courseSemesterJSON != null) {
-			var classCourseSemesters = courseSemesterJSON.classCourseSemesters;
-			for(var i = 0; i < classCourseSemesters.length; i++) {
-				$("#table-classes tbody").append(_getTRTableClasses(classCourseSemesters,  i));
+		if(dtaJSON != undefined && dtaJSON != null) {
+			for(var i = 0; i < dtaJSON.length; i++) {
+				$("#table-classes tbody").append(_getTRTableClasses(i));
 			}
 		} else {
 			$("#table-classes tbody").append("<tr><td colspan='4' style='text-align:center'>No Class To Show!</td></tr>");
 		}
 	}
 	
-	function _getTRTableClasses(classCourseSemesters, position) {
-		text = "<tr id='" +classCourseSemesters[position].classCourseSemesterId +"' data-position='" +position +"'>" +
+	function _getTRTableClasses(position) {
+		console.log(dtaJSON[position].classCourseSemester);
+		text = "<tr id='" +dtaJSON[position].classCourseSemester.classCourseSemesterId +"' data-position='" +position +"'>" +
 				"<td>" 
-				+classCourseSemesters[position].classSemester.classFPT.code +"</td>" +
+				+dtaJSON[position].classCourseSemester.classSemester.classFPT.code +"</td>" +
 				"<td id='conflict'></td><td id='merge-class'></td>" +
 				"<td style='width:300px;'><div class='input-control select' style='width:100%;'>" +
-				"<select id='select-teacher-" +classCourseSemesters[position].classCourseSemesterId +"'>" +
+				"<select id='select-teacher-" +dtaJSON[position].classCourseSemester.classCourseSemesterId +"'>" +
 				"<option value='-1'>...</option>" +
 				"</select></div>" +
 				"<div id='warning' class='fg-red'>" +	
@@ -285,39 +285,39 @@ $(document).ready(function() {
 	}
 	
 	function _setSelectTeachers() {
+		var count = 0;
 		$("#table-classes tbody tr").each(function () {
-			$(this).find("td:eq(3) select").append(_getListTeacherForSelect());
+			$(this).find("td:eq(3) select").append(_getListTeacherForSelect(count++));
 		})
 
 		$.each($("#table-classes tbody tr"), function(id, tr) {
 			var position = $(tr).attr("data-position");
-			if(courseSemesterJSON.classCourseSemesters[position].timetable.length > 0) {
+			if(courseSemesterJSON	 != null && courseSemesterJSON.classCourseSemesters[position].timetable.length > 0) {
 				if(courseSemesterJSON.classCourseSemesters[position].timetable[0].teacherSemester != undefined 
 					&& courseSemesterJSON.classCourseSemesters[position].timetable[0].teacherSemester != null) {
 					$(tr).find("td:eq(3) select option[value='" +courseSemesterJSON.classCourseSemesters[position].timetable[0].teacherSemester.teacherSemesterId +"']").attr("selected", "selected");
 
-					console.log(courseSemesterJSON.classCourseSemesters[position].timetable[0].teacherSemester.teacherSemesterId);
 				}
 			}
 			
 		});
 	}
 
-	function _getListTeacherForSelect() {
+	function _getListTeacherForSelect(position) {
 		var text = "";
 
-		if(courseSemesterJSON != undefined && courseSemesterJSON != null) {
-			var teacherCourseSemesters = courseSemesterJSON.teacherCourseSemesters;
-			for(var i = 0; i < teacherCourseSemesters.length; i++) {
-				text += _getOptionTeacher(i);
+		if(dtaJSON != undefined && dtaJSON != null) {
+			for(var i = 0; i < dtaJSON[position].teacherAvailable.length; i++) {
+				text += _getOptionTeacher(position, i);
 			}
 		}
 		return text;
 	}
 	
-	function _getOptionTeacher(position) {
-		return "<option value='" +courseSemesterJSON.teacherCourseSemesters[position].teacherSemester.teacherSemesterId +"'>" +
-				courseSemesterJSON.teacherCourseSemesters[position].teacherSemester.teacher.account +"</option>";
+	function _getOptionTeacher(x, y) {
+		console.log(dtaJSON[x].teacherAvailable);
+		return "<option value='" +dtaJSON[x].teacherAvailable[y].teacherSemesterId +"'>" +
+					dtaJSON[x].teacherAvailable[y].teacher.account +"</option>";
 	}
 	function _urlParam(param) {
 		var url = $(location).attr('search').substring(1);

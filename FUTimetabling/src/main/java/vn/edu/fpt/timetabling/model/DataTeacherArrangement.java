@@ -5,6 +5,7 @@ import java.util.Set;
 public class DataTeacherArrangement {
 	private ClassCourseSemester classCourseSemester;
 	private Set<ClassCourseSemester> conflictClasses;
+	private Set<TeacherSemester> teacherAvailable;
 
 	/**
 	 * 
@@ -16,12 +17,15 @@ public class DataTeacherArrangement {
 	/**
 	 * @param classCourseSemester
 	 * @param conflictClasses
+	 * @param teacherAvailable
 	 */
 	public DataTeacherArrangement(ClassCourseSemester classCourseSemester,
-			Set<ClassCourseSemester> conflictClasses) {
+			Set<ClassCourseSemester> conflictClasses,
+			Set<TeacherSemester> teacherAvailable) {
 		super();
 		this.classCourseSemester = classCourseSemester;
 		this.conflictClasses = conflictClasses;
+		this.teacherAvailable = teacherAvailable;
 	}
 
 	/**
@@ -32,8 +36,7 @@ public class DataTeacherArrangement {
 	}
 
 	/**
-	 * @param classCourseSemester
-	 *            the classCourseSemester to set
+	 * @param classCourseSemester the classCourseSemester to set
 	 */
 	public void setClassCourseSemester(ClassCourseSemester classCourseSemester) {
 		this.classCourseSemester = classCourseSemester;
@@ -47,11 +50,25 @@ public class DataTeacherArrangement {
 	}
 
 	/**
-	 * @param conflictClasses
-	 *            the conflictClasses to set
+	 * @param conflictClasses the conflictClasses to set
 	 */
 	public void setConflictClasses(Set<ClassCourseSemester> conflictClasses) {
 		this.conflictClasses = conflictClasses;
 	}
+
+	/**
+	 * @return the teacherAvailable
+	 */
+	public Set<TeacherSemester> getTeacherAvailable() {
+		return teacherAvailable;
+	}
+
+	/**
+	 * @param teacherAvailable the teacherAvailable to set
+	 */
+	public void setTeacherAvailable(Set<TeacherSemester> teacherAvailable) {
+		this.teacherAvailable = teacherAvailable;
+	}
+
 	
 }

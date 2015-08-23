@@ -8,6 +8,7 @@ import vn.edu.fpt.timetabling.model.Course;
 import vn.edu.fpt.timetabling.model.CourseSemester;
 import vn.edu.fpt.timetabling.model.DataTeacherArrangement;
 import vn.edu.fpt.timetabling.model.Department;
+import vn.edu.fpt.timetabling.model.TeacherSemester;
 import vn.edu.fpt.timetabling.model.Timetable;
 
 public interface TeacherArrangementService {
@@ -21,6 +22,8 @@ public interface TeacherArrangementService {
 	public List<DataTeacherArrangement> getDataTeacherArrangement(int semesterId, int courseId);
 	
 	public Set<ClassCourseSemester> getListClassConflicts(ClassCourseSemester classCourseSemester, Set<ClassCourseSemester> classCourseSemesters);
-
+	
+	public Set<TeacherSemester> getListTeacherAvailableForClassCourse(ClassCourseSemester classCourseSemester);
+		
 	public boolean updateTimetable(List<Timetable> timetables);
 }

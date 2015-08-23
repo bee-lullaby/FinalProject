@@ -5,6 +5,7 @@ import java.io.StringWriter;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
 @Controller
-public class RoomArrangementController {
+public class RoomArrangementController extends GeneralController{
 	@Autowired
 	private RoomArrangementService roomArrangementService;
 	@Autowired
@@ -48,7 +49,7 @@ public class RoomArrangementController {
 	@RequestMapping(value = "/staff/roomArrangement", method = RequestMethod.GET, params = {
 			"semesterId", "classSemesterId" })
 	public String roomArrangement(@RequestParam int semesterId,
-			@RequestParam int classSemesterId, Model model) {
+			@RequestParam int classSemesterId, Model model, HttpSession httpSession) {
 		List<ClassSemester> JSONccs = roomArrangementService
 				.getListClassesCoursesOfSemester(semesterId, classSemesterId);
 		List<Room> JSONdataRoomArrangement = roomArrangementService
@@ -74,6 +75,8 @@ public class RoomArrangementController {
 					semesterService.listSemesters(false, false, false, false));
 			model.addAttribute("listClassSemesters", classSemesterService
 					.listClassSemestersBySemester(semesterId, false));
+			checkError(httpSession, model);
+			notifySuccess(httpSession, model);
 		} catch (JsonGenerationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -90,7 +93,7 @@ public class RoomArrangementController {
 	@RequestMapping(value = "/staff/roomArrangement/updateTimetable", method = RequestMethod.POST)
 	public String updateTimetableRoom(
 			@RequestParam(value = "dataToSet", required = true) String dataToSet,
-			HttpServletRequest request) {
+			HttpServletRequest request, HttpSession httpSession) {
 
 		ObjectMapper om = new ObjectMapper();
 		TypeFactory typeFactory = om.getTypeFactory();
@@ -99,6 +102,7 @@ public class RoomArrangementController {
 			data = om.readValue(dataToSet, typeFactory.constructCollectionType(
 					List.class, ClassSemester.class));
 			roomArrangementService.updateTimetable(data);
+			httpSession.setAttribute("success", "Update Room Successful!");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
