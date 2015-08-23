@@ -1,9 +1,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="t"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ page session="false"%>
+<%@ page import="vn.edu.fpt.timetabling.utils.Const"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -71,42 +72,62 @@
 <script>
 	selectSemester = function(semester) {
 		var semesterId = semester.value;
-		window.location
-				.replace("http://localhost:8080/Timetabling/staff/addStudentToClass?semesterId="
-						+ semesterId);
+		window.location = "addStudentToClass?semesterId=" + semesterId;
 	};
 	selectClassSemester = function(classSemester) {
 		var classSemesterId = classSemester.value;
-		window.location
-				.replace("http://localhost:8080/Timetabling/staff/addStudentToClass?classSemesterId="
-						+ classSemesterId);
+		window.location = "addStudentToClass?classSemesterId="
+				+ classSemesterId;
 	};
 	selectClassCourseSemester = function(classCourseSemester) {
 		var classCourseSemesterId = classCourseSemester.value;
-		window.location
-				.replace("http://localhost:8080/Timetabling/staff/addStudentToClass?classCourseSemesterId="
-						+ classCourseSemesterId);
+		window.location = "addStudentToClass?classCourseSemesterId="
+				+ classCourseSemesterId;
 	};
-	
-	$(document).ready(function() {
-		$("#btn-set-student-semester").on("click", function() {
-			window.location = "addStudentToClass/autoStudentClasses?semesterId=" +$("#select-semester option:selected").val();
-		});
-		
-		$("#btn-clear-student-semester").on("click", function() {
-			window.location = "addStudentToClass/clearStudentClasses?semesterId=" +$("#select-semester option:selected").val();
-		});
-	
-		$("#btn-set-student-class").on("click", function() {
-			window.location = "addStudentToClass/autoStudentClass?classSemesterId=" +$("#select-class option:selected").val();
-		});
-		
-		$("#btn-clear-student-class").on("click", function() {
-			window.location = "addStudentToClass/clearStudentClass?classSemesterId=" +$("#select-class option:selected").val();
-		});
-	});
-	
-	
+
+	$(document)
+			.ready(
+					function() {
+						$("#btn-set-student-semester")
+								.on(
+										"click",
+										function() {
+											window.location = "addStudentToClass/autoStudentClasses?semesterId="
+													+ $(
+															"#select-semester option:selected")
+															.val();
+										});
+
+						$("#btn-clear-student-semester")
+								.on(
+										"click",
+										function() {
+											window.location = "addStudentToClass/clearStudentClasses?semesterId="
+													+ $(
+															"#select-semester option:selected")
+															.val();
+										});
+
+						$("#btn-set-student-class")
+								.on(
+										"click",
+										function() {
+											window.location = "addStudentToClass/autoStudentClass?classSemesterId="
+													+ $(
+															"#select-class option:selected")
+															.val();
+										});
+
+						$("#btn-clear-student-class")
+								.on(
+										"click",
+										function() {
+											window.location = "addStudentToClass/clearStudentClass?classSemesterId="
+													+ $(
+															"#select-class option:selected")
+															.val();
+										});
+					});
 </script>
 </head>
 <body>
@@ -133,21 +154,21 @@
 						</c:forEach>
 					</select>
 				</div>
-				<button id="btn-set-student-semester" class="button" data-role="hint"
-					data-hint-background="#1CB7EC" data-hint-color="fg-white"
-					data-hint-position="top"
+				<button id="btn-set-student-semester" class="button"
+					data-role="hint" data-hint-background="#1CB7EC"
+					data-hint-color="fg-white" data-hint-position="top"
 					data-hint="Auto Set Classes For All Students">Set Students
 					For Semester</button>
-				<button id="btn-clear-student-semester" class="button" data-role="hint"
-					data-hint-background="#1CB7EC" data-hint-color="fg-white"
-					data-hint-position="top"
+				<button id="btn-clear-student-semester" class="button"
+					data-role="hint" data-hint-background="#1CB7EC"
+					data-hint-color="fg-white" data-hint-position="top"
 					data-hint="Auto Clear Students From All Classes">Clear
 					Students Of Semester</button>
 			</div>
 			<div style="width: 100%;">
 				<div style="width: 100px; text-align: left; display: inline-block">CLASS:</div>
 				<div class="input-control select">
-					<select  id="select-class" onchange="selectClassSemester(this)">
+					<select id="select-class" onchange="selectClassSemester(this)">
 						<c:forEach var="item" items="${classSemesters}">
 							<option value="${item.classSemesterId}"
 								${item.classSemesterId == classSemesterId ? 'selected="selected"' : ''}>${item.classFPT.code}</option>
@@ -156,9 +177,8 @@
 				</div>
 				<button id="btn-set-student-class" class="button" data-role="hint"
 					data-hint-background="#1CB7EC" data-hint-color="fg-white"
-					data-hint-position="top"
-					data-hint="Auto Set Students For A Class">Set Students
-					For Class</button>
+					data-hint-position="top" data-hint="Auto Set Students For A Class">Set
+					Students For Class</button>
 				<button id="btn-clear-student-class" class="button" data-role="hint"
 					data-hint-background="#1CB7EC" data-hint-color="fg-white"
 					data-hint-position="top"
@@ -179,9 +199,12 @@
 			<div style="width: 100%; display: flex;">
 				<div style="width: 49%; margin-right: 15px;">
 					<h3>List of suitable students</h3>
-					
-					<div>Total: <b>${fn:length(freeStudents)}</b></div>
-					<table class="table border bordered striped hovered" style="width: 100%;">
+
+					<div>
+						Total: <b>${fn:length(freeStudents)}</b>
+					</div>
+					<table class="table border bordered striped hovered"
+						style="width: 100%;">
 						<thead>
 							<tr>
 								<th width="80">ID</th>
@@ -202,17 +225,21 @@
 									</tr>
 								</c:forEach>
 							</c:if>
-							<c:if test="${empty freeStudents}"> 
-								<td colspan="4" style="text-align:center">No data for this!</td>
+							<c:if test="${empty freeStudents}">
+								<td colspan="4" style="text-align: center">No data for
+									this!</td>
 							</c:if>
 						</tbody>
 					</table>
 				</div>
 				<div style="width: 49%;">
 					<h3>List of students in this class course semester</h3>
-					
-					<div>Total: <b>${fn:length(busyStudents)}</b></div>
-					<table class="table border bordered striped hovered" style="width: 100%;">
+
+					<div>
+						Total: <b>${fn:length(busyStudents)}</b>
+					</div>
+					<table class="table border bordered striped hovered"
+						style="width: 100%;">
 						<thead>
 							<tr>
 								<th width="80">ID</th>
@@ -233,8 +260,9 @@
 									</tr>
 								</c:forEach>
 							</c:if>
-							<c:if test="${empty busyStudents}"> 
-								<td colspan="4" style="text-align:center">No data for this!</td>
+							<c:if test="${empty busyStudents}">
+								<td colspan="4" style="text-align: center">No data for
+									this!</td>
 							</c:if>
 						</tbody>
 					</table>

@@ -597,8 +597,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 				timetableService.addTimetable(guestTimetable);
 			}
 		}
-		System.out.println("Number of slot 3+4: " + timetableService.countNumberSlots34(semesterId) + "/"
-				+ timetableService.countNumberSlots(semesterId, true));
+		System.out.println("Percent of slot 3+4: " + timetableService.countPercentSlots34(semesterId));
 	}
 
 	@Override

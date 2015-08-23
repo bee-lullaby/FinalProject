@@ -33,8 +33,6 @@ public class TeacherArrangementServiceImpl implements TeacherArrangementService 
 	private ClassCourseSemesterService classCourseSemesterService;
 	@Autowired
 	private TimetableService timetableService;
-	@Autowired
-	private TeacherSemesterService teacherSemesterService;
 
 	@Override
 	public List<Department> getListDepartment() {
@@ -54,8 +52,7 @@ public class TeacherArrangementServiceImpl implements TeacherArrangementService 
 	@Override
 	public List<Course> getListCourse(int departmentId) {
 		List<Course> results = new ArrayList<Course>();
-		Department department = departmentService
-				.getDepartmentById(departmentId);
+		Department department = departmentService.getDepartmentById(departmentId);
 		for (Course course : department.getCourses()) {
 			Course newCourse = new Course();
 			newCourse.setCourseId(course.getCourseId());
@@ -71,7 +68,8 @@ public class TeacherArrangementServiceImpl implements TeacherArrangementService 
 
 		CourseSemester courseSemester = new CourseSemester();
 
-		CourseSemester cs = courseSemesterService.getCourseSemesterByCourseSemester(courseId, semesterId, true, true, false);
+		CourseSemester cs = courseSemesterService.getCourseSemesterByCourseSemester(courseId, semesterId, true, true,
+				false);
 		// set CourseSemeter ID
 		courseSemester.setCourseSemesterId(cs.getCourseSemesterId());
 
@@ -147,109 +145,86 @@ public class TeacherArrangementServiceImpl implements TeacherArrangementService 
 	}
 
 	@Override
-	public List<DataTeacherArrangement> getDataTeacherArrangement(
-			int semesterId, int courseId) {
+	public List<DataTeacherArrangement> getDataTeacherArrangement(int semesterId, int courseId) {
 		List<DataTeacherArrangement> dta = new ArrayList<DataTeacherArrangement>();
 
-		CourseSemester cs = courseSemesterService
-				.getCourseSemesterByCourseSemester(courseId, semesterId, true,
-						true, false);
+		CourseSemester cs = courseSemesterService.getCourseSemesterByCourseSemester(courseId, semesterId, true, true,
+				false);
 
-		Set<ClassCourseSemester> classCourseSemesters = cs
-				.getClassCourseSemesters();
+		Set<ClassCourseSemester> classCourseSemesters = cs.getClassCourseSemesters();
 
 		Set<ClassCourseSemester> reCreate = new LinkedHashSet<ClassCourseSemester>();
 		for (ClassCourseSemester ccs : classCourseSemesters) {
-			reCreate.add(classCourseSemesterService.getClassCourseSemesterById(
-					ccs.getClassCourseSemesterId(), true, false));
+			reCreate.add(
+					classCourseSemesterService.getClassCourseSemesterById(ccs.getClassCourseSemesterId(), true, false));
 		}
 
 		for (ClassCourseSemester classCourseSemester : reCreate) {
 			DataTeacherArrangement dtaObj = new DataTeacherArrangement();
 
 			ClassCourseSemester newCCS = new ClassCourseSemester();
-			newCCS.setClassCourseSemesterId(classCourseSemester
-					.getClassCourseSemesterId());
+			newCCS.setClassCourseSemesterId(classCourseSemester.getClassCourseSemesterId());
 
 			ClassSemester classSemester = new ClassSemester();
-			classSemester.setClassSemesterId(classCourseSemester
-					.getClassSemester().getClassSemesterId());
+			classSemester.setClassSemesterId(classCourseSemester.getClassSemester().getClassSemesterId());
 			ClassFPT classFPT = new ClassFPT();
-			classFPT.setClassId(classCourseSemester.getClassSemester()
-					.getClassFPT().getClassId());
-			classFPT.setCode(classCourseSemester.getClassSemester()
-					.getClassFPT().getCode());
+			classFPT.setClassId(classCourseSemester.getClassSemester().getClassFPT().getClassId());
+			classFPT.setCode(classCourseSemester.getClassSemester().getClassFPT().getCode());
 			classSemester.setClassFPT(classFPT);
 			newCCS.setClassSemester(classSemester);
 
 			CourseSemester courseSemester = new CourseSemester();
-			courseSemester.setCourseSemesterId(classCourseSemester
-					.getCourseSemester().getCourseSemesterId());
+			courseSemester.setCourseSemesterId(classCourseSemester.getCourseSemester().getCourseSemesterId());
 			Course course = new Course();
-			course.setCourseId(classCourseSemester.getCourseSemester()
-					.getCourse().getCourseId());
-			course.setCode(classCourseSemester.getCourseSemester().getCourse()
-					.getCode());
+			course.setCourseId(classCourseSemester.getCourseSemester().getCourse().getCourseId());
+			course.setCode(classCourseSemester.getCourseSemester().getCourse().getCode());
 			courseSemester.setCourse(course);
 			newCCS.setCourseSemester(courseSemester);
 
 			dtaObj.setClassCourseSemester(newCCS);
 
-			Set<ClassCourseSemester> listConflict = getListClassConflicts(
-					classCourseSemester, reCreate);
+			Set<ClassCourseSemester> listConflict = getListClassConflicts(classCourseSemester, reCreate);
 			if (listConflict != null && !listConflict.isEmpty()) {
 				dtaObj.setConflictClasses(listConflict);
 			}
-			
+
 			dtaObj.setTeacherAvailable(getListTeacherAvailableForClassCourse(classCourseSemester));
-			
+
 			dta.add(dtaObj);
 		}
 		return dta;
 	}
 
 	@Override
-	public Set<ClassCourseSemester> getListClassConflicts(
-			ClassCourseSemester classCourseSemester,
+	public Set<ClassCourseSemester> getListClassConflicts(ClassCourseSemester classCourseSemester,
 			Set<ClassCourseSemester> classCourseSemesters) {
 		Set<ClassCourseSemester> result = new LinkedHashSet<ClassCourseSemester>();
 
 		for (ClassCourseSemester ccs : classCourseSemesters) {
-			if (ccs.getClassCourseSemesterId() == classCourseSemester
-					.getClassCourseSemesterId()) {
+			if (ccs.getClassCourseSemesterId() == classCourseSemester.getClassCourseSemesterId()) {
 				continue;
 			}
 			boolean check = false;
-			for (Timetable timetableToCheck : classCourseSemester
-					.getTimetable()) {
+			for (Timetable timetableToCheck : classCourseSemester.getTimetable()) {
 				for (Timetable timetableOfClass : ccs.getTimetable()) {
-					if (timetableToCheck.getDate().equals(
-							timetableOfClass.getDate())
-							&& timetableToCheck.getSlot() == timetableOfClass
-									.getSlot()) {
+					if (timetableToCheck.getDate().equals(timetableOfClass.getDate())
+							&& timetableToCheck.getSlot() == timetableOfClass.getSlot()) {
 						ClassCourseSemester newCCS = new ClassCourseSemester();
-						newCCS.setClassCourseSemesterId(ccs
-								.getClassCourseSemesterId());
+						newCCS.setClassCourseSemesterId(ccs.getClassCourseSemesterId());
 
 						ClassSemester classSemester = new ClassSemester();
-						classSemester.setClassSemesterId(ccs.getClassSemester()
-								.getClassSemesterId());
+						classSemester.setClassSemesterId(ccs.getClassSemester().getClassSemesterId());
 						ClassFPT classFPT = new ClassFPT();
-						classFPT.setClassId(ccs.getClassSemester()
-								.getClassFPT().getClassId());
-						classFPT.setCode(ccs.getClassSemester().getClassFPT()
-								.getCode());
+						classFPT.setClassId(ccs.getClassSemester().getClassFPT().getClassId());
+						classFPT.setCode(ccs.getClassSemester().getClassFPT().getCode());
 						classSemester.setClassFPT(classFPT);
 						newCCS.setClassSemester(classSemester);
 
 						CourseSemester courseSemester = new CourseSemester();
-						courseSemester.setCourseSemesterId(ccs
-								.getCourseSemester().getCourseSemesterId());
+						courseSemester.setCourseSemesterId(ccs.getCourseSemester().getCourseSemesterId());
 						Course course = new Course();
-						course.setCourseId(ccs.getCourseSemester().getCourse()
-								.getCourseId());
-						course.setCode(ccs.getCourseSemester().getCourse()
-								.getCode());
+						course.setCourseId(ccs.getCourseSemester().getCourse().getCourseId());
+						course.setCode(ccs.getCourseSemester().getCourse().getCode());
 						courseSemester.setCourse(course);
 						newCCS.setCourseSemester(courseSemester);
 
@@ -267,33 +242,34 @@ public class TeacherArrangementServiceImpl implements TeacherArrangementService 
 	}
 
 	@Override
-	public Set<TeacherSemester> getListTeacherAvailableForClassCourse(
-			ClassCourseSemester classCourseSemester) {
+	public Set<TeacherSemester> getListTeacherAvailableForClassCourse(ClassCourseSemester classCourseSemester) {
 		Set<TeacherSemester> result = new LinkedHashSet<TeacherSemester>();
-		
+
 		List<ClassCourseSemester> ccs = new ArrayList<ClassCourseSemester>();
 		ccs.add(classCourseSemester);
-		List<Timetable> timetableOfClassCourse = timetableService
-				.listTimetablesByCCSs(ccs);
+		List<Timetable> timetableOfClassCourse = timetableService.listTimetablesByCCSs(ccs);
 
 		List<TeacherSemester> teacherSemesters = new ArrayList<TeacherSemester>();
-		CourseSemester cs = courseSemesterService.getCourseSemesterById(classCourseSemester.getCourseSemester().getCourseSemesterId(), false, true, false);
-		
-		for(TeacherCourseSemester tcs : cs.getTeacherCourseSemesters()) {
+		CourseSemester cs = courseSemesterService.getCourseSemesterById(
+				classCourseSemester.getCourseSemester().getCourseSemesterId(), false, true, false);
+
+		for (TeacherCourseSemester tcs : cs.getTeacherCourseSemesters()) {
 			teacherSemesters.add(tcs.getTeacherSemester());
 		}
-		
-		for(TeacherSemester teacherSemester : teacherSemesters) {
-			List<Timetable> timetableOfTeacher = timetableService.listTimetableByTeacher(teacherSemester.getTeacherSemesterId());
+
+		for (TeacherSemester teacherSemester : teacherSemesters) {
+			List<Timetable> timetableOfTeacher = timetableService
+					.listTimetableByTeacher(teacherSemester.getTeacherSemesterId());
 			int count = 0;
-			for(Timetable t : timetableOfTeacher) {
-					count += TimetableUtils.findNumberSameDaySlot(timetableOfClassCourse, t.getDate(), t.getSlot());	
+			for (Timetable t : timetableOfTeacher) {
+				count += TimetableUtils.findNumberSameDaySlot(timetableOfClassCourse, t.getDate(), t.getSlot());
 			}
-			if(!timetableOfClassCourse.isEmpty() && timetableOfClassCourse.get(0).getTeacherSemester() != null
-					&& teacherSemester.getTeacherSemesterId() == timetableOfClassCourse.get(0).getTeacherSemester().getTeacherSemesterId()) {
+			if (!timetableOfClassCourse.isEmpty() && timetableOfClassCourse.get(0).getTeacherSemester() != null
+					&& teacherSemester.getTeacherSemesterId() == timetableOfClassCourse.get(0).getTeacherSemester()
+							.getTeacherSemesterId()) {
 				count = 0;
 			}
-			
+
 			if (count == 0) {
 				TeacherSemester ts = new TeacherSemester();
 				ts.setTeacherSemesterId(teacherSemester.getTeacherSemesterId());
@@ -303,19 +279,21 @@ public class TeacherArrangementServiceImpl implements TeacherArrangementService 
 				ts.setTeacher(teacher);
 				result.add(ts);
 
-//				System.out.println(teacherSemester.getTeacher().getName() + " " +classCourseSemester.getCourseSemester().getCourse().getCode()
-//											+" " +classCourseSemester.getClassSemester().getClassFPT().getCode());
+				// System.out.println(teacherSemester.getTeacher().getName() + "
+				// "
+				// +classCourseSemester.getCourseSemester().getCourse().getCode()
+				// +" "
+				// +classCourseSemester.getClassSemester().getClassFPT().getCode());
 			}
 		}
-		
+
 		return result;
 	}
 
 	@Override
 	public boolean updateTimetable(List<Timetable> timetables) {
 		for (Timetable timetable : timetables) {
-			Timetable t = timetableService.getTimetableById(timetable
-					.getTimeTableId());
+			Timetable t = timetableService.getTimetableById(timetable.getTimeTableId());
 
 			if (timetable.getTeacherSemester() != null) {
 				t.setTeacherSemester(timetable.getTeacherSemester());

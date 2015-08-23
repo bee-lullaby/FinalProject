@@ -51,7 +51,7 @@ public interface TimetableService {
 
 	public long countNumberSlots(int semesterId, boolean haveTeacher);
 
-	public long countNumberSlots34(int semesterId);
+	public double countPercentSlots34(int semesterId);
 
 	public List<Timetable> listTimetablesByClassSemester(int classSemesterId);
 }

@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,32 +151,57 @@ public class TimetableServiceImpl implements TimetableService {
 	}
 
 	@Override
-	public long countNumberSlots34(int semesterId) {
+	public double countPercentSlots34(int semesterId) {
 		List<Timetable> timetables = listTimetablesBySemester(semesterId);
-		HashMap<String, Integer> slotMap = new HashMap<>();
+		Map<TeacherSemester, Set<String>> teacherDayMap = new HashMap<>();
+		Map<TeacherSemester, Map<String, Integer>> teacherSlotMap = new HashMap<>();
 		for (Timetable timetable : timetables) {
 			int slot = timetable.getSlot();
 			TeacherSemester teacherSemester = timetable.getTeacherSemester();
-			if ((slot == 3 || slot == 4) && teacherSemester != null) {
+			if (teacherSemester != null) {
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTime(timetable.getDate());
 				String keyString = calendar.get(Calendar.YEAR) + "/" + calendar.get(Calendar.MONTH) + "/"
-						+ calendar.get(Calendar.DAY_OF_MONTH) + "/" + teacherSemester.getTeacher().getAccount();
-				int sum = 0;
-				if (slotMap.containsKey(keyString)) {
-					sum = slotMap.get(keyString);
+						+ calendar.get(Calendar.DAY_OF_MONTH);
+				Set<String> days;
+				if (teacherDayMap.containsKey(teacherSemester)) {
+					days = teacherDayMap.get(teacherSemester);
+				} else {
+					days = new HashSet<>();
+					teacherDayMap.put(teacherSemester, days);
 				}
-				sum += slot;
-				slotMap.put(keyString, sum);
+				days.add(keyString);
+				if (slot == 3 || slot == 4) {
+					Map<String, Integer> slotMap;
+					if (teacherSlotMap.containsKey(teacherSemester)) {
+						slotMap = teacherSlotMap.get(teacherSemester);
+						if (slotMap.containsKey(keyString)) {
+							slotMap.put(keyString, slotMap.get(keyString) + slot);
+						} else {
+							slotMap.put(keyString, slot);
+						}
+					} else {
+						slotMap = new HashMap<String, Integer>();
+						teacherSlotMap.put(teacherSemester, slotMap);
+					}
+				}
 			}
 		}
-		int count = 0;
-		for (int sum : slotMap.values()) {
-			if (sum == 7) {
-				count++;
+		double totalDay = 0;
+		for (Set<String> value : teacherDayMap.values()) {
+			totalDay += value.size();
+		}
+		double countSlots34 = 0;
+		for (Map<String, Integer> slotMap : teacherSlotMap.values()) {
+			for (Integer slot : slotMap.values()) {
+				if (slot == 7) {
+					countSlots34++;
+				}
 			}
 		}
-		return count;
+		System.out.println("Total teaching days: " + totalDay);
+		System.out.println("Total time slot 3+4: " + countSlots34);
+		return totalDay / countSlots34;
 	}
 
 	@Override

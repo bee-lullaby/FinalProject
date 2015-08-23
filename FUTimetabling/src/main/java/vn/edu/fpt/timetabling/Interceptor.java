@@ -20,7 +20,7 @@ public class Interceptor extends HandlerInterceptorAdapter {
 			response.sendRedirect(url);
 			return false;
 		}
-		if (url.equals(Const.URL) || url.contains("logout") || url.equals("http://localhost:8080/Timetabling/back")) {
+		if (url.equals(Const.URL) || url.contains("logout") || url.equals(Const.URL_BACK)) {
 			return true;
 		} else if (SessionUtils.isSessionValid(httpSession)) {
 			if (url.contains("/staff") && SessionUtils.isStaff(httpSession)) {

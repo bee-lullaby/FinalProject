@@ -130,6 +130,7 @@ public class AutomaticTimetablingController extends GeneralController {
 					.listTimetableByTeacher(teacherSemester.getTeacherSemesterId());
 			timetablesMap.put(teacherSemester, timetables);
 		}
+		timetableService.countPercentSlots34(semesterId);
 		return new ModelAndView("excelViewTeacher", "timetablesMap", timetablesMap);
 	}
 }
