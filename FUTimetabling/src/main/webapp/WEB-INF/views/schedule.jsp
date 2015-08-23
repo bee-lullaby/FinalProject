@@ -63,7 +63,8 @@
 	<div style="width: 100%; height: 100%">
 		<div style="width: 80%; margin: 0 auto;">
 			<h1>
-				<a href="/Timetabling/staff/scheduleInfo" class="nav-button transform"><span></span></a>
+				<a href="/FUTimetabling/staff/scheduleInfo"
+				class="nav-button transform"><span></span></a>
 				&nbsp;Schedule - ${semesterName}
 			</h1>
 

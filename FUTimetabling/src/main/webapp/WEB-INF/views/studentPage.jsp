@@ -164,7 +164,7 @@
 				<span class="sub-header no-margin text-light">You are logged
 					in as ${accountType}</span> <span class="icon mif-user"></span>
 			</button>
-			<a href="/Timetabling/logout"
+			<a href="/FUTimetabling/logout"
 				class="square-button bg-transparent bg-hover-dark no-border"> <span
 				class="mif-switch"></span>
 			</a>

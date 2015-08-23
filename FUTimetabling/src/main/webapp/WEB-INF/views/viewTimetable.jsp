@@ -112,7 +112,7 @@ h3 {
 		<div style="margin-top: 25px;">
 			<div style="width: 90%; margin: 0 auto;">
 				<h1>
-					<a href="/Timetabling/staff" class="nav-button transform"><span></span></a>
+					<t:nav />
 					&nbsp;Timetable
 				</h1>
 			</div>

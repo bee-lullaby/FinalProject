@@ -69,18 +69,18 @@
 		_init();
 		
 		$("#btn-back").on("click", function() {
-			window.location = "/Timetabling/staff";
+			window.location = "/FUTimetabling/staff";
 		});
 		
 		$("#btn-manual").on("click", function() {
 			var semester = $("#select-semester option:selected").val()
 			
 			if(!$("#div-create-timetable").is(":hidden")) {
-				window.location = "/Timetabling/staff/schedule?semesterId=" +semester;
+				window.location = "/FUTimetabling/staff/schedule?semesterId=" +semester;
 			} else if(!$("#div-room-arrangement").is(":hidden")) {
-				window.location = "/Timetabling/staff/roomArrangement?semesterId=" +semester;
+				window.location = "/FUTimetabling/staff/roomArrangement?semesterId=" +semester;
 			} else if(!$("#div-teacher-arrangement").is(":hidden")) {
-				window.location = "/Timetabling/staff/teacherArrangement?semesterId=" +semester;
+				window.location = "/FUTimetabling/staff/teacherArrangement?semesterId=" +semester;
 			}
 		});
 		
@@ -89,7 +89,7 @@
 		});
 		
 		$("#btn-automatic").on("click", function() {
-			window.location = "/Timetabling/staff/automaticTimetabling?semesterId=" +_urlParam("semesterId");
+			window.location = "/FUTimetabling/staff/automaticTimetabling?semesterId=" +_urlParam("semesterId");
 		})
 		
 		function _init() {

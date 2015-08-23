@@ -69,7 +69,7 @@ $(document).ready(function() {
 	    return i;
 	}
 	$("#btn-finish").on("click", function() {
-		window.location = "/Timetabling/staff"
+		window.location = "/FUTimetabling/staff"
 	});
 	$("#btn-download").on("click", function() {
 		alert("download");
@@ -135,6 +135,19 @@ function _successNotify() {
 			</table>
 			<button class="button" id="btn-finish">Finish</button>
 			<button class="button" id="btn-download">Download</button>
+		</div>
+	</div>
+	
+	<div id="dialog-download" data-role="dialog" class="padding20"
+		data-overlay="true" data-overlay-color="op-dark"
+		data-windows-style="true">
+		<div style="width: 500px; margin: 0 auto; text-align: center;">
+			<h2>DOWNLOAD: </h2>
+			
+			<div id="btn-group" style="margin-top: 25px;">
+				<button class="button" id="btn-delete-accept">DOWNLOAD</button>
+				<button class="button" id="btn-delete-decline">CANCEL</button>
+			</div>
 		</div>
 	</div>
 </body>

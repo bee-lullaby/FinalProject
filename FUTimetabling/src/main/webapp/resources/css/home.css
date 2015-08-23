@@ -1,0 +1,78 @@
+.fade-in {
+	opacity: 0;
+	-webkit-animation: fadeIn ease-in 1;
+	-moz-animation: fadeIn ease-in 1;
+	animation: fadeIn ease-in 1;
+	-webkit-animation-fill-mode: forwards;
+	-moz-animation-fill-mode: forwards;
+	animation-fill-mode: forwards;
+	-webkit-animation-duration: 2s;
+	-moz-animation-duration: 2s;
+	animation-duration: 2s;
+}
+
+@-webkit-keyframes fadeIn {
+	from { 
+		opacity:0;
+		}
+
+	to {
+		opacity: 1;
+	}
+
+}
+@-moz-keyframes fadeIn {
+	from { 
+		opacity:0;
+	}
+
+	to {
+		opacity: 1;
+	}
+
+}
+@keyframes fadeIn {
+	from { 
+		opacity:0;
+	}
+
+	to {
+		opacity: 1;
+	}
+
+}
+#bottom-bar {
+	width: 100%;
+	text-align: center;
+	margin-top: 25px;
+}
+
+#bottom-bar #nav-bottom-bar {
+	margin: 1rem;
+}
+
+#bottom-bar #nav-bottom-bar a {
+	line-height: 3.125rem;
+	padding: 0.325rem .625rem;
+	font-size: 0.9rem;
+	cursor: pointer;
+	color: inherit;
+	display: inline-block;
+	position: relative;
+	vertical-align: middle !important;
+	text-decoration: none;
+	height: 3.125rem;
+}
+
+#bottom-bar #nav-bottom-bar a:hover {
+	border-bottom: 2px solid #fff;
+}
+
+@font-face {
+	font-family: virtue;
+	src: url('resources/fonts/virtue.ttf');
+}
+
+h1 {
+	font-family: virtue;
+}

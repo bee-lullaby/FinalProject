@@ -101,7 +101,7 @@ h3 {
 	<div style="width: 100%;">
 		<div id="title" style="width: 80%; margin: 0 auto; color: #71b1d1;" class="fade-in">
 			<h1>
-				<a href="/Timetabling/staff" class="nav-button transform"><span></span></a>
+				<a href="/FUTimetabling/staff" class="nav-button transform"><span></span></a>
 				&nbsp;Building
 			</h1>
 		</div>

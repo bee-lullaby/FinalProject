@@ -98,7 +98,7 @@ h3 {
 		<div id="title" style="width: 80%; margin: 0 auto; color: #71b1d1;"
 			class="fade-in">
 			<h1>
-				<a href="/Timetabling/staff" class="nav-button transform"><span></span></a>
+				<t:nav />
 				&nbsp;Classes
 			</h1>
 		</div>
@@ -207,7 +207,7 @@ h3 {
 			enctype="multipart/form-data" style="display: inline-block;">
 			<div>
 				<label class="input-control radio"> <input type="radio"
-					name="act" value="0" checked> <span class="check"></span> <span
+					name="act" value="0" > <span class="check"></span> <span
 					class="caption">Add Classes</span>
 				</label>
 			</div>

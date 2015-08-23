@@ -102,9 +102,7 @@ h3 {
 	</div>
 	<div style="width: 80%; margin: 0 auto; margin-bottom: 100px;">
 		<h2>
-			<a href="/Timetabling/staff/scheduleInfo"
-				class="nav-button transform"><span></span></a> &nbsp; Teacher
-			Arrangement
+			<t:nav /> &nbsp; Teacher Arrangement
 		</h2>
 		<div style="display: flex; margin-top: 30px;">
 			<div id="select-semesters" class="left" style="display: inline-block">
