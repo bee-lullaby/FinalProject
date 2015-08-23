@@ -127,6 +127,11 @@
 															"#select-class option:selected")
 															.val();
 										});
+						
+						$("#btn-download").on("click",function() {
+							window.location = "downloadStudentList?semesterId=" + $("#select-semester option:selected").val();
+						});
+
 					});
 </script>
 </head>
@@ -157,13 +162,15 @@
 				<button id="btn-set-student-semester" class="button"
 					data-role="hint" data-hint-background="#1CB7EC"
 					data-hint-color="fg-white" data-hint-position="top"
-					data-hint="Auto Set Classes For All Students">Set Students
-					For Semester</button>
+					data-hint="Auto Set Classes For All Students">Set Students</button>
 				<button id="btn-clear-student-semester" class="button"
 					data-role="hint" data-hint-background="#1CB7EC"
 					data-hint-color="fg-white" data-hint-position="top"
-					data-hint="Auto Clear Students From All Classes">Clear
-					Students Of Semester</button>
+					data-hint="Auto Clear Students From All Classes">Clear Students</button>
+				<button id="btn-download" class="button"
+					data-role="hint" data-hint-background="#1CB7EC"
+					data-hint-color="fg-white" data-hint-position="top"
+					data-hint="Download List Students">Download</button>
 			</div>
 			<div style="width: 100%;">
 				<div style="width: 100px; text-align: left; display: inline-block">CLASS:</div>
