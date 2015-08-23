@@ -248,4 +248,9 @@ public class Student {
 				+ semester + ", classSemester=" + classSemester + "]";
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		Student student = (Student) obj;
+		return student.getStudentCode().equals(this.studentCode);
+	}
 }

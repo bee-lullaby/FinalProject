@@ -3,6 +3,7 @@ package vn.edu.fpt.timetabling;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassSemester;
 import vn.edu.fpt.timetabling.model.Semester;
+import vn.edu.fpt.timetabling.model.Student;
 import vn.edu.fpt.timetabling.model.TeacherSemester;
 import vn.edu.fpt.timetabling.model.Timetable;
 import vn.edu.fpt.timetabling.service.ClassCourseSemesterService;
@@ -27,6 +30,7 @@ import vn.edu.fpt.timetabling.service.RoomService;
 import vn.edu.fpt.timetabling.service.ScheduleInfoService;
 import vn.edu.fpt.timetabling.service.ScheduleService;
 import vn.edu.fpt.timetabling.service.SemesterService;
+import vn.edu.fpt.timetabling.service.StudentService;
 import vn.edu.fpt.timetabling.service.TeacherSemesterService;
 import vn.edu.fpt.timetabling.service.TimetableService;
 
@@ -48,6 +52,8 @@ public class AutomaticTimetablingController extends GeneralController {
 	private ScheduleInfoService scheduleInfoService;
 	@Autowired
 	private TimetableService timetableService;
+	@Autowired
+	private StudentService studentService;
 
 	@RequestMapping(value = "/staff/automaticTimetabling", params = { "semesterId" })
 	public String automaticSchedule(@RequestParam int semesterId, HttpSession httpSession, Model model) {
@@ -133,5 +139,26 @@ public class AutomaticTimetablingController extends GeneralController {
 		}
 		timetableService.countPercentSlots34(semesterId);
 		return new ModelAndView("excelViewTeacher", "timetablesMap", timetablesMap);
+	}
+
+	@RequestMapping(value = "/staff/downloadStudentList", method = RequestMethod.GET)
+	public ModelAndView downloadStudentList(@RequestParam(value = "semesterId", required = true) int semesterId,
+			Model model, HttpSession httpSession, HttpServletResponse response) throws IOException {
+		Semester semester = semesterService.getSemesterById(semesterId, true, false, false, false);
+		Set<ClassSemester> classSemesters = semester.getClassSemesters();
+		HashMap<ClassSemester, Map<String, Student>> studentsMap = new HashMap<>();
+		for (ClassSemester classSemester : classSemesters) {
+			int classSemesterId = classSemester.getClassSemesterId();
+			classSemester = classSemesterService.getClassSemesterById(classSemesterId, true);
+			Map<String, Student> students = new HashMap<>();
+			for (ClassCourseSemester classCourseSemester : classSemester.getClassCourseSemesters()) {
+				for (Student student : studentService.listStudentsInClassCourseSemester(classSemesterId,
+						classCourseSemester.getClassCourseSemesterId())) {
+					students.put(student.getStudentCode(), student);
+				}
+			}
+			studentsMap.put(classSemester, students);
+		}
+		return new ModelAndView("excelViewStudentList", "studentsMap", studentsMap);
 	}
 }
