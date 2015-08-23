@@ -233,7 +233,8 @@ public class TimetableDAOImpl implements TimetableDAO {
 	@Override
 	public List<Timetable> listTimetablesByClassSemester(int classSemesterId) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T"
-				+ " WHERE T.classCourseSemester.classSemester.classSemesterId = :classSemesterId" + " ORDER BY T.date";
+				+ " WHERE T.classCourseSemester.classSemester.classSemesterId = :classSemesterId"
+				+ " ORDER BY T.date, T.slot";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("classSemesterId", classSemesterId);
 		List<Timetable> timetables = (List<Timetable>) query.list();

@@ -100,10 +100,8 @@ public class StudentDAOImpl implements StudentDAO {
 			classCourseSemesters.add(classCourseSemester);
 		}
 		// get all timetable of all classCourseSemesters
-		System.out.println(classCourseSemesters.size());
 		List<Timetable> timetablesOfClassSemester = timetableDAO
 				.listTimetablesByClassCourseSemesters(classCourseSemesters);
-		System.out.println(timetablesOfClassSemester.size());
 		// select student not in this class
 		String hql = "FROM vn.edu.fpt.timetabling.model.Student S"
 				+ " WHERE S.specialized.specializedId = :specializedId AND S.semester = :semester";

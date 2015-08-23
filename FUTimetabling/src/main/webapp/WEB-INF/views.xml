@@ -3,5 +3,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
-	<bean id="excelView" class="vn.edu.fpt.timetabling.utils.ExcelBuilder" />
+	<bean id="excelViewClass" class="vn.edu.fpt.timetabling.utils.ExcelBuilderClass" />
+	<bean id="excelViewTeacher" class="vn.edu.fpt.timetabling.utils.ExcelBuilderTeacher" />
 </beans>

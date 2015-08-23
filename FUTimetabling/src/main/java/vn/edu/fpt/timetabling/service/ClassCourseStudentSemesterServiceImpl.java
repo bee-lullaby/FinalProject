@@ -223,8 +223,10 @@ public class ClassCourseStudentSemesterServiceImpl implements ClassCourseStudent
 			List<ClassSemester> classSemesters = classSemesterService.listClassSemestersBySpecializedSemester(
 					semesterId, specialized.getSpecializedId(), detailSpecialized.getSpecializedId(), semesterNumber);
 			int size = studentsGroup.size();
-			if (size > 2 * Const.StudentNumber.MAX_NUMBER_OF_STUDENTS_IN_CLASS) {
-				int numberClassFull = size / Const.StudentNumber.MAX_NUMBER_OF_STUDENTS_IN_CLASS - 1;
+			if (size > Const.StudentNumber.MAX_NUMBER_OF_STUDENTS_IN_CLASS
+					+ Const.StudentNumber.MIN_NUMBER_OF_STUDENTS_IN_CLASS) {
+				int numberClassFull = (size - Const.StudentNumber.MIN_NUMBER_OF_STUDENTS_IN_CLASS)
+						/ Const.StudentNumber.MAX_NUMBER_OF_STUDENTS_IN_CLASS;
 				int numberOldClassUsed = Math.min(numberClassFull, classSemesters.size());
 				for (int i = 0; i < numberOldClassUsed; i++) {
 					ClassSemester classSemester = classSemesters.remove(0);
@@ -242,16 +244,16 @@ public class ClassCourseStudentSemesterServiceImpl implements ClassCourseStudent
 				}
 			}
 			size = studentsGroup.size();
-			if (2 * Const.StudentNumber.MAX_NUMBER_OF_STUDENTS_IN_CLASS >= size
+			if (Const.StudentNumber.MAX_NUMBER_OF_STUDENTS_IN_CLASS
+					+ Const.StudentNumber.MIN_NUMBER_OF_STUDENTS_IN_CLASS >= size
 					&& size > Const.StudentNumber.MAX_NUMBER_OF_STUDENTS_IN_CLASS) {
-				int sizeOne = (int) Math.ceil(size / 2.0);
 				ClassSemester classSemester;
 				if (classSemesters.size() > 0) {
 					classSemester = classSemesters.remove(0);
 				} else {
 					classSemester = createNewClass(specialized, detailSpecialized, semester, semesterNumber);
 				}
-				for (int i = 0; i < sizeOne; i++) {
+				for (int i = 0; i < Const.StudentNumber.MIN_NUMBER_OF_STUDENTS_IN_CLASS; i++) {
 					addClassCourseStudentSemesters(classSemester, studentsGroup.remove(0));
 				}
 			}

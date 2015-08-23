@@ -247,7 +247,6 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 		}
 		return "redirect:/staff/addStudentToClass";
 	}
-	
 
 	@RequestMapping(value = "/staff/addStudentToClass/clearStudentClass", method = RequestMethod.GET, params = {
 			"classSemesterId" })
@@ -263,7 +262,7 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 	}
 
 	@RequestMapping(value = "/staff/addStudentToClass/clearStudentClasses", method = RequestMethod.GET, params = {
-	"semesterId" })
+			"semesterId" })
 	public String clearStudentClasses(@RequestParam int semesterId, HttpSession httpSession, Model model) {
 		studentService.clearStudentClasses();
 		classCourseStudentSemesterService.deleteClassCourseStudentSemesters(semesterId);
@@ -279,7 +278,7 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 		httpSession.setAttribute("success", "Auto put student into class successful!");
 		return "redirect:/staff/addStudentToClass?semesterId=" + classSemester.getSemester().getSemesterId();
 	}
-	
+
 	@RequestMapping(value = "/staff/addStudentToClass/autoStudentClasses", method = RequestMethod.GET, params = {
 			"semesterId" })
 	public String autoStudentClasses(@RequestParam int semesterId, HttpSession httpSession, Model model) {
@@ -287,7 +286,7 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 		httpSession.setAttribute("success", "Auto put student into classes successful!");
 		return "redirect:/staff/addStudentToClass?semesterId=" + semesterId;
 	}
-	
+
 	@RequestMapping("/staff/addStudentToClass/remove/{studentId}")
 	public String removeClassCourseStudentSemester(HttpSession session, @PathVariable("studentId") int studentId,
 			Model model) {

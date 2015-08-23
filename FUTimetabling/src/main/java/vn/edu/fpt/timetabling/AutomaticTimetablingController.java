@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import vn.edu.fpt.timetabling.model.ClassSemester;
 import vn.edu.fpt.timetabling.model.Semester;
+import vn.edu.fpt.timetabling.model.TeacherSemester;
 import vn.edu.fpt.timetabling.model.Timetable;
 import vn.edu.fpt.timetabling.service.ClassCourseSemesterService;
 import vn.edu.fpt.timetabling.service.ClassSemesterService;
@@ -26,6 +27,7 @@ import vn.edu.fpt.timetabling.service.RoomService;
 import vn.edu.fpt.timetabling.service.ScheduleInfoService;
 import vn.edu.fpt.timetabling.service.ScheduleService;
 import vn.edu.fpt.timetabling.service.SemesterService;
+import vn.edu.fpt.timetabling.service.TeacherSemesterService;
 import vn.edu.fpt.timetabling.service.TimetableService;
 
 @Controller
@@ -34,6 +36,8 @@ public class AutomaticTimetablingController extends GeneralController {
 	private SemesterService semesterService;
 	@Autowired
 	private ClassSemesterService classSemesterService;
+	@Autowired
+	private TeacherSemesterService teacherSemesterService;
 	@Autowired
 	private ClassCourseSemesterService classCourseSemesterService;
 	@Autowired
@@ -103,8 +107,8 @@ public class AutomaticTimetablingController extends GeneralController {
 		// return "redirect:/staff/schedule?semesterId=" + semesterId;
 	}
 
-	@RequestMapping(value = "/staff/downloadTimetable", method = RequestMethod.GET)
-	public ModelAndView downloadTimetable(@RequestParam(value = "semesterId", required = true) int semesterId,
+	@RequestMapping(value = "/staff/downloadTimetableClass", method = RequestMethod.GET)
+	public ModelAndView downloadTimetableClass(@RequestParam(value = "semesterId", required = true) int semesterId,
 			Model model, HttpSession httpSession, HttpServletResponse response) throws IOException {
 		List<ClassSemester> classSemesters = classSemesterService.listClassSemestersBySemester(semesterId, false);
 		HashMap<ClassSemester, List<Timetable>> timetablesMap = new HashMap<>();
@@ -112,6 +116,20 @@ public class AutomaticTimetablingController extends GeneralController {
 			List<Timetable> timetables = timetableService.listTimetableByClass(classSemester.getClassSemesterId());
 			timetablesMap.put(classSemester, timetables);
 		}
-		return new ModelAndView("excelView", "timetablesMap", timetablesMap);
+		return new ModelAndView("excelViewClass", "timetablesMap", timetablesMap);
+	}
+
+	@RequestMapping(value = "/staff/downloadTimetableTeacher", method = RequestMethod.GET)
+	public ModelAndView downloadTimetableTeacher(@RequestParam(value = "semesterId", required = true) int semesterId,
+			Model model, HttpSession httpSession, HttpServletResponse response) throws IOException {
+		List<TeacherSemester> teacherSemesters = teacherSemesterService.listTeacherSemestersBySemester(semesterId,
+				false, false);
+		HashMap<TeacherSemester, List<Timetable>> timetablesMap = new HashMap<>();
+		for (TeacherSemester teacherSemester : teacherSemesters) {
+			List<Timetable> timetables = timetableService
+					.listTimetableByTeacher(teacherSemester.getTeacherSemesterId());
+			timetablesMap.put(teacherSemester, timetables);
+		}
+		return new ModelAndView("excelViewTeacher", "timetablesMap", timetablesMap);
 	}
 }

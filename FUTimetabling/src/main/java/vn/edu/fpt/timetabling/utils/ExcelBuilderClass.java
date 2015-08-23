@@ -25,7 +25,7 @@ import vn.edu.fpt.timetabling.model.Room;
 import vn.edu.fpt.timetabling.model.TeacherSemester;
 import vn.edu.fpt.timetabling.model.Timetable;
 
-public class ExcelBuilder extends AbstractExcelView {
+public class ExcelBuilderClass extends AbstractExcelView {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void buildExcelDocument(Map<String, Object> model, HSSFWorkbook workbook, HttpServletRequest request,
