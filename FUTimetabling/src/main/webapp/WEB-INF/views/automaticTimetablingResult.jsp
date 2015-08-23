@@ -36,7 +36,7 @@
 	text-align: left;
 }
 
-button {
+#main button {
 	width: 150px;
 }
 </style>
@@ -72,9 +72,16 @@ $(document).ready(function() {
 		window.location = "/FUTimetabling/staff"
 	});
 	$("#btn-download").on("click", function() {
-		alert("download");
+		_showDialog("dialog-download");
 	});
-	
+	$("#btn-download-class").on("click", function() {
+		window.location = "downloadTimetableClass?semesterId=" +${semesterId};
+		_showDialog("dialog-download");
+	});
+	$("#btn-download-teacher").on("click", function() {
+		window.location = "downloadTimetableTeacher?semesterId=" +${semesterId};
+		_showDialog("dialog-download");
+	});
 	function _showDialog(id) {
 		var dialog = $("#" + id).data('dialog');
 		if (!dialog.element.data('opened')) {
@@ -116,7 +123,7 @@ function _successNotify() {
 		<h5 style="margin-top: 30px;">Data result for ClassCourses of ${semesterName}</h5>
 		<div id="line"
 			style="border-bottom: 2px solid #999999; width: 50%; margin: 0 auto;"></div>
-		<div style="width: 50%; text-align: center; margin: 0 auto;">
+		<div id="main" style="width: 50%; text-align: center; margin: 0 auto;">
 			<table id="dataAuto" class="table">
 				<thead>
 					<tr>
@@ -140,13 +147,12 @@ function _successNotify() {
 	
 	<div id="dialog-download" data-role="dialog" class="padding20"
 		data-overlay="true" data-overlay-color="op-dark"
-		data-windows-style="true">
+		data-windows-style="true" data-close-button="true">
 		<div style="width: 500px; margin: 0 auto; text-align: center;">
-			<h2>DOWNLOAD: </h2>
-			
 			<div id="btn-group" style="margin-top: 25px;">
-				<button class="button" id="btn-delete-accept">DOWNLOAD</button>
-				<button class="button" id="btn-delete-decline">CANCEL</button>
+			<h2>Download</h2>
+				<button class="button" id="btn-download-class">Timetable for Classes</button>
+				<button class="button" id="btn-download-teacher">Timetable for Teachers</button>
 			</div>
 		</div>
 	</div>

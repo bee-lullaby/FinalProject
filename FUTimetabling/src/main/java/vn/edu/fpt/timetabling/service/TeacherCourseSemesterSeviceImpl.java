@@ -73,20 +73,23 @@ public class TeacherCourseSemesterSeviceImpl implements
 
 						String teacherAccount = cellIterator.next()
 								.getStringCellValue().trim();
-						if (getTeacherCourseSemesterByTeacherCourse(teacherAccount,
+						
+						TeacherSemester teacherSemester = teacherSemesterService
+								.getTeacherSemesterByAccount(semesterId,
+										teacherAccount, false, false);
+						if (teacherSemester == null) {
+							// Do Something //
+						} else {
+							if (getTeacherCourseSemesterByTeacherCourse(teacherSemester.getTeacherSemesterId(),
 								courseCode) == null) {
-							TeacherSemester teacherSemester = teacherSemesterService
-									.getTeacherSemesterByAccount(semesterId,
-											teacherAccount, false, false);
-							if (teacherSemester == null) {
-								// Do Something //
-							} else {
 								tcs.setTeacherSemester(teacherSemester);
 
 								teacherCourseSemesterDAO
 										.addTeacherCourseSemester(tcs);
 							}
 						}
+						
+						
 
 					}
 				}
@@ -133,9 +136,9 @@ public class TeacherCourseSemesterSeviceImpl implements
 
 	@Override
 	public TeacherCourseSemester getTeacherCourseSemesterByTeacherCourse(
-			String teacherAccount, String courseCode) {
+			int teacherSemesterId, String courseCode) {
 		return teacherCourseSemesterDAO
-				.getTeacherCourseSemesterByTeacherCourse(teacherAccount,
+				.getTeacherCourseSemesterByTeacherCourse(teacherSemesterId,
 						courseCode);
 	}
 

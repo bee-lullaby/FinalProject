@@ -95,6 +95,7 @@ public class AutomaticTimetablingController extends GeneralController {
 			HttpSession httpSession, HttpServletRequest request) {
 
 		Semester semester = semesterService.getSemesterById(semesterId, false, false, false, false);
+		model.addAttribute("semesterId", semester.getSemesterId());
 		model.addAttribute("semesterName", semester.getName());
 		model.addAttribute("listClassWasSetTimetablesDone",
 				scheduleInfoService.getListClassWasSetTimetablesDone(semesterId));

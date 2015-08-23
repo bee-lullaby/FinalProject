@@ -92,6 +92,18 @@
 			window.location = "/FUTimetabling/staff/automaticTimetabling?semesterId=" +_urlParam("semesterId");
 		})
 		
+		$("#btn-download").on("click", function() {
+			_showDialog("dialog-download");
+		});
+		$("#btn-download-class").on("click", function() {
+			window.location = "downloadTimetableClass?semesterId=" +_urlParam("semesterId");
+			_showDialog("dialog-download");
+		});
+		$("#btn-download-teacher").on("click", function() {
+			window.location = "downloadTimetableTeacher?semesterId=" +_urlParam("semesterId");
+			_showDialog("dialog-download");
+		});
+		
 		function _init() {
 			$("#select-semester").find("option[value='" +_urlParam("semesterId") +"']").attr("selected", "selected");
 			if($("#setCourse").text() == "N/A" || $("#setCourse").text() == 0) {
@@ -115,5 +127,14 @@
 		            return parameter[1];
 		        }
 		    }
+		}
+		
+		function _showDialog(id) {
+			var dialog = $("#" + id).data('dialog');
+			if (!dialog.element.data('opened')) {
+				dialog.open();
+			} else {
+				dialog.close();
+			}
 		}
 	});

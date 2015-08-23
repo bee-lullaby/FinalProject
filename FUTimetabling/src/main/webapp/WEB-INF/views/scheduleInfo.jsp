@@ -64,6 +64,7 @@ table tr td {
 				</select>
 			</div>
 			<button class="button" id="btn-automatic" style="width: 100px;">Automatic</button>
+			<button class="button" id="btn-download">Download</button>
 		</div>
 	
 		<div class="stepper" id="stepper" style="width:100%;"
@@ -141,6 +142,18 @@ table tr td {
 		<div id="btn-group" style="margin: 0 auto; text-align: center;">
 			<button class="button" id="btn-back" style="width: 100px;">Back</button>
  			<button class="button" id="btn-manual" style="width: 100px;">Manual</button>
+		</div>
+	</div>
+	
+	<div id="dialog-download" data-role="dialog" class="padding20"
+		data-overlay="true" data-overlay-color="op-dark"
+		data-windows-style="true" data-close-button="true">
+		<div style="width: 500px; margin: 0 auto; text-align: center;">
+			<div id="btn-group" style="margin-top: 25px;">
+			<h2>Download</h2>
+				<button class="button" id="btn-download-class">Timetable for Classes</button>
+				<button class="button" id="btn-download-teacher">Timetable for Teachers</button>
+			</div>
 		</div>
 	</div>
 </body>

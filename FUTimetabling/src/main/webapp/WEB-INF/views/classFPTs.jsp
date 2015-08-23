@@ -198,6 +198,7 @@ h3 {
 					href="#">About Us</a>
 			</div>
 		</div>
+		
 	</div>
 	<div id="dialog-add-file" data-role="dialog" data-overlay="true"
 		data-overlay-color="op-dark" style="padding: 25px"
@@ -205,18 +206,7 @@ h3 {
 		<h5>Add File</h5>
 		<form id="form-add-file" action="classFPTs/addFromFile" method="post"
 			enctype="multipart/form-data" style="display: inline-block;">
-			<div>
-				<label class="input-control radio"> <input type="radio"
-					name="act" value="0" > <span class="check"></span> <span
-					class="caption">Add Classes</span>
-				</label>
-			</div>
-			<div>
-				<label class="input-control radio"> <input type="radio"
-					name="act" value="1"> <span class="check"></span> <span
-					class="caption">Add Courses For Classes</span>
-				</label>
-			</div>
+			<input id="act" name="act" value="0" style="display: none">
 			<div class="input-control file" data-role="input">
 				<input type="file" name="file"
 					accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
@@ -225,7 +215,7 @@ h3 {
 				</button>
 			</div>
 			<button class="button" id="btn-add-file"
-				style="display: inline-block" style="width:100%;">ADD</button>
+				style="display: inline-block" style="width:100%;">Add</button>
 		</form>
 	</div>
 	<!-- Dialog Add -->

@@ -17,7 +17,7 @@ public interface TeacherCourseSemesterDAO {
 
 	public TeacherCourseSemester getTeacherCourseSemesterById(int teacherCourseSemesterId);
 	
-	public TeacherCourseSemester getTeacherCourseSemesterByTeacherCourse(String teacherAccount, String courseCode);
+	public TeacherCourseSemester getTeacherCourseSemesterByTeacherCourse(int teacherSemesterId, String courseCode);
 	
 	public void deleteTeacherCourseSemester(int teacherCourseSemesterId);
 }

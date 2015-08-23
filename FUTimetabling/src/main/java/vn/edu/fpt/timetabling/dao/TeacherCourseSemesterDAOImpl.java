@@ -69,12 +69,12 @@ public class TeacherCourseSemesterDAOImpl implements TeacherCourseSemesterDAO {
 	}
 	
 	@Override
-	public TeacherCourseSemester getTeacherCourseSemesterByTeacherCourse(String teacherAccount, String courseCode) {
+	public TeacherCourseSemester getTeacherCourseSemesterByTeacherCourse(int teacherSemesterId, String courseCode) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.TeacherCourseSemester TCS"
-				+" WHERE TCS.teacherSemester.teacher.account = :teacherAccount"
+				+" WHERE TCS.teacherSemester.teacherSemesterId = :teacherSemesterId"
 				+" AND TCS.courseSemester.course.code = :courseCode";
 		Query query = getCurrentSession().createQuery(hql);
-		query.setParameter("teacherAccount", teacherAccount);
+		query.setParameter("teacherSemesterId", teacherSemesterId);
 		query.setParameter("courseCode", courseCode);
 		return (TeacherCourseSemester) query.uniqueResult();
 	}

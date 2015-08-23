@@ -109,26 +109,33 @@ public class ProgramSemesterServiceImpl implements ProgramSemesterService {
 				String specializedCode = row.getCell(0).getStringCellValue().trim();
 				
 				Specialized specialized = specializedService.getSpecializedByCode(specializedCode, false, false);
+				int specializedId = 0;
 				if(specialized == null) {
 					mCheckSpecializedAndCourse.get("specialized").add(specializedCode);
 					continue;
 				} else { 
+					specializedId = specialized.getSpecializedId();
 					p.setSpecialized(specialized);
 				}
 					
+				int detailSpecializedId = 0;
 				if(row.getCell(1) != null) {
 					String detailSpecializedCode = row.getCell(1).getStringCellValue().trim();
 					Specialized detailSpecialized = specializedService.getSpecializedByCode(detailSpecializedCode, false, false);
+					
 					if(detailSpecialized == null) {
 						mCheckSpecializedAndCourse.get("specialized").add(detailSpecializedCode);
 						continue;
 					} else {
+						detailSpecializedId = detailSpecialized.getSpecializedId();
 						p.setDetailSpecialized(detailSpecialized);
 					}
 				}
 				
+				int semesterNumber = 0;
 				if(row.getCell(2) != null) {
 					Double currentSemester = row.getCell(2).getNumericCellValue();
+					semesterNumber = currentSemester.intValue();
 					p.setCurrentSemester(currentSemester.intValue());
 				}
 				
@@ -136,8 +143,10 @@ public class ProgramSemesterServiceImpl implements ProgramSemesterService {
 					Double batch = row.getCell(3).getNumericCellValue();
 					p.setBatch(batch.intValue());
 				}
-				
-				addProgramSemester(p);
+				ProgramSemester testP = getProgramSemesterBySpecializedSemester(semesterId, specializedId, detailSpecializedId, semesterNumber);
+				if (testP == null) {
+					addProgramSemester(p);
+				}
 				
 				int count = 4;
 				while(row.getCell(count) != null) {
@@ -147,11 +156,13 @@ public class ProgramSemesterServiceImpl implements ProgramSemesterService {
 					System.out.println(p.getDetailSpecialized().getCode() +" " +courseCode);
 					if(course == null) { 
 						mCheckSpecializedAndCourse.get("course").add(courseCode);
+						count++;
 						continue;
 					}
 					CourseSemester courseSemester = courseSemesterService.getCourseSemesterByCourseCodeSemester(courseCode, semesterId, false, false, false);
 					if(courseSemester == null) {
 						mCheckSpecializedAndCourse.get("course").add(courseCode);
+						count++;
 						continue;
 					}
 					

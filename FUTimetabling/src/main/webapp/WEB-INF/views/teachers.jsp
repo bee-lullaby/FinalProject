@@ -211,16 +211,13 @@ h3 {
 		<form id="form-add-file" action="teachers/addFromFile" method="post"
 			enctype="multipart/form-data" style="display: inline-block;">
 			<div>
-				<label class="input-control radio"> <input type="radio"
-					name="act" value="0" checked> <span class="check"></span> <span
+				<input type="radio"
+					name="act" value="0" checked><span
 					class="caption">Add Teachers</span>
-				</label>
 			</div>
-			<div>
-				<label class="input-control radio"> <input type="radio"
-					name="act" value="1"> <span class="check"></span> <span
+			<div><input type="radio"
+					name="act" value="1"> <span
 					class="caption">Add Courses For Teachers</span>
-				</label>
 			</div>
 			<div class="input-control file" data-role="input">
 				<input type="file" name="file"
