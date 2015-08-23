@@ -269,12 +269,7 @@
 				</div>
 			</div>
 		</div>
-		<div id="bottom-bar" class="fade-in">
-			<div id="nav-bottom-bar">
-				<a href="http://fpt.edu.vn">FPT University</a><a href="#">Contact</a><a
-					href="#">About Us</a>
-			</div>
-		</div>
+		<t:footer />
 	</div>
 </body>
 </html>

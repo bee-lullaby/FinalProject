@@ -70,7 +70,7 @@
 
 @font-face {
 	font-family: virtue;
-	src: url('resources/fonts/virtue.ttf');
+	src: url('../fonts/virtue.ttf');
 }
 
 h1 {

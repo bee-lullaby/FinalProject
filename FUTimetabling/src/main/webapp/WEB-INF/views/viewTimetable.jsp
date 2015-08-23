@@ -231,6 +231,8 @@ h3 {
 				</table>
 			</div>
 		</div>
+		
+			<t:footer />
 	</div>
 </body>
 </html>

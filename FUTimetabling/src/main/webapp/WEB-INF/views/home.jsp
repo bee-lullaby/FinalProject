@@ -43,7 +43,7 @@
 
 		<div id="bottom-bar">
 			<div id="nav-bottom-bar" style="color: white;">
-				<a href="http://fpt.edu.vn">FPT University</a><a href="#">Contact</a><a
+				<a href="http://fpt.edu.vn">FPT University</a><a
 					href="#">About Us</a>
 			</div>
 		</div>
