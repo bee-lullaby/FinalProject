@@ -234,6 +234,7 @@
 							</select>
 						</div>
 					</div>
+					<div id="warning-not-enough-slot" class="fg-red" style="margin: 5px 0;">Don't have enough slot to set.</div>
 					<div id="warning-set-teacher" class="fg-red" style="margin: 5px 0;">Don't have enough Teacher to set.</div>
 					<div id="warning-set-room" class="fg-red" style="margin: 5px 0;">Don't have enough Room to set.</div>
 					<div id="warning-conflict-merge-class" class="fg-red" style="margin: 5px 0;">Conflict with timetable of Merge-Class.</div>

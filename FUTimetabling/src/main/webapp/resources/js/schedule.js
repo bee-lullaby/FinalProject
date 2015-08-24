@@ -59,6 +59,7 @@ $(document).ready(function(){
 		
 
 		$("#warning-set-teacher").hide();
+		$("#warning-not-enough-slot").hide();
 		$("#warning-set-room").hide();
 		$("#warning-conflict-merge-class").hide();
 		_setCourseInfoDialog(JSONdata[position].dataSchedule); 
@@ -123,7 +124,7 @@ $(document).ready(function(){
 		var position = $("#dialog-schedule").data("position");
 		var prevCourse = $("#dialog-schedule").data("prev-course-selected");
 		if(courseSelectedVal != -1 && JSONdata[position].dataSchedule[courseSelectedText].remainSlots == 0) {
-			
+				$("#warning-not-enough-slot").show();
 		} else if(courseSelectedVal != -1 && JSONdata[position].dataSchedule[courseSelectedText].learnCourseInSlot  
 				>= JSONdata[position].dataSchedule[courseSelectedText].numOfTeachers) {
 			$("#warning-set-teacher").show();
@@ -141,8 +142,11 @@ $(document).ready(function(){
 				var color = $("span[id='" +courseSelectedVal +"'] ").attr("class").split(" ")[1];
 				td.addClass(color);
 				JSONdata[position].dataSchedule[courseSelectedText].learnCourseInSlot += 1;
+			} else {
+				JSONdata[position].dataSchedule[prevCourse].remainSlots += 1;
 			}
 			JSONdata[position].setCourseSlot = courseSelectedVal;
+			console.log(JSONdata[position].setCourseSlot);
 			$("#dialog-schedule").removeData("prev-course-selected");
 			_clearScheduleDialog();
 				console.log(_checkMergeClass(position, courseSelectedVal));
@@ -333,6 +337,7 @@ $(document).ready(function(){
 	function _clearScheduleDialog() {
 		$("#set-courses option:first").attr("selected", "selected");
 		$("#warning-set-teacher").hide();
+		$("#warning-not-enough-slot").hide();
 		$("#warning-set-room").hide();
 		$("#warning-conflict-merge-class").hide();
 		_showDialog("dialog-schedule");

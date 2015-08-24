@@ -7,7 +7,7 @@ public class Const {
 	public static final String CLIENT_SECRET = "dj70o3tz4Qeu42qL0oDhV7Nm";
 	public static final String REDIRECT_URI = "postmessage";
 	public static final String FPT_DOMAIN = "fpt.edu.vn";
-
+	public static final String DATE = "yyyy-MM-dd HH:mm:ss";
 	public class ClassType {
 		public static final String SPECIALIZED = "Specialized";
 		public static final String COURSE = "Course";

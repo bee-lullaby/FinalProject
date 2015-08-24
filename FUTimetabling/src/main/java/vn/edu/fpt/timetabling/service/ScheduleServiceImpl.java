@@ -107,9 +107,11 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public List<DaySlot> getListDaySlot(int semesterId, int classId, int week) {
 		Semester semester = semesterService.getSemesterById(semesterId, false, false, false, false);
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat(Const.DATE);
 		Date date = semester.getStartDate();
 		Calendar cal = Calendar.getInstance();
+		int[] hour = { 7, 9, 10, 12, 14, 16};
+		int[] min = {30, 10, 50, 50, 30, 10}; 
 		cal.setTime(date);
 		cal.set(Calendar.DATE, cal.get(Calendar.DATE) - 1 + 7 * (week - 1));
 
@@ -183,9 +185,15 @@ public class ScheduleServiceImpl implements ScheduleService {
 				HashMap<String, DataSchedule> dataSchedule = new HashMap<String, DataSchedule>();
 
 				// Set Day And Slot
-				ds.setDate(sdf.format(cal.getTime()));
+				Calendar newCal = Calendar.getInstance();
+				newCal.setTime(cal.getTime());
+				newCal.set(Calendar.HOUR, hour[j - 1]);
+				newCal.set(Calendar.MINUTE, min[j - 1]);
+				
+				ds.setDate(sdf.format(newCal.getTime()));
+				System.out.println(ds.getDate());
 				ds.setSlot(j);
-
+				
 				Object o = TimetableUtils.containsTimetable(timetableBasedClass, cal.getTime(), j);
 				if (o != null) {
 					Timetable t = (Timetable) o;
@@ -296,7 +304,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Override
 	public boolean updateTimetable(int semesterId, List<DaySlot> daySlots, List<DaySlot> prevDaySlots)
 			throws ParseException {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat(Const.DATE);
 
 		HashMap<String, Set<Integer>> mMergeClass = classCourseSemesterMergeService
 				.getMapCourseWithMergeClassInSemester(semesterId);
@@ -310,12 +318,16 @@ public class ScheduleServiceImpl implements ScheduleService {
 			DaySlot prevDaySlot = prevDaySlots.get(i);
 			if (prevDaySlot.getSetCourseSlot() != dayslot.getSetCourseSlot()) {
 				Timetable timetable;
-				Date date;
-				date = sdf.parse(dayslot.getDate());
+				Date date = sdf.parse(dayslot.getDate());
 
 				if (prevDaySlot.getSetCourseSlot() != -1) {
 					timetable = timetableService.getTimetableByDateSlotClassCourse(date, prevDaySlot.getSlot(),
 							prevDaySlot.getSetCourseSlot());
+					if(timetable == null) {
+						System.out.println(1);
+					} else {
+						System.out.println(timetable.getTimeTableId());
+					}
 					if (dayslot.getSetCourseSlot() != -1) {
 						ClassCourseSemester ccs = classCourseSemesterService
 								.getClassCourseSemesterById(dayslot.getSetCourseSlot(), false, false);
@@ -350,8 +362,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 									&& mMergeClass.get(key).contains(prevDaySlot.getSetCourseSlot())) {
 								mActionTimetable.get("delete").add(timetable);
 							}
-							timetableService.deleteTimetable(timetable.getTimeTableId());
 						}
+						timetableService.deleteTimetable(timetable.getTimeTableId());
 					}
 				} else {
 					timetable = new Timetable();

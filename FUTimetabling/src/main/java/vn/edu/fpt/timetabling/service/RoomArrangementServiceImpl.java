@@ -349,4 +349,10 @@ public class RoomArrangementServiceImpl implements RoomArrangementService {
 
 		return dras;
 	}
+	
+	
+	public List<int[]> getRoomAvailable(ClassSemester classSemester) {
+		List<int[]> result = new ArrayList<int[]>();
+		return result;
+	}
 }
