@@ -35,9 +35,5 @@ public interface StudentService {
 
 	public List<Student> listStudentsInClassCourseSemester(int classSemesterId, int classCourseSemesterId);
 
-	public List<Student> listStudentsWithoutClass();
-
-	public int clearStudentClasses();
-
-	public int clearStudentClass(int classSemesterId);
+	public List<Student> listStudentsWithoutClass(int semesterId);
 }

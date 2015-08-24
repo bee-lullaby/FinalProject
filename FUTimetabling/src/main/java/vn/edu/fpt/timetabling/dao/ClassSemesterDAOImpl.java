@@ -161,4 +161,17 @@ public class ClassSemesterDAOImpl implements ClassSemesterDAO {
 		query.setParameter("semesterId", semesterId);
 		return query.executeUpdate();
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ClassSemester> listClassSemestersOfStudent(int studentId) {
+		String hql = "SELECT DISTINCT CCSS.classCourseSemester.classSemester"
+				+ " FROM vn.edu.fpt.timetabling.model.ClassCourseStudentSemester CCSS"
+				+ " WHERE CCSS.student.studentId = :studentId";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("studentId", studentId);
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<ClassSemester> classSemesters = (List<ClassSemester>) query.list();
+		return classSemesters;
+	}
 }

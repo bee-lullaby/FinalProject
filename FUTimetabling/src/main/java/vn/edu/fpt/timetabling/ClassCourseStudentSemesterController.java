@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import vn.edu.fpt.timetabling.exception.MaxStudentException;
 import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassCourseStudentSemester;
+import vn.edu.fpt.timetabling.model.ClassFPT;
 import vn.edu.fpt.timetabling.model.ClassSemester;
 import vn.edu.fpt.timetabling.model.Course;
 import vn.edu.fpt.timetabling.model.CourseSemester;
@@ -77,7 +78,7 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 		if (!classCourseSemesters.isEmpty()) {
 			ClassCourseSemester classCourseSemester = null;
 			Course course = new Course();
-			course.setName("All");
+			course.setName("ALL");
 			CourseSemester courseSemester = new CourseSemester();
 			courseSemester.setCourse(course);
 			ClassCourseSemester classCourseSemesterAll = new ClassCourseSemester();
@@ -136,6 +137,13 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 		Set<ClassSemester> classSemesters = semester.getClassSemesters();
 		if (!classSemesters.isEmpty()) {
 			ClassSemester classSemester = null;
+			ClassFPT classFPT = new ClassFPT();
+			classFPT.setCode("ALL");
+			ClassSemester classSemesterAll = new ClassSemester();
+			classSemesterAll.setClassSemesterId(0);
+			classSemesterAll.setClassFPT(classFPT);
+			classSemesterAll.setSemester(semester);
+			classSemesters.add(classSemesterAll);
 			if (classSemesterId != null || session.getAttribute("classSemester") != null) {
 				if (classSemesterId == null) {
 					classSemester = (ClassSemester) session.getAttribute("classSemester");
@@ -147,7 +155,7 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 						}
 					}
 					if (!validClassSemester) {
-						classSemester = classSemesters.iterator().next();
+						classSemester = classSemesterAll;
 					}
 				} else {
 					for (ClassSemester classSemesterTemp : classSemesters) {
@@ -157,17 +165,25 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 					}
 				}
 				if (classSemester == null) {
-					classSemester = classSemesters.iterator().next();
+					classSemester = classSemesterAll;
 				}
 			} else {
-				classSemester = classSemesters.iterator().next();
+				classSemester = classSemesterAll;
 			}
 			classSemesterId = classSemester.getClassSemesterId();
-			classSemester = classSemesterService.getClassSemesterById(classSemesterId, true);
-			session.setAttribute("classSemester", classSemester);
-			model.addAttribute("classSemester", classSemester);
-			model.addAttribute("classSemesterId", classSemesterId);
-			processClassCourseSemesters(session, model, classSemester, classCourseSemesterId);
+			if (classSemesterId == 0) {
+				session.setAttribute("classSemester", classSemester);
+				model.addAttribute("classSemester", classSemester);
+				model.addAttribute("classSemesterId", classSemesterId);
+				model.addAttribute("freeStudents", studentService.listStudentsWithoutClass(semester.getSemesterId()));
+				model.addAttribute("busyStudents", studentService.listStudentsInClassCourseSemester(0, 0));
+			} else {
+				classSemester = classSemesterService.getClassSemesterById(classSemesterId, true);
+				session.setAttribute("classSemester", classSemester);
+				model.addAttribute("classSemester", classSemester);
+				model.addAttribute("classSemesterId", classSemesterId);
+				processClassCourseSemesters(session, model, classSemester, classCourseSemesterId);
+			}
 		}
 		model.addAttribute("classSemesters", classSemesters);
 	}
@@ -240,7 +256,6 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 					classCourseStudentSemester.setStudent(student);
 					classCourseStudentSemesterService.addClassCourseStudentSemester(classCourseStudentSemester);
 				}
-				student.setClassSemester(classSemester);
 			} else {
 				throw new MaxStudentException();
 			}
@@ -251,7 +266,6 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 	@RequestMapping(value = "/staff/addStudentToClass/clearStudentClass", method = RequestMethod.GET, params = {
 			"classSemesterId" })
 	public String clearStudentClass(@RequestParam int classSemesterId, HttpSession httpSession, Model model) {
-		studentService.clearStudentClass(classSemesterId);
 		classCourseStudentSemesterService.deleteClassCourseStudentSemesterByClass(classSemesterId);
 		httpSession.setAttribute("success", "Clear students' class successful!");
 		int semesterId = semesterService.listSemesters(false, false, false, false).get(0).getSemesterId();
@@ -264,7 +278,6 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 	@RequestMapping(value = "/staff/addStudentToClass/clearStudentClasses", method = RequestMethod.GET, params = {
 			"semesterId" })
 	public String clearStudentClasses(@RequestParam int semesterId, HttpSession httpSession, Model model) {
-		studentService.clearStudentClasses();
 		classCourseStudentSemesterService.deleteClassCourseStudentSemesters(semesterId);
 		httpSession.setAttribute("success", "Clear students' classes successful!");
 		return "redirect:/staff/addStudentToClass?semesterId=" + semesterId;
@@ -274,8 +287,10 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 			"classSemesterId" })
 	public String autoStudentClass(@RequestParam int classSemesterId, HttpSession httpSession, Model model) {
 		ClassSemester classSemester = classSemesterService.getClassSemesterById(classSemesterId, false);
-		classCourseStudentSemesterService.autoPutStudentsIntoClassSemester(classSemesterId);
-		httpSession.setAttribute("success", "Auto put student into class successful!");
+		if (classSemester != null) {
+			classCourseStudentSemesterService.autoPutStudentsIntoClassSemester(classSemesterId);
+			httpSession.setAttribute("success", "Auto put student into class successful!");
+		}
 		return "redirect:/staff/addStudentToClass?semesterId=" + classSemester.getSemester().getSemesterId();
 	}
 
@@ -310,12 +325,6 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 			for (ClassCourseSemester classCourseSemester : classCourseSemesters) {
 				classCourseStudentSemesterService.removeStudentFromClassCourseSemester(studentId,
 						classCourseSemester.getClassCourseSemesterId());
-			}
-			int classSemesterId = classSemester.getClassSemesterId();
-			if (!classSemesterService.isStudentInClassSemester(studentId, classSemesterId)
-					&& student.getClassSemester() != null
-					&& student.getClassSemester().getClassSemesterId() == classSemesterId) {
-				student.setClassSemester(null);
 			}
 		}
 		return "redirect:/staff/addStudentToClass";

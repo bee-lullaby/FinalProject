@@ -34,8 +34,6 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 	@Autowired
 	private SemesterService semesterService;
 	@Autowired
-	private StudentService studentService;
-	@Autowired
 	private CourseService courseService;
 	@Autowired
 	private ProgramSemesterService programSemesterService;
@@ -181,7 +179,6 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 	public void addClassSemesterFromFile(File classSemesters, int semesterId) throws IOException {
 		classCourseStudentSemesterService.deleteClassCourseStudentSemesters(semesterId);
 		classCourseSemesterService.deleteClassCourseSemesters(semesterId);
-		studentService.clearStudentClasses();
 		classSemesterDAO.deleteClassSemesters(semesterId);
 		FileInputStream file = new FileInputStream(classSemesters);
 		XSSFWorkbook workbook = new XSSFWorkbook(file);
@@ -286,5 +283,10 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 	@Override
 	public int deleteClassSemesters(int semesterId) {
 		return classSemesterDAO.deleteClassSemesters(semesterId);
+	}
+
+	@Override
+	public List<ClassSemester> listClassSemestersOfStudent(int studentId) {
+		return classSemesterDAO.listClassSemestersOfStudent(studentId);
 	}
 }

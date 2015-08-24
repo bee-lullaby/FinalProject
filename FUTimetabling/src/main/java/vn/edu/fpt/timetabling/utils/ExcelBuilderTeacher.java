@@ -93,8 +93,9 @@ public class ExcelBuilderTeacher extends AbstractExcelView {
 				row.createCell(2).setCellValue(course.getCode());
 				row.createCell(3).setCellValue(course.getName());
 				row.createCell(4).setCellValue(classString);
-				row.createCell(5).setCellValue("Slot" + timetable.getSlot() + " ( from " + calendar.get(Calendar.HOUR)
-						+ ":" + calendar.get(Calendar.MINUTE) + ")");
+				int slot = timetable.getSlot();
+				row.createCell(5).setCellValue("Slot" + slot + " ( from " + Const.Timetable.SLOT_TIME_MAP[slot - 1][0]
+						+ ":" + Const.Timetable.SLOT_TIME_MAP[slot - 1][1] + ")");
 			}
 		}
 	}

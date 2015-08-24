@@ -34,9 +34,6 @@ public class Student {
 	private String batch;
 	@Column
 	private int semester;
-	@ManyToOne
-	@JoinColumn(name = "class_semester_id")
-	private ClassSemester classSemester;
 
 	public Specialized getDetailSpecialized() {
 		return detailSpecialized;
@@ -65,7 +62,7 @@ public class Student {
 	 * @param classSemester
 	 */
 	public Student(int studentId, String account, String name, String email, String studentCode,
-			Specialized specialized, String batch, int semester, ClassSemester classSemester) {
+			Specialized specialized, String batch, int semester) {
 		super();
 		this.studentId = studentId;
 		this.account = account;
@@ -75,7 +72,6 @@ public class Student {
 		this.specialized = specialized;
 		this.batch = batch;
 		this.semester = semester;
-		this.classSemester = classSemester;
 	}
 
 	/**
@@ -89,7 +85,7 @@ public class Student {
 	 * @param classSemester
 	 */
 	public Student(String account, String name, String email, String studentCode, Specialized specialized, String batch,
-			int semester, ClassSemester classSemester) {
+			int semester) {
 		super();
 		this.account = account;
 		this.name = name;
@@ -98,7 +94,6 @@ public class Student {
 		this.specialized = specialized;
 		this.batch = batch;
 		this.semester = semester;
-		this.classSemester = classSemester;
 	}
 
 	/**
@@ -221,21 +216,6 @@ public class Student {
 		this.semester = semester;
 	}
 
-	/**
-	 * @return the classSemester
-	 */
-	public ClassSemester getClassSemester() {
-		return classSemester;
-	}
-
-	/**
-	 * @param classSemester
-	 *            the classSemester to set
-	 */
-	public void setClassSemester(ClassSemester classSemester) {
-		this.classSemester = classSemester;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -245,12 +225,6 @@ public class Student {
 	public String toString() {
 		return "Student [studentId=" + studentId + ", account=" + account + ", name=" + name + ", email=" + email
 				+ ", studentCode=" + studentCode + ", specialized=" + specialized + ", batch=" + batch + ", semester="
-				+ semester + ", classSemester=" + classSemester + "]";
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		Student student = (Student) obj;
-		return student.getStudentCode().equals(this.studentCode);
+				+ semester + "]";
 	}
 }

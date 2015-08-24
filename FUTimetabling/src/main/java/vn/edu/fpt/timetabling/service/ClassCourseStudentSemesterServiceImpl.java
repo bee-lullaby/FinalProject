@@ -199,7 +199,7 @@ public class ClassCourseStudentSemesterServiceImpl implements ClassCourseStudent
 		if (semester == null) {
 			return;
 		}
-		List<Student> students = studentService.listStudentsWithoutClass();
+		List<Student> students = studentService.listStudentsWithoutClass(semesterId);
 		HashMap<String, List<Student>> studentsMap = new HashMap<>();
 		for (Student student : students) {
 			String key = student.getSpecialized().getCode() + "/" + student.getDetailSpecialized().getCode() + "/"

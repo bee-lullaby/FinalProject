@@ -172,13 +172,13 @@ public class StudentDAOImpl implements StudentDAO {
 		String hql = "SELECT CCSS.student FROM vn.edu.fpt.timetabling.model.ClassCourseStudentSemester CCSS";
 		if (classCourseSemesterId != 0) {
 			hql += " WHERE CCSS.classCourseSemester.classCourseSemesterId = :classCourseSemesterId";
-		} else {
+		} else if(classSemesterId != 0) {
 			hql += " WHERE CCSS.classCourseSemester.classSemester.classSemesterId = :classSemesterId";
 		}
 		Query query = getCurrentSession().createQuery(hql);
 		if (classCourseSemesterId != 0) {
 			query.setParameter("classCourseSemesterId", classCourseSemesterId);
-		} else {
+		} else if(classSemesterId != 0) {
 			query.setParameter("classSemesterId", classSemesterId);
 		}
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -188,9 +188,12 @@ public class StudentDAOImpl implements StudentDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Student> listStudentsWithoutClass() {
-		String hql = "FROM vn.edu.fpt.timetabling.model.Student S" + " WHERE S.classSemester IS NULL";
+	public List<Student> listStudentsWithoutClass(int semesterId) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Student S" + " WHERE S NOT IN (SELECT CCSS.student"
+				+ " FROM vn.edu.fpt.timetabling.model.ClassCourseStudentSemester CCSS"
+				+ " WHERE CCSS.classCourseSemester.classSemester.semester.semesterId = :semesterId)";
 		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("semesterId", semesterId);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<Student> students = (List<Student>) query.list();
 		return students;
@@ -222,21 +225,5 @@ public class StudentDAOImpl implements StudentDAO {
 			student = (Student) temp;
 		}
 		return student;
-	}
-
-	@Override
-	public int clearStudentClasses() {
-		String hql = "UPDATE vn.edu.fpt.timetabling.model.Student S SET S.classSemester = NULL";
-		Query query = getCurrentSession().createQuery(hql);
-		return query.executeUpdate();
-	}
-
-	@Override
-	public int clearStudentClass(int classSemesterId) {
-		String hql = "UPDATE vn.edu.fpt.timetabling.model.Student S SET S.classSemester = NULL"
-				+ " WHERE S.classSemester.classSemesterId = :classSemesterId";
-		Query query = getCurrentSession().createQuery(hql);
-		query.setParameter("classSemesterId", classSemesterId);
-		return query.executeUpdate();
 	}
 }

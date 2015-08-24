@@ -560,8 +560,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 							}
 							calendar.setTime(startDate);
 							calendar.add(Calendar.DATE, dayFromStart);
-							calendar.set(Calendar.HOUR_OF_DAY, Const.Timetable.SLOT_TIME_MAP[slot][0]);
-							calendar.set(Calendar.MINUTE, Const.Timetable.SLOT_TIME_MAP[slot][1]);
 							Date date = calendar.getTime();
 							Timetable timetable = new Timetable();
 							timetable.setDate(date);

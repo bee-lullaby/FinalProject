@@ -35,4 +35,6 @@ public interface ClassSemesterService {
 	public List<ClassSemester> listClassSemesterForView(int semesterId);
 
 	public int deleteClassSemesters(int semesterId);
+
+	public List<ClassSemester> listClassSemestersOfStudent(int studentId);
 }

@@ -10,7 +10,7 @@ public interface StudentDAO {
 	public void updateStudent(Student student);
 
 	public List<Student> listStudents();
-	
+
 	public Student getStudentById(int studentId);
 
 	public Student getStudentByCode(String code);
@@ -24,11 +24,7 @@ public interface StudentDAO {
 
 	public List<Student> listStudentsInClassCourseSemester(int classSemesterId, int classCourseSemesterId);
 
-	public List<Student> listStudentsWithoutClass();
-	
+	public List<Student> listStudentsWithoutClass(int semesterId);
+
 	public Student getLastStudent(int specializedId);
-	
-	public int clearStudentClasses();
-	
-	public int clearStudentClass(int classSemesterId);
 }

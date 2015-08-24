@@ -172,22 +172,12 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public List<Student> listStudentsWithoutClass() {
-		return studentDAO.listStudentsWithoutClass();
+	public List<Student> listStudentsWithoutClass(int semesterId) {
+		return studentDAO.listStudentsWithoutClass(semesterId);
 	}
 
 	@Override
 	public Student getStudentByEmail(String email) {
 		return studentDAO.getStudentByEmail(email);
-	}
-
-	@Override
-	public int clearStudentClasses() {
-		return studentDAO.clearStudentClasses();
-	}
-
-	@Override
-	public int clearStudentClass(int classSemesterId) {
-		return studentDAO.clearStudentClass(classSemesterId);
 	}
 }
