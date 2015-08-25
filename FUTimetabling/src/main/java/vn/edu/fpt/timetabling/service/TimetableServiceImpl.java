@@ -2,6 +2,7 @@ package vn.edu.fpt.timetabling.service;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -68,13 +69,8 @@ public class TimetableServiceImpl implements TimetableService {
 	}
 
 	@Override
-	public List<Timetable> listTimetablesByClassCourseSemesters(Set<ClassCourseSemester> classCourseSemesters) {
+	public List<Timetable> listTimetablesByClassCourseSemesters(Collection<ClassCourseSemester> classCourseSemesters) {
 		return timetableDAO.listTimetablesByClassCourseSemesters(classCourseSemesters);
-	}
-
-	@Override
-	public List<Timetable> listTimetablesByCCSs(List<ClassCourseSemester> classCourseSemesters) {
-		return timetableDAO.listTimetablesByCCSs(classCourseSemesters);
 	}
 
 	@Override
@@ -100,12 +96,8 @@ public class TimetableServiceImpl implements TimetableService {
 
 	@Override
 	public List<Timetable> listTimetableByClass(int classSemesterId) {
-		List<Timetable> result = new ArrayList<Timetable>();
 		ClassSemester classSemester = classSemesterService.getClassSemesterById(classSemesterId, true);
-		List<ClassCourseSemester> ccss = new ArrayList<ClassCourseSemester>();
-		ccss.addAll(classSemester.getClassCourseSemesters());
-		result.addAll(timetableDAO.listTimetablesByCCSs(ccss));
-		return result;
+		return timetableDAO.listTimetablesByClassCourseSemesters(classSemester.getClassCourseSemesters());
 	}
 
 	@Override
@@ -120,7 +112,7 @@ public class TimetableServiceImpl implements TimetableService {
 		List<ClassCourseSemester> classCourseSemesters = classCourseSemesterService
 				.listClassCourseSemesterByStudent(semesterId, studentId);
 		if (!classCourseSemesters.isEmpty()) {
-			result.addAll(timetableDAO.listTimetablesByCCSs(classCourseSemesters));
+			result.addAll(timetableDAO.listTimetablesByClassCourseSemesters(classCourseSemesters));
 		}
 		return result;
 	}
@@ -207,5 +199,10 @@ public class TimetableServiceImpl implements TimetableService {
 	@Override
 	public List<Timetable> listTimetablesByClassSemester(int classSemesterId) {
 		return timetableDAO.listTimetablesByClassSemester(classSemesterId);
+	}
+
+	@Override
+	public List<Timetable> listTimetablesByRoom(int semesterId, int roomId) {
+		return timetableDAO.listTimetablesByRoom(semesterId, roomId);
 	}
 }

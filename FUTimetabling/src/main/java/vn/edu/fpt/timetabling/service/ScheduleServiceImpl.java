@@ -110,8 +110,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 		SimpleDateFormat sdf = new SimpleDateFormat(Const.DATE);
 		Date date = semester.getStartDate();
 		Calendar cal = Calendar.getInstance();
-		int[] hour = { 7, 9, 10, 12, 14, 16};
-		int[] min = {30, 10, 50, 50, 30, 10}; 
+		int[] hour = { 7, 9, 10, 12, 14, 16 };
+		int[] min = { 30, 10, 50, 50, 30, 10 };
 		cal.setTime(date);
 		cal.set(Calendar.DATE, cal.get(Calendar.DATE) - 1 + 7 * (week - 1));
 
@@ -119,7 +119,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 		List<ClassCourseSemester> classCourseSemesters = listClassCourseSemesterByClassSemester(classId, semesterId);
 
 		// Get List Timetable based on Class //
-		List<Timetable> timetableBasedClass = timetableService.listTimetablesByCCSs(classCourseSemesters);
+		List<Timetable> timetableBasedClass = timetableService
+				.listTimetablesByClassCourseSemesters(classCourseSemesters);
 
 		// Create List Course Semester of Class //
 		List<CourseSemester> courseSemesters = new ArrayList<CourseSemester>();
@@ -154,7 +155,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 					list.remove(i--);
 				}
 			}
-			mapCourseTimetable.put(courseSemester, timetableService.listTimetablesByCCSs(list));
+			mapCourseTimetable.put(courseSemester, timetableService.listTimetablesByClassCourseSemesters(list));
 		}
 
 		// List All Timetable
@@ -189,11 +190,11 @@ public class ScheduleServiceImpl implements ScheduleService {
 				newCal.setTime(cal.getTime());
 				newCal.set(Calendar.HOUR, hour[j - 1]);
 				newCal.set(Calendar.MINUTE, min[j - 1]);
-				
+
 				ds.setDate(sdf.format(newCal.getTime()));
 				System.out.println(ds.getDate());
 				ds.setSlot(j);
-				
+
 				Object o = TimetableUtils.containsTimetable(timetableBasedClass, cal.getTime(), j);
 				if (o != null) {
 					Timetable t = (Timetable) o;
@@ -323,7 +324,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 				if (prevDaySlot.getSetCourseSlot() != -1) {
 					timetable = timetableService.getTimetableByDateSlotClassCourse(date, prevDaySlot.getSlot(),
 							prevDaySlot.getSetCourseSlot());
-					if(timetable == null) {
+					if (timetable == null) {
 						System.out.println(1);
 					} else {
 						System.out.println(timetable.getTimeTableId());

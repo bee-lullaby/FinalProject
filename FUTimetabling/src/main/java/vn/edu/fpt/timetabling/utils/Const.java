@@ -26,6 +26,7 @@ public class Const {
 		public static final int NUMBER_WORKING_DAYS_IN_WEEK = 5;
 		public static final int NUMBER_WEEKS_BETWEEN_BLOCK = 3;
 		public static final int NUMBER_SLOTS_PER_DAY = 6;
+		public static final int NUMBER_MAX_SLOTS_PER_DAY = 8;
 		public static final int NUMBER_WEEKS_PER_BLOCK = 6;
 		public static final int[][] SLOT_TIME_MAP = { { 7, 30 }, { 9, 10 }, { 10, 50 }, { 12, 50 }, { 14, 30 },
 				{ 16, 10 }, { 18, 05 }, { 19, 45 } };

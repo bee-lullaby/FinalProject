@@ -1,5 +1,6 @@
 package vn.edu.fpt.timetabling.service;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -22,9 +23,7 @@ public interface TimetableService {
 
 	public void deleteTimetable(int timetableId);
 
-	public List<Timetable> listTimetablesByClassCourseSemesters(Set<ClassCourseSemester> classCourseSemesters);
-
-	public List<Timetable> listTimetablesByCCSs(List<ClassCourseSemester> classCourseSemesters);
+	public List<Timetable> listTimetablesByClassCourseSemesters(Collection<ClassCourseSemester> classCourseSemesters);
 
 	public Timetable getTimetableByDateSlotClassCourse(Date date, int slot, int classCourseSemesterId);
 
@@ -54,4 +53,6 @@ public interface TimetableService {
 	public double countPercentSlots34(int semesterId);
 
 	public List<Timetable> listTimetablesByClassSemester(int classSemesterId);
+
+	public List<Timetable> listTimetablesByRoom(int semesterId, int roomId);
 }

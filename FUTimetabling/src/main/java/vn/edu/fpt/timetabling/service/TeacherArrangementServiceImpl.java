@@ -247,7 +247,7 @@ public class TeacherArrangementServiceImpl implements TeacherArrangementService 
 
 		List<ClassCourseSemester> ccs = new ArrayList<ClassCourseSemester>();
 		ccs.add(classCourseSemester);
-		List<Timetable> timetableOfClassCourse = timetableService.listTimetablesByCCSs(ccs);
+		List<Timetable> timetableOfClassCourse = timetableService.listTimetablesByClassCourseSemesters(ccs);
 
 		List<TeacherSemester> teacherSemesters = new ArrayList<TeacherSemester>();
 		CourseSemester cs = courseSemesterService.getCourseSemesterById(
