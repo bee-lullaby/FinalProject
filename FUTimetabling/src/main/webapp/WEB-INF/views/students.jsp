@@ -153,10 +153,8 @@ h3 {
 								<th>Student Code</th>
 								<th>Name</th>
 								<th>Specialized</th>
-								<th>DS</th>
-								<th>Batch</th>
+								<th>Detail Specialized</th>
 								<th>Semester</th>
-								<th>Class</th>
 								<th>Edit</th>
 								<th>Delete</th>
 							</tr>
@@ -171,9 +169,7 @@ h3 {
 										<td>${student.name}</td>
 										<td>${student.specialized.name}</td>
 										<td>${student.detailSpecialized.name}</td>
-										<td>${student.batch}</td>
 										<td>${student.semester}</td>
-										<td>${student.classSemester.classFPT.code}</td>
 										<td><a href="#" style="color: #000; text-align: center;"
 											id="edit-student"><span class="icon flaticon-pencil43"></span></a></td>
 										<td><a href="#" style="color: #000; text-align: center;"

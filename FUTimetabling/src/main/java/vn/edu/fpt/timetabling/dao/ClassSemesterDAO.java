@@ -30,5 +30,5 @@ public interface ClassSemesterDAO {
 
 	public int deleteClassSemesters(int semesterId);
 
-	public List<ClassSemester> listClassSemestersOfStudent(int studentId);
+	public List<ClassSemester> listClassSemestersOfStudent(int semesterId, int studentId);
 }

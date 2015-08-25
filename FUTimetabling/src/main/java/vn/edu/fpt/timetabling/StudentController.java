@@ -2,9 +2,7 @@ package vn.edu.fpt.timetabling;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import vn.edu.fpt.timetabling.model.ClassSemester;
 import vn.edu.fpt.timetabling.model.Specialized;
 import vn.edu.fpt.timetabling.model.Student;
 import vn.edu.fpt.timetabling.service.ClassSemesterService;
@@ -53,21 +50,7 @@ public class StudentController extends GeneralController {
 	@RequestMapping(value = "/staff/students", method = RequestMethod.GET)
 	public String students(Model model, HttpSession httpSession) {
 		List<Student> students = studentService.listStudents();
-		Map<Student, String> studentClassMap = new HashMap<>();
-		for (Student student : students) {
-			List<ClassSemester> classSemesters = classSemesterService
-					.listClassSemestersOfStudent(student.getStudentId());
-			String classes = "";
-			for (ClassSemester classSemester : classSemesters) {
-				if (!classes.isEmpty()) {
-					classes += ", ";
-				}
-				classes += classSemester.getClassFPT().getCode();
-			}
-			studentClassMap.put(student, classes);
-		}
 		model.addAttribute("listStudents", students);
-		model.addAttribute("studentClassMap", studentClassMap);
 		model.addAttribute("listClassSemesters", classSemesterService.listClassSemesters(false));
 		model.addAttribute("listSpecializeds", specializedService.listSpecializeds(false, false));
 		model.addAttribute("listDetailSpecializeds", specializedService.listDetailSpecializeds(false, false));
@@ -138,7 +121,7 @@ public class StudentController extends GeneralController {
 		return "redirect:/staff/students";
 	}
 
-	@RequestMapping(value = "/staff/students/delete", method = RequestMethod.GET, params = "studentId")
+	@RequestMapping(value = "/staff/students/deleteStudent", method = RequestMethod.GET, params = "studentId")
 	public String deleteStudent(@RequestParam int studentId, HttpSession httpSession) {
 		studentService.deleteStudent(studentId);
 		httpSession.setAttribute("success", "Delete Student Successful!");

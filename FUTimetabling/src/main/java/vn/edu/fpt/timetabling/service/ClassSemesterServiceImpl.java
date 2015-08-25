@@ -286,7 +286,7 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 	}
 
 	@Override
-	public List<ClassSemester> listClassSemestersOfStudent(int studentId) {
-		return classSemesterDAO.listClassSemestersOfStudent(studentId);
+	public List<ClassSemester> listClassSemestersOfStudent(int semesterId, int studentId) {
+		return classSemesterDAO.listClassSemestersOfStudent(semesterId, studentId);
 	}
 }

@@ -149,7 +149,6 @@ h3 {
 									<th>Account</th>
 									<th>Name</th>
 									<th>E-mail</th>
-									<th>Semester</th>
 									<th>Courses</th>
 									<th>Edit</th>
 									<th>Delete</th>
@@ -165,7 +164,6 @@ h3 {
 											<td>${teacherSemester.teacher.account}</td>
 											<td>${teacherSemester.teacher.name}</td>
 											<td>${teacherSemester.teacher.email}</td>
-											<td>${teacherSemester.semester.name}</td>
 											<td><c:if
 													test="${!empty teacherSemester.teacherCourseSemesters}">
 													<c:forEach

@@ -120,7 +120,7 @@ $(document).ready(function() {
 		dialog.find("#name").attr("value", tr.find("td:eq(1)").text());
 		dialog.find("#name").attr("readonly", true);
 		dialog.find("#email").attr("value", tr.find("td:eq(2)").text());
-		dialog.find("#select-semester-edit").find("option:contains('" +tr.find("td:eq(3)").text().trim() +"')").attr("selected", "selected");
+		dialog.find("#select-semester-edit").find("option[value='" +_urlParam("semesterId") +"']").attr("selected", "selected");
 		dialog.find("#select-department-edit").find("option:contains('" +tr.find("td:eq(2)").text() +"')").attr("selected", "selected");
 		
 		var listCourses = tr.find("td:eq(4)").text().split(";");

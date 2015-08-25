@@ -14,7 +14,7 @@ $(document).ready(function() {
 	});
 
 	$("#btn-delete-accept").on("click", function() {
-		window.location = "student/deleteStudent?studentId=" +$("#dialog-delete-student").attr("data-studentId");
+		window.location = "students/deleteStudent?studentId=" +$("#dialog-delete-student").attr("data-studentId");
 	});
 	
 	$("#btn-delete-decline").on("click", function() {
