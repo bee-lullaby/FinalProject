@@ -243,4 +243,52 @@ public class TimetableDAOImpl implements TimetableDAO {
 		List<Timetable> timetables = (List<Timetable>) query.list();
 		return timetables;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Timetable> listTimetablesWithoutRoom(int semesterId) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T" + " WHERE T.room IS NULL"
+				+ " AND T.classCourseSemester.classSemester.semester.semesterId = :semesterId"
+				+ " ORDER BY T.date, T.slot";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("semesterId", semesterId);
+		List<Timetable> timetables = (List<Timetable>) query.list();
+		return timetables;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Timetable> listTimetablesWithoutTeacher(int semesterId) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T" + " WHERE T.teacherSemester IS NULL"
+				+ " AND T.classCourseSemester.classSemester.semester.semesterId = :semesterId"
+				+ " ORDER BY T.date, T.slot";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("semesterId", semesterId);
+		List<Timetable> timetables = (List<Timetable>) query.list();
+		return timetables;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Timetable> getTimetableByDateSlotTeacher(Date date, int slot, int teacherSemesterId) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T" + " WHERE T.date = :date AND T.slot = :slot"
+				+ " AND T.teacherSemester.teacherSemesterId = :teacherSemesterId";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("date", date);
+		query.setParameter("slot", slot);
+		query.setParameter("teacherSemesterId", teacherSemesterId);
+		return (List<Timetable>) query.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Timetable> getTimetableByDateSlotRoom(Date date, int slot, int roomId) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Timetable T" + " WHERE T.date = :date AND T.slot = :slot"
+				+ " AND T.room.roomId = :roomId";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("date", date);
+		query.setParameter("slot", slot);
+		query.setParameter("roomId", roomId);
+		return (List<Timetable>) query.list();
+	}
 }

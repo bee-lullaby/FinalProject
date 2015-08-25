@@ -35,4 +35,8 @@ public interface ScheduleService {
 			int week);
 
 	public void autoSchedule(int semesterId);
+	
+	public void autoScheduleRoom(int semesterId);
+	
+	public void autoScheduleTeacher(int semesterId);
 }

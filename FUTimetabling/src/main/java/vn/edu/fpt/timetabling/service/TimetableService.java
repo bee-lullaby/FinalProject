@@ -55,4 +55,12 @@ public interface TimetableService {
 	public List<Timetable> listTimetablesByClassSemester(int classSemesterId);
 
 	public List<Timetable> listTimetablesByRoom(int semesterId, int roomId);
+
+	public List<Timetable> listTimetablesWithoutRoom(int semesterId);
+
+	public List<Timetable> listTimetablesWithoutTeacher(int semesterId);
+
+	public List<Timetable> getTimetableByDateSlotTeacher(Date date, int slot, int teacherSemesterId);
+
+	public List<Timetable> getTimetableByDateSlotRoom(Date date, int slot, int roomId);
 }

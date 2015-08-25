@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -597,6 +598,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 				timetableService.addTimetable(guestTimetable);
 			}
 		}
+		autoScheduleRoom(semesterId);
+		autoScheduleTeacher(semesterId);
 		System.out.println("Percent of slot 3+4: " + timetableService.countPercentSlots34(semesterId));
 	}
 
@@ -749,5 +752,100 @@ public class ScheduleServiceImpl implements ScheduleService {
 		}
 		buildTimetable(semester, ttb, TA.DA.mClassCourse2AssignedRoom, TA.DA.mClassCourse2AssignedTeacher, TA.DA,
 				mergeCourses);
+	}
+
+	@Override
+	public void autoScheduleRoom(int semesterId) {
+		List<Timetable> timetables = timetableService.listTimetablesWithoutRoom(semesterId);
+		if (timetables.isEmpty()) {
+			return;
+		}
+		TeacherSemester teacherSemester = timetables.get(0).getTeacherSemester();
+		Map<Course, Map<String, Room>> courseRoomMap = roomService.getCourseRoomMap();
+		List<Room> allRooms = roomService.listRooms(false);
+		List<Room> suitableRooms = new ArrayList<>();
+		Map<ClassCourseSemester, Integer> classCourseMap = new HashMap<>();
+		for (Timetable timetable : timetables) {
+			timetableService.deleteTimetable(timetable.getTimeTableId());
+			ClassCourseSemester classCourseSemester = timetable.getClassCourseSemester();
+			if (!classCourseMap.containsKey(classCourseSemester)) {
+				classCourseMap.put(classCourseSemester, 0);
+			}
+			classCourseMap.put(classCourseSemester, classCourseMap.get(classCourseSemester) + 1);
+		}
+		Date startDate = semesterService.getSemesterById(semesterId, false, false, false, false).getStartDate();
+		for (Entry<ClassCourseSemester, Integer> entry : classCourseMap.entrySet()) {
+			ClassCourseSemester classCourseSemester = entry.getKey();
+			ClassSemester classSemester = classCourseSemester.getClassSemester();
+			Course course = classCourseSemester.getCourseSemester().getCourse();
+			System.out.println(
+					"Process for class-course: " + classSemester.getClassFPT().getCode() + " / " + course.getCode());
+			if (courseRoomMap.containsKey(course)) {
+				for (Room room : courseRoomMap.get(course).values()) {
+					suitableRooms.add(room);
+				}
+			} else {
+				suitableRooms = allRooms;
+			}
+			int numberOfSlots = entry.getValue();
+			for (int week = 0; week < 15; week++) {
+				System.out.println("Loop week: " + week);
+				if (week == Const.Timetable.NUMBER_WEEKS_PER_BLOCK) {
+					week += Const.Timetable.NUMBER_WEEKS_BETWEEN_BLOCK;
+				}
+				int slotPerWeek = 0;
+				for (int dayInWeek = 0; dayInWeek < Const.Timetable.NUMBER_WORKING_DAYS_IN_WEEK + 1; dayInWeek++) {
+					int plusDate = week * Const.Timetable.NUMBER_DAYS_IN_WEEK + dayInWeek;
+					Calendar calendar = Calendar.getInstance();
+					calendar.setTime(startDate);
+					calendar.add(Calendar.DATE, plusDate);
+					Date date = calendar.getTime();
+					System.out.println("Loop day: " + date);
+					for (int slot = 1; slot <= Const.Timetable.NUMBER_SLOTS_PER_DAY; slot++) {
+						if (slot == 1 && dayInWeek == 5) {
+							continue;
+						}
+						if (timetableService.getTimetableByDateSlotClass(date, slot,
+								classSemester.getClassSemesterId()) == null
+								&& (teacherSemester == null || timetableService.getTimetableByDateSlotTeacher(date,
+										slot, teacherSemester.getTeacherSemesterId()).isEmpty())) {
+							for (Room room : suitableRooms) {
+								if (timetableService.getTimetableByDateSlotRoom(date, slot, room.getRoomId())
+										.isEmpty()) {
+									Timetable timetable = new Timetable();
+									timetable.setDate(date);
+									timetable.setTeacherSemester(teacherSemester);
+									timetable.setSlot(slot);
+									timetable.setClassCourseSemester(classCourseSemester);
+									timetable.setRoom(room);
+									timetableService.addTimetable(timetable);
+									System.out.println("	Found: " + date + " " + slot + " " + course.getCode());
+									slotPerWeek++;
+									numberOfSlots--;
+									break;
+								}
+							}
+						}
+						if (slotPerWeek >= 5 || numberOfSlots <= 0) {
+							break;
+						}
+					}
+					if (slotPerWeek >= 5 || numberOfSlots <= 0) {
+						break;
+					}
+				}
+				if (numberOfSlots <= 0) {
+					break;
+				}
+			}
+		}
+	}
+
+	@Override
+	public void autoScheduleTeacher(int semesterId) {
+		List<Timetable> timetables = timetableService.listTimetablesWithoutTeacher(semesterId);
+		if (timetables.isEmpty()) {
+			return;
+		}
 	}
 }

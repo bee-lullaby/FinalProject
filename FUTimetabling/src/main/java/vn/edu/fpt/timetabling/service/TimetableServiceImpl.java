@@ -205,4 +205,24 @@ public class TimetableServiceImpl implements TimetableService {
 	public List<Timetable> listTimetablesByRoom(int semesterId, int roomId) {
 		return timetableDAO.listTimetablesByRoom(semesterId, roomId);
 	}
+
+	@Override
+	public List<Timetable> listTimetablesWithoutRoom(int semesterId) {
+		return timetableDAO.listTimetablesWithoutRoom(semesterId);
+	}
+
+	@Override
+	public List<Timetable> listTimetablesWithoutTeacher(int semesterId) {
+		return timetableDAO.listTimetablesWithoutTeacher(semesterId);
+	}
+
+	@Override
+	public List<Timetable> getTimetableByDateSlotTeacher(Date date, int slot, int teacherSemesterId) {
+		return timetableDAO.getTimetableByDateSlotTeacher(date, slot, teacherSemesterId);
+	}
+
+	@Override
+	public List<Timetable> getTimetableByDateSlotRoom(Date date, int slot, int roomId) {
+		return timetableDAO.getTimetableByDateSlotRoom(date, slot, roomId);
+	}
 }

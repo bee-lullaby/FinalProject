@@ -24,6 +24,10 @@ public interface TimetableDAO {
 
 	public Timetable getTimetableByDateSlotClass(Date date, int slot, int classSemesterId);
 
+	public List<Timetable> getTimetableByDateSlotTeacher(Date date, int slot, int teacherSemesterId);
+
+	public List<Timetable> getTimetableByDateSlotRoom(Date date, int slot, int roomId);
+
 	public void deleteTimetable(int timetableId);
 
 	public List<Timetable> listTimetablesByStudent(int semesterId, Student student);
@@ -50,4 +54,8 @@ public interface TimetableDAO {
 	public long countNumberSlots(int semesterId, boolean haveTeacher);
 
 	public List<Timetable> listTimetablesByRoom(int semesterId, int roomId);
+
+	public List<Timetable> listTimetablesWithoutRoom(int semesterId);
+
+	public List<Timetable> listTimetablesWithoutTeacher(int semesterId);
 }

@@ -3,7 +3,9 @@ package vn.edu.fpt.timetabling.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
+import vn.edu.fpt.timetabling.model.Course;
 import vn.edu.fpt.timetabling.model.Room;
 
 public interface RoomService {
@@ -16,8 +18,10 @@ public interface RoomService {
 	public List<Room> listRooms(boolean jointTimetable);
 
 	public Room getRoomById(int roomId, boolean jointTimetable);
-	
+
 	public Room getRoomByCode(String code, boolean jointTimetable);
-	
+
 	public void deleteRoom(int roomId);
+
+	public Map<Course, Map<String, Room>> getCourseRoomMap();
 }
