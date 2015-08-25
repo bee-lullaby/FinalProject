@@ -27,6 +27,9 @@ public class CourseServiceImpl implements CourseService {
 		this.courseDAO = courseDAO;
 	}
 
+	@Autowired
+	private CourseSemesterService courseSemesterService;
+	
 	@Override
 	public void addCourse(Course course) {
 		courseDAO.addCourse(course);
@@ -73,7 +76,11 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public void deleteCourse(int courseId) {
-		courseDAO.deleteCourse(courseId);
+	public void deleteCourse(int semesterId, int courseId) {
+		if(courseSemesterService.listCourseSemestersByCourseId(courseId, false, false, false).size() > 1) {
+			courseSemesterService.deleteCourseSemester(courseSemesterService.getCourseSemesterByCourseSemester(courseId, semesterId, false, false, false).getCourseSemesterId());
+		} else {
+			courseDAO.deleteCourse(courseId);
+		}
 	}
 }

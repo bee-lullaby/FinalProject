@@ -3,6 +3,7 @@ $(document).ready(function() {
 	_init();
 	
 	$("#table-courses").on("click", "a[id^='edit-course']", function() {
+		_clearDialogData($("#dialog-edit-course"));
 		_setDialogEditData($("#dialog-edit-course"), $(this).closest("tr"));
 		$("#dialog-edit-course").attr("data-action", "edit");
 		_showDialog("dialog-edit-course");
@@ -14,7 +15,7 @@ $(document).ready(function() {
 	});
 
 	$("#btn-delete-accept").on("click", function() {
-		window.location = "courses/deleteCourse?courseId=" +$("#dialog-delete-course").attr("data-courseId");
+		window.location = "courses/deleteCourse?semesterId=" +_urlParam("semesterId") +"&courseId=" +$("#dialog-delete-course").attr("data-courseId");
 	});
 	
 	$("#btn-delete-decline").on("click", function() {
@@ -103,14 +104,15 @@ $(document).ready(function() {
 		dialog.find("#courseCode").attr("readonly", false);
 		dialog.find("#courseCode").attr("disabled", false);
 		dialog.find("#slots").val("");
-		dialog.find("#select-semester-edit").find("option:first").attr("selected", "selected");
-		dialog.find("#select-department-edit").find("option:first").attr("selected", "selected");	
+		dialog.find("#select-department-edit").find("option:first").attr("selected", "selected");
+		dialog.find("#select-semester-edit option").attr("disabled", true);
+		dialog.find("#select-semester-edit").find("option[value='" +_urlParam("semesterId") +"']").attr("disabled", false).attr("selected", "selected");
 		dialog.find("#select-course-condition-edit option:first").attr("selected", "selected");
 	}
 	
 	function _setDialogEditData(dialog, tr) {
 		dialog.find("#courseId").val(tr.attr("data-courseId"));
-		dialog.find("#courseSemesterId").attr("value", tr.attr("data-courseSemesterId"));
+		dialog.find("#courseSemesterId").val(tr.attr("data-courseSemesterId"));
 		dialog.find("#courseName").val(tr.find("td:eq(0)").text());
 		dialog.find("#courseName").attr("readonly", true);
 //		dialog.find("#courseName").attr("disabled", true);

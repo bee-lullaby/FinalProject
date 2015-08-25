@@ -2,6 +2,7 @@ package vn.edu.fpt.timetabling.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,11 +13,15 @@ import vn.edu.fpt.timetabling.model.Teacher;
 @Transactional(rollbackFor = Exception.class)
 public class TeacherServiceImpl implements TeacherService {
 	private TeacherDAO teacherDAO;
-
+	
 	public void setTeacherDAO(TeacherDAO teacherDAO) {
 		this.teacherDAO = teacherDAO;
 	}
 
+	
+	@Autowired
+	private TeacherSemesterService teacherSemesterService;
+	
 	@Override
 	public void addTeacher(Teacher teacher) {
 		teacherDAO.addTeacher(teacher);
@@ -48,8 +53,12 @@ public class TeacherServiceImpl implements TeacherService {
 	}
 
 	@Override
-	public void deleteTeacher(int teacherId) {
-		teacherDAO.deleteTeacher(teacherId);
+	public void deleteTeacher(int semesterId, int teacherId) {
+		if(teacherSemesterService.listTeacherSemestersByTeacherId(teacherId, false, false).size() > 1) {
+			teacherSemesterService.deleteTeacherSemester(teacherSemesterService.getTeacherSemesterByTeacherSemester(teacherId, semesterId, false, false).getTeacherSemesterId());
+		} else {
+			teacherDAO.deleteTeacher(teacherId);
+		}
 	}
 	
 	

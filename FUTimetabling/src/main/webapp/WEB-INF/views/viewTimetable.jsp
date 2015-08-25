@@ -108,7 +108,7 @@ h3 {
 }
 </style>
 <body style="background-color: #F7F7F4">
-	<div style="width: 100%; height: 100%;">
+	<div style="width: 100%;">
 		<div style="margin-top: 25px;">
 			<div style="width: 90%; margin: 0 auto;">
 				<h1>
@@ -231,8 +231,6 @@ h3 {
 				</table>
 			</div>
 		</div>
-		
-			<t:footer />
 	</div>
 </body>
 </html>

@@ -1,6 +1,4 @@
 $(document).ready(function() { 
-	var coursesData = $("#coursesData").text();
-	var coursesJSON = null;
 	
 	var courseSemesterData = $("#courseSemesterData").text();
 	var courseSemesterJSON = null;
@@ -14,10 +12,8 @@ $(document).ready(function() {
 		mMergeClassJSON = JSON.parse(mMergeClassData);
 	}
 	
-	if(coursesData != undefined && coursesData != null && coursesData != ""
-			&& courseSemesterData != undefined && courseSemesterData != null && courseSemesterData != ""
+	if(courseSemesterData != undefined && courseSemesterData != null && courseSemesterData != ""
 			&& dtaData != undefined && dtaData != null && dtaData != "") { 
-		coursesJSON = JSON.parse(coursesData);
 		courseSemesterJSON = JSON.parse(courseSemesterData);
 		dtaJSON = JSON.parse(dtaData);
 	}
@@ -169,21 +165,19 @@ $(document).ready(function() {
 	}
 	
 	function _setListCourses() {
-		if(coursesJSON != null) {
-			for(var i = 0; i < coursesJSON.length; i++) {
-				$("#select-courses").append("<a id='" +coursesJSON[i].courseId +"' " +
-						"href='?semesterId=" +_urlParam("semesterId") +"&departmentId="+_urlParam("departmentId") +"" +
-						"&courseId=" +coursesJSON[i].courseId +"'>" 
-						+coursesJSON[i].code +"</button>");
-			} 
-			$("#select-courses a[id='" +_urlParam("courseId") +"']").addClass("active");
-			$("#title-course").text($("#select-courses a[id='" +_urlParam("courseSemesterId") +"']").text());
-		}
+		$.each($("#select-courses a"), function() {
+			$(this).attr("href", "?semesterId=" +_urlParam("semesterId") +"&departmentId=" +_urlParam("departmentId")
+					+"&courseSemesterId=" +$(this).attr("id"));
+		});
+		$("#select-courses a[id='" +_urlParam("courseSemesterId") +"']").addClass("active");
+		$("#title-course").text($("#select-courses a[id='" +_urlParam("courseSemesterId") +"']").text());
 	}
 	
 	function _setDataTableClasses() {
+		console.log("!23");
 		if(dtaJSON != undefined && dtaJSON != null) {
 			for(var i = 0; i < dtaJSON.length; i++) {
+				console.log("!23");
 				$("#table-classes tbody").append(_getTRTableClasses(i));
 			}
 		} else {
@@ -192,7 +186,6 @@ $(document).ready(function() {
 	}
 	
 	function _getTRTableClasses(position) {
-		console.log(dtaJSON[position].classCourseSemester);
 		text = "<tr id='" +dtaJSON[position].classCourseSemester.classCourseSemesterId +"' data-position='" +position +"'>" +
 				"<td>" 
 				+dtaJSON[position].classCourseSemester.classSemester.classFPT.code +"</td>" +
@@ -223,6 +216,7 @@ $(document).ready(function() {
 				});
 			} 
 			
+
 			if(dtaJSON != undefined && dtaJSON != null) {
 				for(var i = 0; i < dtaJSON.length; i++) {
 					if(dtaJSON[i].classCourseSemester.classCourseSemesterId == classCourseSemesterId) {
@@ -315,7 +309,6 @@ $(document).ready(function() {
 	}
 	
 	function _getOptionTeacher(x, y) {
-		console.log(dtaJSON[x].teacherAvailable);
 		return "<option value='" +dtaJSON[x].teacherAvailable[y].teacherSemesterId +"'>" +
 					dtaJSON[x].teacherAvailable[y].teacher.account +"</option>";
 	}

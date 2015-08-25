@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ public class TeacherController extends GeneralController {
 	private TeacherSemesterService teacherSemesterService;
 	private CourseSemesterService courseSemesterService;
 	private TeacherCourseSemesterService teacherCourseSemesterService;
+
 	@Autowired(required = true)
 	@Qualifier(value = "teacherService")
 	public void setTeacherService(TeacherService teacherService) {
@@ -66,13 +68,13 @@ public class TeacherController extends GeneralController {
 			TeacherCourseSemesterService teacherCourseSemesterService) {
 		this.teacherCourseSemesterService = teacherCourseSemesterService;
 	}
-	
+
 	@RequestMapping(value = "/staff/teachers", method = RequestMethod.GET)
 	public String teacherInit(HttpSession httpSession, Model model) {
-		List<Semester> semesters = semesterService
-				.listSemesters(false, false, false, false);
+		List<Semester> semesters = semesterService.listSemesters(false, false,
+				false, false);
 		int semesterId = 0;
-		if(!semesters.isEmpty()) 
+		if (!semesters.isEmpty())
 			semesterId = semesters.get(0).getSemesterId();
 		return "redirect:/staff/teachers?semesterId=" + semesterId;
 	}
@@ -83,8 +85,8 @@ public class TeacherController extends GeneralController {
 
 		model.addAttribute("listSemesters",
 				semesterService.listSemesters(false, false, false, false));
-		model.addAttribute("listCourseSemesters",
-				courseSemesterService.listCourseSemestersBySemester(semesterId, false, false, false));
+		model.addAttribute("listCourseSemesters", courseSemesterService
+				.listCourseSemestersBySemester(semesterId, false, false, false));
 		model.addAttribute("listTeacherSemesters",
 				teacherSemesterService.listTeacherSemestersForView(semesterId));
 		checkError(httpSession, model);
@@ -103,14 +105,15 @@ public class TeacherController extends GeneralController {
 			@RequestParam String email,
 			@RequestParam int semesterId,
 			@RequestParam(value = "courses", required = false) String[] courses,
-			HttpSession httpSession) throws TeacherExistedException {
+			HttpSession httpSession, HttpServletRequest request) throws TeacherExistedException {
 
 		Teacher teacher = teacherService.getTeacherByAccount(account);
-		TeacherSemester teacherSemester = teacherSemesterService.getTeacherSemesterByAccount(semesterId, account, false, false);
-		if (teacherSemester != null) {
+		TeacherSemester teacherSemester = teacherSemesterService
+				.getTeacherSemesterByAccount(semesterId, account, false, false);
+		if (teacherId == -1 && teacherSemester != null) {
 			throw new TeacherExistedException();
 		} else {
-			if(teacher == null) {
+			if (teacher == null) {
 				teacher = new Teacher();
 			}
 		}
@@ -118,20 +121,21 @@ public class TeacherController extends GeneralController {
 		teacher.setName(name);
 		teacher.setAccount(account);
 		teacher.setEmail(email);
-		if (teacher.getTeacherId() == -1) {
+		if (teacher.getTeacherId() == 0) {
 			teacherService.addTeacher(teacher);
 			httpSession.setAttribute("success", "Add Teacher Successful!");
-		} else {
+		} else if (teacherId != -1) {
 			teacher.setTeacherId(teacherId);
 			teacherService.updateTeacher(teacher);
 			httpSession.setAttribute("success", "Edit Teacher Successful!");
 		}
-
-		teacherSemester = new TeacherSemester();
-		teacherSemester.setSemester(semesterService.getSemesterById(semesterId,
-				false, false, false, false));
-		teacherSemester.setTeacher(teacher);
-
+		
+		if(teacherSemester == null) {
+			teacherSemester = new TeacherSemester();
+			teacherSemester.setSemester(semesterService.getSemesterById(semesterId,
+					false, false, false, false));
+			teacherSemester.setTeacher(teacher);
+		}
 		if (teacherSemesterId == -1) {
 			teacherSemesterService.addTeacherSemester(teacherSemester);
 		} else {
@@ -162,13 +166,14 @@ public class TeacherController extends GeneralController {
 				teacherCourseSemesterService.addTeacherCourseSemester(tcs);
 			}
 		}
-		return "redirect:/staff/teachers";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 
 	@RequestMapping(value = "/staff/teachers/addFromFile", method = RequestMethod.POST)
 	public String addTeachersFromFile(@RequestParam("act") int act,
 			@RequestParam("file") MultipartFile file,
-			@RequestParam("semesterId") int semesterId, HttpSession httpSession) {
+			@RequestParam("semesterId") int semesterId, HttpSession httpSession, HttpServletRequest request) {
 		if (!file.isEmpty()) {
 			File teachers = new File("teachers.xlxs");
 			try {
@@ -182,19 +187,22 @@ public class TeacherController extends GeneralController {
 					List<String> check = teacherCourseSemesterService
 							.addTeacherCourseSemesterFromFile(teachers,
 									semesterId);
-					if(check.isEmpty()) {
+					if (check.isEmpty()) {
 						httpSession.setAttribute("success",
 								"Add Teachers Courses from File successful!");
 					} else {
-						String text = "Course " +check.get(0);
-						for(int i = 1; i < check.size(); i++) {
-							text += ", " +check.get(i);
+						String text = "Course " + check.get(0);
+						for (int i = 1; i < check.size(); i++) {
+							text += ", " + check.get(i);
 						}
-						if(check.size() == 1) text += " is ";
-						else text += " are ";
+						if (check.size() == 1)
+							text += " is ";
+						else
+							text += " are ";
 						text += "not existed! Please insert course first then try again!";
 						httpSession.setAttribute("error", text);
-						httpSession.setAttribute("success", "Others teachers were added successful!");
+						httpSession.setAttribute("success",
+								"Others teachers were added successful!");
 					}
 				}
 			} catch (IllegalStateException e) {
@@ -205,23 +213,26 @@ public class TeacherController extends GeneralController {
 				e.printStackTrace();
 			}
 		}
-		return "redirect:/staff/teachers";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 
-	@RequestMapping(value = "/staff/teachers/deleteTeacher", method = RequestMethod.GET, params = { "teacherId" })
-	public String deleteTeacher(@RequestParam int teacherId,
-			HttpSession httpSession) {
-		teacherService.deleteTeacher(teacherId);
+	@RequestMapping(value = "/staff/teachers/deleteTeacher", method = RequestMethod.GET, params = {
+			"semesterId", "teacherId" })
+	public String deleteTeacher(@RequestParam int semesterId,
+			@RequestParam int teacherId, HttpSession httpSession, HttpServletRequest request) {
+		teacherService.deleteTeacher(semesterId, teacherId);
 		httpSession.setAttribute("success",
 				"Delete Teachers Semester successful!");
-		return "redirect:/staff/teachers";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
-	
 
 	@ExceptionHandler(TeacherExistedException.class)
-	public String handleException(HttpSession httpSession, Exception e) {
+	public String handleException(HttpSession httpSession, Exception e, HttpServletRequest request) {
 		httpSession.setAttribute("error",
 				"This Teacher's account existed! Please try again!");
-		return "redirect:/staff/teachers";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 }

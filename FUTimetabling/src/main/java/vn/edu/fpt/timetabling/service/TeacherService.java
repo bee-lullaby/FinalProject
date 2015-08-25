@@ -17,5 +17,5 @@ public interface TeacherService {
 	
 	public Teacher getTeacherByAccount(String account);
 
-	public void deleteTeacher(int teacherId);
+	public void deleteTeacher(int semesterId, int teacherId);
 }

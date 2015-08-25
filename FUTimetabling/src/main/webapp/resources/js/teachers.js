@@ -2,7 +2,9 @@ $(document).ready(function() {
 
 	_init();
 	$("#table-teachers").on("click", "a[id^='edit-teacher']",function() {
+		_clearDialogData($("#dialog-edit-teacher"));
 		_setDialogEditData($("#dialog-edit-teacher"), $(this).closest("tr"));
+		
 		_showDialog("dialog-edit-teacher");
 	});
 
@@ -12,7 +14,7 @@ $(document).ready(function() {
 	});
 
 	$("#btn-delete-accept").on("click", function() {
-		window.location = "teachers/deleteTeacher?teacherId=" +$("#dialog-delete-teacher").attr("data-teacherId");
+		window.location = "teachers/deleteTeacher?semesterId=" +_urlParam("semesterId") +"&teacherId=" +$("#dialog-delete-teacher").attr("data-teacherId");
 	});
 	
 	$("#btn-delete-decline").on("click", function() {
@@ -96,6 +98,8 @@ $(document).ready(function() {
 		var input = $("<input>").attr("type", "hidden")
         						.attr("name", "semesterId").val(_urlParam("semesterId"));
 		$('#form-add-file').append($(input));
+		
+		
 	}
 	
 	function _clearDialogData(dialog) {
@@ -104,7 +108,8 @@ $(document).ready(function() {
 		dialog.find("#name").attr("value", "");
 		dialog.find("#account").attr("value", "");
 		dialog.find("#email").attr("value", "");
-		dialog.find("#select-semester-edit").find("option:first").attr("selected", "selected");
+		dialog.find("#select-semester-edit option").attr("disabled", true);
+		dialog.find("#select-semester-edit").find("option[value='" +_urlParam("semesterId") +"']").attr("disabled", false).attr("selected", "selected");
 		dialog.find("#select-courses option").each(function() {
 			$(this).removeAttr("selected");
 		});

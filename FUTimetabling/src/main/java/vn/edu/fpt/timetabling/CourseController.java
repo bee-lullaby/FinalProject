@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,30 +90,33 @@ public class CourseController extends GeneralController {
 			@RequestParam int courseSemesterId, @RequestParam String code,
 			@RequestParam String name, @RequestParam int slots,
 			@RequestParam int semesterId, @RequestParam int departmentId,
-			@RequestParam(value="courseConditionId", required = false) int courseConditionId, HttpSession httpSession)
+			@RequestParam(value="courseConditionId", required = false) int courseConditionId, HttpSession httpSession, HttpServletRequest request)
 			throws CourseExistedException {
 
 		Course course = courseService.getCourseByCode(code);
-		if ((courseId == -1 && course != null)
-				|| (course != null && courseId != -1 && courseId != course
-						.getCourseId())) {
+		CourseSemester courseSemester = courseSemesterService.getCourseSemesterByCourseCodeSemester(code, semesterId, false, false, false);
+		if (courseId == -1 && courseSemester != null) {
 			throw new CourseExistedException();
 		} else {
-			course = new Course();
+			if (course == null) {
+				course = new Course();
+			}
 		}
 
 		course.setCode(code);
 		course.setName(name);
 		course.setDepartment(departmentService.getDepartmentById(departmentId));
 
-		if (courseId == -1) {
+		if (course.getCourseId() == -1) {
 			courseService.addCourse(course);
-		} else {
+		} else if (courseId != -1) {
 			course.setCourseId(courseId);
 			courseService.updateCourse(course);
 		}
 
-		CourseSemester courseSemester = new CourseSemester();
+		if(courseSemester == null) {
+			courseSemester = new CourseSemester();
+		}
 		courseSemester.setSlots(slots);
 		courseSemester.setSemester(semesterService.getSemesterById(semesterId,
 				false, false, false, false));
@@ -128,11 +132,13 @@ public class CourseController extends GeneralController {
 			courseSemesterService.updateCourseSemester(courseSemester);
 			httpSession.setAttribute("success", "Edit Course Successful!");
 		}
-		return "redirect:/staff/courses";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 
 	@RequestMapping(value = "/staff/courses/addFromFile", method = RequestMethod.POST)
-	public String addCourseFromFile(@RequestParam("file") MultipartFile file, @RequestParam("semesterId") int semesterId, HttpSession httpSession) {
+	public String addCourseFromFile(@RequestParam("file") MultipartFile file, @RequestParam("semesterId") int semesterId, HttpSession httpSession,
+			HttpServletRequest request) {
 		if (!file.isEmpty()) {
 			File courses = new File("courses.xlxs");
 			try {
@@ -157,21 +163,24 @@ public class CourseController extends GeneralController {
 				e.printStackTrace();
 			}
 		}
-		return "redirect:/staff/courses";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 
-	@RequestMapping(value = "/staff/courses/deleteCourse", method = RequestMethod.GET, params = { "courseId" })
-	public String deleteCourse(@RequestParam int courseId,
-			HttpSession httpSession) {
-		courseService.deleteCourse(courseId);
+	@RequestMapping(value = "/staff/courses/deleteCourse", method = RequestMethod.GET, params = { "semesterId", "courseId" })
+	public String deleteCourse(@RequestParam int semesterId, @RequestParam int courseId,
+			HttpSession httpSession, HttpServletRequest request) {
+		courseService.deleteCourse(semesterId, courseId);
 		httpSession.setAttribute("success", "Delete Course Successful!");
-		return "redirect:/staff/courses";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 
 	@ExceptionHandler(CourseExistedException.class)
-	public String handleException(HttpSession httpSession, Exception e) {
+	public String handleException(HttpSession httpSession, Exception e, HttpServletRequest request) {
 		httpSession.setAttribute("error",
 				"This Course's code existed! Please try again!");
-		return "redirect:/staff/courses";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 }

@@ -50,25 +50,18 @@ public class TeacherArrangementServiceImpl implements TeacherArrangementService 
 	}
 
 	@Override
-	public List<Course> getListCourse(int departmentId) {
-		List<Course> results = new ArrayList<Course>();
-		Department department = departmentService.getDepartmentById(departmentId);
-		for (Course course : department.getCourses()) {
-			Course newCourse = new Course();
-			newCourse.setCourseId(course.getCourseId());
-			newCourse.setCode(course.getCode());
-			results.add(newCourse);
-		}
-
+	public List<CourseSemester> getListCourseSemester(int semesterId, int departmentId) {
+		List<CourseSemester> results = new ArrayList<CourseSemester>();
+		results.addAll(courseSemesterService.listCourseSemestersByDepartment(semesterId, departmentId, false, false, false));
 		return results;
 	}
 
 	@Override
-	public CourseSemester getCourseSemester(int semesterId, int courseId) {
+	public CourseSemester getCourseSemester(int courseSemesterId) {
 
 		CourseSemester courseSemester = new CourseSemester();
 
-		CourseSemester cs = courseSemesterService.getCourseSemesterByCourseSemester(courseId, semesterId, true, true,
+		CourseSemester cs = courseSemesterService.getCourseSemesterById(courseSemesterId, true, true,
 				false);
 		// set CourseSemeter ID
 		courseSemester.setCourseSemesterId(cs.getCourseSemesterId());
@@ -145,10 +138,10 @@ public class TeacherArrangementServiceImpl implements TeacherArrangementService 
 	}
 
 	@Override
-	public List<DataTeacherArrangement> getDataTeacherArrangement(int semesterId, int courseId) {
+	public List<DataTeacherArrangement> getDataTeacherArrangement(int courseSemesterId) {
 		List<DataTeacherArrangement> dta = new ArrayList<DataTeacherArrangement>();
 
-		CourseSemester cs = courseSemesterService.getCourseSemesterByCourseSemester(courseId, semesterId, true, true,
+		CourseSemester cs = courseSemesterService.getCourseSemesterById(courseSemesterId, true, true,
 				false);
 
 		Set<ClassCourseSemester> classCourseSemesters = cs.getClassCourseSemesters();

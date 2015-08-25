@@ -118,6 +118,8 @@ $(document).ready(function(){
 			if(td.find("div[id='color']").is("[class^='color-']")) {
 				td.find("div[id='color']").removeClass(td.find("div[id='color']").attr("class"));
 				td.find("div[id='text']").text("");
+				JSONdata[position].dataSchedule[prevCourse].remainSlots += 1;
+				console.log(JSONdata[position].dataSchedule[prevCourse].remainSlots);
 				JSONdata[position].dataSchedule[prevCourse].learnCourseInSlot -= 1;
 			}
 			if(courseSelectedVal != -1) {
@@ -125,11 +127,8 @@ $(document).ready(function(){
 				td.find("div[id='color']").addClass(color);
 				td.find("div[id='text']").text($("span[id='" +courseSelectedVal +"'] ").closest("div").text().trim());
 				JSONdata[position].dataSchedule[courseSelectedText].learnCourseInSlot += 1;
-			} else {
-				JSONdata[position].dataSchedule[prevCourse].remainSlots += 1;
 			}
 			JSONdata[position].setCourseSlot = courseSelectedVal;
-			console.log(JSONdata[position].setCourseSlot);
 			$("#dialog-schedule").removeData("prev-course-selected");
 			_clearScheduleDialog();
 				console.log(_checkMergeClass(position, courseSelectedVal));
