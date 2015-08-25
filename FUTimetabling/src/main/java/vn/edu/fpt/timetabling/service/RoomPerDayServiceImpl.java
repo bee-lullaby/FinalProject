@@ -20,6 +20,7 @@ import vn.edu.fpt.timetabling.model.Room;
 import vn.edu.fpt.timetabling.model.Teacher;
 import vn.edu.fpt.timetabling.model.TeacherSemester;
 import vn.edu.fpt.timetabling.model.Timetable;
+import vn.edu.fpt.timetabling.utils.Const;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -36,14 +37,12 @@ public class RoomPerDayServiceImpl implements RoomPerDayService {
 
 		List<Timetable> timetableOfDayData = new ArrayList<Timetable>();
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date d;
+		SimpleDateFormat sdf = new SimpleDateFormat(Const.DATE);
+		
 		try {
-			d = sdf.parse(date);
-
+			Date d = sdf.parse(date);
 			List<Timetable> listTimetable = timetableService
 					.listTimetablesByDate(d);
-
 			for (Timetable t : listTimetable) {
 				ClassCourseSemester ccs = t.getClassCourseSemester();
 
@@ -95,7 +94,6 @@ public class RoomPerDayServiceImpl implements RoomPerDayService {
 					teacher.setTeacher(tea);
 					timetable.setTeacherSemester(teacher);
 				}
-
 				timetableOfDayData.add(timetable);
 			}
 		} catch (ParseException e) {

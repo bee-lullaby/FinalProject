@@ -23,8 +23,28 @@
 <script src="../resources/js/prettify/run_prettify.js"></script>
 <script src="../resources/js/ga.js"></script>
 <script src="../resources/js/jquery.dataTables.min.js"></script>
+<script>
+	function _errorNotify() {
+		var text = $("#messageError").text();
+		$.Notify({
+			type : 'alert',
+			caption : 'Alert',
+			content : text
+		});
+	}
+
+	function _successNotify() {
+		var text = $("#messageSuccess").text();
+		$.Notify({
+			type : 'success',
+			caption : 'Success',
+			content : text
+		});
+	}
+</script>
 </head>
 <body>
+	<t:header />
 	<div style="display: none">
 		<div id="roomsData">${roomsData}</div>
 		<div id="timetableData">${timetableData}</div>
@@ -33,7 +53,7 @@
 
 		<div style="width: 100%;">
 			<h1 id="title" style="display: inline-block">
-				<a href="index.html" class="nav-button transform"><span></span></a>
+				<t:nav />
 				&nbsp;
 			</h1>
 			<div style="float: right; margin: 1.2rem 0;">

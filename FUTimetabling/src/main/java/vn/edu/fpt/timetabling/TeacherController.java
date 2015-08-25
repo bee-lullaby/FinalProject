@@ -106,18 +106,19 @@ public class TeacherController extends GeneralController {
 			HttpSession httpSession) throws TeacherExistedException {
 
 		Teacher teacher = teacherService.getTeacherByAccount(account);
-		if ((teacherId == -1 && teacher != null)
-				|| (teacher != null && teacherId != -1 && teacherId != teacher
-						.getTeacherId())) {
+		TeacherSemester teacherSemester = teacherSemesterService.getTeacherSemesterByAccount(semesterId, account, false, false);
+		if (teacherSemester != null) {
 			throw new TeacherExistedException();
 		} else {
-			teacher = new Teacher();
+			if(teacher == null) {
+				teacher = new Teacher();
+			}
 		}
 
 		teacher.setName(name);
 		teacher.setAccount(account);
 		teacher.setEmail(email);
-		if (teacherId == -1) {
+		if (teacher.getTeacherId() == -1) {
 			teacherService.addTeacher(teacher);
 			httpSession.setAttribute("success", "Add Teacher Successful!");
 		} else {
@@ -126,7 +127,7 @@ public class TeacherController extends GeneralController {
 			httpSession.setAttribute("success", "Edit Teacher Successful!");
 		}
 
-		TeacherSemester teacherSemester = new TeacherSemester();
+		teacherSemester = new TeacherSemester();
 		teacherSemester.setSemester(semesterService.getSemesterById(semesterId,
 				false, false, false, false));
 		teacherSemester.setTeacher(teacher);
@@ -148,7 +149,6 @@ public class TeacherController extends GeneralController {
 		}
 		if (courses != null) {
 			for (String course : courses) {
-				System.out.println(course);
 				TeacherCourseSemester tcs = new TeacherCourseSemester();
 				tcs.setCourseSemester(courseSemesterService
 						.getCourseSemesterByCourseSemester(
