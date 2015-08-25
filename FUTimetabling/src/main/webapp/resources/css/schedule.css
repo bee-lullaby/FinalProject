@@ -46,3 +46,19 @@
 #course-info-to-set th, #course-info-to-set td {
 	font-size: 1.1rem;
 }
+
+#timetable tbody td {
+	padding: 0
+}
+
+#timetable tbody tr td div#color {
+	margin-right: 10px; 
+	height: 100%; 
+	width: 25px;
+	float:left;
+}
+
+#timetable tbody tr td div#text {
+	margin-top:15px;
+	font-size: 1rem;
+}

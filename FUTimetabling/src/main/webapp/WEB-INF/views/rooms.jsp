@@ -146,6 +146,7 @@ h3 {
 								data-hint-position="top" data-hint="Add From File">
 								<span class="mif-file-text"></span>
 							</button>
+							<button id="btn-room-per-day" class="button">Room by Day</button>
 						</div>
 					</div>
 					<div style="width: 100%; height: 100%;">

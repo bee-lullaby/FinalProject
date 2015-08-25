@@ -391,10 +391,11 @@ $(document).ready(
 				for(var z = 0; z < roomsJSON[r].timetables.length; z++) {
 						var roomId = roomsJSON[r].roomId;
 						if(classCourseSemester.timetable[y].date == roomsJSON[r].timetables[z].date 
-								&& classCourseSemester.timetable[y].slot == roomsJSON[r].timetables[z].slot 
-								&& classCourseSemester.timetable[y].room != null 
-								&& classCourseSemester.timetable[y].room.roomId != roomId) {
-							
+								&& classCourseSemester.timetable[y].slot == roomsJSON[r].timetables[z].slot) {
+							if(classCourseSemester.timetable[y].room != null 
+									&& classCourseSemester.timetable[y].room.roomId == roomId) {
+								break;
+							}
 							if(listRoomsCantSet.indexOf(roomId) < 0) {
 								listRoomsCantSet.push(roomId);
 							}

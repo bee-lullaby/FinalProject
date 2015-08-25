@@ -123,7 +123,7 @@
 					<c:forEach items="${listClassCourses}" var="classCourseSemester">
 						<c:set var="x" value="${x + 1}" scope="page" />
 						<div id="course-${x}"
-							style="cursor: pointer; display: inline-block">
+							style="display: inline-block">
 							<span id="${classCourseSemester.classCourseSemesterId}"
 								class="course-color color-${x}"></span>
 							&nbsp;${classCourseSemester.getCourseSemester().getCourse().code}&nbsp;&nbsp;
@@ -179,42 +179,6 @@
 			</div>
 		</div>
 	</div>
-	<!-- Dialogs -->
-
-	<c:set var="y" value="0" scope="page" />
-	<c:forEach items="${listClassCourses}" var="classCourseSemester">
-
-		<c:set var="y" value="${y + 1}" scope="page" />
-		<div id="dialog-info-course-${y}" data-role="dialog" class="padding20"
-			data-close-button="true" data-overlay="true"
-			data-overlay-color="op-dark">
-			<h1>${classCourseSemester.getCourseSemester().getCourse().code}</h1>
-			<table id="table-course" class="table">
-				<tr>
-					<th>Teacher (<font id="numberOfTeacher"></font>):
-					</th>
-					<td colspan="3">
-						<div class="input-control select">
-							<select>
-								<c:forEach items="${listTeacherCourseSemester}" var="teacher">
-									<c:choose>
-										<c:when
-											test="${classCourseSemester.getCourseSemester().courseSemesterId == teacher.getCourseSemester().courseSemesterId}">
-											<option
-												value="${teacher.getTeacherSemester().getTeacher().teacherId}">
-												${teacher.getTeacherSemester().getTeacher().account}</option>
-										</c:when>
-									</c:choose>
-
-								</c:forEach>
-							</select>
-						</div>
-					</td>
-				</tr>
-			</table>
-		</div>
-	</c:forEach>
-
 
 	<div id="dialog-schedule" data-role="dialog" class="padding20"
 		data-overlay="true" data-overlay-color="op-dark"
