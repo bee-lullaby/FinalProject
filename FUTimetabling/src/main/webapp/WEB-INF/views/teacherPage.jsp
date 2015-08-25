@@ -158,7 +158,7 @@
 <body>
 	<div class="tile-area fg-black" style="width: 80%; margin: 0 auto;">
 		<div class="tile-area-title">
-			<img src="resources/images/logo_fu.png" style="width: 150px; top: 40px;" />
+			<img src="resources/images/logo_fu_home.png" style="width: 150px; top: 40px;" />
 		</div>
 		<div class="tile-area-controls" style="top: 30px;">
 			<button
@@ -171,15 +171,14 @@
 				class="mif-switch"></span>
 			</a>
 		</div>
-
 		<div class="tile-group double">
 			<span class="tile-group-title" style="color: black">ACTIVITIES</span>
 			<div class="tile-container">
-				<div class="tile-wide bg-cyan fg-white" data-role="tile" id="activity-viewTimetable">
+				<div class="tile bg-cyan fg-white" data-role="tile" id="activity-viewTimetable">
 					<div class="tile-content iconic">
-						<div class="icon flaticon-check7"></div>
+						<div class="icon flaticon-calendars16"></div>
 					</div>
-					<span class="tile-label">Classes Arrangement</span>
+					<span class="tile-label">View Timetable</span>
 				</div>
 			</div>
 		</div>

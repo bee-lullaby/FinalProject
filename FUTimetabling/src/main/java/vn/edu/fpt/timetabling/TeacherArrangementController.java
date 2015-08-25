@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import vn.edu.fpt.timetabling.model.Course;
 import vn.edu.fpt.timetabling.model.CourseSemester;
 import vn.edu.fpt.timetabling.model.DataTeacherArrangement;
 import vn.edu.fpt.timetabling.model.Timetable;
@@ -86,12 +85,12 @@ public class TeacherArrangementController extends GeneralController {
 		List<CourseSemester> courseSemesters = courseSemesterService
 				.listCourseSemestersByDepartment(semesterId, departmentId,
 						false, false, false);
-		int courseId = 0;
+		int courseSemesterId = 0;
 		if (courseSemesters.size() != 0) {
-			courseId = courseSemesters.get(0).getCourse().getCourseId();
+			courseSemesterId = courseSemesters.get(0).getCourseSemesterId();
 		}
 		return "redirect:/staff/teacherArrangement?semesterId=" + semesterId
-				+ "&departmentId=" + departmentId + "&courseId=" + courseId;
+				+ "&departmentId=" + departmentId + "&courseSemesterId=" + courseSemesterId;
 	}
 
 	@RequestMapping(value = "/staff/teacherArrangement", method = RequestMethod.GET, params = { "semesterId" })
@@ -102,12 +101,12 @@ public class TeacherArrangementController extends GeneralController {
 		List<CourseSemester> courseSemesters = courseSemesterService
 				.listCourseSemestersByDepartment(semesterId, departmentId,
 						false, false, false);
-		int courseId = 0;
+		int courseSemesterId = 0;
 		if (courseSemesters.size() != 0) {
-			courseId = courseSemesters.get(0).getCourse().getCourseId();
+			courseSemesterId = courseSemesters.get(0).getCourseSemesterId();
 		}
 		return "redirect:/staff/teacherArrangement?semesterId=" + semesterId
-				+ "&departmentId=" + departmentId + "&courseId=" + courseId;
+				+ "&departmentId=" + departmentId + "&courseSemesterId=" + courseSemesterId;
 
 	}
 
@@ -119,42 +118,36 @@ public class TeacherArrangementController extends GeneralController {
 		List<CourseSemester> courseSemesters = courseSemesterService
 				.listCourseSemestersByDepartment(semesterId, departmentId,
 						false, false, false);
-		int courseId = 0;
+		int courseSemesterId = 0;
 		if (courseSemesters.size() != 0) {
-			courseId = courseSemesters.get(0).getCourse().getCourseId();
+			courseSemesterId = courseSemesters.get(0).getCourseSemesterId();
 		}
 		return "redirect:/staff/teacherArrangement?semesterId=" + semesterId
-				+ "&departmentId=" + departmentId + "&courseId=" + courseId;
+				+ "&departmentId=" + departmentId + "&courseSemesterId=" + courseSemesterId;
 	}
 
 	@RequestMapping(value = "/staff/teacherArrangement", method = RequestMethod.GET, params = {
-			"semesterId", "departmentId", "courseId" })
+			"semesterId", "departmentId", "courseSemesterId" })
 	public String teacherArrangementSemesterDepartmentCourse(
 			@RequestParam int semesterId, @RequestParam int departmentId,
-			@RequestParam int courseId, Model model, HttpSession httpSession) {
-		List<Course> coursesData;
+			@RequestParam int courseSemesterId, Model model, HttpSession httpSession) {
+		List<CourseSemester> coursesData =  teacherArrangementService.getListCourseSemester(semesterId, departmentId);
 		CourseSemester courseSemesterData;
 		List<DataTeacherArrangement> dtaData;
 		HashMap<String, Set<Integer>> mMergerClassData = classCourseSemesterMergeService.getMapCourseWithMergeClassInSemester(semesterId);
-		if (courseId != 0) {
-			coursesData = teacherArrangementService.getListCourse(departmentId);
-			courseSemesterData = teacherArrangementService.getCourseSemester(semesterId, 
-					courseId);
-			dtaData = teacherArrangementService.getDataTeacherArrangement(
-					semesterId, courseId);
+		if (courseSemesterId != 0) {
+			courseSemesterData = teacherArrangementService.getCourseSemester(courseSemesterId);
+			dtaData = teacherArrangementService.getDataTeacherArrangement(courseSemesterId);
 		} else {
-			coursesData = new ArrayList<Course>();
 			courseSemesterData = new CourseSemester();
 			dtaData = new ArrayList<DataTeacherArrangement>();
 		}
 		ObjectMapper om = new ObjectMapper();
-		StringWriter coursesJSON = new StringWriter();
 		StringWriter courseSemesterJSON = new StringWriter();
 		StringWriter dtaJSON = new StringWriter();
 		StringWriter mMergeClassJSON = new StringWriter();
 		try {
-			if (courseId != 0) {
-				om.writeValue(coursesJSON, coursesData);
+			if (courseSemesterId != 0) {
 				om.writeValue(courseSemesterJSON, courseSemesterData);
 				om.writeValue(dtaJSON, dtaData);
 				om.writeValue(mMergeClassJSON, mMergerClassData);
@@ -162,8 +155,10 @@ public class TeacherArrangementController extends GeneralController {
 			model.addAttribute("listSemesters",
 					semesterService.listSemesters(false, false, false, false));
 			model.addAttribute("listDepartments", teacherArrangementService.getListDepartment());
-			if (courseId != 0) {
-				model.addAttribute("coursesData", coursesJSON);
+			if (courseSemesterId != 0) {
+				model.addAttribute("semesterId", semesterId);
+				model.addAttribute("departmentId", departmentId);
+				model.addAttribute("coursesData", coursesData);
 				model.addAttribute("courseSemesterData", courseSemesterJSON);
 				model.addAttribute("dtaData", dtaJSON);
 				model.addAttribute("mMergeClassData", mMergeClassJSON); 

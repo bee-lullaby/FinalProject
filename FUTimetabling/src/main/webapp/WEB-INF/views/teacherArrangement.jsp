@@ -92,7 +92,6 @@ h3 {
 <body>
 	<t:header />
 	<div style="display: none">
-		<div id="coursesData">${coursesData}</div>
 		<div id="courseSemesterData">${courseSemesterData}</div>
 		<div id="dtaData">${dtaData}</div>
 		<div id="mMergeClassData">${mMergeClassData}</div>
@@ -127,7 +126,13 @@ h3 {
 			</div>
 			<div style="display: inline-block; width:100%;" class="left">
 				<h3>COURSES</h3>
-				<div id="select-courses" style="height: 200px;"></div>
+				<div id="select-courses" style="height: 200px;">
+					<c:if test="${!empty coursesData}">
+						<c:forEach items="${coursesData}" var="courseSemester">
+							<a id="${courseSemester.courseSemesterId}">${courseSemester.course.code}</a>
+						</c:forEach>
+					</c:if>
+				</div>
 			</div>
 		</div>
 		<div

@@ -52,4 +52,7 @@ public interface CourseSemesterService {
 			boolean jointClassCourseSemester,
 			boolean jointTeacherCourseSemester,
 			boolean jointProgramSemesterDetails);
+	
+	public List<CourseSemester> listCourseSemestersByCourseId(int courseId,
+			boolean jointClassCourseSemester, boolean jointTeacherCourseSemester, boolean jointProgramSemesterDetails);
 }

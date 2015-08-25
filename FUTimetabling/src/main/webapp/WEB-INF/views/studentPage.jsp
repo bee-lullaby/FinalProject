@@ -156,43 +156,27 @@
 <body>
 	<div class="tile-area fg-black" style="width: 80%; margin: 0 auto;">
 		<div class="tile-area-title">
-			<img src="resources/images/logo_fu.png" style="width: 150px; top: 40px;" />
+			<img src="resources/images/logo_fu_home.png" style="width: 150px; top: 40px;" />
 		</div>
 		<div class="tile-area-controls" style="top: 30px;">
 			<button
 				class="image-button icon-right bg-transparent bg-hover-dark no-border">
 				<span class="sub-header no-margin text-light">You are logged
-					in as ${accountType}</span> <span class="icon mif-user"></span>
+					in as <b>${account}</b></span> <span class="icon mif-user"></span>
 			</button>
 			<a href="/FUTimetabling/logout"
 				class="square-button bg-transparent bg-hover-dark no-border"> <span
 				class="mif-switch"></span>
 			</a>
 		</div>
-
-		<div class="tile-group double">
-			<span class="tile-group-title" style="color: black">ACCOUNT</span>
-
-			<div class="tile-container">
-				<div class="tile-large fg-white" data-role="tile"
-					style="background: url(resources/images/testAvatar.jpg) top left no-repeat; background-size: cover">
-					<div class="tile-content">
-						<div class="padding10">
-							<h1>${name}</h1>
-							<h5>${account}</h5>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
 		<div class="tile-group double">
 			<span class="tile-group-title" style="color: black">ACTIVITIES</span>
 			<div class="tile-container">
-				<div class="tile-wide bg-cyan fg-white" data-role="tile" id="activity-viewTimetable">
+				<div class="tile bg-cyan fg-white" data-role="tile" id="activity-viewTimetable">
 					<div class="tile-content iconic">
-						<div class="icon flaticon-check7"></div>
+						<div class="icon flaticon-calendars16"></div>
 					</div>
-					<span class="tile-label">Classes Arrangement</span>
+					<span class="tile-label">View Timetable</span>
 				</div>
 			</div>
 		</div>

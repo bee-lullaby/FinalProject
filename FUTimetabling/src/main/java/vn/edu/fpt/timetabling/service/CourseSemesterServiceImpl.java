@@ -186,5 +186,11 @@ public class CourseSemesterServiceImpl implements CourseSemesterService {
 		return courseSemesterDAO.listCourseSemestersByDepartment(semesterId,
 				departmentId, false, false, false);
 	}
+	
+	@Override
+	public List<CourseSemester> listCourseSemestersByCourseId(int courseId,
+			boolean jointClassCourseSemester, boolean jointTeacherCourseSemester, boolean jointProgramSemesterDetails) {
+		return courseSemesterDAO.listCourseSemestersByCourseId(courseId, jointClassCourseSemester, jointTeacherCourseSemester, jointProgramSemesterDetails);
+	}
 
 }

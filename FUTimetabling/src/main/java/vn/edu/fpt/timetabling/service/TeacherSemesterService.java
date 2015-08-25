@@ -17,7 +17,10 @@ public interface TeacherSemesterService {
 
 	public List<TeacherSemester> listTeacherSemestersBySemester(int semesterId, boolean jointTeacherCourseSemesters,
 			boolean jointTimetables);
-
+	
+	public List<TeacherSemester> listTeacherSemestersByTeacherId(int teacherId, boolean jointTeacherCourseSemesters,
+			boolean jointTimetables);
+	
 	public TeacherSemester getTeacherSemesterById(int teacherSemesterId, boolean jointTeacherCourseSemesters,
 			boolean jointTimetables);
 

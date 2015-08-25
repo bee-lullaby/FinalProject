@@ -15,6 +15,9 @@ public interface TeacherSemesterDAO {
 	
 	public List<TeacherSemester> listTeacherSemestersByCourse(int courseId);
 	
+	public List<TeacherSemester> listTeacherSemestersByTeacherId(int teacherId, boolean jointTeacherCourseSemesters,
+			boolean jointTimetables);
+	
 	public TeacherSemester getTeacherSemesterById(int teacherSemesterId, boolean jointTeacherCourseSemesters,
 			boolean jointTimetables);
 

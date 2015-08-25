@@ -30,6 +30,9 @@ public interface CourseSemesterDAO {
 
 	public List<CourseSemester> listCourseSemestersByDepartment(int semesterId, int departmentId,
 			boolean jointClassCourseSemester, boolean jointTeacherCourseSemester, boolean jointProgramSemesterDetails);
-
+	
+	public List<CourseSemester> listCourseSemestersByCourseId(int courseId,
+			boolean jointClassCourseSemester, boolean jointTeacherCourseSemester, boolean jointProgramSemesterDetails);
+	
 	public int deleteCourseSemesters(int semesterId);
 }

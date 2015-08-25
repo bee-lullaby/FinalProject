@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -164,7 +163,7 @@ public class ClassFPTController extends GeneralController {
 			"classId", "courseId", "blockCondition", "semesterLong" })
 	public String updateClassCourse(@RequestParam int semesterId, @RequestParam int classId,
 			@RequestParam String[] courseId, @RequestParam String[] blockCondition, @RequestParam String[] semesterLong,
-			HttpSession httpSession) {
+			HttpSession httpSession, HttpServletRequest request) {
 		ClassSemester classSemester = classSemesterService.getClassSemesterByClassSemester(semesterId, classId, true);
 		for (ClassCourseSemester classCourseSemester : classSemester.getClassCourseSemesters()) {
 			classCourseSemesterService.deleteClassCourseSemester(classCourseSemester.getClassCourseSemesterId());
@@ -187,12 +186,12 @@ public class ClassFPTController extends GeneralController {
 			}
 		}
 		httpSession.setAttribute("success", "Courses of Class were updated successful!");
-		return "redirect:/staff/classFPTs";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 
-	@RequestMapping(value = "/staff/classFPTs/updateClassFPTs", method = RequestMethod.POST, params = { "classId",
-			"classSemesterId", "semesterId", "batch", "batchChar", "type", "specializedId" })
-	public String updateClassFPTs(@RequestParam int classId, @RequestParam int classSemesterId,
+	@RequestMapping(value = "/staff/classFPTs/updateClassFPTs", method = RequestMethod.POST, params = {"semesterId", "batch", "batchChar", "type", "specializedId" })
+	public String updateClassFPTs(
 			@RequestParam int semesterId, @RequestParam int batch, @RequestParam char batchChar,
 			@RequestParam String type, @RequestParam int specializedId,
 			@RequestParam(value = "detailSepecializedId", required = false) int detailSepecializedId,
@@ -210,12 +209,7 @@ public class ClassFPTController extends GeneralController {
 			// return "redirect:/staff/classes";
 		}
 
-		ClassFPT classFPT = classService.getClassById(classId);
-		boolean update = true;
-		if (classFPT == null) {
-			update = false;
-			classFPT = new ClassFPT();
-		}
+		ClassFPT classFPT = new ClassFPT();
 		classFPT.setType(type);
 		String classCodePrefix;
 		String classCode = "";
@@ -224,16 +218,18 @@ public class ClassFPTController extends GeneralController {
 			classFPT.setBatch(batch);
 			classFPT.setBatchChar(batchChar);
 			classFPT.setCourse(null);
-			classCodePrefix = classFPT.getSpecialized().getCode() + String.format("%02d", batch);
+			if (detailSepecializedId != -1) {
+				classFPT.setDetailSpecialized(specializedService.getSpecializedById(detailSepecializedId, false, false));
+			}
+			classCodePrefix = classFPT.getDetailSpecialized().getCode() + String.format("%02d", batch);
 		} else {
 			classFPT.setBatch(null);
 			classFPT.setSpecialized(null);
 			classFPT.setCourse(courseService.getCourseById(Integer.parseInt(courses[0])));
 			classCodePrefix = classFPT.getCourse().getCode();
 		}
-		if (!update) {
-			classFPT.setNumber(classService.getNextClassNumber(classCodePrefix));
-		}
+		classFPT.setNumber(classService.getNextClassNumber(classCodePrefix));
+		
 		if (type.equals(ClassType.SPECIALIZED)) {
 			classCode = classCodePrefix + String.format("%02d", classFPT.getNumber());
 			classFPT.setCode(classCode);
@@ -241,37 +237,16 @@ public class ClassFPTController extends GeneralController {
 			classCode = classCodePrefix + "." + classFPT.getNumber();
 			classFPT.setCode(classCode);
 		}
-		if (detailSepecializedId != -1) {
-			classFPT.setDetailSpecialized(specializedService.getSpecializedById(detailSepecializedId, false, false));
-		}
 
-		if (classId == -1) {
-			// new class, add it
-			classService.addClass(classFPT);
-		} else {
-			// existing class, call update
-			classFPT.setClassId(classId);
-			classService.updateClass(classFPT);
-		}
+		classService.addClass(classFPT);
 
 		ClassSemester classSemester = new ClassSemester();
 		classSemester.setSemester(semesterService.getSemesterById(semesterId, false, false, false, false));
 		classSemester.setClassFPT(classFPT);
 
-		if (classSemesterId == -1) {
 			classSemesterService.addClassSemester(classSemester);
-		} else {
-			classSemester.setClassSemesterId(classSemesterId);
-			classSemesterService.updateClassSemester(classSemester);
-		}
+		
 
-		if (classId != -1 && classSemesterId != -1) {
-			Set<ClassCourseSemester> classCourseSemesters = classSemesterService
-					.getClassSemesterById(classSemesterId, true).getClassCourseSemesters();
-			for (ClassCourseSemester ccs : classCourseSemesters) {
-				classCourseSemesterService.deleteClassCourseSemester(ccs.getClassCourseSemesterId());
-			}
-		}
 		if (courses != null) {
 			for (String course : courses) {
 				ClassCourseSemester ccs = new ClassCourseSemester();
@@ -287,7 +262,7 @@ public class ClassFPTController extends GeneralController {
 
 	@RequestMapping(value = "/staff/classFPTs/addFromFile", method = RequestMethod.POST)
 	public String addClassFromFile(@RequestParam("act") int act, @RequestParam("file") MultipartFile file,
-			@RequestParam("semesterId") int semesterId, HttpSession httpSession) {
+			@RequestParam("semesterId") int semesterId, HttpSession httpSession, HttpServletRequest request) {
 
 		if (!file.isEmpty()) {
 			File classSemesters = new File("classSemesters.xlxs");
@@ -336,14 +311,16 @@ public class ClassFPTController extends GeneralController {
 				e.printStackTrace();
 			}
 		}
-		return "redirect:/staff/classFPTs";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 
 	@RequestMapping(value = "/staff/classFPTs/deleteClassFPT", method = RequestMethod.GET, params = { "classId" })
-	public String deleteClassFPT(@RequestParam int classId, HttpSession httpSession) {
+	public String deleteClassFPT(@RequestParam int classId, HttpSession httpSession,HttpServletRequest request) {
 		classService.deleteClass(classId);
 		httpSession.setAttribute("success", "Delete Class Successful!");
-		return "redirect:/staff/classFPTs";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 	//
 	// @ExceptionHandler(ClassExistedException.class)

@@ -19,5 +19,5 @@ public interface CourseService {
 
 	public Course getCourseByCode(String code);
 
-	public void deleteCourse(int courseId);
+	public void deleteCourse(int semesterId, int courseId);
 }
