@@ -1,8 +1,8 @@
 package vn.edu.fpt.timetabling.utils;
 
 public class Const {
-	public static final String URL = "http://localhost:8080/FUTimetabling";
-	public static final String URL_BACK = "http://localhost:8080/FUTimetabling/back";
+	public static final String URL = "http://duchmtest.cloudapp.net/FUTimetabling";
+	public static final String URL_BACK = "http://duchmtest.cloudapp.net/FUTimetabling/back";
 	public static final String CLIENT_ID = "938120756299-8u3vpmb12jptc4jn8h5bdqftlurbfll9.apps.googleusercontent.com";
 	public static final String CLIENT_SECRET = "dj70o3tz4Qeu42qL0oDhV7Nm";
 	public static final String REDIRECT_URI = "postmessage";
