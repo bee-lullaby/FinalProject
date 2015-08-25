@@ -7,7 +7,9 @@ public class Const {
 	public static final String CLIENT_SECRET = "dj70o3tz4Qeu42qL0oDhV7Nm";
 	public static final String REDIRECT_URI = "postmessage";
 	public static final String FPT_DOMAIN = "fpt.edu.vn";
-	public static final String DATE = "yyyy-MM-dd HH:mm:ss";
+	public static final String DATE = "yyyy-MM-dd";
+	public static final int SLOTS_OF_ROOM_IN_ONE_SEMESTER = 432;
+	
 	public class ClassType {
 		public static final String SPECIALIZED = "Specialized";
 		public static final String COURSE = "Course";
@@ -29,5 +31,7 @@ public class Const {
 		public static final int NUMBER_WEEKS_PER_BLOCK = 6;
 		public static final int[][] SLOT_TIME_MAP = { { 7, 30 }, { 9, 10 }, { 10, 50 }, { 12, 50 }, { 14, 30 },
 				{ 16, 10 }, { 18, 05 }, { 19, 45 } };
+		public static final int[] FIRST_WEEK_EACH_GROUP_SIMILAR = {1, 4, 10, 13};
+		
 	}
 }

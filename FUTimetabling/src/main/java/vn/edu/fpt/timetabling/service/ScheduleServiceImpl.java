@@ -110,8 +110,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 		SimpleDateFormat sdf = new SimpleDateFormat(Const.DATE);
 		Date date = semester.getStartDate();
 		Calendar cal = Calendar.getInstance();
-		int[] hour = { 7, 9, 10, 12, 14, 16};
-		int[] min = {30, 10, 50, 50, 30, 10}; 
 		cal.setTime(date);
 		cal.set(Calendar.DATE, cal.get(Calendar.DATE) - 1 + 7 * (week - 1));
 
@@ -185,12 +183,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 				HashMap<String, DataSchedule> dataSchedule = new HashMap<String, DataSchedule>();
 
 				// Set Day And Slot
-				Calendar newCal = Calendar.getInstance();
-				newCal.setTime(cal.getTime());
-				newCal.set(Calendar.HOUR, hour[j - 1]);
-				newCal.set(Calendar.MINUTE, min[j - 1]);
 				
-				ds.setDate(sdf.format(newCal.getTime()));
+				ds.setDate(sdf.format(cal.getTime()));
 				System.out.println(ds.getDate());
 				ds.setSlot(j);
 				
@@ -323,11 +317,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 				if (prevDaySlot.getSetCourseSlot() != -1) {
 					timetable = timetableService.getTimetableByDateSlotClassCourse(date, prevDaySlot.getSlot(),
 							prevDaySlot.getSetCourseSlot());
-					if(timetable == null) {
-						System.out.println(1);
-					} else {
-						System.out.println(timetable.getTimeTableId());
-					}
 					if (dayslot.getSetCourseSlot() != -1) {
 						ClassCourseSemester ccs = classCourseSemesterService
 								.getClassCourseSemesterById(dayslot.getSetCourseSlot(), false, false);
