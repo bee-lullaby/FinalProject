@@ -44,8 +44,11 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 	@Autowired
 	private ClassCourseSemesterService classCourseSemesterService;
 	@Autowired
+	private ClassCourseSemesterMergeService classCourseSemesterMergeService;
+	@Autowired
 	private ClassCourseStudentSemesterService classCourseStudentSemesterService;
-
+	@Autowired
+	private TimetableService timetableService;
 	public void setClassSemesterDAO(ClassSemesterDAO classSemesterDAO) {
 		this.classSemesterDAO = classSemesterDAO;
 	}
@@ -177,7 +180,9 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 
 	@Override
 	public void addClassSemesterFromFile(File classSemesters, int semesterId) throws IOException {
+		timetableService.deleteTimetablesBySemester(semesterId);
 		classCourseStudentSemesterService.deleteClassCourseStudentSemesters(semesterId);
+		classCourseSemesterMergeService.deleteClassCourseSemesterMerges(semesterId);
 		classCourseSemesterService.deleteClassCourseSemesters(semesterId);
 		classSemesterDAO.deleteClassSemesters(semesterId);
 		FileInputStream file = new FileInputStream(classSemesters);
@@ -244,39 +249,42 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 			System.out.println(specializedId + " " + detailSpecializedId + " " + semesterNumber);
 			ProgramSemester programSemester = programSemesterService.getProgramSemesterBySpecializedSemester(semesterId,
 					specializedId, detailSpecializedId, semesterNumber);
-			Set<ProgramSemesterDetail> programSemesterDetails = programSemester.getProgramSemesterDetails();
-			List<Course> courses1 = new ArrayList<Course>();
-			List<Course> courses2 = new ArrayList<Course>();
-			for (ProgramSemesterDetail programSemesterDetail : programSemesterDetails) {
-				CourseSemester courseSemester = programSemesterDetail.getCourseSemester();
-				Course course = courseSemester.getCourseCondition();
-				if (course != null) {
-					courses1.add(courseSemester.getCourse());
-					courses2.add(course);
+			if(programSemester != null) {
+				Set<ProgramSemesterDetail> programSemesterDetails = programSemester.getProgramSemesterDetails();
+				List<Course> courses1 = new ArrayList<Course>();
+				List<Course> courses2 = new ArrayList<Course>();
+				for (ProgramSemesterDetail programSemesterDetail : programSemesterDetails) {
+					CourseSemester courseSemester = programSemesterDetail.getCourseSemester();
+					Course course = courseSemester.getCourseCondition();
+					if (course != null) {
+						courses1.add(courseSemester.getCourse());
+						courses2.add(course);
+					}
+				}
+				
+				for (ProgramSemesterDetail programSemesterDetail : programSemesterDetails) {
+					CourseSemester courseSemester = programSemesterDetail.getCourseSemester();
+					ClassCourseSemester classCourseSemester = new ClassCourseSemester();
+					classCourseSemester.setClassSemester(classSemester);
+					classCourseSemester.setCourseSemester(courseSemester);
+					classCourseSemester.setSemesterLong(programSemesterDetail.isSemesterLong());
+					if (!programSemesterDetail.isSemesterLong()) {
+						classCourseSemester.setBlockCondition(0);
+						for (Course course : courses1) {
+							if (course.getCode().equals(courseSemester.getCourse().getCode())) {
+								classCourseSemester.setBlockCondition(1);
+							}
+						}
+						for (Course course : courses2) {
+							if (course.getCode().equals(courseSemester.getCourse().getCode())) {
+								classCourseSemester.setBlockCondition(2);
+							}
+						}
+					}
+					classCourseSemesterService.addClassCourseSemester(classCourseSemester);
 				}
 			}
 			
-			for (ProgramSemesterDetail programSemesterDetail : programSemesterDetails) {
-				CourseSemester courseSemester = programSemesterDetail.getCourseSemester();
-				ClassCourseSemester classCourseSemester = new ClassCourseSemester();
-				classCourseSemester.setClassSemester(classSemester);
-				classCourseSemester.setCourseSemester(courseSemester);
-				classCourseSemester.setSemesterLong(programSemesterDetail.isSemesterLong());
-				if (!programSemesterDetail.isSemesterLong()) {
-					classCourseSemester.setBlockCondition(0);
-					for (Course course : courses1) {
-						if (course.getCode().equals(courseSemester.getCourse().getCode())) {
-							classCourseSemester.setBlockCondition(1);
-						}
-					}
-					for (Course course : courses2) {
-						if (course.getCode().equals(courseSemester.getCourse().getCode())) {
-							classCourseSemester.setBlockCondition(2);
-						}
-					}
-				}
-				classCourseSemesterService.addClassCourseSemester(classCourseSemester);
-			}
 		}
 		workbook.close();
 		file.close();

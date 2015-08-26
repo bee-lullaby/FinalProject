@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,7 +33,6 @@ import vn.edu.fpt.timetabling.service.CourseSemesterService;
 import vn.edu.fpt.timetabling.service.CourseService;
 import vn.edu.fpt.timetabling.service.SemesterService;
 import vn.edu.fpt.timetabling.service.SpecializedService;
-import vn.edu.fpt.timetabling.service.TimetableService;
 import vn.edu.fpt.timetabling.utils.Const.ClassType;
 
 @Controller
@@ -45,7 +45,6 @@ public class ClassFPTController extends GeneralController {
 	private CourseSemesterService courseSemesterService;
 	private ClassCourseSemesterService classCourseSemesterService;
 	private ClassCourseStudentSemesterService classCourseStudentSemesterService;
-	private TimetableService timetableService;
 	
 	@Autowired(required = true)
 	@Qualifier(value = "classService")
@@ -94,12 +93,6 @@ public class ClassFPTController extends GeneralController {
 	@Qualifier(value = "classCourseSemesterService")
 	public void setClassCourseSemesterService(ClassCourseSemesterService classCourseSemesterService) {
 		this.classCourseSemesterService = classCourseSemesterService;
-	}
-	
-	@Autowired(required = true)
-	@Qualifier(value = "timetableService")
-	public void setTimetableService(TimetableService timetableService) {
-		this.timetableService = timetableService;
 	}
 	
 	@RequestMapping(value = "/staff/classFPTs")
@@ -329,12 +322,12 @@ public class ClassFPTController extends GeneralController {
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}
-	//
-	// @ExceptionHandler(ClassExistedException.class)
-	// public String handleException(HttpSession httpSession, Exception e) {
-	// httpSession.setAttribute("error",
-	// "This Class's code existed! Please try again!");
-	// return "redirect:/staff/classFPTs";
-	// }
+	
+	 @ExceptionHandler(Exception.class)
+	 public String handleException(HttpSession httpSession, Exception e) {
+	 httpSession.setAttribute("error",
+	 "Error!");
+	 return "redirect:/staff/classFPTs";
+	 }
 
 }

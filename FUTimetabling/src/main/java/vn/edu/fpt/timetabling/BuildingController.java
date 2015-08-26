@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.google.api.client.http.HttpRequest;
-
 import vn.edu.fpt.timetabling.exception.BuildingExistedException;
 import vn.edu.fpt.timetabling.model.Building;
 import vn.edu.fpt.timetabling.service.BuildingService;
