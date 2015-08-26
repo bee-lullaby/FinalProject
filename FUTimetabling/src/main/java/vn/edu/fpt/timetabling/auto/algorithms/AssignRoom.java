@@ -48,90 +48,7 @@ public class AssignRoom {
 	IFunction[] fsumSameNBTeacher;
 	
 	/**Test room clustering.*/
-	public void testRoomClustering(){
-		DA = new DataCenter();
-		AssignTeacher a = new AssignTeacher();
-		a.DA = this.DA;
-		
-		String fn_data_course_class = "data_course_class_merged.txt";
-		String fn_data_teacher = "data_teacher.txt";
-		String fn_data_room_building = "data_room_building.txt";
-		String fn_data_mergedCases = "data_mergedCases.txt";
-		String fn_classTimeTableSolutions = "data_solutionWarehouses2.dat";
-		String fn_conflictMatrix = "data_conflictMatrix.txt";
-		String fn_courseScoreMatrix = "data_scoreMatrix.txt";
-		String fn_beingUsedTimeTable = "data_beingusedTT.dat";
-		String fn_allClassTTB = "TTB.html";
-		String fn_allTeacherTTB1 = "teacherTimeTable1.html";
-		String fn_allTeacherTTB2 = "teacherTimeTable2.html";
-		String fn_allTeacherTTB = "teacherTimeTable.html";
-		String fn_allClass_TimetableFull = "TTB_AllClass_full.html";
-		
-		DA.loadData_Course_Class(fn_data_course_class); //for all phases
-		DA.loadData_Teacher_UsingCode(fn_data_teacher);	//for phase 3
-		//DA.loadData_Room_Building(fn_data_room_building);	//for phase 4
-		DA.loadData_mergedCases(fn_data_mergedCases); //for phase 1
-		
-		
-		//----------------------------------------------------------
-		//first, assigning teacher-cc
-		a.assignTeacherUsingScore(fn_conflictMatrix, fn_beingUsedTimeTable, fn_courseScoreMatrix, DA.classCourses);
-		
-		//load data: nbRoomPercluster
-		DA.nbRoomPerCluster = new int[DataCenter.NBCLUSTER];
-		DA.aRoomList = new ArrayList[DataCenter.NBCLUSTER];
-		for (int i = 0; i < DataCenter.NBCLUSTER; i++) {
-			DA.aRoomList[i] = new ArrayList<>();
-		}
-		for (int i = 0; i < DataCenter.NBCLUSTER; i++) {
-			DA.loadData_RoomCluster(DA.FILENAME_PREFIX_ROOMCLUSTER,i);
-		}
-		DA.nbClassPerCluster = new int[DataCenter.NBCLUSTER];
-		
-		//find number of class per cluster.
-		System.out.println("\nCluster: ");
-		DA.nbClassPerCluster = findNumberOfClassPerCluster();
-		for (int i = 0; i < DataCenter.NBCLUSTER; i++) {
-			System.out.print("cluster["+(i+1)+"]: nbroom = "+DA.nbRoomPerCluster[i]+", nbclass = "+DA.nbClassPerCluster[i]+":");
-			for (Room r : DA.aRoomList[i]) {
-				System.out.print(" "+r.code);
-			}
-			System.out.println();
-		}
-		
-		//find elements needed
-		SingleSolution[] sol = loadbeingUsedTimeTable(fn_beingUsedTimeTable);
-		a.findScoreElement(sol);
-		
-		//build commonTeacherMatrix;
-		buildCommonTeacherSameDayMatrix();		
-		
-		//state model
-		stateModel();
-		
-		//search
-		search_LS();
-//		search_OLS();
-		
-		//print result
-		DA.result_classClustering = new ArrayList<>();		
-		for (int cter = 0; cter < DataCenter.NBCLUSTER; cter++) {
-			
-			System.out.print("Cluster["+(cter+1)+"]-<"+fsumSameNBTeacher[cter].getValue()+"> :");
-			for (int cl = 0; cl < DA.nbClass; cl++) {
-				if (x[cl][cter].getValue() == 1) {
-					ClassFU cls = DA.classes[cl];
-					System.out.print(" "+cls.code);
-				}
-				
-			}
-			System.out.println();
-		}
-		
-		
-		
-		//----------------------------------------------------------
-	}
+	
 	
 	/**Room clustering*/
 	
@@ -530,56 +447,56 @@ public class AssignRoom {
 				roomList.add(i, DA.lCorrespondClassifiedRoom[type].get(i));
 			}		
 			
-			System.out.println("RoomList size = "+roomList.size());
+			//System.out.println("RoomList size = "+roomList.size());
 			assignCC2Room(classcourseList,roomList);
 		}
 		
 		
-		for (int type = 0; type < DA.nbRoomTypes; type++) {
-			System.out.println("\nType no."+(type+1)+": ");
-			System.out.print("Course:"+"<"+DA.lClassifiedCourse[type].size()+">: ");
-			for (Course c : DA.lClassifiedCourse[type]) {
-				System.out.print(" "+c.code);
-			}
-			System.out.print("\nRoom: "+"<"+DA.lCorrespondClassifiedRoom[type].size()+">: ");
-			for (Room r : DA.lCorrespondClassifiedRoom[type]) {
-				System.out.print(" "+r.code);
-			}
-			System.out.println();
-		}
-		
-		//====================================================
-		System.out.println("\nResult: ");
-		for (Pair_CourseRoom p : DA.result) {
-			ClassCourse cc = p.cc;
-			ClassFU cls = DA.mClassCourse2Class.get(cc);
-			Room r = p.r;
-			System.out.println("cc = "+cc.code+"-"+cls.code+": "+r.code);			
-		}
-		
-		System.out.println("\nNot yet assigned class-course: ");
-		int count = 0;
-		for (int i = 0; i < DA.ccIsAssigned.length; i++) {
-			if (DA.ccIsAssigned[i] == false) {
-				count++;
-				ClassCourse cc = DA.classCourses[i];
-				ClassFU cls = DA.mClassCourse2Class.get(cc);
-				System.out.println(count+", "+cc.code+"-"+cls.code);
-			}
-		}
-		System.out.println("Total "+count+" not yet assigned.\n");
-		
-		for (int ri = 0; ri < DA.nbRoom; ri++) {
-			Room r = DA.rooms[ri];
-			ArrayList<ClassCourse> ccList = mRoom2ClassCourseList.get(r);
-//			System.out.println("mRoom2ClassCourseList size = "+mRoom2ClassCourseList.size());
-			System.out.print("room = "+r.code+":<"+DA.availableCapacity[ri]+">"+"-<"+ccList.size()+">: ");
-			for (ClassCourse cc : ccList) {
-				ClassFU cls = DA.mClassCourse2Class.get(cc);
-				System.out.print(" "+cls.code+"-"+cc.code);				
-			}
-			System.out.println();
-		}
+//		for (int type = 0; type < DA.nbRoomTypes; type++) {
+//			System.out.println("\nType no."+(type+1)+": ");
+//			System.out.print("Course:"+"<"+DA.lClassifiedCourse[type].size()+">: ");
+//			for (Course c : DA.lClassifiedCourse[type]) {
+//				System.out.print(" "+c.code);
+//			}
+//			System.out.print("\nRoom: "+"<"+DA.lCorrespondClassifiedRoom[type].size()+">: ");
+//			for (Room r : DA.lCorrespondClassifiedRoom[type]) {
+//				System.out.print(" "+r.code);
+//			}
+//			System.out.println();
+//		}
+//		
+//		//====================================================
+//		System.out.println("\nResult: ");
+//		for (Pair_CourseRoom p : DA.result) {
+//			ClassCourse cc = p.cc;
+//			ClassFU cls = DA.mClassCourse2Class.get(cc);
+//			Room r = p.r;
+//			System.out.println("cc = "+cc.code+"-"+cls.code+": "+r.code);			
+//		}
+//		
+//		System.out.println("\nNot yet assigned class-course: ");
+//		int count = 0;
+//		for (int i = 0; i < DA.ccIsAssigned.length; i++) {
+//			if (DA.ccIsAssigned[i] == false) {
+//				count++;
+//				ClassCourse cc = DA.classCourses[i];
+//				ClassFU cls = DA.mClassCourse2Class.get(cc);
+//				System.out.println(count+", "+cc.code+"-"+cls.code);
+//			}
+//		}
+//		System.out.println("Total "+count+" not yet assigned.\n");
+//		
+//		for (int ri = 0; ri < DA.nbRoom; ri++) {
+//			Room r = DA.rooms[ri];
+//			ArrayList<ClassCourse> ccList = mRoom2ClassCourseList.get(r);
+////			System.out.println("mRoom2ClassCourseList size = "+mRoom2ClassCourseList.size());
+//			System.out.print("room = "+r.code+":<"+DA.availableCapacity[ri]+">"+"-<"+ccList.size()+">: ");
+//			for (ClassCourse cc : ccList) {
+//				ClassFU cls = DA.mClassCourse2Class.get(cc);
+//				System.out.print(" "+cls.code+"-"+cc.code);				
+//			}
+//			System.out.println();
+//		}
 	}
 	/**Assign some class-courses to some rooms.*/
 	public void assignCC2Room(ArrayList<ClassCourse> classcourseList, ArrayList<Room> roomList){

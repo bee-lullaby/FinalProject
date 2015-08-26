@@ -76,7 +76,7 @@ public class AssignTeacher {
 	public double[][] scoreMatrix;
 //	final static int WEIGHT_BLOCK = 1;
 //	final static int WEIGHT_SESSION = 5;
-	final static int WEIGHT_DAY = 10; // w1
+	final static int WEIGHT_DAY = 5; // w1
 	final static int WEIGHT_NOON = -5; //w2
 //	final static int WEIGHT_BEGINENDDAY = -3;
 //	final static int WEIGHT_TARGETREMAIN = 2;
@@ -583,47 +583,47 @@ public class AssignTeacher {
 		ls.close();
 	}
 
-	public void findSol() {
-		DA = new DataCenter();
-		DA.loadData_Course_Class("data_all_sm_merged.txt");
-		DA.loadData_Teacher_UsingCode("teacherDataCode.txt"); // data da thay
-																// doi
-		conflict = loadConflictMatrix("conflictm.txt");
-
-		/*
-		 * System.out.println("conflict matrix"); for (int i = 0; i <
-		 * conflict.length; i++) { for (int j = 0; j < conflict.length; j++) {
-		 * System.out.print(conflict[i][j] + " "); } System.out.println(); }
-		 * System.out.println(); System.out.println("prospective matrix");
-		 * 
-		 * // course-teacherList for (int i = 0; i < DA.nbClassCourse; i++) {
-		 * ClassCourse cc = DA.classCourses[i]; Course c =
-		 * DA.mClassCourse2Course.get(cc); ArrayList<Teacher> L =
-		 * DA.mCourse2TeacherList.get(c); for (int t = 0; t < DA.nbTeacher; t++)
-		 * { if (L.contains(DA.teachers[t])) { System.out.print("1 "); } else {
-		 * System.out.print("0 "); }
-		 * 
-		 * }
-		 * 
-		 * System.out.println(); }
-		 */
-
-		// a.stateModelFull();
-		// a.search_LS();
-		// a.search_OLS();
-		// a.printsolHTML("assignTeacherResult.html");
-
-		stateModel_LS2();
-		search_LS();
-		printsolHTML2("");
-		// System.out.println("\nMore optimized solution:");
-		search_OLS();
-
-		printsolHTML2("");
-		SingleSolution[] sol = loadbeingUsedTimeTable("beingusedTT.dat");
-		printAllTeacherHTML("teachersol.html", sol);
-
-	}
+//	public void findSol() {
+//		DA = new DataCenter();
+//		DA.loadData_Course_Class("data_all_sm_merged.txt");
+//		DA.loadData_Teacher_UsingCode("teacherDataCode.txt"); // data da thay
+//																// doi
+//		conflict = loadConflictMatrix("conflictm.txt");
+//
+//		/*
+//		 * System.out.println("conflict matrix"); for (int i = 0; i <
+//		 * conflict.length; i++) { for (int j = 0; j < conflict.length; j++) {
+//		 * System.out.print(conflict[i][j] + " "); } System.out.println(); }
+//		 * System.out.println(); System.out.println("prospective matrix");
+//		 * 
+//		 * // course-teacherList for (int i = 0; i < DA.nbClassCourse; i++) {
+//		 * ClassCourse cc = DA.classCourses[i]; Course c =
+//		 * DA.mClassCourse2Course.get(cc); ArrayList<Teacher> L =
+//		 * DA.mCourse2TeacherList.get(c); for (int t = 0; t < DA.nbTeacher; t++)
+//		 * { if (L.contains(DA.teachers[t])) { System.out.print("1 "); } else {
+//		 * System.out.print("0 "); }
+//		 * 
+//		 * }
+//		 * 
+//		 * System.out.println(); }
+//		 */
+//
+//		// a.stateModelFull();
+//		// a.search_LS();
+//		// a.search_OLS();
+//		// a.printsolHTML("assignTeacherResult.html");
+//
+//		stateModel_LS2();
+//		search_LS();
+//		printsolHTML2("");
+//		// System.out.println("\nMore optimized solution:");
+//		search_OLS();
+//
+//		printsolHTML2("");
+//		SingleSolution[] sol = loadbeingUsedTimeTable("beingusedTT.dat");
+//		printAllTeacherHTML("teachersol.html", sol);
+//
+//	}
 
 	public void completeMapClassCourse2AssignedTeacher() {
 		DA.mClassCourse2AssignedTeacher = new HashMap<>();
@@ -646,34 +646,34 @@ public class AssignTeacher {
 		}
 	}
 
-	public void findSol2() {
-		DA = new DataCenter();
-		DA.loadData_Course_Class("data_all_sm.txt");
-		DA.loadData_Teacher_UsingCode("teacherDataCode.txt");
-		conflict = loadConflictMatrix("conflict_matrix.txt");
-		model = new CPModel();
-		stateModel();
-		solver = new CPSolver();
-		solver.read(model);
-
-		for (int ci = 0; ci < DA.nbClassCourse; ci++) {
-			ClassCourse cc = DA.classCourses[ci];
-			Course c = DA.mClassCourse2Course.get(cc);
-			ArrayList<Teacher> L = DA.mCourse2TeacherList.get(c);
-			System.out.println("code = " + c.code + ", supply = " + L.size());
-
-			// if (L.size() == 0) {
-			// System.out.println("L size = "+L.size());
-			// } else {
-			// System.out.println("L size = "+L.size());
-			// }
-			// int[] tc = new int[L.size()];
-
-		}
-		boolean ok = solver.solve();
-		System.out.println(ok);
-		printsolCP();
-	}
+//	public void findSol2() {
+//		DA = new DataCenter();
+//		DA.loadData_Course_Class("data_all_sm.txt");
+//		DA.loadData_Teacher_UsingCode("teacherDataCode.txt");
+//		conflict = loadConflictMatrix("conflict_matrix.txt");
+//		model = new CPModel();
+//		stateModel();
+//		solver = new CPSolver();
+//		solver.read(model);
+//
+//		for (int ci = 0; ci < DA.nbClassCourse; ci++) {
+//			ClassCourse cc = DA.classCourses[ci];
+//			Course c = DA.mClassCourse2Course.get(cc);
+//			ArrayList<Teacher> L = DA.mCourse2TeacherList.get(c);
+//			System.out.println("code = " + c.code + ", supply = " + L.size());
+//
+//			// if (L.size() == 0) {
+//			// System.out.println("L size = "+L.size());
+//			// } else {
+//			// System.out.println("L size = "+L.size());
+//			// }
+//			// int[] tc = new int[L.size()];
+//
+//		}
+//		boolean ok = solver.solve();
+//		System.out.println(ok);
+//		printsolCP();
+//	}
 
 	public void printsolHTML2(String fn) {
 		DA.mTeacher2AssignedClassCourse = new HashMap<Teacher, ArrayList<ClassCourse>>();
@@ -1665,8 +1665,8 @@ public class AssignTeacher {
 									if ((sl == TimeTableAllClass.SLOT_3 || sl == TimeTableAllClass.SLOT_4)) {
 										DA.aClassCourse2Noon[ccIdx] = 1;
 										markNoon[ccIdx] = true;
-										System.out.println(ccIdx + ", cc = " + cc.code + "-" + clas.code + ": noon = "
-												+ DA.aClassCourse2Noon[ccIdx] + ", slot = " + (sl + 1));
+//										System.out.println(ccIdx + ", cc = " + cc.code + "-" + clas.code + ": noon = "
+//												+ DA.aClassCourse2Noon[ccIdx] + ", slot = " + (sl + 1));
 									}
 								}
 								if (markBeginEndDay[ccIdx] == false) {
@@ -1676,9 +1676,9 @@ public class AssignTeacher {
 										DA.aClassCourse2BeginEndDay[ccIdx] = 0;
 									}
 									markBeginEndDay[ccIdx] = true;
-									System.out
-											.println(ccIdx + ", cc = " + cc.code + "-" + clas.code + ": BeginEndDay = "
-													+ DA.aClassCourse2BeginEndDay[ccIdx] + ", slot = " + (sl + 1));
+//									System.out
+//											.println(ccIdx + ", cc = " + cc.code + "-" + clas.code + ": BeginEndDay = "
+//													+ DA.aClassCourse2BeginEndDay[ccIdx] + ", slot = " + (sl + 1));
 								}
 							}
 						}
@@ -1735,38 +1735,38 @@ public class AssignTeacher {
 
 		}
 
-		for (int cc = 0; cc < DA.nbClassCourse; cc++) {
-			// Collections.sort(daySet[cc]);
-			ClassCourse clc = DA.classCourses[cc];
-			ClassFU cls = DA.mClassCourse2Class.get(clc);
-			System.out.print("cc = " + cc + ", " + clc.code + "-" + cls.code + ", stt = " + clc.stt + ", dayset: ");
-			// System.out.print(" "+daySet[cc].first());
-			for (Integer i : daySet[cc]) {
-				System.out.print(" " + i);
-			}
-			System.out.print(":    block = " + (DA.aClassCourse2Block[cc] + 1));
-			if (DA.aClassCourse2Day[cc] == 0) {
-				System.out.print(", chan");
-			} else {
-				System.out.print(", le  ");
-			}
-			if (DA.aClassCourse2Noon[cc] == 0) {
-				System.out.print(", not noon");
-			} else {
-				System.out.print(", 3 or 4  ");
-			}
-			if (DA.aClassCourse2Session[cc] == 0) {
-				System.out.print(", sang ");
-			} else {
-				System.out.print(", chieu");
-			}
-			if (DA.aClassCourse2BeginEndDay[cc] == 0) {
-				System.out.print(", giua ngay");
-			} else {
-				System.out.print(", dau+cuoi ");
-			}
-			System.out.println();
-		}
+//		for (int cc = 0; cc < DA.nbClassCourse; cc++) {
+//			// Collections.sort(daySet[cc]);
+//			ClassCourse clc = DA.classCourses[cc];
+//			ClassFU cls = DA.mClassCourse2Class.get(clc);
+//			//System.out.print("cc = " + cc + ", " + clc.code + "-" + cls.code + ", stt = " + clc.stt + ", dayset: ");
+//			// System.out.print(" "+daySet[cc].first());
+//			for (Integer i : daySet[cc]) {
+//				System.out.print(" " + i);
+//			}
+//			System.out.print(":    block = " + (DA.aClassCourse2Block[cc] + 1));
+//			if (DA.aClassCourse2Day[cc] == 0) {
+//				System.out.print(", chan");
+//			} else {
+//				System.out.print(", le  ");
+//			}
+//			if (DA.aClassCourse2Noon[cc] == 0) {
+//				System.out.print(", not noon");
+//			} else {
+//				System.out.print(", 3 or 4  ");
+//			}
+//			if (DA.aClassCourse2Session[cc] == 0) {
+//				System.out.print(", sang ");
+//			} else {
+//				System.out.print(", chieu");
+//			}
+//			if (DA.aClassCourse2BeginEndDay[cc] == 0) {
+//				System.out.print(", giua ngay");
+//			} else {
+//				System.out.print(", dau+cuoi ");
+//			}
+//			System.out.println();
+//		}
 	}
 
 	public boolean conflict(int[][] conflict, ClassCourse cc1, ClassCourse cc2) {
@@ -1802,26 +1802,6 @@ public class AssignTeacher {
 	}
 	///////////////////////////////////////////////////////////////////
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		AssignTeacher a = new AssignTeacher();
-		a.findSol();
-		String fn_data_course_class = "data_course_class_merged.txt";
-		String fn_data_teacher = "data_teacher.txt";
-		String fn_conflictMatrix = "data_conflictMatrix.txt";
-		String fn_courseScoreMatrix = "data_scoreMatrix.txt";
-		String fn_beingUsedTimeTable_Template2 = "data_beingusedTT_Temp2.dat";
-		String fn_beingUsedTimeTable_Template1 = "data_beingusedTT_Temp1.dat";
-		String fn_allTeacherTimeTable = "timetableAllTeacher.html";
-
-		a.DA = new DataCenter();
-		a.DA.loadData_Course_Class(fn_data_course_class);
-		a.DA.loadData_Teacher_UsingCode(fn_data_teacher);
-		a.assignTeacherUsingScore(fn_conflictMatrix, fn_beingUsedTimeTable_Template2, fn_courseScoreMatrix,
-				a.DA.classCourses);
-		SingleSolution[] sol = a.loadbeingUsedTimeTable(fn_beingUsedTimeTable_Template2);
-		a.printAllTeacherHTML(fn_allTeacherTimeTable, sol);
-
-	}// end of main
+	
 
 }

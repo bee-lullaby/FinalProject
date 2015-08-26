@@ -805,8 +805,8 @@ public class TimeTableOneClass_SM {
 		boolean ok = solver.solve();
 		// sol[0] = solver.recordSolution();
 		// Boolean ok = solver.solveAll();
-		System.out.println("Solved = " + ok + ", nbSolutions = "
-				+ solver.getNbSolutions());
+//		System.out.println("Solved = " + ok + ", nbSolutions = "
+//				+ solver.getNbSolutions());
 
 	}
 
