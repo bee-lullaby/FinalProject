@@ -24,4 +24,6 @@ public interface RoomService {
 	public void deleteRoom(int roomId);
 
 	public Map<Course, Map<String, Room>> getCourseRoomMap();
+	
+	public List<Room> listNormalRooms();
 }

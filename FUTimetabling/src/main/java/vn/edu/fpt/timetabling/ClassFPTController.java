@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +32,7 @@ import vn.edu.fpt.timetabling.service.CourseSemesterService;
 import vn.edu.fpt.timetabling.service.CourseService;
 import vn.edu.fpt.timetabling.service.SemesterService;
 import vn.edu.fpt.timetabling.service.SpecializedService;
+import vn.edu.fpt.timetabling.service.TimetableService;
 import vn.edu.fpt.timetabling.utils.Const.ClassType;
 
 @Controller
@@ -45,7 +45,8 @@ public class ClassFPTController extends GeneralController {
 	private CourseSemesterService courseSemesterService;
 	private ClassCourseSemesterService classCourseSemesterService;
 	private ClassCourseStudentSemesterService classCourseStudentSemesterService;
-
+	private TimetableService timetableService;
+	
 	@Autowired(required = true)
 	@Qualifier(value = "classService")
 	public void setClassService(ClassService classService) {
@@ -94,7 +95,13 @@ public class ClassFPTController extends GeneralController {
 	public void setClassCourseSemesterService(ClassCourseSemesterService classCourseSemesterService) {
 		this.classCourseSemesterService = classCourseSemesterService;
 	}
-
+	
+	@Autowired(required = true)
+	@Qualifier(value = "timetableService")
+	public void setTimetableService(TimetableService timetableService) {
+		this.timetableService = timetableService;
+	}
+	
 	@RequestMapping(value = "/staff/classFPTs")
 	public String classFPTinit(HttpSession httpSession, Model model) {
 		List<Semester> semesters = semesterService.listSemesters(false, false, false, false);
@@ -268,43 +275,43 @@ public class ClassFPTController extends GeneralController {
 			File classSemesters = new File("classSemesters.xlxs");
 			try {
 				file.transferTo(classSemesters);
-				if (act == 0) {
-					classSemesterService.addClassSemesterFromFile(classSemesters, semesterId);
-					httpSession.setAttribute("success", "Add classes successful!");
-				} else if (act == 1) {
-					HashMap<String, List<String>> check = classCourseSemesterService
-							.addClassCourseSemesterFromFile(classSemesters, semesterId);
-
-					if (!check.get("class").isEmpty()) {
-						String text = "Class " + check.get("class").get(0);
-						for (int i = 1; i < check.get("class").size(); i++) {
-							text += ", " + check.get("class").get(i);
-						}
-						text += " of this Semester";
-						if (check.get("class").size() == 1)
-							text += " is ";
-						else
-							text += " are ";
-						text += " not existed! Please insert class first then try again!";
-						httpSession.setAttribute("error", text);
-					}
-					if (!check.get("course").isEmpty()) {
-						String text = "Course " + check.get("course").get(0);
-						for (int i = 1; i < check.get("course").size(); i++) {
-							text += ", " + check.get("course").get(i);
-						}
-						text += " of this Semester";
-						if (check.get("course").size() == 1)
-							text += " is ";
-						else
-							text += " are ";
-						text += " not existed! Please insert course first then try again!";
-						httpSession.setAttribute("error", text);
-					}
-					if (check.get("course").isEmpty() && check.get("class").isEmpty()) {
-						httpSession.setAttribute("success", "Add Courses For Classes Successful!");
-					}
-				}
+//				if (act == 0) {
+				classSemesterService.addClassSemesterFromFile(classSemesters, semesterId);
+				httpSession.setAttribute("success", "Add classes successful!");
+//				} else if (act == 1) {
+//					HashMap<String, List<String>> check = classCourseSemesterService
+//							.addClassCourseSemesterFromFile(classSemesters, semesterId);
+//
+//					if (!check.get("class").isEmpty()) {
+//						String text = "Class " + check.get("class").get(0);
+//						for (int i = 1; i < check.get("class").size(); i++) {
+//							text += ", " + check.get("class").get(i);
+//						}
+//						text += " of this Semester";
+//						if (check.get("class").size() == 1)
+//							text += " is ";
+//						else
+//							text += " are ";
+//						text += " not existed! Please insert class first then try again!";
+//						httpSession.setAttribute("error", text);
+//					}
+//					if (!check.get("course").isEmpty()) {
+//						String text = "Course " + check.get("course").get(0);
+//						for (int i = 1; i < check.get("course").size(); i++) {
+//							text += ", " + check.get("course").get(i);
+//						}
+//						text += " of this Semester";
+//						if (check.get("course").size() == 1)
+//							text += " is ";
+//						else
+//							text += " are ";
+//						text += " not existed! Please insert course first then try again!";
+//						httpSession.setAttribute("error", text);
+//					}
+//					if (check.get("course").isEmpty() && check.get("class").isEmpty()) {
+//						httpSession.setAttribute("success", "Add Courses For Classes Successful!");
+//					}
+//				}
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -316,7 +323,7 @@ public class ClassFPTController extends GeneralController {
 	}
 
 	@RequestMapping(value = "/staff/classFPTs/deleteClassFPT", method = RequestMethod.GET, params = { "classId" })
-	public String deleteClassFPT(@RequestParam int classId, HttpSession httpSession,HttpServletRequest request) {
+	public String deleteClassFPT(@RequestParam int classId, HttpSession httpSession,HttpServletRequest request) {	
 		classService.deleteClass(classId);
 		httpSession.setAttribute("success", "Delete Class Successful!");
 		String referer = request.getHeader("Referer");

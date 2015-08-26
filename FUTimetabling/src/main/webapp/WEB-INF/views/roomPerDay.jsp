@@ -75,9 +75,9 @@
 				<thead>
 					<tr>
 						<th rowspan="2">Rooms</th>
-						<th colspan="6">Building A</th>
+						<th colspan="6">GD</th>
 						<th rowspan="2">Rooms</th>
-						<th colspan="6">Building B</th>
+						<th colspan="6">HB</th>
 					</tr>
 					<tr>
 						<th>Slot 1</th>
@@ -180,6 +180,20 @@
 					style="width: 100px; margin-right: 5px">SAVE</button>
 				<button id="btn-cancel-set-room" class="button"
 					style="width: 100px; float: right;">CANCEL</button>
+			</div>
+		</div>
+	</div>
+	
+	<div id="dialog-delete-room" data-role="dialog" class="padding20"
+		data-overlay="true" data-overlay-color="op-dark">
+		<form id="form-delete-room" method="post" action="deleteRoomOfTimetable" style="display: none">
+			<input type="text" id="timetableId" name="timetableId" />
+		</form>
+		<div style="width: 500px; margin: 0 auto; text-align: center;">
+			<h2>Are you sure to delete?</h2>
+			<div id="btn-group" style="margin-top: 25px;">
+				<button class="button" id="btn-delete-accept">ACCEPT</button>
+				<button class="button" id="btn-delete-decline">DECLINE</button>
 			</div>
 		</div>
 	</div>

@@ -132,6 +132,11 @@ h3 {
 								data-hint-position="top" data-hint="Add From File">
 								<span class="mif-file-text"></span>
 							</button>
+							<button id="btn-clear" class="button" data-role="hint"
+								data-hint-background="#1CB7EC" data-hint-color="fg-white"
+								data-hint-position="top" data-hint="Clear Program Semesters">
+								<span class="icon flaticon-rubbish12"></span>
+							</button>
 						</div>
 					</div>
 					<div style="width: 100%; height: 100%;">

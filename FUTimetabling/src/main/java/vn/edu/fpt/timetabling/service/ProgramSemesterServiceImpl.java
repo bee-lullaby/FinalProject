@@ -182,4 +182,9 @@ public class ProgramSemesterServiceImpl implements ProgramSemesterService {
 		
 		return mCheckSpecializedAndCourse;
 	}
+	
+	@Override
+	public void deleteProgramSemestersBySemester(int semesterId) {
+		programSemesterDAO.deleteProgramSemestersBySemester(semesterId);
+	}
 }

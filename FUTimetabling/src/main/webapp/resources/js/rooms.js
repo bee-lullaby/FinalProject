@@ -2,6 +2,11 @@ $(document).ready(function() {
 
 	_init();
 	
+	
+	$("#btn-room-per-day").on("click", function() {
+		window.location = "roomPerDay";
+	});
+	
 	$("#table-rooms").on("click", "a[id^='edit-room']", function() {
 		_setDialogEditData($("#dialog-edit-room"), $(this).closest("tr"));
 		$("#dialog-edit-room").attr("data-action", "edit");

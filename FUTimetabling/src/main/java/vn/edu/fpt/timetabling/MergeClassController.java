@@ -2,6 +2,7 @@ package vn.edu.fpt.timetabling;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +67,7 @@ public class MergeClassController extends GeneralController {
 	@RequestMapping(value = "/staff/mergeClasses/addMergeClass", method = RequestMethod.POST, params = {
 			"classCourseSemesterId1", "classCourseSemesterId2" })
 	public String addMergeClass(@RequestParam int classCourseSemesterId1,
-			@RequestParam int classCourseSemesterId2, HttpSession httpSession) throws ClassCourseSemesterMergeExistedException {
+			@RequestParam int classCourseSemesterId2, HttpSession httpSession, HttpServletRequest request) throws ClassCourseSemesterMergeExistedException {
 		
 		ClassCourseSemester ccs1 = classCourseSemesterService.getClassCourseSemesterById(classCourseSemesterId1, false, false);
 		ClassCourseSemester ccs2 = classCourseSemesterService.getClassCourseSemesterById(classCourseSemesterId2, false, false);
@@ -83,29 +84,33 @@ public class MergeClassController extends GeneralController {
 		
 		classCourseSemesterMergeService.addClassCourseSemesterMerge(ccsm);
 		httpSession.setAttribute("success", "Add Merge-Class Successful!");
-		return "redirect:/staff/mergeClasses";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 	
 	@RequestMapping(value = "/staff/mergeClasses/deleteMergeClass", method = RequestMethod.GET, params = { "mergeClassId" })
 	public String deleteMergeClass(@RequestParam int mergeClassId,
-			HttpSession httpSession) {
+			HttpSession httpSession, HttpServletRequest request) {
 		classCourseSemesterMergeService.deleteClassCourseSemesterMerge(mergeClassId);
 		httpSession.setAttribute("success", "Delete Course Successful!");
-		return "redirect:/staff/mergeClasses";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 	
 	@RequestMapping(value = "/staff/mergeClasses/clear", method = RequestMethod.GET, params = { "semesterId" })
 	public String clearMergeClasses(@RequestParam int semesterId,
-			HttpSession httpSession) {
+			HttpSession httpSession, HttpServletRequest request) {
 		classCourseSemesterMergeService.deleteClassCourseSemesterMerges(semesterId);
 		httpSession.setAttribute("success", "Clear all Merge-Class Successful!");
-		return "redirect:/staff/mergeClasses";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 	
 	@ExceptionHandler(ClassCourseSemesterMergeExistedException.class)
-	public String handleException(HttpSession httpSession, Exception e) {
+	public String handleException(HttpSession httpSession, Exception e, HttpServletRequest request) {
 		httpSession.setAttribute("error",
 				"This Merge-Classe existed! Please try again!");
-		return "redirect:/staff/mergeClasses";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 }

@@ -45,8 +45,23 @@ $(document).ready(function() {
 		$("#form-set-room").submit();
 	});
 	
+	$("#table-body").on("click", "td", function() {
+		if($(this).text() != "") {
+			$("#form-delete-room #timetableId").val($(this).attr("data-timetableid"));
+			_showDialog("dialog-delete-room");
+		};
+	});
+	
+	$("#btn-delete-accept").on("click", function() {
+		$("#form-delete-room").submit();
+	});
+	
+	$("#btn-delete-decline").on("click", function() {
+		_showDialog("dialog-delete-room");
+	});
+	
 	function _init() {
-		$("#title").append("Rooms of ...");
+		$("#title").append("Rooms of " +_urlParam("date"));
 		$("#datepicker").attr("data-preset", _urlParam("date"));
 		
 		_setTable();
@@ -74,13 +89,15 @@ $(document).ready(function() {
 		} else {
 			text += "<th></th>";
 		}
-		text += "<td></td><td></td><td></td><td></td><td></td><td></td>";
+		text += "<td data-slot='1'></td><td data-slot='2'></td><td data-slot='3'></td>" +
+				"<td data-slot='4'></td><td data-slot='5'></td><td data-slot='6'></td>";
 		if (buildingB[position]) {
 			text += "<th>" + buildingB[position].code + "</th>";
 		} else {
 			text += "<th></th>";
 		}
-		text += "<td></td><td></td><td></td><td></td><td></td><td></td>";
+		text += "<td data-slot='1'></td><td data-slot='2'></td><td data-slot='3'></td>" +
+				"<td data-slot='4'></td><td data-slot='5'></td><td data-slot='6'></td>";
 		text += "</tr>"
 		return text;
 	}
@@ -95,9 +112,11 @@ $(document).ready(function() {
 					var slot = timetableJSON[i].slot - 1;
 					if(roomCode.charAt(0) == 'H') {
 						var position = slot + 6;
-						$(tr).find("td:eq("+positions+")").text(_getTextForCell(i));
+						$(tr).find("td:eq("+position+")").html(_getTextForCell(i));
+						$(tr).find("td:eq("+position+")").attr("data-timetableId", timetableJSON[i].timeTableId);
 					} else {
 						$(tr).find("td:eq("+slot+")").html(_getTextForCell(i));
+						$(tr).find("td:eq("+slot+")").attr("data-timetableId", timetableJSON[i].timeTableId);
 					}
 				}
 			}
@@ -145,26 +164,28 @@ $(document).ready(function() {
 	
 	function _setDataTableRemainRoom(position, slot) {
 		var timetable = timetableJSON[position];
-		$("#table-set-room #timetableId").attr("value", timetable.timeTableId);
-		$("#table-set-room #classCode").attr("value", timetable.classCourseSemester.classSemester.classFPT.code);
-		$("#table-set-room #courseCode").attr("value", timetable.classCourseSemester.courseSemester.course.code);
-		$("#table-set-room #slot").attr("value", timetable.slot);
-		
-		$("#table-rooms tr").each(function () {
-			var td = $(this).find("td:eq("+ (slot-1) +")");
-			if($(td).text() != null) {
+		$("#table-set-room #timetableId").val(timetable.timeTableId);
+		$("#table-set-room #classCode").val(timetable.classCourseSemester.classSemester.classFPT.code);
+		$("#table-set-room #courseCode").val(timetable.classCourseSemester.courseSemester.course.code);
+		$("#table-set-room #slot").val(timetable.slot);
+		console.log(slot);
+		$("#table-body tr").each(function () {
+			var i = parseInt(slot) - 1;
+			var td = $(this).find("td:eq("+ i +")");
+			if($(td).text() == null || $(td).text() == "") {
 				var th = $(this).find("th:eq(0)");
-				if(th.text() != null) {
+				if(th.text() != null && th.text() != "") {
 					$("#table-set-room #roomId").append(_getOptionForAvailableRoom($(this).index(), 0));	
 				}
 			}
 		});
 		
-		$("#table-rooms td:eq("+ (slot+5) +")").each(function () {
-			var td = $(this).find("td:eq("+ (slot+5) +")");
-			if($(td).text() != null) {
-				var th = $(this).find("th:eq(1)");
-				if(th.text() != null) {
+		$("#table-body tr").each(function () {
+			var i = parseInt(slot) + 5;
+			var td = $(this).find("td:eq("+ i +")");
+			if($(td).text() == null || $(td).text() == "") {
+				var th = $(this).find("th:eq(0)");
+				if(th.text() != null && th.text() != "") {
 					$("#table-set-room #roomId").append(_getOptionForAvailableRoom($(this).index(), 1));	
 				}
 			}

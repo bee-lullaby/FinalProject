@@ -43,7 +43,7 @@ $(document).ready(function(){
 		$("#warning-not-enough-slot").hide();
 		$("#warning-set-room").hide();
 		$("#warning-conflict-merge-class").hide();
-		_setCourseInfoDialog(JSONdata[position].dataSchedule); 
+		_setCourseInfoDialog(position); 
 		_showDialog("dialog-schedule");
 	});
 	
@@ -94,7 +94,7 @@ $(document).ready(function(){
 	});
 	
 	$("#set-courses").on("change", function() {
-		_setCourseInfoDialog(JSONdata[$("#dialog-schedule").data("position")].dataSchedule);
+		_setCourseInfoDialog($("#dialog-schedule").data("position"));
 	});
 	
 	$("#btn-set-course").on("click", function(){
@@ -104,6 +104,10 @@ $(document).ready(function(){
 		var td = $("#dialog-schedule").data("td");
 		var position = $("#dialog-schedule").data("position");
 		var prevCourse = $("#dialog-schedule").data("prev-course-selected");
+		if(courseSelectedText.indexOf(prevCourse) > -1) {
+			_clearScheduleDialog();
+			return;
+		}
 		if(courseSelectedVal != -1 && JSONdata[position].dataSchedule[courseSelectedText].remainSlots == 0) {
 				$("#warning-not-enough-slot").show();
 		} else if(courseSelectedVal != -1 && JSONdata[position].dataSchedule[courseSelectedText].learnCourseInSlot  
@@ -115,31 +119,31 @@ $(document).ready(function(){
 		} else if (!_checkMergeClass(position, courseSelectedVal)) {
 			$("#warning-conflict-merge-class").show();
 		} else {	
-			if(td.find("div[id='color']").is("[class^='color-']")) {
-				td.find("div[id='color']").removeClass(td.find("div[id='color']").attr("class"));
-				td.find("div[id='text']").text("");
-				JSONdata[position].dataSchedule[prevCourse].remainSlots += 1;
-				console.log(JSONdata[position].dataSchedule[prevCourse].remainSlots);
-				JSONdata[position].dataSchedule[prevCourse].learnCourseInSlot -= 1;
-			}
-			if(courseSelectedVal != -1) {
-				var color = $("span[id='" +courseSelectedVal +"'] ").attr("class").split(" ")[1];
-				td.find("div[id='color']").addClass(color);
-				td.find("div[id='text']").text($("span[id='" +courseSelectedVal +"'] ").closest("div").text().trim());
-				JSONdata[position].dataSchedule[courseSelectedText].learnCourseInSlot += 1;
-			}
+//			if(td.find("div[id='color']").is("[class^='color-']")) {
+//				td.find("div[id='color']").removeClass(td.find("div[id='color']").attr("class"));
+//				td.find("div[id='text']").text("");
+//				JSONdata[position].dataSchedule[prevCourse].remainSlots += 1;
+//				JSONdata[position].dataSchedule[prevCourse].learnCourseInSlot -= 1;
+//			}
+//			if(courseSelectedVal != -1) {
+//				var color = $("span[id='" +courseSelectedVal +"'] ").attr("class").split(" ")[1];
+//				td.find("div[id='color']").addClass(color);
+//				td.find("div[id='text']").text($("span[id='" +courseSelectedVal +"'] ").closest("div").text().trim());
+//				JSONdata[position].dataSchedule[courseSelectedText].learnCourseInSlot += 1;
+//				JSONdata[position].dataSchedule[courseSelectedText].remainSlots -= 1;
+//			}
 			JSONdata[position].setCourseSlot = courseSelectedVal;
-			$("#dialog-schedule").removeData("prev-course-selected");
-			_clearScheduleDialog();
-				console.log(_checkMergeClass(position, courseSelectedVal));
+			JSONToSubmit.attr("value", JSON.stringify(JSONdata));
+			$("#data").attr("action", "schedule/updateTimetable");
+			$("#data").submit();
+//			console.log(courseSelectedText);
+//			console.log(JSONdata[position].dataSchedule[courseSelectedText]);
 		}
 	});
 	
 	function _checkMergeClass(position, courseSelectedVal) {
 		var check = true;
-		$.each(JSONmergeClassData, function(key, value) { 
-			console.log(key);
-			console.log(value[0]);
+		$.each(JSONmergeClassData, function(key, value) {
 			if(courseSelectedVal == key) {
 				for(var i = 0; i < value.length; i++) {
 					var date1 = new Date(value[i].date);
@@ -266,11 +270,13 @@ $(document).ready(function(){
 		
 	}
 	
-	function _setCourseInfoDialog(dataSchedule) {
+	function _setCourseInfoDialog(position) {
 		if($("#set-courses option:selected").val() != -1) {
-			var courseSelected = $("#set-courses option:selected").text();
-			$("#course-info-to-set #course-code").text(courseSelected);
-			var data = dataSchedule[courseSelected];
+			var courseSelectedText = $("#set-courses option:selected").text();
+			$("#course-info-to-set #course-code").text(courseSelectedText);
+			var data = JSONdata[position].dataSchedule[courseSelectedText];
+			console.log(courseSelectedText);
+			console.log(JSONdata[position].dataSchedule[courseSelectedText]);
 			$("#course-info-to-set #remainSlots").text(data.remainSlots);
 			$("#course-info-to-set #classes").text(data.numOfClasses);
 			$("#course-info-to-set #learnCourseInSlot").text(data.learnCourseInSlot);

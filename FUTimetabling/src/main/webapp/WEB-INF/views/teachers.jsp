@@ -205,12 +205,10 @@ h3 {
 			enctype="multipart/form-data" style="display: inline-block;">
 			<div>
 				<input type="radio"
-					name="act" value="0" checked><span
-					class="caption">Add Teachers</span>
+					name="act" value="0" checked> Add Teachers
 			</div>
 			<div><input type="radio"
-					name="act" value="1"> <span
-					class="caption">Add Courses For Teachers</span>
+					name="act" value="1"> Add Courses For Teachers
 			</div>
 			<div class="input-control file" data-role="input">
 				<input type="file" name="file"

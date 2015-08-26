@@ -24,4 +24,6 @@ public interface ProgramSemesterService {
 			int detailSpecializedId, int semesterNumber);
 	
 	public HashMap<String, List<String>> addProgramSemesterFromFile(int semesterId, File programs) throws IOException;
+	
+	public void deleteProgramSemestersBySemester(int semesterId);
 }
