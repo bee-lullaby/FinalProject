@@ -6,8 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.apache.poi.ss.usermodel.Row;
@@ -19,8 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import vn.edu.fpt.timetabling.dao.RoomDAO;
 import vn.edu.fpt.timetabling.model.Building;
+import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.Course;
+import vn.edu.fpt.timetabling.model.CourseSemester;
 import vn.edu.fpt.timetabling.model.Room;
+import vn.edu.fpt.timetabling.model.Timetable;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -30,7 +35,13 @@ public class RoomServiceImpl implements RoomService {
 	private BuildingService buildingService;
 	@Autowired
 	private CourseService courseService;
-
+	@Autowired
+	private CourseSemesterService courseSemesterService;
+	@Autowired
+	private ClassCourseSemesterService classCourseSemesterService;
+	@Autowired
+	private ClassCourseSemesterMergeService classCourseSemesterMergeService;
+	
 	public void setRoomDAO(RoomDAO roomDAO) {
 		this.roomDAO = roomDAO;
 	}
@@ -150,5 +161,91 @@ public class RoomServiceImpl implements RoomService {
 			}
 		}
 		return results;
+	}
+	
+	@Override
+	public Map<String, Set<Integer>> getRoomMapClassCourse(int semesterId) {
+		Map<String, Set<Integer>> result = new HashMap<String, Set<Integer>>();
+		
+		Map<Course, Map<String, Room>> courseRoomMap = getCourseRoomMap();
+		
+		//
+		HashMap<String, Set<Integer>> mMergeClass = classCourseSemesterMergeService
+				.getMapCourseWithMergeClassInSemester(semesterId);
+		
+		for(Course course : courseRoomMap.keySet()) {
+			CourseSemester courseSemester = courseSemesterService.getCourseSemesterByCourseSemester(course.getCourseId(), semesterId, true, false, false);
+			
+			List<ClassCourseSemester> list = new ArrayList<ClassCourseSemester>();
+			list.addAll(courseSemester.getClassCourseSemesters());
+			List<Integer> checkList = new ArrayList<Integer>();
+			for (String key : mMergeClass.keySet()) {
+				if (key.contains(Integer.toString(courseSemester
+						.getCourseSemesterId()))) {
+					int count = 0;
+					for (int ccsId : mMergeClass.get(key)) {
+						if (count == 0) {
+							count++;
+							continue;
+						} else {
+							checkList.add(ccsId);
+						}
+					}
+				}
+			}
+			
+			for (int i = 0; i < list.size(); i++) {
+				if (checkList.contains(list.get(i).getClassCourseSemesterId())) {
+					list.remove(i--);
+				}
+			}
+			
+			Set<Integer> setClassCourseSemesterIds = new LinkedHashSet<Integer>();
+			for(ClassCourseSemester ccs : list) {
+				setClassCourseSemesterIds.add(ccs.getClassCourseSemesterId());
+			}
+			
+			
+			for(String roomCode : courseRoomMap.get(course).keySet()) {
+				if(!result.containsKey(roomCode)) {
+					result.put(roomCode, new LinkedHashSet<Integer>());
+				} 
+				
+				result.get(roomCode).addAll(setClassCourseSemesterIds);
+			}
+		}
+		return result;
+	}
+	
+	
+	@Override
+	// get Map between SpecialCourse with Timetable of its classes
+	public Map<Course, Set<Timetable>> getSpecialCourseMapTimetableOfItsClasses(int semesterId) {
+		Map<Course, Set<Timetable>> result = new HashMap<Course, Set<Timetable>>();
+		
+
+		// get Map Course with Room
+		Map<Course, Map<String, Room>> mCourseRoom = getCourseRoomMap();
+		
+		// get Map Room with Class Course
+		Map<String, Set<Integer>> mRoomClassCourse = getRoomMapClassCourse(semesterId);
+		
+		for(Course course : mCourseRoom.keySet()) {
+			
+			if(!result.containsKey(course)) {
+				// add new key for result map
+				result.put(course, new LinkedHashSet<Timetable>());
+			}
+			
+			for(String roomCode : mCourseRoom.get(course).keySet()) {
+				if(mRoomClassCourse.containsKey(roomCode)) {
+					for(int classCourseSemesterId : mRoomClassCourse.get(roomCode)) {
+						ClassCourseSemester ccs = classCourseSemesterService.getClassCourseSemesterById(classCourseSemesterId, true, false);
+						result.get(course).addAll(ccs.getTimetable());
+					}
+				}
+			}
+		}
+		return result;
 	}
 }

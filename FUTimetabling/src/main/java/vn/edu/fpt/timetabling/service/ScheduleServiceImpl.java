@@ -174,23 +174,36 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 		// List All Timetable
 		List<Timetable> allTimetable = timetableService.listTimetables();
+
+		// List Rooms
 		List<Room> listNormalRooms = roomService.listNormalRooms();
-		Map<Course, Map<String, Room>> mCourseSpecialRoom = roomService.getCourseRoomMap();
-		// Map date with number of Classes
-		HashMap<String, Set<Integer>> mapDateAndNumberOfClasses = new HashMap<String, Set<Integer>>();
+
+		// Map of Special Course
+		Map<Course, Map<String, Room>> mSpecialCourseRoom = roomService
+				.getCourseRoomMap();
+		Map<Course, Set<Timetable>> mSpecialCourseTimetable = roomService
+				.getSpecialCourseMapTimetableOfItsClasses(semesterId);
+
+		// Map date with number of Normal Classes
+		HashMap<String, Set<Integer>> mapDateAndNumberOfNormalClassesCourses = new HashMap<String, Set<Integer>>();
 		for (Timetable t : allTimetable) {
 			String key = sdf.format(t.getDate()) + " " + t.getSlot();
-			if (mapDateAndNumberOfClasses.containsKey(key)) {
-				mapDateAndNumberOfClasses.get(key).add(
-						t.getClassCourseSemester().getClassSemester()
-								.getClassSemesterId());
-			} else {
-				Set<Integer> setClasses = new LinkedHashSet<Integer>();
-				setClasses.add(t.getClassCourseSemester().getClassSemester()
-						.getClassSemesterId());
-				mapDateAndNumberOfClasses.put(key, setClasses);
+			if (!mSpecialCourseRoom.containsKey(t.getClassCourseSemester()
+					.getCourseSemester().getCourse())) {
+				if (mapDateAndNumberOfNormalClassesCourses.containsKey(key)) {
+					mapDateAndNumberOfNormalClassesCourses.get(key).add(
+							t.getClassCourseSemester().getClassSemester()
+									.getClassSemesterId());
+				} else {
+					Set<Integer> setClasses = new LinkedHashSet<Integer>();
+					setClasses.add(t.getClassCourseSemester()
+							.getClassSemester().getClassSemesterId());
+					mapDateAndNumberOfNormalClassesCourses.put(key, setClasses);
+				}
 			}
 		}
+
+		// Map date with number of Special Courses
 
 		// Map teacher with course of class
 		// ...//
@@ -223,17 +236,25 @@ public class ScheduleServiceImpl implements ScheduleService {
 									cal.getTime(), j));
 
 					// Set Rooms
-					if(mCourseSpecialRoom.containsKey(cs.getCourse())) {
-						dataS.setTotalRooms(mCourseSpecialRoom.get(cs.getCourse()).size());
+					if (mSpecialCourseRoom.containsKey(cs.getCourse())) {
+						dataS.setTotalRooms(mSpecialCourseRoom.get(
+								cs.getCourse()).size());
 					} else {
 						dataS.setTotalRooms(listNormalRooms.size());
 					}
 
 					// Set Remains Room for this day and this slot.
 					String key = ds.getDate() + " " + ds.getSlot();
-					if (mapDateAndNumberOfClasses.containsKey(key)) {
-						dataS.setClassesInSlot(mapDateAndNumberOfClasses.get(
-								key).size());
+					if (mSpecialCourseRoom.containsKey(cs.getCourse())) {
+						List<Timetable> newList = new ArrayList<Timetable>();
+						newList.addAll(mSpecialCourseTimetable
+										.get(cs.getCourse()));
+						dataS.setClassesInSlot(TimetableUtils
+								.findNumberSameDaySlot(newList, cal.getTime(), j));
+					} else if (mapDateAndNumberOfNormalClassesCourses
+							.containsKey(key)) {
+						dataS.setClassesInSlot(mapDateAndNumberOfNormalClassesCourses
+								.get(key).size());
 					} else {
 						dataS.setClassesInSlot(0);
 					}

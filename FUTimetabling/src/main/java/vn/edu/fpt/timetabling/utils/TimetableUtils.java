@@ -9,7 +9,7 @@ import vn.edu.fpt.timetabling.model.Timetable;
 public class TimetableUtils {
 
 	public static Timetable containsTimetable(List<Timetable> list, Date date, int slot) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat(Const.DATE);
 		for(Timetable t : list) {
 			if (t != null && sdf.format(t.getDate()).compareTo(sdf.format(date)) == 0 && t.getSlot() == slot) {
 				return t;
@@ -19,7 +19,7 @@ public class TimetableUtils {
 	}
 	
 	public static int findNumberSameDaySlot(List<Timetable> list, Date date, int slot) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat(Const.DATE);
 		int count = 0;
 		for(Timetable t : list) {
 			if (t != null && sdf.format(t.getDate()).compareTo(sdf.format(date)) == 0 && t.getSlot() == slot) {
