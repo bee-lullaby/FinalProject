@@ -143,11 +143,6 @@
 						data-hint-position="top" data-hint="Clear">
 						<span class="mif-cross"></span>
 					</button>
-					<button id="btn-submit" class="button" data-role="hint"
-						data-hint-background="#1CB7EC" data-hint-color="fg-white"
-						data-hint-position="top" data-hint="Submit">
-						<span class="mif-download"></span>
-					</button>
 				</div>
 			</div>
 			<div id="timetable-container" style="width: 100%; margin-top: 15px">

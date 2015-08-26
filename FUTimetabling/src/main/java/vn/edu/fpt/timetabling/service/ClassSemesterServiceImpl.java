@@ -234,6 +234,7 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 			} else {
 				updateClassSemester(classSemester);
 			}
+			
 			int specializedId = classFPT.getSpecialized().getSpecializedId();
 			int detailSpecializedId = 0;
 			if (classFPT.getDetailSpecialized() != null) {
@@ -254,6 +255,7 @@ public class ClassSemesterServiceImpl implements ClassSemesterService {
 					courses2.add(course);
 				}
 			}
+			
 			for (ProgramSemesterDetail programSemesterDetail : programSemesterDetails) {
 				CourseSemester courseSemester = programSemesterDetail.getCourseSemester();
 				ClassCourseSemester classCourseSemester = new ClassCourseSemester();

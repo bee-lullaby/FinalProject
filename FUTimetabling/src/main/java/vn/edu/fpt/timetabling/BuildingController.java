@@ -1,5 +1,6 @@
 package vn.edu.fpt.timetabling;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,18 +11,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.google.api.client.http.HttpRequest;
+
 import vn.edu.fpt.timetabling.exception.BuildingExistedException;
 import vn.edu.fpt.timetabling.model.Building;
 import vn.edu.fpt.timetabling.service.BuildingService;
+import vn.edu.fpt.timetabling.service.TimetableService;
 
 @Controller
 public class BuildingController extends GeneralController {
 
 	@Autowired
 	private BuildingService buildingService;
-
+	@Autowired
+	private TimetableService timetableService;
 	@RequestMapping(value = "/staff/building", method = RequestMethod.GET)
-	public String staffManagement(HttpSession httpSession, Model model) {
+	public String buildingManagement(HttpSession httpSession, Model model) {
 		model.addAttribute("listBuildings", buildingService.listBuildings());
 		checkError(httpSession, model);
 		notifySuccess(httpSession, model);
@@ -30,7 +35,7 @@ public class BuildingController extends GeneralController {
 
 	@RequestMapping(value = "/staff/building/updateBuilding", method = RequestMethod.POST, params = {
 			"buildingId", "code" })
-	public String updateStaff(@RequestParam int buildingId,
+	public String updateBuilding(@RequestParam int buildingId,
 			@RequestParam String code, HttpSession httpSession)
 			throws BuildingExistedException {
 
@@ -58,7 +63,7 @@ public class BuildingController extends GeneralController {
 
 	@RequestMapping(value = "/staff/building/deleteBuilding", method = RequestMethod.GET, params = { "buildingId" })
 	public String deleteBuilding(@RequestParam int buildingId,
-			HttpSession httpSession) {
+			HttpSession httpSession, HttpServletRequest request) {
 		buildingService.deleteBuilding(buildingId);
 		httpSession.setAttribute("success", "Delete Building Successful!");
 		return "redirect:/staff/building";

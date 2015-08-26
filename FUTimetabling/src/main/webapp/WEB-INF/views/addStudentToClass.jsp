@@ -240,7 +240,7 @@
 					</table>
 				</div>
 				<div style="width: 49%;">
-					<h3>List of students in this class course semester</h3>
+					<h3>List of students were set:</h3>
 
 					<div>
 						Total: <b>${fn:length(busyStudents)}</b>

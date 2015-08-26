@@ -166,6 +166,10 @@ public class TeacherController extends GeneralController {
 				teacherCourseSemesterService.addTeacherCourseSemester(tcs);
 			}
 		}
+		
+		if (teacher.getTeacherId() != 0) {
+			httpSession.setAttribute("success", "Add Teacher For Semester Successful!");
+		}
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}

@@ -16,6 +16,10 @@ $(document).ready(function() {
 		_showDialog("dialog-add-file");
 	});
 	
+	$("#btn-clear").on("click", function() {
+		window.location = "programs/clearPrograms?semesterId=" +_urlParam("semesterId");
+	});
+	
 	function _init() {
 		var table = $('#table-programs').DataTable({
 			"lengthChange": false,

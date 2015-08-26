@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import vn.edu.fpt.timetabling.model.Semester;
 import vn.edu.fpt.timetabling.service.CourseSemesterService;
+import vn.edu.fpt.timetabling.service.ProgramSemesterDetailService;
 import vn.edu.fpt.timetabling.service.ProgramSemesterService;
 import vn.edu.fpt.timetabling.service.SemesterService;
 import vn.edu.fpt.timetabling.service.SpecializedService;
@@ -28,6 +29,7 @@ public class ProgramSemesterController extends GeneralController {
 	private SemesterService semesterService;
 	private SpecializedService specializedService;
 	private CourseSemesterService courseSemesterService;
+	private ProgramSemesterDetailService programSemesterDetailService;
 	
 	@Autowired(required = true)
 	@Qualifier(value = "programSemesterService")
@@ -51,6 +53,12 @@ public class ProgramSemesterController extends GeneralController {
 	@Qualifier(value = "courseSemesterService")
 	public void setCourseSemesterService(CourseSemesterService courseSemesterService) {
 		this.courseSemesterService = courseSemesterService;
+	}
+	
+	@Autowired(required = true)
+	@Qualifier(value = "programSemesterDetailService")
+	public void setCourseSemesterService(ProgramSemesterDetailService programSemesterDetailService) {
+		this.programSemesterDetailService = programSemesterDetailService;
 	}
 	
 	@RequestMapping(value = "/staff/programs", method = RequestMethod.GET)
@@ -94,6 +102,14 @@ public class ProgramSemesterController extends GeneralController {
 		return "redirect:/staff/programs";
 	}
 	
+	@RequestMapping(value = "/staff/programs/clearPrograms", method = RequestMethod.GET)
+	public String clearPrograms(@RequestParam("semesterId") int semesterId, HttpSession httpSession) {
+		programSemesterDetailService.deleteProgramSemesterDetailsBySemester(semesterId);
+		programSemesterService.deleteProgramSemestersBySemester(semesterId);
+		httpSession.setAttribute("success",
+				"Clear Programs Successful!");
+		return "redirect:/staff/programs";
+	}
 	
 	@ExceptionHandler(Exception.class)
 	public String handleException(HttpSession httpSession, Exception e) {

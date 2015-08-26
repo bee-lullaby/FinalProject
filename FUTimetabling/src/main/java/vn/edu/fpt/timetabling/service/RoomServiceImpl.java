@@ -138,4 +138,17 @@ public class RoomServiceImpl implements RoomService {
 		}
 		return courseRoomMap;
 	}
+	
+	@Override
+	public List<Room> listNormalRooms() {
+		List<Room> results = new ArrayList<Room>();
+		List<Room> rooms = listRooms(false);
+		for (Room room : rooms) {
+			String coursesString = room.getCourses();
+			if (coursesString == null || coursesString.trim().isEmpty()) {
+				results.add(room);
+			}
+		}
+		return results;
+	}
 }

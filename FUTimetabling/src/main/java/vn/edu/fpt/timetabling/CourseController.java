@@ -25,6 +25,7 @@ import vn.edu.fpt.timetabling.service.CourseSemesterService;
 import vn.edu.fpt.timetabling.service.CourseService;
 import vn.edu.fpt.timetabling.service.DepartmentService;
 import vn.edu.fpt.timetabling.service.SemesterService;
+import vn.edu.fpt.timetabling.service.TimetableService;
 
 @Controller
 public class CourseController extends GeneralController {
@@ -33,6 +34,9 @@ public class CourseController extends GeneralController {
 	private DepartmentService departmentService;
 	private CourseSemesterService courseSemesterService;
 
+	@Autowired
+	private TimetableService timetableService;
+	
 	@Autowired(required = true)
 	@Qualifier(value = "courseService")
 	public void setCourseService(CourseService courseService) {
@@ -139,6 +143,12 @@ public class CourseController extends GeneralController {
 	@RequestMapping(value = "/staff/courses/addFromFile", method = RequestMethod.POST)
 	public String addCourseFromFile(@RequestParam("file") MultipartFile file, @RequestParam("semesterId") int semesterId, HttpSession httpSession,
 			HttpServletRequest request) {
+		if(timetableService.listTimetablesBySemester(semesterId).size() > 0) {
+			httpSession.setAttribute("error", "Timetable existed ! Can't re-add!");
+			String referer = request.getHeader("Referer");
+			return "redirect:" + referer;
+		}
+		
 		if (!file.isEmpty()) {
 			File courses = new File("courses.xlxs");
 			try {
