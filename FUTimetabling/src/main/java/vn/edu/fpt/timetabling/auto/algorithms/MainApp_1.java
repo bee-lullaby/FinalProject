@@ -3,19 +3,9 @@ package vn.edu.fpt.timetabling.auto.algorithms;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.CellRangeAddress;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Font;
 
 import vn.edu.fpt.timetabling.auto.entities.ClassCourse;
 import vn.edu.fpt.timetabling.auto.entities.ClassFU;
@@ -74,7 +64,7 @@ public class MainApp_1 {
 			System.exit(1);
 		}
 
-//		DA.makeMustNotConflictClassCourseList();
+		// DA.makeMustNotConflictClassCourseList();
 		// ---------------------------------------------------------------------------
 		// PHASE 1:
 		long startTime_phase1 = System.currentTimeMillis();
@@ -100,9 +90,9 @@ public class MainApp_1 {
 		SingleSolution[] sol = TA.loadbeingUsedTimeTable(fn_beingUsedTimeTable_Temp2);
 		TA.beingUsedTimeTable = sol;
 		// TA.printTimeTableAllClass(fn_allClassTTB,sol);
-		
+
 		long estimatedTime_phase2 = System.currentTimeMillis() - startTime_phase2;
-		
+
 		// ---------------------------------------------------------------------------
 		// PHASE 3:
 		long startTime_phase3 = System.currentTimeMillis();
@@ -123,10 +113,10 @@ public class MainApp_1 {
 		// TA.calRoomDemandEverySlot(sol);
 		System.out.println();
 		long estimatedTime_phase4 = System.currentTimeMillis() - startTime_phase4;
-		
+
 		// ==================================================================
 		printTimeTableHTML_AllClass(fn_TTB);
-//		PoiWriteExcelFile(TA, "timetable.xls", sol);
+		// PoiWriteExcelFile(TA, "timetable.xls", sol);
 		System.out.println("Done printing timetable all class to " + fn_TTB);
 		printTimeTable_AllTeacher(fn_allTeacherTTB2);
 		System.out.println("Done printing timetable all teacher to " + fn_allTeacherTTB2);
@@ -154,25 +144,26 @@ public class MainApp_1 {
 
 		String fn_data_course_class = "data_course_class_merged.txt";
 		String fn_data_teacher = "data_teacher.txt";
-		String fn_data_room_building = "data_room_building.txt";
+		// String fn_data_room_building = "data_room_building.txt";
 		String fn_data_mergedCases = "data_mergedCases.txt";
-		String fn_classTimeTableSolutions_Temp2 = "data_solutionWarehouses_Temp2.dat";
+		// String fn_classTimeTableSolutions_Temp2 =
+		// "data_solutionWarehouses_Temp2.dat";
 		String fn_classTimeTableSolutions_Temp1 = "data_solutionWarehouses_Temp1.dat";
-		String fn_conflictMatrix_Temp2 = "data_conflictMatrix_Temp2.txt";
+		// String fn_conflictMatrix_Temp2 = "data_conflictMatrix_Temp2.txt";
 		String fn_conflictMatrix_Temp1 = "data_conflictMatrix_Temp1.txt";
-		String fn_courseScoreMatrix_Temp2 = "data_scoreMatrix_Temp2.txt";
+		// String fn_courseScoreMatrix_Temp2 = "data_scoreMatrix_Temp2.txt";
 		String fn_courseScoreMatrix_Temp1 = "data_scoreMatrix_Temp1.txt";
-		String fn_beingUsedTimeTable_Temp2 = "data_beingusedTT_Temp2.dat";
+		// String fn_beingUsedTimeTable_Temp2 = "data_beingusedTT_Temp2.dat";
 		String fn_beingUsedTimeTable_Temp1 = "data_beingusedTT_Temp1.dat";
-		String fn_allClassTTB = "TTB.html";
+		// String fn_allClassTTB = "TTB.html";
 		String fn_allTeacherTTB1 = "teacherTimeTable1.html";
-		String fn_allTeacherTTB2 = "teacherTimeTable2.html";
-		String fn_allTeacherTTB = "teacherTimeTable.html";
+		// String fn_allTeacherTTB2 = "teacherTimeTable2.html";
+		// String fn_allTeacherTTB = "teacherTimeTable.html";
 		String fn_allClass_TimetableFull = "TTB_AllClass_Temp1.html";
 
 		DA.loadData_Course_Class(fn_data_course_class); // for all phases
 		DA.loadData_Teacher_UsingCode(fn_data_teacher); // for phase 3
-		//DA.loadData_Room_Building(fn_data_room_building); // for phase 4
+		// DA.loadData_Room_Building(fn_data_room_building); // for phase 4
 		DA.loadData_mergedCases(fn_data_mergedCases); // for phase 1
 
 		// ---------------------------------------------------------------------------
@@ -292,14 +283,14 @@ public class MainApp_1 {
 		// String fn_conflictMatrix_Temp2 = "data_conflictMatrix_Temp2.txt";
 		String fn_conflictMatrix_Temp1 = "data_conflictMatrix_Temp1.txt";
 		// String fn_courseScoreMatrix_Temp2 = "data_scoreMatrix_Temp2.txt";
-		String fn_courseScoreMatrix_Temp1 = "data_scoreMatrix_Temp1.txt";
+		// String fn_courseScoreMatrix_Temp1 = "data_scoreMatrix_Temp1.txt";
 		// String fn_beingUsedTimeTable_Temp2 = "data_beingusedTT_Temp2.dat";
 		String fn_beingUsedTimeTable_Temp1 = "data_beingusedTT_Temp1_full.dat";
 		String fn_allClassTTB = "TTB.html";
-		String fn_allTeacherTTB1 = "teacherTimeTable1.html";
+		// String fn_allTeacherTTB1 = "teacherTimeTable1.html";
 		// String fn_allTeacherTTB2 = "teacherTimeTable2.html";
 		// String fn_allTeacherTTB = "teacherTimeTable.html";
-		String fn_allClass_TimetableFull = "TTB_AllClass_Temp1.html";
+		// String fn_allClass_TimetableFull = "TTB_AllClass_Temp1.html";
 
 		DA.loadData_Class_v2(fn_data_class);
 		DA.loadData_Department_v2(fn_data_department);
@@ -372,7 +363,7 @@ public class MainApp_1 {
 		 * "Done printing timetable all teacher to " + fn_allTeacherTTB1);
 		 */
 		// ==================================================================
-		
+
 		long estimatedTime = System.currentTimeMillis() - startTime;
 		System.out.println("\nTime-consuming phase 1: " + (double) estimatedTime_phase1 / 1000 + " secs");
 		System.out.println("Time-consuming phase 2: " + (double) estimatedTime_phase2 / 1000 + " secs");
@@ -388,7 +379,6 @@ public class MainApp_1 {
 	 * Print timetable of all classes with: course, time(day,slot), room,
 	 * professor.
 	 */
-	
 
 	public void printTimeTableHTML_AllClass(String fn) {
 		try {
@@ -667,7 +657,7 @@ public class MainApp_1 {
 		String fn_classTimeTableSolutions_Temp2 = "data_solutionWarehouses_Temp2.dat";
 		String fn_beingUsedTimeTable_Temp2 = "data_beingusedTT_Temp2.dat";
 		String fn_conflictMatrix_Temp2 = "data_conflictMatrix_Temp2.txt";
-		String fn_courseScoreMatrix_Temp2 = "data_scoreMatrix_Temp2.txt";
+		// String fn_courseScoreMatrix_Temp2 = "data_scoreMatrix_Temp2.txt";
 
 		DA.loadData_Class_v2(fn_data_class);
 		DA.loadData_Department_v2(fn_data_department);

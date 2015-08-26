@@ -3,7 +3,6 @@ package vn.edu.fpt.timetabling.auto.userdefinefunction;
 import java.util.HashSet;
 
 import localsearch.constraints.basic.IsEqual;
-import localsearch.functions.basic.FuncMinus;
 import localsearch.functions.basic.FuncVarConst;
 import localsearch.model.AbstractInvariant;
 import localsearch.model.ConstraintSystem;

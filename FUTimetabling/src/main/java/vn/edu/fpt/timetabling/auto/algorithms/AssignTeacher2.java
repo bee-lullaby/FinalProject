@@ -94,7 +94,7 @@ public class AssignTeacher2 {
 
 		// =============================================
 		// % 2 courses conflict thi ko cung giao vien
-		VarIntLS[] temp = new VarIntLS[2];
+		// VarIntLS[] temp = new VarIntLS[2];
 		for (int t = 0; t < DA.nbTeacher; t++) {
 			for (int c1 = 0; c1 < DA.nbClassCourse - 1; c1++) {
 				for (int c2 = c1 + 1; c2 < DA.nbClassCourse; c2++) {
@@ -163,6 +163,7 @@ public class AssignTeacher2 {
 		ls.close();
 	}
 
+	@SuppressWarnings("unchecked")
 	public void stateModel_LS() {
 		ls = new LocalSearchManager();
 		x_LS = new VarIntLS[nbCourse];
@@ -206,7 +207,7 @@ public class AssignTeacher2 {
 				}
 			}
 		}
-		VarIntLS[] tt = y_LS[0];
+		// VarIntLS[] tt = y_LS[0];
 
 		for (int c1 = 0; c1 < nbCourse - 1; c1++) {
 			for (int c2 = c1 + 1; c2 < nbCourse; c2++) {
@@ -287,6 +288,7 @@ public class AssignTeacher2 {
 	}
 
 	// //////////////////////////////////////////////////
+	@SuppressWarnings("unchecked")
 	public void stateModel_CP() {
 		x_cp = new IntegerVariable[nbTeacher][nbCourse];
 		sum_cp = new IntegerExpressionVariable[nbTeacher];

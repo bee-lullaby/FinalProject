@@ -46,6 +46,7 @@ import vn.edu.fpt.timetabling.auto.entities.Room;
 import vn.edu.fpt.timetabling.auto.entities.SingleSolution;
 import vn.edu.fpt.timetabling.auto.entities.Teacher;
 
+@SuppressWarnings("deprecation")
 public class TimeTableAllClass {
 	public DataCenter DA;
 	public TimeTableOneClass_SM[] timeTable_WareHouse;
@@ -134,8 +135,8 @@ public class TimeTableAllClass {
 			for (int fcj = fci + 1; fcj < nbFC; fcj++) {
 				ClassCourse cc1 = mXDay2ClassCourse.get(x_day[fci]);
 				ClassCourse cc2 = mXDay2ClassCourse.get(x_day[fcj]);
-				ClassFU cls1 = DA.mClassCourse2Class.get(cc1);
-				ClassFU cls2 = DA.mClassCourse2Class.get(cc2);
+				// ClassFU cls1 = DA.mClassCourse2Class.get(cc1);
+				// ClassFU cls2 = DA.mClassCourse2Class.get(cc2);
 				int cc1Idx = DA.mClassCourse2Index.get(cc1);
 				int cc2Idx = DA.mClassCourse2Index.get(cc2);
 				// if (DA.mustNotConflictMatrix[cc1Idx][cc2Idx] == 1 || cls1 ==
@@ -272,7 +273,7 @@ public class TimeTableAllClass {
 		File f = new File(fn);
 		try {
 			Scanner in = new Scanner(f);
-			String line = in.nextLine();
+			in.nextLine();
 			// System.out.println(line);
 			int idx = -1;
 			while (true) {
@@ -313,7 +314,7 @@ public class TimeTableAllClass {
 			 * 
 			 * }
 			 */
-
+			in.close();
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -435,13 +436,12 @@ public class TimeTableAllClass {
 		for (int cl = 0; cl < DA.nbClass; cl++) {
 			timeTable_WareHouse[cl] = new TimeTableOneClass_SM();
 			timeTable_WareHouse[cl].D = new DataOneClass();
-			//timeTable_WareHouse[cl].D.loadData(DA.genStringDataOneClass[cl]);
+			// timeTable_WareHouse[cl].D.loadData(DA.genStringDataOneClass[cl]);
 			timeTable_WareHouse[cl].D.loadData_SM(DataCenter.FILENAME_PREFIX_DATAONECLASS + cl + ".txt");
 			System.out.println("Done class " + cl);
-			
-			
+
 		}
-//		System.out.println("DEN DUOC DAY ROI");
+		// System.out.println("DEN DUOC DAY ROI");
 		for (int cl = 0; cl < DA.nbClass; cl++) {
 			ClassFU cls = DA.classes[cl];
 			ArrayList<ClassCourse> L = DA.mClass2ClassCourseList.get(cls);
@@ -1047,13 +1047,13 @@ public class TimeTableAllClass {
 			int newLimit = timeTable_WareHouse[pickedClass].sol.length;
 			int next = -1;
 			int currentViolation = S.violations();
-			int diff = 0;
+			// int diff = 0;
 			next = 0;
 
 			int bestReduce = 0;
 			// int oldPosition = backUpTimeTable[pickedClass];
-			int currentDelta = getAssignDelta(pickedClass,
-					timeTable_WareHouse[pickedClass].sol[backUpTimeTable[pickedClass]]);
+			// int currentDelta = getAssignDelta(pickedClass,
+			// timeTable_WareHouse[pickedClass].sol[backUpTimeTable[pickedClass]]);
 			do { // find best solution for picked class
 				if (next != backUpTimeTable[pickedClass]) { // ko duyet solution
 															// da co
@@ -1061,13 +1061,14 @@ public class TimeTableAllClass {
 					beingUsedTimeTable[pickedClass] = timeTable_WareHouse[pickedClass].sol[next];
 
 					// tinh new violation, so voi best violation.
-					int newdelta = getAssignDelta(pickedClass, timeTable_WareHouse[pickedClass].sol[next]);
+					// int newdelta = getAssignDelta(pickedClass,
+					// timeTable_WareHouse[pickedClass].sol[next]);
 					setValuePropagage(pickedClass, timeTable_WareHouse[pickedClass].sol[next]);
 					int newViolation = S.violations();
 					int newReduce = newViolation - currentViolation;
 					// if(newdelta < currentDelta){
 					if (newReduce < bestReduce) {
-						currentDelta = newdelta;
+						// currentDelta = newdelta;
 						bestReduce = newReduce;
 
 						positionOfBest = next;
@@ -1298,8 +1299,8 @@ public class TimeTableAllClass {
 			do {
 				int newTotalDemand = totalDemand;
 				int currentRoomDemand = 0;
-				int bestScore = 0;
-				int current_score = 0;
+				// int bestScore = 0;
+				// int current_score = 0;
 				next = 0;
 				do {
 					// System.out.println("class = "+pickedClass+", position =
@@ -1337,7 +1338,7 @@ public class TimeTableAllClass {
 							positionOfBest = next;
 							bestTotalDemand = newTotalDemand;
 							bestRoomDemand = currentRoomDemand;
-							bestScore = current_score;
+							// bestScore = current_score;
 							System.out.println(diff + "th chance");
 							System.out.println("room demand = " + currentRoomDemand);
 						}
@@ -1432,7 +1433,7 @@ public class TimeTableAllClass {
 			int newLimit = timeTable_WareHouse[pickedClass].sol.length;
 			int next = -1;
 			int currentViolation = S.violations();
-			int diff = 0;
+			// int diff = 0;
 			next = 0;
 
 			int bestReduce = 0;
@@ -1522,7 +1523,7 @@ public class TimeTableAllClass {
 		int base_violation = S.violations();
 		demand_OfACourse = calculateTeacherDemand(beingUsedTimeTable);
 		int nbViolatedCourse = DA.nbCourse;
-		int nBViolatedDepartment = DA.nbDepartment;
+		// int nBViolatedDepartment = DA.nbDepartment;
 		System.out.println("Violation after making feasible solution: " + base_violation);
 		do {
 			if (bannedClass.size() == DA.nbClass - 1) {
@@ -1550,7 +1551,7 @@ public class TimeTableAllClass {
 			int bestTotalDemand = totalDemand;
 			demand_OfACourse = calculateTeacherDemand(beingUsedTimeTable);
 			totalDemand = sumArray(demand_OfACourse);
-			int[] ss = findSessionAllClass(beingUsedTimeTable);
+			// int[] ss = findSessionAllClass(beingUsedTimeTable);
 			demand_Department = calculateDepartmentTeacherDemand(beingUsedTimeTable);
 			// int oldTotalDepartmentDemand = sumOfAnArray(demand_Department);
 			int next = -1;
@@ -1558,8 +1559,9 @@ public class TimeTableAllClass {
 			do {
 				int newTotalDemand = totalDemand;
 				// int currentRoomDemand = 0;
-				int bestDiff = Math.abs(ss[0] - ss[1]);
-				nBViolatedDepartment = nbViolatedElement(demand_Department, supply_Department);
+				// int bestDiff = Math.abs(ss[0] - ss[1]);
+				// nBViolatedDepartment = nbViolatedElement(demand_Department,
+				// supply_Department);
 
 				next = 0;
 				do {
@@ -1575,10 +1577,15 @@ public class TimeTableAllClass {
 						if (newViolation <= base_violation) {
 							// tinh new demand, new total demand
 							newDemand = calculateTeacherDemand(beingUsedTimeTable);
-							int[] newDepartmentDemand = calculateDepartmentTeacherDemand(beingUsedTimeTable);
+							// int[] newDepartmentDemand =
+							// calculateDepartmentTeacherDemand(beingUsedTimeTable);
 							newTotalDemand = sumArray(newDemand);
-							int newNBViolatedCourse = nbViolatedElement(newDemand, supplyTeacher4Optimization);
-							int newNBViolatedDepartment = nbViolatedElement(newDepartmentDemand, supply_Department);
+							// int newNBViolatedCourse =
+							// nbViolatedElement(newDemand,
+							// supplyTeacher4Optimization);
+							// int newNBViolatedDepartment =
+							// nbViolatedElement(newDepartmentDemand,
+							// supply_Department);
 							// int[] newDepartmentDemand =
 							// calculateDepartmentTeacherDemand(beingUsedTimeTable);
 							// int newTotalDepartmentDemand =
@@ -1587,28 +1594,30 @@ public class TimeTableAllClass {
 							// lay this solution
 							// currentRoomDemand =
 							// calRoomDemand(beingUsedTimeTable);
-							int[] ss1 = findSessionAllClass(beingUsedTimeTable);
-							int currentDiff = Math.abs(ss1[0] - ss1[1]);
+							// int[] ss1 =
+							// findSessionAllClass(beingUsedTimeTable);
+							// int currentDiff = Math.abs(ss1[0] - ss1[1]);
 
 							if (true
-//									 && newNBViolatedCourse < nbViolatedCourse
+									// && newNBViolatedCourse < nbViolatedCourse
 									// && newNBViolatedDepartment <=
 									// nBViolatedDepartment
 									// && newTotalDepartmentDemand <=
 									// oldTotalDepartmentDemand
 									&& newTotalDemand < bestTotalDemand
-									// && currentRoomDemand < bestRoomDemand +
-									// diff
-//									&& currentDiff < bestDiff + diff
-									) {
+							// && currentRoomDemand < bestRoomDemand +
+							// diff
+							// && currentDiff < bestDiff + diff
+							) {
 								// nbViolatedCourse = newNBViolatedCourse;
-//								nBViolatedDepartment = newNBViolatedDepartment;
+								// nBViolatedDepartment =
+								// newNBViolatedDepartment;
 								// oldTotalDepartmentDemand =
 								// newTotalDepartmentDemand;
 								base_violation = newViolation;
 								bestPosition = next;
 								bestTotalDemand = newTotalDemand;
-								bestDiff = currentDiff;
+								// bestDiff = currentDiff;
 								// bestRoomDemand = currentRoomDemand;
 								// System.out.println(diff + "th chance");
 								// System.out.println("room demand = " +
@@ -1659,11 +1668,11 @@ public class TimeTableAllClass {
 			demand_OfACourse = calculateTeacherDemand(beingUsedTimeTable);
 			nbViolatedCourse = nbViolatedElement(demand_OfACourse, supplyTeacher4Optimization);
 			iter++;
-		} while (iter < NB_ITERATION 
-//				&& totalDemand > totalSupply
-		 && nbViolatedCourse > 0
-//				&& nBViolatedDepartment > 0
-				);
+		} while (iter < NB_ITERATION
+				// && totalDemand > totalSupply
+				&& nbViolatedCourse > 0
+		// && nBViolatedDepartment > 0
+		);
 		System.out.println("Final violation = " + S.violations());
 		System.out.println("Done finding...");
 		System.out.println("\nResult:.....");
@@ -1770,8 +1779,8 @@ public class TimeTableAllClass {
 					if (sol.T[i][j] >= 0) {
 						str = "M" + sol.T[i][j];
 						ClassCourse cc = DA.mID2ClassCourse.get(sol.T[i][j]);
-						Course c = DA.mClassCourse2Course.get(cc);
-						int idx = c.ID;
+						// Course c = DA.mClassCourse2Course.get(cc);
+						// int idx = c.ID;
 						int stt = cc.stt;
 						if (stt == 3) {
 							out.println("bgcolor='yellow'> ");
@@ -2180,7 +2189,6 @@ public class TimeTableAllClass {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	public void make_L_LStar_F_FStar(SingleSolution[] timetable) {
 		for (CoupleCoursePlace cp : DA.lcoupleCoursePlaceList) {
 			if (cp == null) {
@@ -2320,7 +2328,7 @@ public class TimeTableAllClass {
 			}
 			//
 		}
-		int demand = 0;
+		// int demand = 0;
 		// for (Course c : DA.courses) {
 		ArrayList<CoupleCoursePlace> L = DA.mCourse2CoupleCPList.get(course);
 		ArrayList<ClassCourse> ccL = DA.mCourse2ClassCourseList.get(course);
@@ -2352,7 +2360,7 @@ public class TimeTableAllClass {
 			DA.mCourse2FStar.replace(course, max);
 			System.out.println(", " + ccL.size() + "-" + (ccL.size() == count) + ", " + count + ", fstar = " + max + "-"
 					+ DA.mCourse2FStar.get(course) + ", nbCC in all L* = " + DA.mCourse2AllLStar.get(course).size());
-			demand += max;
+			// demand += max;
 		}
 		// }
 		// System.out.println("demand = "+demand);
@@ -2395,17 +2403,17 @@ public class TimeTableAllClass {
 		System.out.println();
 		update_L_LStar_F_FStar(c, ttb);
 		ArrayList<ClassCourse> ccL = DA.mCourse2LStar.get(c);
-		ArrayList<CoupleCoursePlace> CPList = DA.mCourse2CoupleCPList.get(c);
+		// ArrayList<CoupleCoursePlace> CPList = DA.mCourse2CoupleCPList.get(c);
 		ClassCourse cc = ccL.get(1);
 		System.out.println();
 		ClassFU cls = DA.mClassCourse2Class.get(cc);
 		System.out.println(cc.code + "-" + cls.code);
 		// System.out.println();
 		Place p0 = DA.mClassCourse2Place.get(cc);
-		Place p = DA.findPlace(0, 0, 1);
+		// Place p = DA.findPlace(0, 0, 1);
 		Place p1 = DA.findPlace(1, 0, 2);
-		Place p2 = DA.findPlace(0, 1, 3);
-		Place p3 = DA.findPlace(1, 1, 4);
+		// Place p2 = DA.findPlace(0, 1, 3);
+		// Place p3 = DA.findPlace(1, 1, 4);
 		System.out.println(isFeasibleToMove(cc, p1, ttb));
 		System.out.println("ss = " + p0.session + ", bl = " + p0.block + ", slot = " + p0.slot);
 		move(cc, p0, p1, ttb);
@@ -2430,7 +2438,7 @@ public class TimeTableAllClass {
 		 */
 
 		ccL = DA.mCourse2LStar.get(c);
-		CPList = DA.mCourse2CoupleCPList.get(c);
+		// CPList = DA.mCourse2CoupleCPList.get(c);
 		cc = ccL.get(1);
 		pp = DA.mClassCourse2Place.get(cc);
 		Place p4 = DA.findPlace(1, 0, 1);
@@ -2512,6 +2520,7 @@ public class TimeTableAllClass {
 		return true;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void postImprovement(String fn_timetable) {
 		long startTime = System.currentTimeMillis();
 		// String fn = "data_beingusedTT_Temp1_full.dat";
@@ -2618,85 +2627,62 @@ public class TimeTableAllClass {
 		System.out.println("Time-consuming: " + estimatedTime / 1000 + " secs");
 	}
 
-	/*public void modelling_ttb_manual() {
-		DA.makeMustNotConflictClassCourseList();
-		DA.makeMustNotConflictMatrix();
-		String fn = "datasm/variable.txt";
-		genData_Fragment(fn);
-		ls = new LocalSearchManager();
-		int nbFC = DA.nbClassCourse * NB_FRAGMENT_PERCOURSE;
-
-		x_day = new VarIntLS[DA.nbClassCourse * NB_FRAGMENT_PERCOURSE];
-		x_slot = new VarIntLS[DA.nbClassCourse * NB_FRAGMENT_PERCOURSE];
-
-		loadData_FragmentANDInitializeVariables(fn);
-		S = new ConstraintSystem(ls);
-
-		// state model
-		for (int fci = 0; fci < nbFC - 1; fci++) {
-			for (int fcj = fci + 1; fcj < nbFC; fcj++) {
-				ClassCourse cc1 = mXDay2ClassCourse.get(x_day[fci]);
-				ClassCourse cc2 = mXDay2ClassCourse.get(x_day[fcj]);
-				ClassFU cls1 = DA.mClassCourse2Class.get(cc1);
-				ClassFU cls2 = DA.mClassCourse2Class.get(cc2);
-				int cc1Idx = DA.mClassCourse2Index.get(cc1);
-				int cc2Idx = DA.mClassCourse2Index.get(cc2);
-				if (DA.mustNotConflictMatrix[cc1Idx][cc2Idx] == 1 || cls1 == cls2) {
-					// if (DA.mustNotConflictMatrix[cc1Idx][cc2Idx] == 1) {
-					// if(cls1 == cls2){
-					IConstraint ic1 = new IsEqual(x_day[fci], x_day[fcj]);
-					IConstraint ic2 = new NotEqual(x_slot[fci], x_slot[fcj]);
-					S.post(new Implicate(ic1, ic2));
-				}
-			}
-		}
-
-		// ---------------------------------------------------------------------
-		ls.close();
-
-		System.out.println("\nViolation after stating model: " + S.violations());
-
-		// set value
-		DA.loadData_ClassCourse_DaySlot_temp2("datasm/data_ttb_sm.txt");
-		for (ClassCourse cc : DA.classCourses) {
-			ArrayList<VarIntLS> dayList = mClassCourse2x_dayList.get(cc);
-			ArrayList<VarIntLS> slotList = mClassCourse2x_slotList.get(cc);
-			ArrayList<DaySlot> dsList = DA.mClassCourse2DaySlotList_manual.get(cc);
-			if (dayList.size() != dsList.size() || slotList.size() != dsList.size()) {
-				System.out.println("Problem in modeling manual");
-				System.exit(1);
-			}
-			int idx = -1;
-			for (DaySlot daySlot : dsList) {
-				idx++;
-				int d = daySlot.day;
-				int s = daySlot.slot;
-				dayList.get(idx).setValuePropagate(d);
-				slotList.get(idx).setValuePropagate(s);
-			}
-		}
-
-		// validation
-		System.out.println("Violation after modeling manual_ttb: " + S.violations());
-		int count = 0;
-		for (VarIntLS xday : x_day) {
-			ClassCourse cc = mXDay2ClassCourse.get(xday);
-			ClassFU cls = DA.mClassCourse2Class.get(cc);
-			if (S.violations(xday) > 0) {
-				System.out.println("Violated day: " + cls.code + "-" + cc.code + ", d = " + xday.getValue());
-				count++;
-			}
-		}
-		for (VarIntLS xslot : x_slot) {
-			ClassCourse cc = mXSlot2ClassCourse.get(xslot);
-			ClassFU cls = DA.mClassCourse2Class.get(cc);
-			if (S.violations(xslot) > 0) {
-				System.out.println("Violated slot: " + cls.code + "-" + cc.code + ", s = " + xslot.getValue());
-				count++;
-			}
-		}
-		System.out.println("total " + count + " violated variables.");
-	}*/
+	/*
+	 * public void modelling_ttb_manual() {
+	 * DA.makeMustNotConflictClassCourseList(); DA.makeMustNotConflictMatrix();
+	 * String fn = "datasm/variable.txt"; genData_Fragment(fn); ls = new
+	 * LocalSearchManager(); int nbFC = DA.nbClassCourse *
+	 * NB_FRAGMENT_PERCOURSE;
+	 * 
+	 * x_day = new VarIntLS[DA.nbClassCourse * NB_FRAGMENT_PERCOURSE]; x_slot =
+	 * new VarIntLS[DA.nbClassCourse * NB_FRAGMENT_PERCOURSE];
+	 * 
+	 * loadData_FragmentANDInitializeVariables(fn); S = new
+	 * ConstraintSystem(ls);
+	 * 
+	 * // state model for (int fci = 0; fci < nbFC - 1; fci++) { for (int fcj =
+	 * fci + 1; fcj < nbFC; fcj++) { ClassCourse cc1 =
+	 * mXDay2ClassCourse.get(x_day[fci]); ClassCourse cc2 =
+	 * mXDay2ClassCourse.get(x_day[fcj]); ClassFU cls1 =
+	 * DA.mClassCourse2Class.get(cc1); ClassFU cls2 =
+	 * DA.mClassCourse2Class.get(cc2); int cc1Idx =
+	 * DA.mClassCourse2Index.get(cc1); int cc2Idx =
+	 * DA.mClassCourse2Index.get(cc2); if
+	 * (DA.mustNotConflictMatrix[cc1Idx][cc2Idx] == 1 || cls1 == cls2) { // if
+	 * (DA.mustNotConflictMatrix[cc1Idx][cc2Idx] == 1) { // if(cls1 == cls2){
+	 * IConstraint ic1 = new IsEqual(x_day[fci], x_day[fcj]); IConstraint ic2 =
+	 * new NotEqual(x_slot[fci], x_slot[fcj]); S.post(new Implicate(ic1, ic2));
+	 * } } }
+	 * 
+	 * // ---------------------------------------------------------------------
+	 * ls.close();
+	 * 
+	 * System.out.println("\nViolation after stating model: " + S.violations());
+	 * 
+	 * // set value
+	 * DA.loadData_ClassCourse_DaySlot_temp2("datasm/data_ttb_sm.txt"); for
+	 * (ClassCourse cc : DA.classCourses) { ArrayList<VarIntLS> dayList =
+	 * mClassCourse2x_dayList.get(cc); ArrayList<VarIntLS> slotList =
+	 * mClassCourse2x_slotList.get(cc); ArrayList<DaySlot> dsList =
+	 * DA.mClassCourse2DaySlotList_manual.get(cc); if (dayList.size() !=
+	 * dsList.size() || slotList.size() != dsList.size()) { System.out.println(
+	 * "Problem in modeling manual"); System.exit(1); } int idx = -1; for
+	 * (DaySlot daySlot : dsList) { idx++; int d = daySlot.day; int s =
+	 * daySlot.slot; dayList.get(idx).setValuePropagate(d);
+	 * slotList.get(idx).setValuePropagate(s); } }
+	 * 
+	 * // validation System.out.println("Violation after modeling manual_ttb: "
+	 * + S.violations()); int count = 0; for (VarIntLS xday : x_day) {
+	 * ClassCourse cc = mXDay2ClassCourse.get(xday); ClassFU cls =
+	 * DA.mClassCourse2Class.get(cc); if (S.violations(xday) > 0) {
+	 * System.out.println("Violated day: " + cls.code + "-" + cc.code + ", d = "
+	 * + xday.getValue()); count++; } } for (VarIntLS xslot : x_slot) {
+	 * ClassCourse cc = mXSlot2ClassCourse.get(xslot); ClassFU cls =
+	 * DA.mClassCourse2Class.get(cc); if (S.violations(xslot) > 0) {
+	 * System.out.println("Violated slot: " + cls.code + "-" + cc.code +
+	 * ", s = " + xslot.getValue()); count++; } } System.out.println("total " +
+	 * count + " violated variables."); }
+	 */
 
 	public void buildTTB_manual() {
 		DA.classTTB_manual = new SingleSolution[DA.nbClass];
@@ -2796,12 +2782,12 @@ public class TimeTableAllClass {
 		cell = rowbl2.createCell(c2);
 		cell.setCellValue(TA.DA.classes[clIdx].code);
 		c2++;
-		int ss2 = -1;
+		// int ss2 = -1;
 		ses = rowbl2.createCell(c2);
 		ses2 = rowbl23.createCell(c2);
 
 		for (int i = 10; i < 20; i++) {
-			
+
 			int p = 0;
 			for (int j = 0; j < 2 * TA.DA.nbSlotsPerHalfDay; j++) {
 				String str = "";
@@ -2810,13 +2796,13 @@ public class TimeTableAllClass {
 
 					ClassCourse cc = DA.mID2ClassCourse.get(sol.T[j][i]);
 					Course course = DA.mClassCourse2Course.get(cc);
-//					if (DA.mClassCourse2AssignedRoom.get(cc) != null) {
-//						Room room = DA.mClassCourse2AssignedRoom.get(cc);
-//						rc = room.code;
-//					}
-					if(DA.mClassCourse2AssignedTeacher.get(cc)!=null){
+					// if (DA.mClassCourse2AssignedRoom.get(cc) != null) {
+					// Room room = DA.mClassCourse2AssignedRoom.get(cc);
+					// rc = room.code;
+					// }
+					if (DA.mClassCourse2AssignedTeacher.get(cc) != null) {
 						Teacher tc = DA.mClassCourse2AssignedTeacher.get(cc);
-						rc= tc.code;
+						rc = tc.code;
 					}
 					str = course.code;
 					if (j < 3) {
@@ -2883,7 +2869,7 @@ public class TimeTableAllClass {
 			for (int i = 1; i <= DA.nbCourse * 6; i++) {
 				HSSFRow row1 = viewByCourse.createRow(i);
 				for (int j = 0; j <= 20; j++) {
-					HSSFCell cell1 = row1.createCell(j);
+					row1.createCell(j);
 				}
 			}
 
@@ -2918,14 +2904,14 @@ public class TimeTableAllClass {
 				HSSFRow row1 = viewByRoom.createRow(i);
 
 				for (int j = 0; j <= 6 * 20; j++) {
-					HSSFCell cell1 = row1.createCell(j);
+					row1.createCell(j);
 				}
 				HSSFCell cell1 = row1.getCell(0);
-				Room room = new Room();
-				if (DA.mIDx2Room.get(i-1)==null){
-					//cell1.setCellValue("No room");
-				}
-				else cell1.setCellValue(DA.mIDx2Room.get(i - 1).code);
+				// Room room = new Room();
+				if (DA.mIDx2Room.get(i - 1) == null) {
+					// cell1.setCellValue("No room");
+				} else
+					cell1.setCellValue(DA.mIDx2Room.get(i - 1).code);
 			}
 
 			for (int icl = 0; icl < DA.nbClass; icl++) {
@@ -2938,11 +2924,11 @@ public class TimeTableAllClass {
 							if (DA.mClassCourse2AssignedRoom.get(cc) != null) {
 								Room room = DA.mClassCourse2AssignedRoom.get(cc);
 								int idxr = DA.mRoom2Index.get(room);
-								//DA.mClassCourse2AssignedTeacher.get(0);
+								// DA.mClassCourse2AssignedTeacher.get(0);
 								HSSFRow row1 = viewByRoom.getRow(idxr + 1);
-								
-								System.out.println("Row : "+(idxr+1));
-								System.out.println("Cell: "+ 1+day*6+slot);
+
+								System.out.println("Row : " + (idxr + 1));
+								System.out.println("Cell: " + 1 + day * 6 + slot);
 								HSSFCell cell1 = row1.getCell(1 + day * 6 + slot);
 								String str = cell1.getStringCellValue();
 								str = str + "," + code;
@@ -2970,6 +2956,7 @@ public class TimeTableAllClass {
 			}
 
 			workbook.write(fileOut);
+			workbook.close();
 			fileOut.flush();
 			fileOut.close();
 		} catch (FileNotFoundException e) {
@@ -2994,17 +2981,17 @@ public class TimeTableAllClass {
 			mergeCourse.add(hostClass.code);
 			mergeCourse.add(guestClass.code);
 			mergeCourses.add(mergeCourse);
-			System.out.println("Lop ghep: "+ classCourse.code+hostClass.code+ guestClass.code);
+			System.out.println("Lop ghep: " + classCourse.code + hostClass.code + guestClass.code);
 			for (int slot = 0; slot < DA.nbSlotsPerHalfDay * 2; slot++) {
 				for (int day = 0; day < DA.nbDays_20; day++) {
 					if (timetable[hostIndex].T[slot][day] == classCourse.ID) {
 						ArrayList<ClassCourse> ccl = DA.mClass2ClassCourseList.get(guestClass);
 						for (ClassCourse classCourse2 : ccl) {
-							if( classCourse2.code.compareTo(classCourse.code)==0){
+							if (classCourse2.code.compareTo(classCourse.code) == 0) {
 								timetable[guestIndex].T[slot][day] = classCourse2.ID;
 							}
 						}
-						
+
 					}
 				}
 			}
@@ -3014,15 +3001,15 @@ public class TimeTableAllClass {
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
-	public void initRandom(){
-		
+	public void initRandom() {
+
 		beingUsedTimeTable = new SingleSolution[DA.nbClass];
 		backUpTimeTable = new int[DA.nbClass];
 		Random r = new Random();
 		for (int cl = 0; cl < DA.nbClass; cl++) {
 			TimeTableOneClass_SM tt1c = timeTable_WareHouse[cl];
 			beingUsedTimeTable[cl] = new SingleSolution();
-			
+
 			int upperBound = 0;
 			if (tt1c.sol.length < TimeTableAllClass.LIMIT_NBSOLUTION_PERCLASS) {
 				upperBound = tt1c.sol.length;
@@ -3030,26 +3017,27 @@ public class TimeTableAllClass {
 				upperBound = TimeTableAllClass.LIMIT_NBSOLUTION_PERCLASS;
 			}
 			if (upperBound < 1) {
-				System.out.println("number of solution of class "+DA.classes[cl].code+" < 1");
+				System.out.println("number of solution of class " + DA.classes[cl].code + " < 1");
 				System.exit(1);
 			}
-			int p = r.nextInt((upperBound-1 - 0) + 1) + 0;
-//			int p = 0;
+			int p = r.nextInt((upperBound - 1 - 0) + 1) + 0;
+			// int p = 0;
 			beingUsedTimeTable[cl] = tt1c.sol[p];
 			setValuePropagage(cl, beingUsedTimeTable[cl]);
 			backUpTimeTable[cl] = tt1c.sol[p].position;
 		}
-		
+
 		supplyTeacher4Optimization = calculateSupplyTeacher();
 		demand_OfACourse = calculateTeacherDemand(beingUsedTimeTable);
 		totalDemand = sumArray(demand_OfACourse);
 		totalSupply = sumArray(supplyTeacher4Optimization);
-		System.out.println("total demand 0 = "+ totalDemand);
-		System.out.println("total supply 0 = "+ totalSupply);
-		System.out.println("initial random violation = "+S.violations());
+		System.out.println("total demand 0 = " + totalDemand);
+		System.out.println("total supply 0 = " + totalSupply);
+		System.out.println("initial random violation = " + S.violations());
 		System.out.println();
-		
+
 	}
+
 	/**
 	 * FindRandomFeasibleSolution. Find a feasible solution of random solution.
 	 */
@@ -3363,8 +3351,8 @@ public class TimeTableAllClass {
 		return pickedClass;
 	}
 
-	public int pickMostPromisingPosition2(int pickedClass, int base_violation, int bestTotalDemand,
-			int bestPosition, int newLimit, int diff) {
+	public int pickMostPromisingPosition2(int pickedClass, int base_violation, int bestTotalDemand, int bestPosition,
+			int newLimit, int diff) {
 		// find the best position
 		int f = 0;
 		// int currentRoomDemand = 0;
@@ -3379,8 +3367,9 @@ public class TimeTableAllClass {
 		boolean[] isPositionFeasible = new boolean[timeTable_WareHouse[pickedClass].sol.length];
 		int[] ss = findSessionAllClass(beingUsedTimeTable);
 		int currentDiff = Math.abs(ss[0] - ss[1]);
-		int currentNBViolatedCourse = nbViolatedElement(calculateTeacherDemand(beingUsedTimeTable),
-				supplyTeacher4Optimization);
+		// int currentNBViolatedCourse =
+		// nbViolatedElement(calculateTeacherDemand(beingUsedTimeTable),
+		// supplyTeacher4Optimization);
 
 		int next = 0;
 		do {
@@ -3400,8 +3389,9 @@ public class TimeTableAllClass {
 				// currentRoomDemand = calculateRoomDemand(beingUsedTimeTable);
 				int[] ss1 = findSessionAllClass(beingUsedTimeTable);
 				int newDiff = Math.abs(ss1[0] - ss1[1]);
-				int newNBViolatedCourse = nbViolatedElement(calculateTeacherDemand(beingUsedTimeTable),
-						supplyTeacher4Optimization);
+				// int newNBViolatedCourse =
+				// nbViolatedElement(calculateTeacherDemand(beingUsedTimeTable),
+				// supplyTeacher4Optimization);
 
 				if (f < fmin_of_Sk
 						// && newNBViolatedCourse < currentNBViolatedCourse
@@ -3445,10 +3435,10 @@ public class TimeTableAllClass {
 		return newBestPostion;
 	}
 
-	public static void testTabuSearch(){
+	public static void testTabuSearch() {
 		TimeTableAllClass TA = new TimeTableAllClass();
-		TA.DA = new DataCenter();		
-		
+		TA.DA = new DataCenter();
+
 		String fn_data_class = "datasm/data_class_sm.txt";
 		String fn_data_course = "datasm/data_course_sm.txt";
 		String fn_data_classcourse = "datasm/data_classcourse_sm.txt";
@@ -3460,8 +3450,9 @@ public class TimeTableAllClass {
 		String fn_beingUsedTimeTable_Temp2 = "datasm/data_beingusedTT_Temp2.dat";
 		String fn_conflictMatrix_Temp2 = "datasm/data_conflictMatrix_Temp2.txt";
 		String fn_TTB = "datasm/optimizedTTB_sm.html";
-//		String fn_courseScoreMatrix_Temp2 = "datasm/data_scoreMatrix_Temp2.txt";
-		
+		// String fn_courseScoreMatrix_Temp2 =
+		// "datasm/data_scoreMatrix_Temp2.txt";
+
 		TA.DA.loadData_Class_v2(fn_data_class);
 		TA.DA.loadData_Department_v2(fn_data_department);
 		TA.DA.loadData_Course_v2(fn_data_course);
@@ -3473,17 +3464,17 @@ public class TimeTableAllClass {
 			System.out.println("Not feasible to make timetable.");
 			System.exit(1);
 		}
-		long startTime = System.currentTimeMillis();				
-			
+		long startTime = System.currentTimeMillis();
+
 		TA.stateModelAllClass(fn_classTimeTableSolutions_Temp2);
-		
+
 		File f = new File("datasm/log_exp1.txt");
 		try {
 			FileWriter fw = new FileWriter(f);
 			BufferedWriter bw = new BufferedWriter(fw);
 			int[] obj_tabu = new int[1];
-			bw.write("Experiments: tabu length = "+TABULENGTH+", nbIteration = "+NB_ITERATION+"\n");
-			for (int i = 0; i < obj_tabu.length; i++) {				
+			bw.write("Experiments: tabu length = " + TABULENGTH + ", nbIteration = " + NB_ITERATION + "\n");
+			for (int i = 0; i < obj_tabu.length; i++) {
 				long startTime1 = System.currentTimeMillis();
 				TA.initRandom();
 				TA.findRandomFeasibleSolution();
@@ -3491,68 +3482,69 @@ public class TimeTableAllClass {
 				TA.totalDemand = TA.sumArray(TA.demand_OfACourse);
 				TA.fStar = TA.totalDemand;
 				TA.sStar = TA.beingUsedTimeTable;
-//				TA.findOptimalTimetable_TabuSearch();
+				// TA.findOptimalTimetable_TabuSearch();
 				TA.findOptimalTimetable_TabuSearch2();
-				
+
 				long estimatedTime = System.currentTimeMillis() - startTime1;
 				TA.savebeingUsedTimeTable(fn_beingUsedTimeTable_Temp2);
 				SingleSolution[] ttb = TA.loadbeingUsedTimeTable(fn_beingUsedTimeTable_Temp2);
 				TA.beingUsedTimeTable = ttb;
 				TA.writeMatrix2File(fn_conflictMatrix_Temp2, ttb);
-//				TA.calRoomDemandEverySlot(ttb);
-				
-//				int roomDemand = TA.calculateRoomDemand(ttb);
+				// TA.calRoomDemandEverySlot(ttb);
+
+				// int roomDemand = TA.calculateRoomDemand(ttb);
 				if (TA.isTimeTableCorrect(fn_conflictMatrix_Temp2)) {
 					int[] ss = TA.findSessionAllClass(ttb);
-//					System.out.println("sang = "+ss[0]);
-//					System.out.println("chieu = "+ss[1]);
-					bw.write("No."+(i+1)+": ");
+					// System.out.println("sang = "+ss[0]);
+					// System.out.println("chieu = "+ss[1]);
+					bw.write("No." + (i + 1) + ": ");
 					obj_tabu[i] = TA.fStar;
 					bw.write(TA.fStar
-//							+", room demand = "+roomDemand
-							+", sang = "+ss[0]
-							+", chieu = "+ss[1]
-							+", time = "+(estimatedTime/1000)+" sec.\n");
-				}			
+							// +", room demand = "+roomDemand
+							+ ", sang = " + ss[0] + ", chieu = " + ss[1] + ", time = " + (estimatedTime / 1000)
+							+ " sec.\n");
+				}
 			}
 			bw.write("Result: ");
 			for (int i = 0; i < obj_tabu.length; i++) {
-				bw.write(" "+obj_tabu[i]);
+				bw.write(" " + obj_tabu[i]);
 			}
 			bw.write("\n");
-			
-			bw.close();								
+
+			bw.close();
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-	/*	TA.savebeingUsedTimeTable(fn_beingUsedTimeTable_Temp2);
-		TA.writeMatrix2File(fn_conflictMatrix_Temp2, TA.beingUsedTimeTable);
-		if (TA.isTimeTableCorrect(fn_conflictMatrix_Temp2)) {
-			System.out.println("Timetable is correct.");
-		} else {
-			System.out.println("Timetable is incorrect.");
-		}*/
-		
+
+		/*
+		 * TA.savebeingUsedTimeTable(fn_beingUsedTimeTable_Temp2);
+		 * TA.writeMatrix2File(fn_conflictMatrix_Temp2, TA.beingUsedTimeTable);
+		 * if (TA.isTimeTableCorrect(fn_conflictMatrix_Temp2)) {
+		 * System.out.println("Timetable is correct."); } else {
+		 * System.out.println("Timetable is incorrect."); }
+		 */
+
 		TA.printTimeTableAllClass(fn_TTB, TA.beingUsedTimeTable);
 		long estimatedTime = System.currentTimeMillis() - startTime;
-		System.out.println("Time consumming = "+ ((double)estimatedTime/1000) +" sec");
+		System.out.println("Time consumming = " + ((double) estimatedTime / 1000) + " sec");
 	}
-	public void stateModel(String fn_classTimeTableSolutions){
+
+	public void stateModel(String fn_classTimeTableSolutions) {
 		stateModelAllClass("fc.txt");
-		
+
 		timeTable_WareHouse = new TimeTableOneClass_SM[DA.nbClass];
 		for (int cl = 0; cl < DA.nbClass; cl++) {
 			timeTable_WareHouse[cl] = new TimeTableOneClass_SM();
 			timeTable_WareHouse[cl].D = new DataOneClass();
-			timeTable_WareHouse[cl].D.loadData_SM(DataCenter.FILENAME_PREFIX_DATAONECLASS +cl+ ".txt");
+			timeTable_WareHouse[cl].D.loadData_SM(DataCenter.FILENAME_PREFIX_DATAONECLASS + cl + ".txt");
 			System.out.println("Done class " + cl);
 		}
-		
+
 		loadSolutionWarehouse(fn_classTimeTableSolutions);
 	}
+
 	final static int TABULENGTH = 30;
 	final static int MAXSTABLE = 300;
 
@@ -3605,13 +3597,13 @@ public class TimeTableAllClass {
 		TA.DA.loadData_ClassCourse_v2(fn_data_classcourse);
 		TA.DA.assignStudentEachClassCourse();
 		TA.DA.loadData_ClassCourse_v2(fn_data_classcourse_saved);
-		
+
 		TA.DA.loadData_DeletedList("datafall/data_deletedList_fall.txt");
 		TA.DA.loadData_mergedCases(fn_data_mergedCases);
 
-//		 TA.DA.loadData_ClassCourse_v2(fn_data_classcourse);
-		 TA.DA.mergeClassCourse();
-		 TA.DA.reloadData_ClassCourse_v2(fn_data_classcourse);
+		// TA.DA.loadData_ClassCourse_v2(fn_data_classcourse);
+		TA.DA.mergeClassCourse();
+		TA.DA.reloadData_ClassCourse_v2(fn_data_classcourse);
 
 		TA.DA.loadData_Building_v2(fn_data_building);
 		TA.DA.loadData_Room_v2(fn_data_room);
@@ -3628,9 +3620,9 @@ public class TimeTableAllClass {
 
 		TA.makeSolutionWarehouse_Template2(fn_classTimeTableSolutions_Temp2);
 		//
-//		TA.init(fn_classTimeTableSolutions_Temp2, "");
+		// TA.init(fn_classTimeTableSolutions_Temp2, "");
 
-//		TA.findOptimalTimeTable_v2_2(fnclassTimeTableSolutions_Temp2);
+		// TA.findOptimalTimeTable_v2_2(fnclassTimeTableSolutions_Temp2);
 		TA.stateModel(fn_classTimeTableSolutions_Temp2);
 		TA.initRandom();
 		TA.findRandomFeasibleSolution();
@@ -3643,7 +3635,7 @@ public class TimeTableAllClass {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		TA.savebeingUsedTimeTable(fn_beingUsedTimeTable_Temp2);
 		SingleSolution[] ttb = TA.loadbeingUsedTimeTable(fn_beingUsedTimeTable_Temp2);
 		TA.beingUsedTimeTable = ttb;
@@ -3663,7 +3655,7 @@ public class TimeTableAllClass {
 			System.out.println("sang = " + ss[0]);
 			System.out.println("chieu = " + ss[1]);
 			TA.testDepartMentDemand(ttb);
-			//TA.recoverTimeTableMergedCase(ttb);
+			// TA.recoverTimeTableMergedCase(ttb);
 			TA.PoiWriteExcelFile(TA, "ttb.xls", TA.beingUsedTimeTable);
 		} else {
 			System.out.println("Timetable is incorrect.");

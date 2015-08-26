@@ -2,8 +2,10 @@ package vn.edu.fpt.timetabling.service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import vn.edu.fpt.timetabling.model.ClassCourseSemester;
 import vn.edu.fpt.timetabling.model.ClassCourseSemesterMerge;
 
 public interface ClassCourseSemesterMergeService {
@@ -25,4 +27,6 @@ public interface ClassCourseSemesterMergeService {
 	public void deleteClassCourseSemesterMerge(int classCourseSemesterMergeId);
 
 	public int deleteClassCourseSemesterMerges(int semesterId);
+	
+	public Map<ClassCourseSemester, ClassCourseSemester> getGuestHostMap(int semesterId);
 }

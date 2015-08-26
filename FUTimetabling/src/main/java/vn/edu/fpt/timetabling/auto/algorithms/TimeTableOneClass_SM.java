@@ -2,7 +2,6 @@ package vn.edu.fpt.timetabling.auto.algorithms;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Random;
 
 import choco.Choco;
 import choco.cp.model.CPModel;
@@ -74,8 +73,7 @@ public class TimeTableOneClass_SM {
 				IConstraint c2 = new NotEqual(x_slot_20[fci], x_slot_20[fcj]);
 				S.post(new Implicate(c1, c2));
 
-				IConstraint c4 = new IsEqual(new Abs(x_slot_20[fci],
-						x_slot_20[fcj]), 1);
+				IConstraint c4 = new IsEqual(new Abs(x_slot_20[fci], x_slot_20[fcj]), 1);
 				IConstraint c3 = new IsEqual(x_day_20[fci], x_day_20[fcj]);
 				ClassCourse c = D.courseOfFCourse_20.get(fc1);
 				ClassCourse cc = D.courseOfFCourse_20.get(fc2);
@@ -119,8 +117,7 @@ public class TimeTableOneClass_SM {
 				IConstraint c2 = new NotEqual(x_slot_20[fci], x_slot_20[fcj]);
 				S.post(new Implicate(c1, c2));
 
-				IConstraint c4 = new IsEqual(new Abs(x_slot_20[fci],
-						x_slot_20[fcj]), 1);
+				IConstraint c4 = new IsEqual(new Abs(x_slot_20[fci], x_slot_20[fcj]), 1);
 				IConstraint c3 = new IsEqual(x_day_20[fci], x_day_20[fcj]);
 				ClassCourse c = D.courseOfFCourse_20.get(fc1);
 				ClassCourse cc = D.courseOfFCourse_20.get(fc2);
@@ -141,17 +138,17 @@ public class TimeTableOneClass_SM {
 
 	public void copyResult_Template2() {
 		// this.stateModel_20();
-//		int[] daylist_2bl_even = { 0, 2, 4, 5, 7, 9, 10, 12, 15, 17 };
-//		int[] daylist_2bl_odd = { 1, 3, 6, 8, 11, 13, 14, 16, 18, 19 };
-		int[] daylist_stt3_block1 = {0,1,2,3,4,5,6,7,8,9 };
-		int[] daylist_stt3_block2 = { 10,11,12,13,14,15,16,17,18,19 };
+		// int[] daylist_2bl_even = { 0, 2, 4, 5, 7, 9, 10, 12, 15, 17 };
+		// int[] daylist_2bl_odd = { 1, 3, 6, 8, 11, 13, 14, 16, 18, 19 };
+		int[] daylist_stt3_block1 = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+		int[] daylist_stt3_block2 = { 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 };
 
 		int[] daylist_b1_even;
 		int[] daylist_b1_odd;
 		int[] daylist_b2_even;
 		int[] daylist_b2_odd;
-		Random r = new Random();
-		int a = r.nextInt();
+		// Random r = new Random();
+		// int a = r.nextInt();
 		// if (a%2 == 0) {
 		daylist_b1_even = new int[] { 0, 2, 4, 5, 7 };
 		daylist_b1_odd = new int[] { 1, 3, 6, 8, 9 };
@@ -166,13 +163,14 @@ public class TimeTableOneClass_SM {
 
 		/**/
 
-//		int courseIn2Block = -1;
+		// int courseIn2Block = -1;
 		ArrayList<Integer> twoBlockCourses = new ArrayList<>();
 		for (int c = 0; c < D.nbClasscoursePerClass; c++) {
 			if (D.statusOfCourse[c] == 3) {
 				twoBlockCourses.add(c);
-//				courseIn2Block = c;
-				// System.out.println("c = "+D.courses[c].ID+", stt = "+D.statusOfCourse[c]);
+				// courseIn2Block = c;
+				// System.out.println("c = "+D.courses[c].ID+", stt =
+				// "+D.statusOfCourse[c]);
 
 				ClassCourse course = D.classCourses[c];
 				ArrayList<FCourse> L = D.fCoursesOfClasscourse.get(course);
@@ -187,9 +185,10 @@ public class TimeTableOneClass_SM {
 				int session = solver.getVar(x_session[fcIdx]).getVal();
 				slot = D.nbSlotsPerHalfDay * session + slot;
 
-				// System.out.println("idx = "+fcIdx+", day = "+day+", slot = "+slot+", session = "+session);
+				// System.out.println("idx = "+fcIdx+", day = "+day+", slot =
+				// "+slot+", session = "+session);
 
-//				if (day % 2 == 0) {
+				// if (day % 2 == 0) {
 				if (day < 2) {
 					for (int i = 0; i < L_20.size(); i++) {
 						/*
@@ -205,21 +204,24 @@ public class TimeTableOneClass_SM {
 						x_day_20[fcIdx_20].setValuePropagate(daylist_stt3_block1[i]);
 						x_slot_20[fcIdx_20].setValuePropagate(slot);
 						x_session_20[fcIdx_20].setValuePropagate(session);
-						// System.out.println("idx = "+fcIdx_20+", day = "+daylist_2bl_even[i]+", slot = "+slot+", session = "+session);
+						// System.out.println("idx = "+fcIdx_20+", day =
+						// "+daylist_2bl_even[i]+", slot = "+slot+", session =
+						// "+session);
 					}
 				} else {
 					for (int i = 0; i < L_20.size(); i++) {
 						FCourse fc_20 = L_20.get(i);
 						int fcIdx_20 = D.mFCourse2Index_20.get(fc_20);
-						x_day_20[fcIdx_20]
-								.setValuePropagate(daylist_stt3_block2[i]);
+						x_day_20[fcIdx_20].setValuePropagate(daylist_stt3_block2[i]);
 						x_slot_20[fcIdx_20].setValuePropagate(slot);
 						x_session_20[fcIdx_20].setValuePropagate(session);
-						// System.out.println("idx = "+fcIdx_20+", day = "+daylist_2bl_even[i]+", slot = "+slot+", session = "+session);
+						// System.out.println("idx = "+fcIdx_20+", day =
+						// "+daylist_2bl_even[i]+", slot = "+slot+", session =
+						// "+session);
 					}
 				}
 
-//				break;
+				// break;
 			}
 		}
 		// System.out.println("course in 2 blocks: "+courseIn2Block);
@@ -241,9 +243,10 @@ public class TimeTableOneClass_SM {
 				slotFc1 = D.nbSlotsPerHalfDay * session + slotFc1;
 				slotFc2 = D.nbSlotsPerHalfDay * session + slotFc2;
 
-				ClassCourse t = D.classCourses[c];
+				// ClassCourse t = D.classCourses[c];
 
-				// System.out.println("c = "+t.ID+", slot fc1 = "+slotFc1+", slot fc2 = "+slotFc2);
+				// System.out.println("c = "+t.ID+", slot fc1 = "+slotFc1+",
+				// slot fc2 = "+slotFc2);
 
 				// ---------------------------
 				int setIdx = -1;
@@ -256,8 +259,7 @@ public class TimeTableOneClass_SM {
 					int fcIdx = D.mFCourse2Index_20.get(fc);
 
 					if (day == 0) {
-						x_day_20[fcIdx]
-								.setValuePropagate(daylist_b1_even[setIdx]);
+						x_day_20[fcIdx].setValuePropagate(daylist_b1_even[setIdx]);
 						// if (day%2 == 0) {
 						if (i % 2 == 0) {
 							int count = 0;
@@ -268,8 +270,7 @@ public class TimeTableOneClass_SM {
 									break;
 								}
 								x_slot_20[fcIdx].setValuePropagate(fr);
-								fr = D.nbSlotsPerHalfDay * session + (fr + 1)
-										% 3;
+								fr = D.nbSlotsPerHalfDay * session + (fr + 1) % 3;
 							} while (S.violations(x_slot_20[fcIdx]) > 0);
 						} else {
 							int count = 0;
@@ -280,14 +281,12 @@ public class TimeTableOneClass_SM {
 									break;
 								}
 								x_slot_20[fcIdx].setValuePropagate(fr);
-								fr = D.nbSlotsPerHalfDay * session + (fr + 1)
-										% 3;
+								fr = D.nbSlotsPerHalfDay * session + (fr + 1) % 3;
 							} while (S.violations(x_slot_20[fcIdx]) > 0);
 						}
 					}
 					if (day == 1) {
-						x_day_20[fcIdx]
-								.setValuePropagate(daylist_b1_odd[setIdx]);
+						x_day_20[fcIdx].setValuePropagate(daylist_b1_odd[setIdx]);
 						// if (day%2 == 0) {
 						if (i % 2 == 0) {
 							int count = 0;
@@ -298,8 +297,7 @@ public class TimeTableOneClass_SM {
 									break;
 								}
 								x_slot_20[fcIdx].setValuePropagate(fr);
-								fr = D.nbSlotsPerHalfDay * session + (fr + 1)
-										% 3;
+								fr = D.nbSlotsPerHalfDay * session + (fr + 1) % 3;
 							} while (S.violations(x_slot_20[fcIdx]) > 0);
 						} else {
 							int count = 0;
@@ -310,14 +308,12 @@ public class TimeTableOneClass_SM {
 									break;
 								}
 								x_slot_20[fcIdx].setValuePropagate(fr);
-								fr = D.nbSlotsPerHalfDay * session + (fr + 1)
-										% 3;
+								fr = D.nbSlotsPerHalfDay * session + (fr + 1) % 3;
 							} while (S.violations(x_slot_20[fcIdx]) > 0);
 						}
 					}
 					if (day == 2) {
-						x_day_20[fcIdx]
-								.setValuePropagate(daylist_b2_even[setIdx]);
+						x_day_20[fcIdx].setValuePropagate(daylist_b2_even[setIdx]);
 						// if (day%2 == 0) {
 						if (i % 2 == 0) {
 							int count = 0;
@@ -328,8 +324,7 @@ public class TimeTableOneClass_SM {
 									break;
 								}
 								x_slot_20[fcIdx].setValuePropagate(fr);
-								fr = D.nbSlotsPerHalfDay * session + (fr + 1)
-										% 3;
+								fr = D.nbSlotsPerHalfDay * session + (fr + 1) % 3;
 							} while (S.violations(x_slot_20[fcIdx]) > 0);
 						} else {
 							int count = 0;
@@ -340,14 +335,12 @@ public class TimeTableOneClass_SM {
 									break;
 								}
 								x_slot_20[fcIdx].setValuePropagate(fr);
-								fr = D.nbSlotsPerHalfDay * session + (fr + 1)
-										% 3;
+								fr = D.nbSlotsPerHalfDay * session + (fr + 1) % 3;
 							} while (S.violations(x_slot_20[fcIdx]) > 0);
 						}
 					}
 					if (day == 3) {
-						x_day_20[fcIdx]
-								.setValuePropagate(daylist_b2_odd[setIdx]);
+						x_day_20[fcIdx].setValuePropagate(daylist_b2_odd[setIdx]);
 						// if (day%2 == 0) {
 						if (i % 2 == 0) {
 							int count = 0;
@@ -358,8 +351,7 @@ public class TimeTableOneClass_SM {
 									break;
 								}
 								x_slot_20[fcIdx].setValuePropagate(fr);
-								fr = D.nbSlotsPerHalfDay * session + (fr + 1)
-										% 3;
+								fr = D.nbSlotsPerHalfDay * session + (fr + 1) % 3;
 							} while (S.violations(x_slot_20[fcIdx]) > 0);
 						} else {
 							int count = 0;
@@ -370,8 +362,7 @@ public class TimeTableOneClass_SM {
 									break;
 								}
 								x_slot_20[fcIdx].setValuePropagate(fr);
-								fr = D.nbSlotsPerHalfDay * session + (fr + 1)
-										% 3;
+								fr = D.nbSlotsPerHalfDay * session + (fr + 1) % 3;
 							} while (S.violations(x_slot_20[fcIdx]) > 0);
 						}
 					}
@@ -392,8 +383,8 @@ public class TimeTableOneClass_SM {
 		int[] daylist_b1_odd;
 		int[] daylist_b2_even;
 		int[] daylist_b2_odd;
-		Random r = new Random();
-		int a = r.nextInt();
+		// Random r = new Random();
+		// int a = r.nextInt();
 		// if (a%2 == 0) {
 		/*
 		 * daylist_b1_even = new int[]{0,2,4,5,7}; daylist_b1_odd = new
@@ -403,7 +394,7 @@ public class TimeTableOneClass_SM {
 		daylist_b1_even = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 		daylist_b1_odd = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 		daylist_b2_even = new int[] { 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 };
-		daylist_b2_odd = new int[]{ 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 };
+		daylist_b2_odd = new int[] { 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 };
 		// } else {
 		// daylist_b1_even = new int[]{0,2,4,7,9};
 		// daylist_b1_odd = new int[]{1,3,5,6,8};
@@ -417,7 +408,8 @@ public class TimeTableOneClass_SM {
 		for (int c = 0; c < D.nbClasscoursePerClass; c++) {
 			if (D.statusOfCourse[c] == 3) {
 				courseIn2Block = c;
-				// System.out.println("c = "+D.courses[c].ID+", stt = "+D.statusOfCourse[c]);
+				// System.out.println("c = "+D.courses[c].ID+", stt =
+				// "+D.statusOfCourse[c]);
 
 				ClassCourse course = D.classCourses[c];
 				ArrayList<FCourse> L = D.fCoursesOfClasscourse.get(course);
@@ -432,7 +424,8 @@ public class TimeTableOneClass_SM {
 				int session = solver.getVar(x_session[fcIdx]).getVal();
 				slot = D.nbSlotsPerHalfDay * session + slot;
 
-				// System.out.println("idx = "+fcIdx+", day = "+day+", slot = "+slot+", session = "+session);
+				// System.out.println("idx = "+fcIdx+", day = "+day+", slot =
+				// "+slot+", session = "+session);
 
 				if (day % 2 == 0) {
 					for (int i = 0; i < L_20.size(); i++) {
@@ -446,21 +439,23 @@ public class TimeTableOneClass_SM {
 
 						FCourse fc_20 = L_20.get(i);
 						int fcIdx_20 = D.mFCourse2Index_20.get(fc_20);
-						x_day_20[fcIdx_20]
-								.setValuePropagate(daylist_2bl_even[i]);
+						x_day_20[fcIdx_20].setValuePropagate(daylist_2bl_even[i]);
 						x_slot_20[fcIdx_20].setValuePropagate(slot);
 						x_session_20[fcIdx_20].setValuePropagate(session);
-						// System.out.println("idx = "+fcIdx_20+", day = "+daylist_2bl_even[i]+", slot = "+slot+", session = "+session);
+						// System.out.println("idx = "+fcIdx_20+", day =
+						// "+daylist_2bl_even[i]+", slot = "+slot+", session =
+						// "+session);
 					}
 				} else {
 					for (int i = 0; i < L_20.size(); i++) {
 						FCourse fc_20 = L_20.get(i);
 						int fcIdx_20 = D.mFCourse2Index_20.get(fc_20);
-						x_day_20[fcIdx_20]
-								.setValuePropagate(daylist_2bl_odd[i]);
+						x_day_20[fcIdx_20].setValuePropagate(daylist_2bl_odd[i]);
 						x_slot_20[fcIdx_20].setValuePropagate(slot);
 						x_session_20[fcIdx_20].setValuePropagate(session);
-						// System.out.println("idx = "+fcIdx_20+", day = "+daylist_2bl_even[i]+", slot = "+slot+", session = "+session);
+						// System.out.println("idx = "+fcIdx_20+", day =
+						// "+daylist_2bl_even[i]+", slot = "+slot+", session =
+						// "+session);
 					}
 				}
 
@@ -486,23 +481,23 @@ public class TimeTableOneClass_SM {
 				slotFc1 = D.nbSlotsPerHalfDay * session + slotFc1;
 				slotFc2 = D.nbSlotsPerHalfDay * session + slotFc2;
 
-				ClassCourse t = D.classCourses[c];
+				// ClassCourse t = D.classCourses[c];
 
-				// System.out.println("c = "+t.ID+", slot fc1 = "+slotFc1+", slot fc2 = "+slotFc2);
+				// System.out.println("c = "+t.ID+", slot fc1 = "+slotFc1+",
+				// slot fc2 = "+slotFc2);
 
 				// ---------------------------
 				int setIdx = -1;
 				FCourse fc = null;
 				for (int i = 0; i < L_20.size(); i++) {
-//					if (i % 2 == 0) { // vi set co 5 ngay thoi nhung co 10 fc
-						setIdx++;
-//					}
+					// if (i % 2 == 0) { // vi set co 5 ngay thoi nhung co 10 fc
+					setIdx++;
+					// }
 					fc = L_20.get(i);
 					int fcIdx = D.mFCourse2Index_20.get(fc);
 
 					if (day == 0) {
-						x_day_20[fcIdx]
-								.setValuePropagate(daylist_b1_even[setIdx]);
+						x_day_20[fcIdx].setValuePropagate(daylist_b1_even[setIdx]);
 						// if (day%2 == 0) {
 						if (i % 2 == 0) {
 							int count = 0;
@@ -513,8 +508,7 @@ public class TimeTableOneClass_SM {
 									break;
 								}
 								x_slot_20[fcIdx].setValuePropagate(fr);
-								fr = D.nbSlotsPerHalfDay * session + (fr + 1)
-										% 3;
+								fr = D.nbSlotsPerHalfDay * session + (fr + 1) % 3;
 							} while (S.violations(x_slot_20[fcIdx]) > 0);
 						} else {
 							int count = 0;
@@ -525,14 +519,12 @@ public class TimeTableOneClass_SM {
 									break;
 								}
 								x_slot_20[fcIdx].setValuePropagate(fr);
-								fr = D.nbSlotsPerHalfDay * session + (fr + 1)
-										% 3;
+								fr = D.nbSlotsPerHalfDay * session + (fr + 1) % 3;
 							} while (S.violations(x_slot_20[fcIdx]) > 0);
 						}
 					}
 					if (day == 1) {
-						x_day_20[fcIdx]
-								.setValuePropagate(daylist_b1_odd[setIdx]);
+						x_day_20[fcIdx].setValuePropagate(daylist_b1_odd[setIdx]);
 						// if (day%2 == 0) {
 						if (i % 2 == 0) {
 							int count = 0;
@@ -543,8 +535,7 @@ public class TimeTableOneClass_SM {
 									break;
 								}
 								x_slot_20[fcIdx].setValuePropagate(fr);
-								fr = D.nbSlotsPerHalfDay * session + (fr + 1)
-										% 3;
+								fr = D.nbSlotsPerHalfDay * session + (fr + 1) % 3;
 							} while (S.violations(x_slot_20[fcIdx]) > 0);
 						} else {
 							int count = 0;
@@ -555,14 +546,12 @@ public class TimeTableOneClass_SM {
 									break;
 								}
 								x_slot_20[fcIdx].setValuePropagate(fr);
-								fr = D.nbSlotsPerHalfDay * session + (fr + 1)
-										% 3;
+								fr = D.nbSlotsPerHalfDay * session + (fr + 1) % 3;
 							} while (S.violations(x_slot_20[fcIdx]) > 0);
 						}
 					}
 					if (day == 2) {
-						x_day_20[fcIdx]
-								.setValuePropagate(daylist_b2_even[setIdx]);
+						x_day_20[fcIdx].setValuePropagate(daylist_b2_even[setIdx]);
 						// if (day%2 == 0) {
 						if (i % 2 == 0) {
 							int count = 0;
@@ -573,8 +562,7 @@ public class TimeTableOneClass_SM {
 									break;
 								}
 								x_slot_20[fcIdx].setValuePropagate(fr);
-								fr = D.nbSlotsPerHalfDay * session + (fr + 1)
-										% 3;
+								fr = D.nbSlotsPerHalfDay * session + (fr + 1) % 3;
 							} while (S.violations(x_slot_20[fcIdx]) > 0);
 						} else {
 							int count = 0;
@@ -585,14 +573,12 @@ public class TimeTableOneClass_SM {
 									break;
 								}
 								x_slot_20[fcIdx].setValuePropagate(fr);
-								fr = D.nbSlotsPerHalfDay * session + (fr + 1)
-										% 3;
+								fr = D.nbSlotsPerHalfDay * session + (fr + 1) % 3;
 							} while (S.violations(x_slot_20[fcIdx]) > 0);
 						}
 					}
 					if (day == 3) {
-						x_day_20[fcIdx]
-								.setValuePropagate(daylist_b2_odd[setIdx]);
+						x_day_20[fcIdx].setValuePropagate(daylist_b2_odd[setIdx]);
 						// if (day%2 == 0) {
 						if (i % 2 == 0) {
 							int count = 0;
@@ -603,8 +589,7 @@ public class TimeTableOneClass_SM {
 									break;
 								}
 								x_slot_20[fcIdx].setValuePropagate(fr);
-								fr = D.nbSlotsPerHalfDay * session + (fr + 1)
-										% 3;
+								fr = D.nbSlotsPerHalfDay * session + (fr + 1) % 3;
 							} while (S.violations(x_slot_20[fcIdx]) > 0);
 						} else {
 							int count = 0;
@@ -615,8 +600,7 @@ public class TimeTableOneClass_SM {
 									break;
 								}
 								x_slot_20[fcIdx].setValuePropagate(fr);
-								fr = D.nbSlotsPerHalfDay * session + (fr + 1)
-										% 3;
+								fr = D.nbSlotsPerHalfDay * session + (fr + 1) % 3;
 							} while (S.violations(x_slot_20[fcIdx]) > 0);
 						}
 					}
@@ -635,14 +619,12 @@ public class TimeTableOneClass_SM {
 
 		for (int i = 0; i < D.nbFCourses; i++) {
 			x_day[i] = Choco.makeIntVar("x_day[" + i + "]", 0, 3);
-			x_slot[i] = Choco.makeIntVar("x_slot[" + i + "]", 0,
-					D.nbSlotsPerHalfDay - 1);
+			x_slot[i] = Choco.makeIntVar("x_slot[" + i + "]", 0, D.nbSlotsPerHalfDay - 1);
 			x_session[i] = Choco.makeIntVar("x_session[" + i + "]", 0, 1);
 		}
 
 		for (int i = 0; i < D.nbClasscoursePerClass; i++) {
-			ArrayList<FCourse> fCourses = D.fCoursesOfClasscourse
-					.get(D.classCourses[i]);
+			ArrayList<FCourse> fCourses = D.fCoursesOfClasscourse.get(D.classCourses[i]);
 			if (D.statusOfCourse[i] == 3) {
 				for (int j = 0; j < fCourses.size() - 1; j++) {
 					FCourse fc = fCourses.get(j);
@@ -663,8 +645,7 @@ public class TimeTableOneClass_SM {
 					// Constraint c4 = Choco.eq(Choco.mod(x_day[fc1i], 2),1);
 					//
 					// model.addConstraint(Choco.implies(c3, c4));
-					model.addConstraint(Choco.eq(Choco.plus(x_day[fci], 2),
-							x_day[fc1i]));
+					model.addConstraint(Choco.eq(Choco.plus(x_day[fci], 2), x_day[fc1i]));
 				}
 			} else {
 				for (int j = 0; j < fCourses.size() - 1; j++) {
@@ -674,22 +655,22 @@ public class TimeTableOneClass_SM {
 					int fc1i = D.mFCourse2Index.get(fc1);
 
 					model.addConstraint(Choco.eq(x_slot[fci], x_slot[fc1i]));
-					model.addConstraint(Choco.eq(Choco.plus(x_day[fci], 1),
-							x_day[fc1i]));
-					
-					/*Constraint c1 = Choco.eq(x_day[fci], x_day[fcj]);
-				Constraint c2 = Choco.neq(x_slot[fci], x_slot[fcj]);
-				model.addConstraint(Choco.implies(c1, c2));*/
-					
+					model.addConstraint(Choco.eq(Choco.plus(x_day[fci], 1), x_day[fc1i]));
+
+					/*
+					 * Constraint c1 = Choco.eq(x_day[fci], x_day[fcj]);
+					 * Constraint c2 = Choco.neq(x_slot[fci], x_slot[fcj]);
+					 * model.addConstraint(Choco.implies(c1, c2));
+					 */
+
 					Constraint c1 = Choco.leq(x_day[fci], 1);
 					Constraint c2 = Choco.leq(x_day[fc1i], 1);
 					model.addConstraint(Choco.implies(c1, c2));
-					
-					Constraint c3 = Choco.leq(2,x_day[fci]);
-					Constraint c4 = Choco.leq(2,x_day[fc1i]);
+
+					Constraint c3 = Choco.leq(2, x_day[fci]);
+					Constraint c4 = Choco.leq(2, x_day[fc1i]);
 					model.addConstraint(Choco.implies(c3, c4));
-					
-					
+
 					if (D.statusOfCourse[i] == 1) {
 						model.addConstraint(Choco.leq(x_day[fci], 1));
 						model.addConstraint(Choco.leq(x_day[fc1i], 1));
@@ -730,14 +711,12 @@ public class TimeTableOneClass_SM {
 
 		for (int i = 0; i < D.nbFCourses; i++) {
 			x_day[i] = Choco.makeIntVar("x_day[" + i + "]", 0, 3);
-			x_slot[i] = Choco.makeIntVar("x_slot[" + i + "]", 0,
-					D.nbSlotsPerHalfDay - 1);
+			x_slot[i] = Choco.makeIntVar("x_slot[" + i + "]", 0, D.nbSlotsPerHalfDay - 1);
 			x_session[i] = Choco.makeIntVar("x_session[" + i + "]", 0, 1);
 		}
 
 		for (int i = 0; i < D.nbClasscoursePerClass; i++) {
-			ArrayList<FCourse> fCourses = D.fCoursesOfClasscourse
-					.get(D.classCourses[i]);
+			ArrayList<FCourse> fCourses = D.fCoursesOfClasscourse.get(D.classCourses[i]);
 			if (D.statusOfCourse[i] == 3) {
 				for (int j = 0; j < fCourses.size() - 1; j++) {
 					FCourse fc = fCourses.get(j);
@@ -747,18 +726,17 @@ public class TimeTableOneClass_SM {
 
 					model.addConstraint(Choco.lt(x_day[fci], x_day[fc1i]));
 					model.addConstraint(Choco.eq(x_slot[fci], x_slot[fc1i]));
-//					model.addConstraint(Choco.neq(x_slot[fci], 1));
-//					model.addConstraint(Choco.neq(x_slot[fc1i], 1));
+					// model.addConstraint(Choco.neq(x_slot[fci], 1));
+					// model.addConstraint(Choco.neq(x_slot[fc1i], 1));
 
-					 Constraint c1 = Choco.leq(x_day[fci], 1);
-					 Constraint c2 = Choco.leq(x_day[fc1i], 1);
-					 model.addConstraint(Choco.implies(c1, c2));
-					 Constraint c3 = Choco.leq(2,x_day[fci]);
-					 Constraint c4 = Choco.leq(2,x_day[fc1i]);
-					 model.addConstraint(Choco.implies(c3, c4));
-					 
-					model.addConstraint(Choco.eq(Choco.plus(x_day[fci], 1),
-							x_day[fc1i]));
+					Constraint c1 = Choco.leq(x_day[fci], 1);
+					Constraint c2 = Choco.leq(x_day[fc1i], 1);
+					model.addConstraint(Choco.implies(c1, c2));
+					Constraint c3 = Choco.leq(2, x_day[fci]);
+					Constraint c4 = Choco.leq(2, x_day[fc1i]);
+					model.addConstraint(Choco.implies(c3, c4));
+
+					model.addConstraint(Choco.eq(Choco.plus(x_day[fci], 1), x_day[fc1i]));
 				}
 			} else {
 				for (int j = 0; j < fCourses.size() - 1; j++) {
@@ -768,7 +746,7 @@ public class TimeTableOneClass_SM {
 					int fc1i = D.mFCourse2Index.get(fc1);
 
 					model.addConstraint(Choco.eq(x_day[fci], x_day[fc1i]));
-					model.addConstraint(Choco.eq(Choco.plus(x_slot[fci], 1),x_slot[fc1i]));
+					model.addConstraint(Choco.eq(Choco.plus(x_slot[fci], 1), x_slot[fc1i]));
 					if (D.statusOfCourse[i] == 1) {
 						model.addConstraint(Choco.leq(x_day[fci], 1));
 						model.addConstraint(Choco.leq(x_day[fc1i], 1));
@@ -805,14 +783,13 @@ public class TimeTableOneClass_SM {
 		boolean ok = solver.solve();
 		// sol[0] = solver.recordSolution();
 		// Boolean ok = solver.solveAll();
-		System.out.println("Solved = " + ok + ", nbSolutions = "
-				+ solver.getNbSolutions());
+		System.out.println("Solved = " + ok + ", nbSolutions = " + solver.getNbSolutions());
 
 	}
 
 	public void printHTML(String fn) {
 		PrintWriter out = null;
-		int n = 0;
+		// int n = 0;
 		try {
 			out = new PrintWriter(fn);
 
@@ -911,8 +888,7 @@ public class TimeTableOneClass_SM {
 							 */
 							if (sol[n1].T[i][j] >= 0) {
 								str = "M" + sol[n1].T[i][j];
-								ClassCourse c = D.mID2Course
-										.get(sol[n1].T[i][j]);
+								ClassCourse c = D.mID2Course.get(sol[n1].T[i][j]);
 								int idx = D.mCourse2Index.get(c);
 								int stt = D.statusOfCourse[idx];
 								if (stt == 3) {
@@ -929,7 +905,8 @@ public class TimeTableOneClass_SM {
 								out.println(str);
 							}
 							out.println("</td>");
-							// out.print("<td height = 20 width = 20 bgcolor='green'>"
+							// out.print("<td height = 20 width = 20
+							// bgcolor='green'>"
 							// + str + "</td>\n");
 						}
 						out.println("</tr>");
@@ -1011,8 +988,7 @@ public class TimeTableOneClass_SM {
 							 */
 							if (sol[n1].T[i][j] >= 0) {
 								str = "M" + sol[n1].T[i][j];
-								ClassCourse c = D.mID2Course
-										.get(sol[n1].T[i][j]);
+								ClassCourse c = D.mID2Course.get(sol[n1].T[i][j]);
 								int idx = D.mCourse2Index.get(c);
 								int stt = D.statusOfCourse[idx];
 								if (stt == 3) {
@@ -1029,7 +1005,8 @@ public class TimeTableOneClass_SM {
 								out.println(str);
 							}
 							out.println("</td>");
-							// out.print("<td height = 20 width = 20 bgcolor='green'>"
+							// out.print("<td height = 20 width = 20
+							// bgcolor='green'>"
 							// + str + "</td>\n");
 						}
 						out.println("</tr>");
@@ -1054,13 +1031,11 @@ public class TimeTableOneClass_SM {
 		out2.close();
 	}
 
-	
 	public int findFCourse_full(int d, int sl) {
 		// matrix 1(size: nbFcousre x 4): fcourse course x_day x_slot
 		// matrix 2(size: nbFcousre x 3): course teacher class
 		for (int index = 0; index < D.nbFCourses_20; index++) {
-			if (x_day_20[index].getValue() == d
-					&& x_slot_20[index].getValue() == sl) {
+			if (x_day_20[index].getValue() == d && x_slot_20[index].getValue() == sl) {
 				// int cc = D.courseOfFCourse_full[i];
 				// if (D.statusOfCourse[cc]==3) {
 				// return i;
@@ -1128,12 +1103,12 @@ public class TimeTableOneClass_SM {
 
 			out.println("</table>");
 
-			int count = 0;
+			// int count = 0;
 			for (int i = 0; i < x_slot_20.length; i++) {
 				VarIntLS x = x_slot_20[i];
 				VarIntLS y = x_day_20[i];
 				if (S.violations(x) != 0 || S.violations(y) != 0) {
-					count++;
+					// count++;
 				}
 			}
 			// out.println("number of violated fc : "+ count);
@@ -1154,7 +1129,7 @@ public class TimeTableOneClass_SM {
 			// sol[i].T = new int[2*D.nbSlotsPerHalfDay][D.nbDays_20];
 			solArray[i].T = new int[2 * D.nbSlotsPerHalfDay][D.nbDays_20];
 		}
-		PrintWriter out = null;
+		// PrintWriter out = null;
 		try {
 			// out = new PrintWriter(fn);
 			if (this.solver.solve()) {
@@ -1163,8 +1138,8 @@ public class TimeTableOneClass_SM {
 					copyResult_Template2();
 					SingleSolution sSol = new SingleSolution();
 					sSol.T = new int[2 * D.nbSlotsPerHalfDay][D.nbDays_20];
-					int session = 0;
-					session = x_session_20[0].getValue();
+					// int session = 0;
+					// session = x_session_20[0].getValue();
 					// System.out.println("session["+n+"] = "+ session);
 					// sol[n].position = n;
 					solArray[n].position = n;
@@ -1188,7 +1163,7 @@ public class TimeTableOneClass_SM {
 								// sol[n].T[i_slot][i_day] = c.ID;
 								solArray[n].T[i_slot][i_day] = c.ID;
 								sSol.T[i_slot][i_day] = c.ID;
-								session = x_session_20[idxFc].getValue();
+								// session = x_session_20[idxFc].getValue();
 							}
 						}
 					}
@@ -1198,11 +1173,11 @@ public class TimeTableOneClass_SM {
 					 * out.println("no."+ n + ": position = "+ sol[n].position);
 					 * out.println("<table border = 1>"); for (int i = 0; i < 2
 					 * * D.nbSlotsPerHalfDay; i++) { out.print("<tr>"); for (int
-					 * j = 0; j < D.nbDays_20; j++) {
-					 * out.print("<td height = 20 width = 20 "); String str =
-					 * ""; if (s[i][j] >= 0){ str = "M" + s[i][j]; ClassCourse c
-					 * = D.mID2Course.get(s[i][j]); if(sol[n].T[i][j] >= 0 ){
-					 * str = "M"+sol[n].T[i][j]; ClassCourse cc =
+					 * j = 0; j < D.nbDays_20; j++) { out.print(
+					 * "<td height = 20 width = 20 "); String str = ""; if
+					 * (s[i][j] >= 0){ str = "M" + s[i][j]; ClassCourse c =
+					 * D.mID2Course.get(s[i][j]); if(sol[n].T[i][j] >= 0 ){ str
+					 * = "M"+sol[n].T[i][j]; ClassCourse cc =
 					 * D.mID2Course.get(sol[n].T[i][j]); int idx =
 					 * D.mCourse2Index.get(cc); int stt = D.statusOfCourse[idx];
 					 * if (stt == 3) { out.println("bgcolor='yellow'> "); } else
@@ -1210,9 +1185,9 @@ public class TimeTableOneClass_SM {
 					 * 0) { out.println("bgcolor='green'> "); // } else { //
 					 * out.println("bgcolor='blue'> "); // } }
 					 * 
-					 * out.println(str); } out.println("</td>"); //
-					 * out.print("<td height = 20 width = 20 bgcolor='green'>" +
-					 * str + "</td>\n"); } out.println("</tr>"); }
+					 * out.println(str); } out.println("</td>"); // out.print(
+					 * "<td height = 20 width = 20 bgcolor='green'>" + str +
+					 * "</td>\n"); } out.println("</tr>"); }
 					 * out.println("</table>");
 					 * out.println("-----------------------\n"); out.println();
 					 */
@@ -1225,8 +1200,7 @@ public class TimeTableOneClass_SM {
 				} while (this.solver.nextSolution());
 			}
 			if (solutionList.size() < solArray.length) {
-				System.out.println("list size = " + solutionList.size()
-						+ ", sol array size = " + solArray.length);
+				System.out.println("list size = " + solutionList.size() + ", sol array size = " + solArray.length);
 				if (solutionList.size() <= 0) {
 					System.out.println("Not feasible.");
 					System.exit(1);
@@ -1251,7 +1225,7 @@ public class TimeTableOneClass_SM {
 		// out.close();
 	}
 
-	public void findSolution_Template1(String fn, int limit){
+	public void findSolution_Template1(String fn, int limit) {
 		ArrayList<SingleSolution> solutionList = new ArrayList<SingleSolution>();
 		int n = 0;
 		// sol = new SingleSolution[limit];
@@ -1262,7 +1236,7 @@ public class TimeTableOneClass_SM {
 			// sol[i].T = new int[2*D.nbSlotsPerHalfDay][D.nbDays_20];
 			solArray[i].T = new int[2 * D.nbSlotsPerHalfDay][D.nbDays_20];
 		}
-		PrintWriter out = null;
+		// PrintWriter out = null;
 		try {
 			// out = new PrintWriter(fn);
 			if (this.solver.solve()) {
@@ -1271,8 +1245,8 @@ public class TimeTableOneClass_SM {
 					copyResult_Template1();
 					SingleSolution sSol = new SingleSolution();
 					sSol.T = new int[2 * D.nbSlotsPerHalfDay][D.nbDays_20];
-					int session = 0;
-					session = x_session_20[0].getValue();
+					// int session = 0;
+					// session = x_session_20[0].getValue();
 					// System.out.println("session["+n+"] = "+ session);
 					// sol[n].position = n;
 					solArray[n].position = n;
@@ -1296,7 +1270,7 @@ public class TimeTableOneClass_SM {
 								// sol[n].T[i_slot][i_day] = c.ID;
 								solArray[n].T[i_slot][i_day] = c.ID;
 								sSol.T[i_slot][i_day] = c.ID;
-								session = x_session_20[idxFc].getValue();
+								// session = x_session_20[idxFc].getValue();
 							}
 						}
 					}
@@ -1306,11 +1280,11 @@ public class TimeTableOneClass_SM {
 					 * out.println("no."+ n + ": position = "+ sol[n].position);
 					 * out.println("<table border = 1>"); for (int i = 0; i < 2
 					 * * D.nbSlotsPerHalfDay; i++) { out.print("<tr>"); for (int
-					 * j = 0; j < D.nbDays_20; j++) {
-					 * out.print("<td height = 20 width = 20 "); String str =
-					 * ""; if (s[i][j] >= 0){ str = "M" + s[i][j]; ClassCourse c
-					 * = D.mID2Course.get(s[i][j]); if(sol[n].T[i][j] >= 0 ){
-					 * str = "M"+sol[n].T[i][j]; ClassCourse cc =
+					 * j = 0; j < D.nbDays_20; j++) { out.print(
+					 * "<td height = 20 width = 20 "); String str = ""; if
+					 * (s[i][j] >= 0){ str = "M" + s[i][j]; ClassCourse c =
+					 * D.mID2Course.get(s[i][j]); if(sol[n].T[i][j] >= 0 ){ str
+					 * = "M"+sol[n].T[i][j]; ClassCourse cc =
 					 * D.mID2Course.get(sol[n].T[i][j]); int idx =
 					 * D.mCourse2Index.get(cc); int stt = D.statusOfCourse[idx];
 					 * if (stt == 3) { out.println("bgcolor='yellow'> "); } else
@@ -1318,9 +1292,9 @@ public class TimeTableOneClass_SM {
 					 * 0) { out.println("bgcolor='green'> "); // } else { //
 					 * out.println("bgcolor='blue'> "); // } }
 					 * 
-					 * out.println(str); } out.println("</td>"); //
-					 * out.print("<td height = 20 width = 20 bgcolor='green'>" +
-					 * str + "</td>\n"); } out.println("</tr>"); }
+					 * out.println(str); } out.println("</td>"); // out.print(
+					 * "<td height = 20 width = 20 bgcolor='green'>" + str +
+					 * "</td>\n"); } out.println("</tr>"); }
 					 * out.println("</table>");
 					 * out.println("-----------------------\n"); out.println();
 					 */
@@ -1332,10 +1306,9 @@ public class TimeTableOneClass_SM {
 
 				} while (this.solver.nextSolution());
 			}
-			
+
 			if (solutionList.size() < solArray.length) {
-				System.out.println("list size = " + solutionList.size()
-						+ ", sol array size = " + solArray.length);
+				System.out.println("list size = " + solutionList.size() + ", sol array size = " + solArray.length);
 				sol = new SingleSolution[solutionList.size()];
 				// int idx = 0;
 				// for (SingleSolution singleSolution : solArray) {
@@ -1356,7 +1329,6 @@ public class TimeTableOneClass_SM {
 		// out.close();
 	}
 
-	
 	public void find() {
 		TimeTableOneClass_SM TT = new TimeTableOneClass_SM();
 		TT.D = new DataOneClass();
@@ -1370,8 +1342,8 @@ public class TimeTableOneClass_SM {
 		TT.D.loadData_SM("class6.txt");
 		/*
 		 * TT.D.cls = new entities.Class(); TT.D.cls.ID = 1; Course[] c =
-		 * TT.D.courses; for (Course course : c) {
-		 * System.out.println("c = "+course.ID); }
+		 * TT.D.courses; for (Course course : c) { System.out.println("c = "
+		 * +course.ID); }
 		 */
 		// TT.printHTML_all("a.html", 10);
 		TT.model = new CPModel();
@@ -1379,7 +1351,8 @@ public class TimeTableOneClass_SM {
 		TT.stateModel_Template2();
 		TT.solver.read(TT.model);
 		// boolean ok = TT.solver.solveAll();
-		// System.out.println("solveall = "+ok+", nbSolution = "+TT.solver.getNbSolutions());
+		// System.out.println("solveall = "+ok+", nbSolution =
+		// "+TT.solver.getNbSolutions());
 		// TT.findSolution("sol_20.html",100);
 		TT.printHTML_all_Template2("sol.html", 3000);
 

@@ -3,6 +3,7 @@ package vn.edu.fpt.timetabling.service;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
@@ -97,5 +98,17 @@ public class ClassCourseSemesterMergeServiceImpl implements ClassCourseSemesterM
 	@Override
 	public int deleteClassCourseSemesterMerges(int semesterId) {
 		return classCourseSemesterMergeDAO.deleteClassCourseSemesterMerges(semesterId);
+	}
+
+	@Override
+	public Map<ClassCourseSemester, ClassCourseSemester> getGuestHostMap(int semesterId) {
+		List<ClassCourseSemesterMerge> classCourseSemesterMerges = listClassCourseSemesterMerges(semesterId);
+		Map<ClassCourseSemester, ClassCourseSemester> guestHostMap = new HashMap<>();
+		for (ClassCourseSemesterMerge classCourseSemesterMerge : classCourseSemesterMerges) {
+			ClassCourseSemester hostClassCourseSemester = classCourseSemesterMerge.getClassCourseSemester1();
+			ClassCourseSemester guestClassCourseSemester = classCourseSemesterMerge.getClassCourseSemester2();
+			guestHostMap.put(guestClassCourseSemester, hostClassCourseSemester);
+		}
+		return guestHostMap;
 	}
 }

@@ -69,7 +69,10 @@ $(document).ready(function() {
 	    return i;
 	}
 	$("#btn-finish").on("click", function() {
-		window.location = "/FUTimetabling/staff"
+		window.location = "/FUTimetabling/staff";
+	});
+	$("#btn-room").on("click", function() {
+		window.location = "/FUTimetabling/staff/automaticTimetabling/autoRoom?semesterId=" +${semesterId};
 	});
 	$("#btn-download").on("click", function() {
 		_showDialog("dialog-download");
@@ -140,6 +143,7 @@ function _successNotify() {
 					</tr>
 				</thead>
 			</table>
+			<button class="button" id="btn-room">Auto find missing room</button>
 			<button class="button" id="btn-finish">Finish</button>
 			<button class="button" id="btn-download">Download</button>
 		</div>

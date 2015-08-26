@@ -14,15 +14,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import vn.edu.fpt.timetabling.exception.BuildingExistedException;
 import vn.edu.fpt.timetabling.model.Building;
 import vn.edu.fpt.timetabling.service.BuildingService;
-import vn.edu.fpt.timetabling.service.TimetableService;
 
 @Controller
 public class BuildingController extends GeneralController {
-
 	@Autowired
 	private BuildingService buildingService;
-	@Autowired
-	private TimetableService timetableService;
+
 	@RequestMapping(value = "/staff/building", method = RequestMethod.GET)
 	public String buildingManagement(HttpSession httpSession, Model model) {
 		model.addAttribute("listBuildings", buildingService.listBuildings());
@@ -31,10 +28,9 @@ public class BuildingController extends GeneralController {
 		return "building";
 	}
 
-	@RequestMapping(value = "/staff/building/updateBuilding", method = RequestMethod.POST, params = {
-			"buildingId", "code" })
-	public String updateBuilding(@RequestParam int buildingId,
-			@RequestParam String code, HttpSession httpSession)
+	@RequestMapping(value = "/staff/building/updateBuilding", method = RequestMethod.POST, params = { "buildingId",
+			"code" })
+	public String updateBuilding(@RequestParam int buildingId, @RequestParam String code, HttpSession httpSession)
 			throws BuildingExistedException {
 
 		Building building = buildingService.getBuildingByCode(code);
@@ -60,8 +56,7 @@ public class BuildingController extends GeneralController {
 	}
 
 	@RequestMapping(value = "/staff/building/deleteBuilding", method = RequestMethod.GET, params = { "buildingId" })
-	public String deleteBuilding(@RequestParam int buildingId,
-			HttpSession httpSession, HttpServletRequest request) {
+	public String deleteBuilding(@RequestParam int buildingId, HttpSession httpSession, HttpServletRequest request) {
 		buildingService.deleteBuilding(buildingId);
 		httpSession.setAttribute("success", "Delete Building Successful!");
 		return "redirect:/staff/building";
@@ -69,8 +64,7 @@ public class BuildingController extends GeneralController {
 
 	@ExceptionHandler(BuildingExistedException.class)
 	public String handleException(HttpSession httpSession, Exception e) {
-		httpSession.setAttribute("error",
-				"This Building's code existed! Please try again!");
+		httpSession.setAttribute("error", "This Building's code existed! Please try again!");
 		return "redirect:/staff/building";
 	}
 }

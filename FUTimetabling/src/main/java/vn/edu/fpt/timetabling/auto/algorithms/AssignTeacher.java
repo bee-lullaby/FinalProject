@@ -74,13 +74,13 @@ public class AssignTeacher {
 	boolean[] isAlreadyPicked;
 
 	public double[][] scoreMatrix;
-//	final static int WEIGHT_BLOCK = 1;
-//	final static int WEIGHT_SESSION = 5;
+	// final static int WEIGHT_BLOCK = 1;
+	// final static int WEIGHT_SESSION = 5;
 	final static int WEIGHT_DAY = 10; // w1
-	final static int WEIGHT_NOON = -5; //w2
-//	final static int WEIGHT_BEGINENDDAY = -3;
-//	final static int WEIGHT_TARGETREMAIN = 2;
-//	final static int WEIGHT_RELATIVE = 10;
+	final static int WEIGHT_NOON = -5; // w2
+	// final static int WEIGHT_BEGINENDDAY = -3;
+	// final static int WEIGHT_TARGETREMAIN = 2;
+	// final static int WEIGHT_RELATIVE = 10;
 	// final static int MAX_PICKSCORE = 1000;
 	final static boolean FAVOR_THEBESTCASE = false;
 
@@ -118,7 +118,7 @@ public class AssignTeacher {
 
 		// =============================================
 		// % 2 courses conflict thi ko cung giao vien
-		VarIntLS[] temp = new VarIntLS[2];
+		// VarIntLS[] temp = new VarIntLS[2];
 		for (int t = 0; t < DA.nbTeacher; t++) {
 			for (int c1 = 0; c1 < DA.nbClassCourse - 1; c1++) {
 				for (int c2 = c1 + 1; c2 < DA.nbClassCourse; c2++) {
@@ -187,6 +187,7 @@ public class AssignTeacher {
 		ls.close();
 	}
 
+	@SuppressWarnings("unchecked")
 	public void stateModel_LS() {
 		ls = new LocalSearchManager();
 		x_LS = new VarIntLS[nbCourse];
@@ -230,7 +231,7 @@ public class AssignTeacher {
 				}
 			}
 		}
-		VarIntLS[] tt = y_LS[0];
+		// VarIntLS[] tt = y_LS[0];
 
 		for (int c1 = 0; c1 < nbCourse - 1; c1++) {
 			for (int c2 = c1 + 1; c2 < nbCourse; c2++) {
@@ -290,6 +291,7 @@ public class AssignTeacher {
 	}
 
 	// //////////////////////////////////////////////////
+	@SuppressWarnings("unchecked")
 	public void stateModel_CP() {
 		x_cp = new IntegerVariable[nbTeacher][nbCourse];
 		sum_cp = new IntegerExpressionVariable[nbTeacher];
@@ -1329,9 +1331,9 @@ public class AssignTeacher {
 			// System.out.println("chua day mon nao ca, nbc =
 			// "+mTeacher2AssignedCC.get(tc).size());
 			// return MAX_PICKSCORE;
-			return  target; // co 2 nguoi chua dc gan thi
-													// nguoi nao can nhieu hon
-													// dc gan truoc
+			return target; // co 2 nguoi chua dc gan thi
+							// nguoi nao can nhieu hon
+							// dc gan truoc
 		} else {
 			double current = DA.mTeacher2AssignedClassCourse.get(tc).size();
 			double remain = target - current;
@@ -1355,7 +1357,7 @@ public class AssignTeacher {
 				return 0;
 			}
 			double S = Math.sqrt(remain * remain + relaScore * relaScore);
-			return (double) remain / S +  (double) relaScore / S;
+			return (double) remain / S + (double) relaScore / S;
 		}
 	}
 
@@ -1369,8 +1371,8 @@ public class AssignTeacher {
 			// "+mTeacher2AssignedCC.get(tc).size());
 			// return MAX_PICKSCORE;
 			return target; // co 2 nguoi chua dc gan thi
-													// nguoi nao can nhieu hon
-													// dc gan truoc
+							// nguoi nao can nhieu hon
+							// dc gan truoc
 		} else {
 			double current = DA.mTeacher2AssignedClassCourse.get(tc).size();
 			double remain = target - current;
@@ -1393,10 +1395,10 @@ public class AssignTeacher {
 			if (remain == 0 && relaScore == 0) {
 				return 0;
 			}
-			double S = Math.sqrt(remain * remain + relaScore * relaScore);
+			// double S = Math.sqrt(remain * remain + relaScore * relaScore);
 			// return WEIGHT_TARGETREMAIN*(double)remain/S +
 			// WEIGHT_RELATIVE*(double)relaScore/S;
-			return  (double) remain + (double) relaScore;
+			return (double) remain + (double) relaScore;
 		}
 	}
 
@@ -1446,7 +1448,7 @@ public class AssignTeacher {
 
 	/** Normalize matrix score */
 	public void normalizeMatrixScore() {
-		HashSet<Double> set = new HashSet<>();
+		// HashSet<Double> set = new HashSet<>();
 		double min = Double.MAX_VALUE;
 		for (int i = 0; i < DA.nbClassCourse - 1; i++) {
 			for (int j = i + 1; j < DA.nbClassCourse; j++) {
@@ -1534,10 +1536,10 @@ public class AssignTeacher {
 				int ss2 = DA.aClassCourse2Session[cc2];
 				int d1 = DA.aClassCourse2Day[cc1];
 				int d2 = DA.aClassCourse2Day[cc2];
-				int n1 = DA.aClassCourse2Noon[cc1];
-				int n2 = DA.aClassCourse2Noon[cc2];
-				int be1 = DA.aClassCourse2BeginEndDay[cc1];
-				int be2 = DA.aClassCourse2BeginEndDay[cc2];
+				// int n1 = DA.aClassCourse2Noon[cc1];
+				// int n2 = DA.aClassCourse2Noon[cc2];
+				// int be1 = DA.aClassCourse2BeginEndDay[cc1];
+				// int be2 = DA.aClassCourse2BeginEndDay[cc2];
 
 				int sameblock = 0;
 				if (clc1.stt == 3 || clc2.stt == 3) {
@@ -1559,13 +1561,13 @@ public class AssignTeacher {
 				}
 				// }
 
-				int samesession = 0;
+				// int samesession = 0;
 				if ((ss1 + ss2) % 2 == 0) {
-					samesession = 1;
+					// samesession = 1;
 				}
-				int samenoon = n1 * n2;
+				// int samenoon = n1 * n2;
 
-				int sameBeginEndDay = be1 * be2;
+				// int sameBeginEndDay = be1 * be2;
 
 				scoreMatrix[cc1][cc2] = // WEIGHT_BLOCK*sameblock
 										// + WEIGHT_SESSION*samesession*sameday
@@ -1582,8 +1584,8 @@ public class AssignTeacher {
 			for (int cc2 = cc1 + 1; cc2 < DA.nbClassCourse; cc2++) {
 				ClassCourse clc1 = DA.classCourses[cc1];
 				ClassCourse clc2 = DA.classCourses[cc2];
-				ClassFU cls1 = DA.mClassCourse2Class.get(clc1);
-				ClassFU cls2 = DA.mClassCourse2Class.get(clc2);
+				// ClassFU cls1 = DA.mClassCourse2Class.get(clc1);
+				// ClassFU cls2 = DA.mClassCourse2Class.get(clc2);
 
 				int b1 = DA.aClassCourse2Block[cc1];
 				int b2 = DA.aClassCourse2Block[cc2];
@@ -1591,28 +1593,28 @@ public class AssignTeacher {
 				int ss2 = DA.aClassCourse2Session[cc2];
 				int d1 = DA.aClassCourse2Day[cc1];
 				int d2 = DA.aClassCourse2Day[cc2];
-				int n1 = DA.aClassCourse2Noon[cc1];
-				int n2 = DA.aClassCourse2Noon[cc2];
+				// int n1 = DA.aClassCourse2Noon[cc1];
+				// int n2 = DA.aClassCourse2Noon[cc2];
 
-				int sameblock = 0;
+				// int sameblock = 0;
 				if (clc1.stt == 3 || clc2.stt == 3) {
-					sameblock = 1;
+					// sameblock = 1;
 				} else if ((b1 + b2) % 2 == 0) {
-					sameblock = 1;
+					// sameblock = 1;
 				}
 
-				int sameday = 0;
+				// int sameday = 0;
 				// if (sameblock == 1) {
 				if ((d1 + d2) % 2 == 0) {
-					sameday = 1;
+					// sameday = 1;
 				}
 				// }
 
-				int samesession = 0;
+				// int samesession = 0;
 				if ((ss1 + ss2) % 2 == 0) {
-					samesession = 1;
+					// samesession = 1;
 				}
-				int samenoon = n1 * n2;
+				// int samenoon = n1 * n2;
 
 				/*
 				 * System.out.print("<"+clc1.code+"-"+clc2.code+","+cls1.code+
@@ -1634,6 +1636,7 @@ public class AssignTeacher {
 	}
 
 	/** find some data (day, block, session) to calculate scoress */
+	@SuppressWarnings("unchecked")
 	public void findScoreElement(SingleSolution[] sol) {
 		// tìm block, session, ngày chẵn/lẽ của cc
 		DA.aClassCourse2Block = new int[DA.nbClassCourse];
@@ -1811,7 +1814,8 @@ public class AssignTeacher {
 		String fn_conflictMatrix = "data_conflictMatrix.txt";
 		String fn_courseScoreMatrix = "data_scoreMatrix.txt";
 		String fn_beingUsedTimeTable_Template2 = "data_beingusedTT_Temp2.dat";
-		String fn_beingUsedTimeTable_Template1 = "data_beingusedTT_Temp1.dat";
+		// String fn_beingUsedTimeTable_Template1 =
+		// "data_beingusedTT_Temp1.dat";
 		String fn_allTeacherTimeTable = "timetableAllTeacher.html";
 
 		a.DA = new DataCenter();

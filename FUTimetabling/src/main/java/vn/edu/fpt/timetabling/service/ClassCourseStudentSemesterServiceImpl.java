@@ -189,6 +189,7 @@ public class ClassCourseStudentSemesterServiceImpl implements ClassCourseStudent
 			classCourseStudentSemester.setClassCourseSemester(classCourseSemester);
 			classCourseStudentSemester.setStudent(student);
 			addClassCourseStudentSemester(classCourseStudentSemester);
+			System.out.println("Course: " + classCourseSemester.getCourseSemester().getCourse().getCode());
 		}
 	}
 

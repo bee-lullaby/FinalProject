@@ -215,7 +215,7 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 		session.setAttribute("semester", semester);
 		checkError(session, model);
 		notifySuccess(session, model);
-		return "addStudentToClass";
+		return "addStudentsToClass";
 	}
 
 	@RequestMapping("/staff/addStudentToClass/add/{studentId}")
