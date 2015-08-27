@@ -1,5 +1,6 @@
 package vn.edu.fpt.timetabling.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -727,7 +728,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		for (Building building : buildings) {
 			buildingData.add(building.getBuildingId() + "|" + building.getCode());
 		}
-
+		new File("D://datafall").mkdirs();
 		TimeTableAllClass TA = new TimeTableAllClass();
 		TA.DA = new DataCenter();
 		TA.DA.loadData_Department_v2(departmentData);
