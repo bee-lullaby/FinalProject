@@ -168,10 +168,28 @@ public class ScheduleServiceImpl implements ScheduleService {
 		Map<Course, Map<String, Room>> mSpecialCourseRoom = roomService.getCourseRoomMap();
 		Map<Course, Set<Timetable>> mSpecialCourseTimetable = roomService
 				.getSpecialCourseMapTimetableOfItsClasses(semesterId);
-
+		
+		// Get Set Merge Classes will not get timetable
+		Set<Integer> sCCSIdMergeClasses = new LinkedHashSet<Integer>();
+ 		for(String key : mMergeClass.keySet()) {
+ 			int count = 0;
+ 			for(int id : mMergeClass.get(key)) {
+ 				// dont add first value 
+ 				if(count == 0) { 
+ 					count++;
+ 					continue;
+ 				} else {
+ 					sCCSIdMergeClasses.add(id);
+ 				}
+ 			}
+ 		}
+		
 		// Map date with number of Normal Classes
 		HashMap<String, Set<Integer>> mapDateAndNumberOfNormalClassesCourses = new HashMap<String, Set<Integer>>();
 		for (Timetable t : allTimetable) {
+			if(sCCSIdMergeClasses.contains(t.getClassCourseSemester().getClassCourseSemesterId())) {
+				continue;
+			}
 			String key = sdf.format(t.getDate()) + " " + t.getSlot();
 			if (!mSpecialCourseRoom.containsKey(t.getClassCourseSemester().getCourseSemester().getCourse())) {
 				if (mapDateAndNumberOfNormalClassesCourses.containsKey(key)) {
@@ -321,7 +339,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 			throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat(Const.DATE);
 
-		HashMap<String, Set<Integer>> mMergeClass = classCourseSemesterMergeService
+ 		HashMap<String, Set<Integer>> mMergeClass = classCourseSemesterMergeService
 				.getMapCourseWithMergeClassInSemester(semesterId);
 		HashMap<String, Set<Timetable>> mActionTimetable = new HashMap<String, Set<Timetable>>();
 
