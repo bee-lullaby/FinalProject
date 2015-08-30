@@ -313,6 +313,9 @@
 	<beans:bean id="scheduleInfoService"
 		class="vn.edu.fpt.timetabling.service.ScheduleInfoServiceImpl">
 	</beans:bean>
+	<beans:bean id="scheduleAndRoomService"
+		class="vn.edu.fpt.timetabling.service.ScheduleAndRoomServiceImpl">
+	</beans:bean>
 	<context:component-scan base-package="vn.edu.fpt.timetabling" />
 
 	<tx:annotation-driven transaction-manager="transactionManager" />

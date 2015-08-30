@@ -176,6 +176,11 @@ public class StudentServiceImpl implements StudentService {
 		return studentDAO.listStudentsWithoutClass(semesterId);
 	}
 
+	@Override 
+	public List<Student> listStudentsInClasses(int semesterId) {
+		return studentDAO.listStudentsInClasses(semesterId);
+	}
+	
 	@Override
 	public Student getStudentByEmail(String email) {
 		return studentDAO.getStudentByEmail(email);

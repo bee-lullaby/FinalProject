@@ -176,7 +176,7 @@ public class ClassCourseStudentSemesterController extends GeneralController {
 				model.addAttribute("classSemester", classSemester);
 				model.addAttribute("classSemesterId", classSemesterId);
 				model.addAttribute("freeStudents", studentService.listStudentsWithoutClass(semester.getSemesterId()));
-				model.addAttribute("busyStudents", studentService.listStudentsInClassCourseSemester(0, 0));
+				model.addAttribute("busyStudents", studentService.listStudentsInClasses(semester.getSemesterId()));
 			} else {
 				classSemester = classSemesterService.getClassSemesterById(classSemesterId, true);
 				session.setAttribute("classSemester", classSemester);

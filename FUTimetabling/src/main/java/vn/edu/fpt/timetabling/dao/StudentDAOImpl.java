@@ -198,7 +198,20 @@ public class StudentDAOImpl implements StudentDAO {
 		List<Student> students = (List<Student>) query.list();
 		return students;
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Student> listStudentsInClasses(int semesterId) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Student S" + " WHERE S IN (SELECT CCSS.student"
+				+ " FROM vn.edu.fpt.timetabling.model.ClassCourseStudentSemester CCSS"
+				+ " WHERE CCSS.classCourseSemester.classSemester.semester.semesterId = :semesterId)";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("semesterId", semesterId);
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<Student> students = (List<Student>) query.list();
+		return students;
+	}
+	
 	@Override
 	public Student getStudentByEmail(String email) {
 		String hql = "FROM vn.edu.fpt.timetabling.model.Student S WHERE lower(S.email) = lower(:email)";

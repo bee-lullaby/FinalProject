@@ -35,5 +35,7 @@ public interface StudentService {
 
 	public List<Student> listStudentsInClassCourseSemester(int classSemesterId, int classCourseSemesterId);
 
+	public List<Student> listStudentsInClasses(int semesterId);
+	
 	public List<Student> listStudentsWithoutClass(int semesterId);
 }
