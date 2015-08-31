@@ -13,7 +13,7 @@ public interface TeacherSemesterDAO {
 	
 	public List<TeacherSemester> listTeacherSemestersBySemester(int semesterId, boolean jointTeacherCourseSemesters, boolean jointTimetables);
 	
-	public List<TeacherSemester> listTeacherSemestersByCourse(int courseId);
+	public List<TeacherSemester> listTeacherSemestersByCourse(int semesterId, int courseId);
 	
 	public List<TeacherSemester> listTeacherSemestersByTeacherId(int teacherId, boolean jointTeacherCourseSemesters,
 			boolean jointTimetables);

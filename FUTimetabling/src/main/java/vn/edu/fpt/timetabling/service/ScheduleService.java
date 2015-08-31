@@ -33,6 +33,4 @@ public interface ScheduleService {
 	public void autoSchedule(int semesterId);
 
 	public void autoScheduleRoom(int semesterId);
-
-	public void autoScheduleTeacher(int semesterId);
 }

@@ -101,7 +101,7 @@ public class TeacherSemesterDAOImpl implements TeacherSemesterDAO {
 		List<TeacherSemester> teacherSemesters = (List<TeacherSemester>) query.list();
 		return teacherSemesters;
 	}
-	
+
 	@Override
 	public TeacherSemester getTeacherSemesterByTeacherSemester(int teacherId, int semesterId,
 			boolean jointTeacherCourseSemesters, boolean jointTimetables) {
@@ -144,11 +144,13 @@ public class TeacherSemesterDAOImpl implements TeacherSemesterDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<TeacherSemester> listTeacherSemestersByCourse(int courseId) {
+	public List<TeacherSemester> listTeacherSemestersByCourse(int semesterId, int courseId) {
 		String hql = "SELECT TCS.teacherSemester FROM vn.edu.fpt.timetabling.model.TeacherCourseSemester TCS"
-				+ " WHERE TCS.courseSemester.course.courseId = :courseId";
+				+ " WHERE TCS.courseSemester.course.courseId = :courseId"
+				+ " AND TCS.courseSemester.semester.semesterId = :semesterId";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("courseId", courseId);
+		query.setParameter("semesterId", semesterId);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<TeacherSemester> teacherSemesters = (List<TeacherSemester>) query.list();
 		return teacherSemesters;

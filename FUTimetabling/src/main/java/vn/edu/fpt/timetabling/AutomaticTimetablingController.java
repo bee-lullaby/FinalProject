@@ -94,14 +94,6 @@ public class AutomaticTimetablingController extends GeneralController {
 		return "redirect:/staff/automaticTimetablingResult?semesterId=" + semesterId;
 	}
 
-	@RequestMapping(value = "/staff/automaticTimetabling/autoTeacher", method = RequestMethod.GET)
-	public String autoScheduleTeacher(@RequestParam(value = "semesterId", required = true) int semesterId, Model model,
-			HttpSession httpSession) {
-		scheduleService.autoScheduleTeacher(semesterId);
-		httpSession.setAttribute("success", "Auto timetabling teacher successful!!!");
-		return "redirect:/staff/automaticTimetablingResult?semesterId=" + semesterId;
-	}
-
 	@RequestMapping(value = "/staff/automaticTimetabling/clear", method = RequestMethod.GET)
 	public String clearSchedule(@RequestParam(value = "semesterId", required = true) int semesterId, Model model,
 			HttpSession httpSession, HttpServletRequest request) {

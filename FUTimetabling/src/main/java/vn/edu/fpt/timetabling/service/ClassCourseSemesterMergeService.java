@@ -29,4 +29,6 @@ public interface ClassCourseSemesterMergeService {
 	public int deleteClassCourseSemesterMerges(int semesterId);
 	
 	public Map<ClassCourseSemester, ClassCourseSemester> getGuestHostMap(int semesterId);
+	
+	public Map<ClassCourseSemester, List<ClassCourseSemester>> getHostGuestMap(int semesterId);
 }

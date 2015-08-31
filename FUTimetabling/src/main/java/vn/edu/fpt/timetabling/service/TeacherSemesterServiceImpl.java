@@ -97,13 +97,14 @@ public class TeacherSemesterServiceImpl implements TeacherSemesterService {
 		return teacherSemesterDAO.getTeacherSemesterById(teacherSemesterId, jointTeacherCourseSemesters,
 				jointTimetables);
 	}
-	
+
 	@Override
 	public List<TeacherSemester> listTeacherSemestersByTeacherId(int teacherId, boolean jointTeacherCourseSemesters,
 			boolean jointTimetables) {
-		return teacherSemesterDAO.listTeacherSemestersByTeacherId(teacherId, jointTeacherCourseSemesters, jointTimetables);
+		return teacherSemesterDAO.listTeacherSemestersByTeacherId(teacherId, jointTeacherCourseSemesters,
+				jointTimetables);
 	}
-	
+
 	@Override
 	public void deleteTeacherSemester(int teacherSemesterId) {
 		teacherSemesterDAO.deleteTeacherSemester(teacherSemesterId);
@@ -169,7 +170,7 @@ public class TeacherSemesterServiceImpl implements TeacherSemesterService {
 	}
 
 	@Override
-	public List<TeacherSemester> listTeacherSemestersByCourse(int courseId) {
-		return teacherSemesterDAO.listTeacherSemestersByCourse(courseId);
+	public List<TeacherSemester> listTeacherSemestersByCourse(int semesterId, int courseId) {
+		return teacherSemesterDAO.listTeacherSemestersByCourse(semesterId, courseId);
 	}
 }
