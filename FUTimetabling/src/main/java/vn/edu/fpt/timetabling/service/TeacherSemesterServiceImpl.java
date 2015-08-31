@@ -173,4 +173,9 @@ public class TeacherSemesterServiceImpl implements TeacherSemesterService {
 	public List<TeacherSemester> listTeacherSemestersByCourse(int semesterId, int courseId) {
 		return teacherSemesterDAO.listTeacherSemestersByCourse(semesterId, courseId);
 	}
+	
+	@Override
+	public List<TeacherSemester> listTeacherInTimetable(int semesterId) {
+		return teacherSemesterDAO.listTeacherInTimetable(semesterId);
+	}
 }

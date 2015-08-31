@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,8 +85,8 @@ public class ProgramSemesterController extends GeneralController {
 	}
 	
 	@RequestMapping(value = "/staff/programs/addFromFile", method = RequestMethod.POST)
-	public String addDepartmentsFromFile(@RequestParam("semesterId") int semesterId, 
-			@RequestParam("file") MultipartFile file, HttpSession httpSession) {
+	public String addProgramSemestersFromFile(@RequestParam("semesterId") int semesterId, 
+			@RequestParam("file") MultipartFile file, HttpSession httpSession, HttpServletRequest request) {
 		if (!file.isEmpty()) {
             File programSemesters = new File("programSemesters.xlxs");
 			try {
@@ -99,21 +100,24 @@ public class ProgramSemesterController extends GeneralController {
 				e.printStackTrace();
 			}
 		}
-		return "redirect:/staff/programs";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 	
 	@RequestMapping(value = "/staff/programs/clearPrograms", method = RequestMethod.GET)
-	public String clearPrograms(@RequestParam("semesterId") int semesterId, HttpSession httpSession) {
+	public String clearPrograms(@RequestParam("semesterId") int semesterId, HttpSession httpSession, HttpServletRequest request) {
 		programSemesterDetailService.deleteProgramSemesterDetailsBySemester(semesterId);
 		programSemesterService.deleteProgramSemestersBySemester(semesterId);
 		httpSession.setAttribute("success",
 				"Clear Programs Successful!");
-		return "redirect:/staff/programs";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 	
 	@ExceptionHandler(Exception.class)
-	public String handleException(HttpSession httpSession, Exception e) {
+	public String handleException(HttpSession httpSession, Exception e, HttpServletRequest request) {
 		httpSession.setAttribute("error", "Error, please try again.");
-		return "redirect:/staff/programs";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 }

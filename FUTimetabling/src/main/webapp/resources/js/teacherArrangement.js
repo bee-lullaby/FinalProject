@@ -175,9 +175,8 @@ $(document).ready(function() {
 	
 	function _setDataTableClasses() {
 		console.log("!23");
-		if(dtaJSON != undefined && dtaJSON != null) {
+		if(dtaJSON != undefined && dtaJSON != null && dtaJSON.length != 0) {
 			for(var i = 0; i < dtaJSON.length; i++) {
-				console.log("!23");
 				$("#table-classes tbody").append(_getTRTableClasses(i));
 			}
 		} else {
@@ -286,7 +285,8 @@ $(document).ready(function() {
 
 		$.each($("#table-classes tbody tr"), function(id, tr) {
 			var position = $(tr).attr("data-position");
-			if(courseSemesterJSON	 != null && courseSemesterJSON.classCourseSemesters[position].timetable.length > 0) {
+			if(dtaJSON != undefined && dtaJSON != null && dtaJSON.length != 0 &&
+					courseSemesterJSON != null && courseSemesterJSON.classCourseSemesters[position].timetable.length > 0) {
 				if(courseSemesterJSON.classCourseSemesters[position].timetable[0].teacherSemester != undefined 
 					&& courseSemesterJSON.classCourseSemesters[position].timetable[0].teacherSemester != null) {
 					$(tr).find("td:eq(3) select option[value='" +courseSemesterJSON.classCourseSemesters[position].timetable[0].teacherSemester.teacherSemesterId +"']").attr("selected", "selected");
@@ -300,7 +300,7 @@ $(document).ready(function() {
 	function _getListTeacherForSelect(position) {
 		var text = "";
 
-		if(dtaJSON != undefined && dtaJSON != null) {
+		if(dtaJSON != undefined && dtaJSON != null && dtaJSON.length != 0) {
 			for(var i = 0; i < dtaJSON[position].teacherAvailable.length; i++) {
 				text += _getOptionTeacher(position, i);
 			}

@@ -79,6 +79,19 @@ public class RoomDAOImpl implements RoomDAO {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Room> listRoomsInTimetable(int semesterId) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.Room R" + " WHERE R IN (SELECT T.room"
+				+ " FROM vn.edu.fpt.timetabling.model.Timetable T"
+				+ " WHERE T.classCourseSemester.classSemester.semester.semesterId = :semesterId)";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("semesterId", semesterId);
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<Room> rooms = (List<Room>) query.list();
+		return rooms;
+	}
+	
 	@Override
 	public void deleteRoom(int roomId) {
 		Room room = getRoomById(roomId, false);

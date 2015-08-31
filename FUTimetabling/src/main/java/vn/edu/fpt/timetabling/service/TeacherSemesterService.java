@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import vn.edu.fpt.timetabling.model.Teacher;
 import vn.edu.fpt.timetabling.model.TeacherSemester;
 
 public interface TeacherSemesterService {
@@ -35,4 +36,6 @@ public interface TeacherSemesterService {
 	public List<TeacherSemester> listTeacherSemestersForView(int semesterId);
 
 	public List<TeacherSemester> listTeacherSemestersByCourse(int semesterId, int courseId);
+	
+	public List<TeacherSemester> listTeacherInTimetable(int semesterId);
 }

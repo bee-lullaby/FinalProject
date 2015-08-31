@@ -15,5 +15,7 @@ public interface RoomDAO {
 	
 	public Room getRoomByCode(String code, boolean jointTimetable);
 	
+	public List<Room> listRoomsInTimetable(int semesterId);
+	
 	public void deleteRoom(int roomId);
 }

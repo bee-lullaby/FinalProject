@@ -30,7 +30,7 @@ public class BuildingController extends GeneralController {
 
 	@RequestMapping(value = "/staff/building/updateBuilding", method = RequestMethod.POST, params = { "buildingId",
 			"code" })
-	public String updateBuilding(@RequestParam int buildingId, @RequestParam String code, HttpSession httpSession)
+	public String updateBuilding(@RequestParam int buildingId, @RequestParam String code, HttpSession httpSession, HttpServletRequest request)
 			throws BuildingExistedException {
 
 		Building building = buildingService.getBuildingByCode(code);
@@ -59,12 +59,14 @@ public class BuildingController extends GeneralController {
 	public String deleteBuilding(@RequestParam int buildingId, HttpSession httpSession, HttpServletRequest request) {
 		buildingService.deleteBuilding(buildingId);
 		httpSession.setAttribute("success", "Delete Building Successful!");
-		return "redirect:/staff/building";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 
 	@ExceptionHandler(BuildingExistedException.class)
-	public String handleException(HttpSession httpSession, Exception e) {
+	public String handleException(HttpSession httpSession, Exception e, HttpServletRequest request) {
 		httpSession.setAttribute("error", "This Building's code existed! Please try again!");
-		return "redirect:/staff/building";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 }
