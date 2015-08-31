@@ -62,10 +62,10 @@
 
 						.ajax({
 							type : 'POST',
-							url : 'http://localhost:8080/FUTimetabling/',
+							url : 'http://duchmtest.cloudapp.net/FUTimetabling/',
 							contentType : 'application/octet-stream; charset=utf-8',
 							success : function(result) {
-								window.location = 'http://localhost:8080/FUTimetabling/'
+								window.location = 'http://duchmtest.cloudapp.net/FUTimetabling/'
 										+ result;
 							},
 							processData : false,
