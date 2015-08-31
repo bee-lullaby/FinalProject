@@ -1,6 +1,8 @@
 package vn.edu.fpt.timetabling;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,9 +57,11 @@ public class AutomaticTimetablingController extends GeneralController {
 	@Autowired
 	private StudentService studentService;
 
+	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+	
 	@RequestMapping(value = "/staff/automaticTimetabling", params = { "semesterId" })
 	public String automaticSchedule(@RequestParam int semesterId, HttpSession httpSession, Model model) {
-
+		
 		Semester semester = semesterService.getSemesterById(semesterId, true, false, false, true);
 		Set<ClassSemester> classSemesters = semester.getClassSemesters();
 
@@ -81,8 +85,10 @@ public class AutomaticTimetablingController extends GeneralController {
 	@RequestMapping(value = "/staff/automaticTimetabling/auto", method = RequestMethod.GET)
 	public String autoSchedule(@RequestParam(value = "semesterId", required = true) int semesterId, Model model,
 			HttpSession httpSession) {
+		httpSession.setAttribute("startTime", sdf.format(new Date()));
 		scheduleService.autoSchedule(semesterId);
 		httpSession.setAttribute("success", "Auto timetabling successful!!!");
+		httpSession.setAttribute("endTime", sdf.format(new Date()));
 		return "redirect:/staff/automaticTimetablingResult?semesterId=" + semesterId;
 	}
 
@@ -91,6 +97,7 @@ public class AutomaticTimetablingController extends GeneralController {
 			HttpSession httpSession) {
 		scheduleService.autoScheduleRoom(semesterId);
 		httpSession.setAttribute("success", "Auto timetabling room successful!!!");
+		httpSession.setAttribute("endTime", sdf.format(new Date()));
 		return "redirect:/staff/automaticTimetablingResult?semesterId=" + semesterId;
 	}
 
@@ -117,6 +124,12 @@ public class AutomaticTimetablingController extends GeneralController {
 			HttpSession httpSession, HttpServletRequest request) {
 
 		Semester semester = semesterService.getSemesterById(semesterId, false, false, false, false);
+		
+		if(httpSession.getAttribute("startTime") != null && httpSession.getAttribute("endTime") != null){
+			model.addAttribute("startTime", httpSession.getAttribute("startTime"));
+			model.addAttribute("endTime", httpSession.getAttribute("endTime"));
+		}
+		
 		model.addAttribute("semesterId", semester.getSemesterId());
 		model.addAttribute("semesterName", semester.getName());
 		model.addAttribute("listClassWasSetTimetablesDone",
@@ -124,6 +137,9 @@ public class AutomaticTimetablingController extends GeneralController {
 		model.addAttribute("listClassWasSetRoomsDone", scheduleInfoService.getListClassWasSetRoomsDone(semesterId));
 		model.addAttribute("listClassWasSetTeachersDone",
 				scheduleInfoService.getListClassWasSetTeachersDone(semesterId));
+		model.addAttribute("totalRoomsUsed", roomService.listRoomsInTimetable(semesterId).size());
+		model.addAttribute("totalTeachersUsed", teacherSemesterService.listTeacherInTimetable(semesterId).size());
+		model.addAttribute("countPercentSlots34", String.format("%.2f", timetableService.countPercentSlots34(semesterId)) +"%");
 		checkError(httpSession, model);
 		notifySuccess(httpSession, model);
 		return "automaticTimetablingResult";

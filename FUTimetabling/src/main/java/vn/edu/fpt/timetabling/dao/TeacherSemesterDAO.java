@@ -26,6 +26,8 @@ public interface TeacherSemesterDAO {
 
 	public TeacherSemester getTeacherSemesterByTeacherSemester(int teacherId, int semesterId,  boolean jointTeacherCourseSemesters,
 			boolean jointTimetables);
+
+	public List<TeacherSemester> listTeacherInTimetable(int semesterId);
 	
 	public void deleteTeacherSemester(int teacherSemesterId);
 }

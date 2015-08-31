@@ -31,6 +31,8 @@ public interface RoomService {
 	
 	public Map<Course, Set<Timetable>> getSpecialCourseMapTimetableOfItsClasses(int semesterId);
 	
+	public List<Room> listRoomsInTimetable(int semesterId);
+	
 	public List<Room> listNormalRooms();
 	
 }

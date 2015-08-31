@@ -217,6 +217,10 @@ public class RoomServiceImpl implements RoomService {
 		return result;
 	}
 	
+	@Override
+	public List<Room> listRoomsInTimetable(int semesterId) {
+		return roomDAO.listRoomsInTimetable(semesterId);
+	}
 	
 	@Override
 	// get Map between SpecialCourse with Timetable of its classes

@@ -135,6 +135,21 @@ public class TeacherSemesterDAOImpl implements TeacherSemesterDAO {
 		query.setParameter("account", account);
 		return (TeacherSemester) query.uniqueResult();
 	}
+	
+
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<TeacherSemester> listTeacherInTimetable(int semesterId) {
+		String hql = "FROM vn.edu.fpt.timetabling.model.TeacherSemester TS" + " WHERE TS IN (SELECT T.teacherSemester"
+				+ " FROM vn.edu.fpt.timetabling.model.Timetable T"
+				+ " WHERE T.classCourseSemester.classSemester.semester.semesterId = :semesterId)";
+		Query query = getCurrentSession().createQuery(hql);
+		query.setParameter("semesterId", semesterId);
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<TeacherSemester> teachers = (List<TeacherSemester>) query.list();
+		return teachers;
+	}
 
 	@Override
 	public void deleteTeacherSemester(int teacherSemesterId) {

@@ -60,7 +60,7 @@ public class TeacherDAOImpl implements TeacherDAO {
 		query.setParameter("account", account);
 		return (Teacher) query.uniqueResult();
 	}
-
+	
 	@Override
 	public void deleteTeacher(int teacherId) {
 		Teacher teacher = getTeacherById(teacherId);

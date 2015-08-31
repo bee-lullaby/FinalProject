@@ -51,7 +51,6 @@ public class TeacherServiceImpl implements TeacherService {
 	public Teacher getTeacherByAccount(String account) {
 		return teacherDAO.getTeacherByAccount(account);
 	}
-
 	@Override
 	public void deleteTeacher(int semesterId, int teacherId) {
 		if(teacherSemesterService.listTeacherSemestersByTeacherId(teacherId, false, false).size() > 1) {

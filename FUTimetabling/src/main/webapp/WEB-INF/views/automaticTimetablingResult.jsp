@@ -130,6 +130,14 @@ function _successNotify() {
 			<table id="dataAuto" class="table">
 				<thead>
 					<tr>
+						<th>Start Time:</th>
+						<td>${startTime}</td>
+					</tr>
+					<tr>
+						<th>End Time:</th>
+						<td>${endTime}</td>
+					</tr>
+					<tr>
 						<th>Set Timetable:</th>
 						<td>${fn:length(listClassWasSetTimetablesDone)}</td>
 					</tr>
@@ -138,8 +146,20 @@ function _successNotify() {
 						<td>${fn:length(listClassWasSetRoomsDone)}</td>
 					</tr>
 					<tr>
+						<th>Total rooms were used:</th>
+						<td>${totalRoomsUsed}</td>
+					</tr>
+					<tr>
 						<th>Set Teacher:</th>
 						<td>${fn:length(listClassWasSetTeachersDone)}</td>
+					</tr>
+					<tr>
+						<th>Total teachers were used:</th>
+						<td>${totalTeachersUsed}</td>
+					</tr>
+					<tr>
+						<th>Percentage of slot 3-4:</th>
+						<td>${countPercentSlots34}</td>
 					</tr>
 				</thead>
 			</table>
