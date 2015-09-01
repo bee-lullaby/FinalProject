@@ -1,9 +1,9 @@
 $(document).ready(function() { 
-	_init();
+	init();
 	
 	$("#table-mergeClasses").on("click", "a[id^='delete-mergeClass']",function() {
 		$("#dialog-delete-mergeClass").attr("data-mergeClassId", $(this).closest("tr").attr("data-mergeClassId"));
-		_showDialog("dialog-delete-mergeClass");
+		showDialog("dialog-delete-mergeClass");
 	});
 
 	$("#btn-delete-accept").on("click", function() {
@@ -12,25 +12,25 @@ $(document).ready(function() {
 	
 	$("#btn-delete-decline").on("click", function() {
 		$("#dialog-delete-mergeClass").removeAttr("data-mergeClassId");
-		_showDialog("dialog-delete-mergeClass");
+		showDialog("dialog-delete-mergeClass");
 	});
 	
 	$("#btn-add-mergeClass").on("click", function() {
-		_clearDialogData($("#dialog-add-mergeClass"));
-		_setDataSelect($("#dialog-add-mergeClass").find("#select-course"));
-		_showDialog("dialog-add-mergeClass");
+		clearDialogData($("#dialog-add-mergeClass"));
+		setDataSelect($("#dialog-add-mergeClass").find("#select-course"));
+		showDialog("dialog-add-mergeClass");
 	});
 	
 	$("#btn-clear-mergeClass").on("click", function() {
-		_showDialog("dialog-clear-mergeClass");
+		showDialog("dialog-clear-mergeClass");
 	});
 	
 	$("#btn-clear-accept").on("click", function() {
-		window.location = "mergeClasses/clear?semesterId=" +_urlParam("semesterId");
+		window.location = "mergeClasses/clear?semesterId=" +urlParam("semesterId");
 	});
 	
 	$("#btn-clear-decline").on("click", function() {
-		_showDialog("dialog-clear-mergeClass");
+		showDialog("dialog-clear-mergeClass");
 	});
 	
 	$("#dialog-add-mergeClass #btn-add-save").on("click", function() {
@@ -46,8 +46,8 @@ $(document).ready(function() {
 	});
 	
 	$("#dialog-add-mergeClass #btn-add-cancel").on("click", function() {
-		_showDialog("dialog-add-mergeClass");
-		_clearDialogData($("#dialog-add-mergeClass"));
+		showDialog("dialog-add-mergeClass");
+		clearDialogData($("#dialog-add-mergeClass"));
 		$("#dialog-add-mergeClass #select-class-1").css("border-color", "");
 		$("#dialog-add-mergeClass #select-class-2").css("border-color", "");
 	});
@@ -56,10 +56,10 @@ $(document).ready(function() {
 		$("#dialog-add-mergeClass").find("#select-class-1 option:first").attr("selected", "selected");
 		$("#dialog-add-mergeClass").find("#select-class-2 option:first").attr("selected", "selected");
 		$("#dialog-add-mergeClass").find("select[id^='select-class'] option").hide();
-		_setDataSelect($("#dialog-add-mergeClass").find("#select-course"));
+		setDataSelect($("#dialog-add-mergeClass").find("#select-course"));
 	});
 	
-	function _init() {
+	function init() {
 		var table = $('#table-mergeClasses').DataTable({
 			"lengthChange": false,
 			"searching": true,
@@ -68,18 +68,18 @@ $(document).ready(function() {
 			"pageLength": 30
 	    });
 		
-		$("#select-semester").find("a[id='" +_urlParam("semesterId") +"']").closest("li").addClass("active");
+		$("#select-semester").find("a[id='" +urlParam("semesterId") +"']").closest("li").addClass("active");
 		
 	}
 	
-	function _clearDialogData(dialog) {
+	function clearDialogData(dialog) {
 		dialog.find("#select-course option:first").attr("selected", "selected");
 		dialog.find("#select-class-1 option:first").attr("selected", "selected");
 		dialog.find("#select-class-2 option:first").attr("selected", "selected");
 		dialog.find("select[id^='select-class'] option").hide();
 	}
 	
-	function _setDataSelect(select) {
+	function setDataSelect(select) {
 		$("select[id^='select-class-'] option:first").hide();
 		var courseSemesterId = $(select).find("option:selected").val();
 		$("select[id^='select-class-'] option").filter(function() {
@@ -87,7 +87,7 @@ $(document).ready(function() {
 	    }).show();
 	}
 	
-	function _urlParam(param) {
+	function urlParam(param) {
 	    var url = $(location).attr('search').substring(1);
 	    var parameters = url.split('&');
 	    for (var i = 0; i < parameters.length; i++) 
@@ -100,7 +100,7 @@ $(document).ready(function() {
 	    }
 	}
 	
-	function _showDialog(id) {
+	function showDialog(id) {
 		var dialog = $("#" + id).data('dialog');
 		if (!dialog.element.data('opened')) {
 			dialog.open();

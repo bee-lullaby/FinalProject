@@ -14,7 +14,7 @@ $(document).ready(
 		
 		var specialCourses = [];
 		var positionOfSpecialRooms = [];
-		_init();
+		init();
 		
 		$("#table-info-classes").dataTable( {
 			"lengthChange": false,
@@ -24,12 +24,12 @@ $(document).ready(
 	    });
 
 		$("#btn-num-classes").on("click", function() {
-			_showDialog("dialog-info-classes");
+			showDialog("dialog-info-classes");
 		});
 
 		$("#select-classes").on("change", function() {
 			var classId = classesCoursesJSON[$(this).find("option:selected").val()].classFPT.classId;
-			$("#control-classes #semesterId").attr("value", _urlParam("semesterId"));
+			$("#control-classes #semesterId").attr("value", urlParam("semesterId"));
 			$("#control-classes #classId").attr("value", classId);
 			$("#control-classes").submit();
 		});
@@ -37,11 +37,11 @@ $(document).ready(
 		$("#select-rooms").on("change", function() {
 			$("#warning-room-arrangement").html("");
 			$("#warning").hide();
-			_setRoomForCourses();
+			setRoomForCourses();
 		});
 		
 //		$("select[id^='select-rooms-']").on("change", function () {
-////			_compareWithTimetablesRooms($(this).attr("id"));
+////			compareWithTimetablesRooms($(this).attr("id"));
 //
 ////			if (conflictDateSlots.length > 0) {
 ////				var text = "<b>+</b> Timetable of Room " +$(this).find("option:selected").text() +" has conflict with Timetable of "; 
@@ -52,7 +52,7 @@ $(document).ready(
 ////				$("#warning").show();
 ////				$(this).find("option:first").attr("selected", "selected");
 ////				$(this).attr("data-error", "error");
-////				_setOptionSelectedRoomsForAllCourse();
+////				setOptionSelectedRoomsForAllCourse();
 ////			} else if(specialCourses.indexOf(courseCode) > 0) {
 //				var courseCode = $(this).closest("tr").find("td:nth-child(1)").text();
 //				var check = false;
@@ -91,7 +91,7 @@ $(document).ready(
 ////				}
 ////			}
 ////			
-//			_checkCustomRooms();
+//			checkCustomRooms();
 //		});
 		
 		$("#btn-submit").on("click", function() {
@@ -99,7 +99,7 @@ $(document).ready(
 			var checkError = false;
 			var classCourseSemesters = {};
 			$.each(classesCoursesJSON, function(value, object) {
-				if(object.classSemesterId == _urlParam("classSemesterId"))
+				if(object.classSemesterId == urlParam("classSemesterId"))
 					classCourseSemesters = object.classCourseSemesters;
 			});
 			for(var i = 0; i < classCourseSemesters.length; i++) {
@@ -110,7 +110,7 @@ $(document).ready(
 				}
 			}
 			if(checkError) {
-				 _showDialog("dialog-error");
+				 showDialog("dialog-error");
 			} else {
 				var check = true;
 				for(var i = 0; i < classCourseSemesters.length; i++) {
@@ -134,14 +134,14 @@ $(document).ready(
 		});
 		
 		$("#btn-cancel-info-classes").on("click", function() {
-			_showDialog("dialog-info-classes");
+			showDialog("dialog-info-classes");
 		});
 		
 		$("#btn-cancel-error").on("click", function() {
-			_showDialog("dialog-error");
+			showDialog("dialog-error");
 		});
 		
-		function _init() {
+		function init() {
 
 			// Set button.
 			var count = 0;
@@ -155,30 +155,30 @@ $(document).ready(
 			$("#btn-num-rooms").text(roomsJSON.length);
 			$("#warning").hide();
 			
-			_setspecialCourses();
+			setspecialCourses();
 			
-			_setTextNoteRoomCapacity();
+			setTextNoteRoomCapacity();
 //			
-//			_setOptionSelectClasses();
+//			setOptionSelectClasses();
 			
-			_setOptionSelectRooms();
+			setOptionSelectRooms();
 			
-			_setSelectRoomForCourses();
+			setSelectRoomForCourses();
 			
-			_setDialogInfoClasses();
+			setDialogInfoClasses();
 			 
 
-			$("#select-semesters").find("a[id='" +_urlParam("semesterId") +"']").addClass("active");
+			$("#select-semesters").find("a[id='" +urlParam("semesterId") +"']").addClass("active");
 
-			$("#select-classes").find("a[id='" +_urlParam("classSemesterId") +"']").addClass("active");
-			$("#className").text($("#select-classes").find("a[id='" +_urlParam("classSemesterId") +"']").text());
+			$("#select-classes").find("a[id='" +urlParam("classSemesterId") +"']").addClass("active");
+			$("#className").text($("#select-classes").find("a[id='" +urlParam("classSemesterId") +"']").text());
 			$("#select-classes a").each(function() {
-				$(this).attr("href", "?semesterId=" + _urlParam("semesterId") +"&classSemesterId=" +$(this).attr("id"));
+				$(this).attr("href", "?semesterId=" + urlParam("semesterId") +"&classSemesterId=" +$(this).attr("id"));
 			});
 		}
 
-//		function _setOptionSelectClasses() {
-//			var classId =  _urlParam("classId");
+//		function setOptionSelectClasses() {
+//			var classId =  urlParam("classId");
 //			for (var i = 0; i < classesCoursesJSON.length; i++) {
 //				if(classesCoursesJSON[i].classFPT.classId == classId)
 //					$("#select-classes").append($("<option></option>")
@@ -192,15 +192,15 @@ $(document).ready(
 //			}
 //		}
 
-		function _setOptionSelectRooms() {
+		function setOptionSelectRooms() {
 			var classCourseSemesters = {};
 			$.each(classesCoursesJSON, function(value, object) {
-				if(object.classSemesterId == _urlParam("classSemesterId"))
+				if(object.classSemesterId == urlParam("classSemesterId"))
 					classCourseSemesters = object.classCourseSemesters;
 			});
 			var listRoomsCantSet = [];
 			$.each(classCourseSemesters, function(value, object) {
-				var roomsCantSet = _checkRoomsCantSet(object);
+				var roomsCantSet = checkRoomsCantSet(object);
 				for(var i = 0; i < roomsCantSet.length; i++) {
 					if(listRoomsCantSet.indexOf(roomsCantSet[i]) < 0) {
 						listRoomsCantSet.push(roomsCantSet[i])
@@ -216,15 +216,15 @@ $(document).ready(
 			}
 		}
 		
-		function _setSelectRoomForCourses() {
+		function setSelectRoomForCourses() {
 			var classCourseSemesters = {};
 			$.each(classesCoursesJSON, function(value, object) {
-				if(object.classSemesterId == _urlParam("classSemesterId"))
+				if(object.classSemesterId == urlParam("classSemesterId"))
 					classCourseSemesters = object.classCourseSemesters;
 			});
 			for (var x = 0; x < classCourseSemesters.length; x++) {
-				$("#courses-class").append(_getTRCoursesClass(classCourseSemesters[x]))
-				var roomsCantSet = _checkRoomsCantSet(classCourseSemesters[x]);
+				$("#courses-class").append(getTRCoursesClass(classCourseSemesters[x]))
+				var roomsCantSet = checkRoomsCantSet(classCourseSemesters[x]);
 				var courseCode = classCourseSemesters[x].courseSemester.course.code;
 				var classCourseSemesterId = classCourseSemesters[x].classCourseSemesterId;
 				if(specialCourses.indexOf(courseCode) > -1) {
@@ -248,15 +248,15 @@ $(document).ready(
 				
 			}
 			
-			_setOptionSelectedRoomsForAllCourse();
+			setOptionSelectedRoomsForAllCourse();
 		}
 		
 		
 		// Use for select-rooms change
-		function _setOptionSelectedRoomsForAllCourse() {
+		function setOptionSelectedRoomsForAllCourse() {
 			var classCourseSemesters = {};
 			$.each(classesCoursesJSON, function(value, object) {
-				if(object.classSemesterId == _urlParam("classSemesterId"))
+				if(object.classSemesterId == urlParam("classSemesterId"))
 					classCourseSemesters = object.classCourseSemesters;
 			});
 			for(var i = 0; i < classCourseSemesters.length; i++) {
@@ -277,13 +277,13 @@ $(document).ready(
 					
 				}
 			}
-			_checkCustomRooms();
+			checkCustomRooms();
 			
 		}
 		
 		
 		
-	function _setRoomForCourses() {
+	function setRoomForCourses() {
 		var roomSelected = $("#select-rooms option:selected").val();
 		
 	
@@ -307,7 +307,7 @@ $(document).ready(
 
 	}
 	
-	function _getTRCoursesClass(classCourseSemester) {
+	function getTRCoursesClass(classCourseSemester) {
 		var tr = "<tr>"
 				+ "<td " 
 				+ "data-courseSemesterId='" +classCourseSemester.courseSemester.courseSemesterId +"'>"
@@ -323,10 +323,10 @@ $(document).ready(
 			
 	
 	
-	function _checkCustomRooms() {
+	function checkCustomRooms() {
 		var classCourseSemesters = {};
 		$.each(classesCoursesJSON, function(value, object) {
-			if(object.classSemesterId == _urlParam("classSemesterId"))
+			if(object.classSemesterId == urlParam("classSemesterId"))
 				classCourseSemesters = object.classCourseSemesters;
 		});
 		var check = true;
@@ -348,13 +348,13 @@ $(document).ready(
 		}
 	}
 //	
-//	function _compareWithTimetablesRooms(id) {
+//	function compareWithTimetablesRooms(id) {
 //		conflictDateSlots = [];
 //		var selectedRoom = $("#" +id +" option:selected").val();
 //		var concflictRooms = [];
 //		var classCourseSemesters = [];
 //		$.each(classesCoursesJSON, function(value, object) {
-//			if(object.classSemesterId == _urlParam("classSemesterId")) {
+//			if(object.classSemesterId == urlParam("classSemesterId")) {
 //				$.merge(classCourseSemesters, object.classCourseSemesters);
 //			}
 //		});
@@ -384,7 +384,7 @@ $(document).ready(
 //		return concflictRooms;
 //	}
 	
-	function _checkRoomsCantSet(classCourseSemester) {
+	function checkRoomsCantSet(classCourseSemester) {
 		var listRoomsCantSet = [];
 		for(var y = 0; y < classCourseSemester.timetable.length; y++) {
 			for(var r = 0; r < roomsJSON.length; r++) {
@@ -406,7 +406,7 @@ $(document).ready(
 		return listRoomsCantSet;
 	}
 	
-	function _urlParam(param) {
+	function urlParam(param) {
 	    var url = $(location).attr('search').substring(1);
 	    var parameters = url.split('&');
 	    for (var i = 0; i < parameters.length; i++) 
@@ -419,7 +419,7 @@ $(document).ready(
 	    }
 	}
 	
-	function _showDialog(id) {
+	function showDialog(id) {
 		var dialog = $("#" + id).data('dialog');
 		if (!dialog.element.data('opened')) {
 			dialog.open();
@@ -428,7 +428,7 @@ $(document).ready(
 		}
 	}
 	
-	function _setTextNoteRoomCapacity() {
+	function setTextNoteRoomCapacity() {
 		for (var i = 0; i < roomsJSON.length; i++) {
 			if (roomsJSON[i].capacity > 30) {
 				var text = $("#more-than-30").html();
@@ -451,7 +451,7 @@ $(document).ready(
 		}
 	}
 	
-	function _setspecialCourses() {
+	function setspecialCourses() {
 		for(var i = 0; i < roomsJSON.length; i++) {
 			if(roomsJSON[i].courses != null) {
 				positionOfSpecialRooms.push(i);
@@ -465,13 +465,13 @@ $(document).ready(
 		}
 	}
 	
-	function _setDialogInfoClasses() {
+	function setDialogInfoClasses() {
 		for(var i = 0; i < dataRoomArrangementsJSON.length; i++) {
-			$("#info-classes").append(_getTRDialogInfoClasses(i));
+			$("#info-classes").append(getTRDialogInfoClasses(i));
 		}
 	}
 	
-	function _getTRDialogInfoClasses(position) {
+	function getTRDialogInfoClasses(position) {
 		var tr = "<tr>" +
 				"<td>" +dataRoomArrangementsJSON[position].classSemester.classFPT.code +"</td>";
 		if (dataRoomArrangementsJSON[position].setRoomSuccessful) {
@@ -481,7 +481,7 @@ $(document).ready(
 		}
 		
 		tr += "<td>" +dataRoomArrangementsJSON[position].numberOfSlots +"</td>" +
-			"<td>" +(dataRoomArrangementsJSON[position].numberOfSlots - dataRoomArrangementsJSON[position].numberOfSlots_WereSetSuccessful) +"</td>" +
+			"<td>" +(dataRoomArrangementsJSON[position].numberOfSlots - dataRoomArrangementsJSON[position].numberOfSlotsWereSetSuccessful) +"</td>" +
 			"<td></td>";
 		
 		return tr;

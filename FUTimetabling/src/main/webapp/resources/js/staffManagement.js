@@ -1,15 +1,15 @@
 $(document).ready(function() { 
 
-	_init();
+	init();
 	
 	$("#table-staffs").on("click", "a[id^='edit-staff']",function() {
-		_setDialogEditData($("#dialog-edit-staff"), $(this).closest("tr"));
-		_showDialog("dialog-edit-staff");
+		setDialogEditData($("#dialog-edit-staff"), $(this).closest("tr"));
+		showDialog("dialog-edit-staff");
 	});
 	
 	$("#table-staffs").on("click", "a[id^='delete-staff']",function() {
 		$("#dialog-delete-staff").attr("data-staffId", $(this).closest("tr").attr("data-staffId"));
-		_showDialog("dialog-delete-staff");
+		showDialog("dialog-delete-staff");
 	});
 
 	$("#btn-delete-accept").on("click", function() {
@@ -18,12 +18,12 @@ $(document).ready(function() {
 	
 	$("#btn-delete-decline").on("click", function() {
 		$("#dialog-delete-staff").removeAttr("data-staffId");
-		_showDialog("dialog-delete-staff");
+		showDialog("dialog-delete-staff");
 	});
 	
 	$("#btn-add-staff").on("click", function() {
-		_clearDialogData($("#dialog-add-staff"));
-		_showDialog("dialog-add-staff");
+		clearDialogData($("#dialog-add-staff"));
+		showDialog("dialog-add-staff");
 	});
 	
 	$("#dialog-edit-staff #btn-edit-save").on("click", function() {
@@ -43,7 +43,7 @@ $(document).ready(function() {
 				$.Notify({type: 'alert', caption: 'Alert', content: "Your Name can not be empty!!!"});
 				$("#dialog-add-staff #name").css("border-color", "red");
 			} else {
-				if(_isFPTEmail($("#dialog-add-staff #email").val())) {
+				if(isFPTEmail($("#dialog-add-staff #email").val())) {
 					$("#form-add-staff").submit();
 				} else {
 					$("#dialog-add-staff #name").css("border-color", "");
@@ -55,18 +55,18 @@ $(document).ready(function() {
 	});
 	
 	$("#dialog-edit-staff #btn-edit-cancel").on("click", function() {
-		_showDialog("dialog-edit-staff");
-		_clearDialogData($("#dialog-edit-staff"));
+		showDialog("dialog-edit-staff");
+		clearDialogData($("#dialog-edit-staff"));
 	});
 	
 	$("#dialog-add-staff #btn-add-cancel").on("click", function() {
-		_showDialog("dialog-add-staff");
+		showDialog("dialog-add-staff");
 		$("#dialog-add-staff #email").css("border-color", "");
 		$("#dialog-add-staff #name").css("border-color", "");
 		$("#dialog-add-staff #account").css("border-color", "");
 	});
 	
-	function _init() {
+	function init() {
 		var table = $('#table-staffs').DataTable({
 			"lengthChange": false,
 			"searching": true,
@@ -76,14 +76,14 @@ $(document).ready(function() {
 	    });
 	}
 	
-	function _clearDialogData(dialog) {
+	function clearDialogData(dialog) {
 		dialog.find("#staffId").val("-1");
 		dialog.find("#name").val("");
 		dialog.find("#account").val("");
 		dialog.find("#email").val( "");
 	}
 	
-	function _setDialogEditData(dialog, tr) {
+	function setDialogEditData(dialog, tr) {
 		dialog.find("#staffId").val(tr.attr("data-staffId"));
 		dialog.find("#account").val(tr.find("td:eq(0)").text());
 		dialog.find("#account").attr("readonly", true);
@@ -92,7 +92,7 @@ $(document).ready(function() {
 		dialog.find("#email").val(tr.find("td:eq(2)").text());
 	}
 	
-	function _isFPTEmail(email) {
+	function isFPTEmail(email) {
 		var part = email.split("@");
 		
 		if(part.length != 2) {
@@ -107,7 +107,7 @@ $(document).ready(function() {
 		
 	}
 
-	function _urlParam(param) {
+	function urlParam(param) {
 	    var url = $(location).attr('search').substring(1);
 	    var parameters = url.split('&');
 	    for (var i = 0; i < parameters.length; i++) 
@@ -120,7 +120,7 @@ $(document).ready(function() {
 	    }
 	}
 	
-	function _showDialog(id) {
+	function showDialog(id) {
 		var dialog = $("#" + id).data('dialog');
 		if (!dialog.element.data('opened')) {
 			dialog.open();

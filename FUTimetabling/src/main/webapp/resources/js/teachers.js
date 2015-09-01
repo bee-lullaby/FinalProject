@@ -1,34 +1,34 @@
 $(document).ready(function() { 
 
-	_init();
+	init();
 	$("#table-teachers").on("click", "a[id^='edit-teacher']",function() {
-		_clearDialogData($("#dialog-edit-teacher"));
-		_setDialogEditData($("#dialog-edit-teacher"), $(this).closest("tr"));
+		clearDialogData($("#dialog-edit-teacher"));
+		setDialogEditData($("#dialog-edit-teacher"), $(this).closest("tr"));
 		
-		_showDialog("dialog-edit-teacher");
+		showDialog("dialog-edit-teacher");
 	});
 
 	$("#table-teachers").on("click", "a[id^='delete-teacher']",function() {
 		$("#dialog-delete-teacher").attr("data-teacherId", $(this).closest("tr").attr("data-teacherId"));
-		_showDialog("dialog-delete-teacher");
+		showDialog("dialog-delete-teacher");
 	});
 
 	$("#btn-delete-accept").on("click", function() {
-		window.location = "teachers/deleteTeacher?semesterId=" +_urlParam("semesterId") +"&teacherId=" +$("#dialog-delete-teacher").attr("data-teacherId");
+		window.location = "teachers/deleteTeacher?semesterId=" +urlParam("semesterId") +"&teacherId=" +$("#dialog-delete-teacher").attr("data-teacherId");
 	});
 	
 	$("#btn-delete-decline").on("click", function() {
 		$("#dialog-delete-teacher").removeAttr("data-teacherId");
-		_showDialog("dialog-delete-teacher");
+		showDialog("dialog-delete-teacher");
 	});
 	
 	$("#btn-add-teacher").on("click", function() {
-		_clearDialogData($("#dialog-add-teacher"));
-		_showDialog("dialog-add-teacher");
+		clearDialogData($("#dialog-add-teacher"));
+		showDialog("dialog-add-teacher");
 	});
 	
 	$("#dialog-edit-teacher #btn-edit-save").on("click", function() {
-		if(_isFPTEmail($("#dialog-edit-teacher #email").val())) {
+		if(isFPTEmail($("#dialog-edit-teacher #email").val())) {
 			$("#form-edit-teacher").attr("action", "teachers/updateTeacher");
 			$("#form-edit-teacher").submit();
 		} else {
@@ -46,7 +46,7 @@ $(document).ready(function() {
 				$.Notify({type: 'alert', caption: 'Alert', content: "Your Name can not be empty!!!"});
 				$("#dialog-add-teacher #name").css("border-color", "red");
 			} else {
-				if(_isFPTEmail($("#dialog-add-teacher #email").val())) {
+				if(isFPTEmail($("#dialog-add-teacher #email").val())) {
 					$("#form-add-teacher").attr("action", "teachers/updateTeacher");
 					$("#form-add-teacher").submit();
 				} else {
@@ -58,33 +58,33 @@ $(document).ready(function() {
 	});
 	
 	$("#dialog-edit-teacher #btn-edit-cancel").on("click", function() {
-		_showDialog("dialog-edit-teacher");
+		showDialog("dialog-edit-teacher");
 		console.log("cancel");
-		_clearDialogData($("#dialog-edit-teacher"));
+		clearDialogData($("#dialog-edit-teacher"));
 	});
 	
 	$("#dialog-add-teacher #btn-add-cancel").on("click", function() {
-		_showDialog("dialog-add-teacher");
-		_clearDialogData($("#dialog-add-teacher"));
+		showDialog("dialog-add-teacher");
+		clearDialogData($("#dialog-add-teacher"));
 	});
 	
 	$("#btn-add-from-file").on("click", function() {
-		_showDialog("dialog-add-file");
+		showDialog("dialog-add-file");
 	});
 	
 	$("#btn-cancel-add-file").on("click", function() {
-		_showDialog("dialog-add-file");
+		showDialog("dialog-add-file");
 	});
 	
 	$("#table-add-teachers #select-courses").on("change", function() {
-		_setTextAriaCoursesSelected($(this));
+		setTextAriaCoursesSelected($(this));
 	});
 	
 	$("#table-edit-teachers #select-courses").on("change", function() {
-		_setTextAriaCoursesSelected($(this));
+		setTextAriaCoursesSelected($(this));
 	});
 	
-	function _init() {
+	function init() {
 		var table = $('#table-teachers').DataTable({
 			"lengthChange": false,
 			"searching": true,
@@ -93,31 +93,31 @@ $(document).ready(function() {
 			"pageLength": 20
 	    });
 		
-		$("#select-semester").find("a[id='" +_urlParam("semesterId") +"']").closest("li").addClass("active");
+		$("#select-semester").find("a[id='" +urlParam("semesterId") +"']").closest("li").addClass("active");
 		
 		var input = $("<input>").attr("type", "hidden")
-        						.attr("name", "semesterId").val(_urlParam("semesterId"));
+        						.attr("name", "semesterId").val(urlParam("semesterId"));
 		$('#form-add-file').append($(input));
 		
 		
 	}
 	
-	function _clearDialogData(dialog) {
+	function clearDialogData(dialog) {
 		dialog.find("#teacherId").attr("value", "-1");
 		dialog.find("#teacherSemesterId").attr("value", "-1");
 		dialog.find("#name").attr("value", "");
 		dialog.find("#account").attr("value", "");
 		dialog.find("#email").attr("value", "");
 		dialog.find("#select-semester-edit option").attr("disabled", true);
-		dialog.find("#select-semester-edit").find("option[value='" +_urlParam("semesterId") +"']").attr("disabled", false).attr("selected", "selected");
+		dialog.find("#select-semester-edit").find("option[value='" +urlParam("semesterId") +"']").attr("disabled", false).attr("selected", "selected");
 		dialog.find("#select-courses option").each(function() {
 			$(this).removeAttr("selected");
 		});
 		
-		_setTextAriaCoursesSelected(dialog.find("#select-courses"));
+		setTextAriaCoursesSelected(dialog.find("#select-courses"));
 	}
 	
-	function _setDialogEditData(dialog, tr) {
+	function setDialogEditData(dialog, tr) {
 		dialog.find("#teacherId").attr("value", tr.attr("data-teacherId"));
 		dialog.find("#teacherSemesterId").attr("value", tr.attr("data-teacherSemesterId"));
 		dialog.find("#account").attr("value", tr.find("td:eq(0)").text());
@@ -125,7 +125,7 @@ $(document).ready(function() {
 		dialog.find("#name").attr("value", tr.find("td:eq(1)").text());
 		dialog.find("#name").attr("readonly", true);
 		dialog.find("#email").attr("value", tr.find("td:eq(2)").text());
-		dialog.find("#select-semester-edit").find("option[value='" +_urlParam("semesterId") +"']").attr("selected", "selected");
+		dialog.find("#select-semester-edit").find("option[value='" +urlParam("semesterId") +"']").attr("selected", "selected");
 		dialog.find("#select-department-edit").find("option:contains('" +tr.find("td:eq(2)").text() +"')").attr("selected", "selected");
 		
 		var listCourses = tr.find("td:eq(4)").text().split(";");
@@ -136,10 +136,10 @@ $(document).ready(function() {
 			}
 		});
 
-		_setTextAriaCoursesSelected($("#table-edit-teachers").find("#select-courses"));
+		setTextAriaCoursesSelected($("#table-edit-teachers").find("#select-courses"));
 	}
 	
-	function _setTextAriaCoursesSelected(parents) {
+	function setTextAriaCoursesSelected(parents) {
 		var text = "";
 		parents.find("option:selected").each(function() {
 			text += $(this).text() +"; ";
@@ -148,7 +148,7 @@ $(document).ready(function() {
 		parents.closest("td").find("#courses-selected").text(text);
 	}
 
-	function _urlParam(param) {
+	function urlParam(param) {
 	    var url = $(location).attr('search').substring(1);
 	    var parameters = url.split('&');
 	    for (var i = 0; i < parameters.length; i++) 
@@ -161,7 +161,7 @@ $(document).ready(function() {
 	    }
 	}
 
-	function _isFPTEmail(email) {
+	function isFPTEmail(email) {
 		var part = email.split("@");
 		
 		if(part.length != 2) {
@@ -173,7 +173,7 @@ $(document).ready(function() {
 		return true;
 	}
 	
-	function _showDialog(id) {
+	function showDialog(id) {
 		var dialog = $("#" + id).data('dialog');
 		if (!dialog.element.data('opened')) {
 			dialog.open();

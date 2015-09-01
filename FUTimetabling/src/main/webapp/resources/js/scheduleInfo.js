@@ -1,4 +1,4 @@
-	function _stepper_on_step(index, step) {
+	function stepperonstep(index, step) {
 		if (index == 1) {
 			$("#btn-prev").attr("disabled", true);
 			$("#btn-next").attr("disabled", false);
@@ -20,7 +20,7 @@
 		}
 	}
 
-	function _stepper_on_step_click(index, step) {
+	function stepperonstepclick(index, step) {
 		if (index == 0) {
 			$("#btn-prev").attr("disabled", true);
 			$("#btn-next").attr("disabled", false);
@@ -66,7 +66,7 @@
 	
 	$(document).ready(function() {
 		
-		_init();
+		init();
 		
 		$("#btn-back").on("click", function() {
 			window.location = "/FUTimetabling/staff";
@@ -89,23 +89,23 @@
 		});
 		
 		$("#btn-automatic").on("click", function() {
-			window.location = "/FUTimetabling/staff/automaticTimetabling?semesterId=" +_urlParam("semesterId");
+			window.location = "/FUTimetabling/staff/automaticTimetabling?semesterId=" +urlParam("semesterId");
 		})
 		
 		$("#btn-download").on("click", function() {
-			_showDialog("dialog-download");
+			showDialog("dialog-download");
 		});
 		$("#btn-download-class").on("click", function() {
-			window.location = "downloadTimetableClass?semesterId=" +_urlParam("semesterId");
-			_showDialog("dialog-download");
+			window.location = "downloadTimetableClass?semesterId=" +urlParam("semesterId");
+			showDialog("dialog-download");
 		});
 		$("#btn-download-teacher").on("click", function() {
-			window.location = "downloadTimetableTeacher?semesterId=" +_urlParam("semesterId");
-			_showDialog("dialog-download");
+			window.location = "downloadTimetableTeacher?semesterId=" +urlParam("semesterId");
+			showDialog("dialog-download");
 		});
 		
-		function _init() {
-			$("#select-semester").find("option[value='" +_urlParam("semesterId") +"']").attr("selected", "selected");
+		function init() {
+			$("#select-semester").find("option[value='" +urlParam("semesterId") +"']").attr("selected", "selected");
 			if($("#setCourse").text() == "N/A" || $("#setCourse").text() == 0) {
 				$("#btn-manual").attr("disabled", true);
 				$("#btn-automatic").attr("disabled", true);
@@ -116,7 +116,7 @@
 			}
 		}
 		
-		function _urlParam(param) {
+		function urlParam(param) {
 		    var url = $(location).attr('search').substring(1);
 		    var parameters = url.split('&');
 		    for (var i = 0; i < parameters.length; i++) 
@@ -129,7 +129,7 @@
 		    }
 		}
 		
-		function _showDialog(id) {
+		function showDialog(id) {
 			var dialog = $("#" + id).data('dialog');
 			if (!dialog.element.data('opened')) {
 				dialog.open();

@@ -1,16 +1,16 @@
 $(document).ready(function() { 
 
-	_init();
+	init();
 	
 	$("#table-specializeds").on("click", "a[id^='edit-specialized']", function() {
-		_setDialogEditData($("#dialog-edit-specialized"), $(this).closest("tr"));
+		setDialogEditData($("#dialog-edit-specialized"), $(this).closest("tr"));
 		$("#dialog-edit-specialized").attr("data-action", "edit");
-		_showDialog("dialog-edit-specialized");
+		showDialog("dialog-edit-specialized");
 	});
 
 	$("#table-specializeds").on("click", "a[id^='delete-specialized']",function() {
 		$("#dialog-delete-specialized").attr("data-specializedId", $(this).closest("tr").attr("data-specializedId"));
-		_showDialog("dialog-delete-specialized");
+		showDialog("dialog-delete-specialized");
 	});
 	
 	$("#btn-delete-accept").on("click", function() {
@@ -19,13 +19,13 @@ $(document).ready(function() {
 	
 	$("#btn-delete-decline").on("click", function() {
 		$("#dialog-delete-specialized").removeAttr("data-specializedId");
-		_showDialog("dialog-delete-specialized");
+		showDialog("dialog-delete-specialized");
 	});
 	
 	
 	$("#btn-add-specialized").on("click", function() {
-		_clearDialogData($("#dialog-add-specialized"));
-		_showDialog("dialog-add-specialized");
+		clearDialogData($("#dialog-add-specialized"));
+		showDialog("dialog-add-specialized");
 	});
 	
 	$("#dialog-add-specialized #btn-add-save").on("click", function() {
@@ -45,27 +45,27 @@ $(document).ready(function() {
 	});
 	
 	$("#dialog-edit-specialized #btn-edit-cancel").on("click", function() {
-		_showDialog("dialog-edit-specialized");
+		showDialog("dialog-edit-specialized");
 		$("#dialog-edit-specialized").removeAttr("data-action");
 		
 	});
 	
 	$("#dialog-add-specialized #btn-add-cancel").on("click", function() {
-		_showDialog("dialog-add-specialized");
-		_clearDialogData($("#dialog-add-specialized"));
+		showDialog("dialog-add-specialized");
+		clearDialogData($("#dialog-add-specialized"));
 		$("#dialog-add-specialized #code").css("border-color", "");
 		$("#dialog-add-specialized #name").css("border-color", "");
 	});
 	
 	$("#btn-add-from-file").on("click", function() {
-		_showDialog("dialog-add-file");
+		showDialog("dialog-add-file");
 	});
 	
 	$("#btn-cancel-add-file").on("click", function() {
-		_showDialog("dialog-add-file");
+		showDialog("dialog-add-file");
 	});
 	
-	function _init() {
+	function init() {
 		var table = $('#table-specializeds').DataTable({
 			"lengthChange": false,
 			"searching": true,
@@ -73,18 +73,18 @@ $(document).ready(function() {
 			"info": true,
 			"pageLength": 30
 	    });
-		$("#select-semester").find("a[id='" +_urlParam("semesterId") +"']").addClass("active");
+		$("#select-semester").find("a[id='" +urlParam("semesterId") +"']").addClass("active");
 		
 	}
 	
-	function _clearDialogData(dialog) {
+	function clearDialogData(dialog) {
 		dialog.find("#specializedId").val("-1");
 		dialog.find("#code").val("");
 		dialog.find("#code").attr("readonly", false);
 		dialog.find("#name").val("");
 	}
 	
-	function _urlParam(param) {
+	function urlParam(param) {
 	    var url = $(location).attr('search').substring(1);
 	    var parameters = url.split('&');
 	    for (var i = 0; i < parameters.length; i++) 
@@ -97,7 +97,7 @@ $(document).ready(function() {
 	    }
 	}
 	
-	function _showDialog(id) {
+	function showDialog(id) {
 		var dialog = $("#" + id).data('dialog');
 		if (!dialog.element.data('opened')) {
 			dialog.open();

@@ -18,7 +18,7 @@ $(document).ready(function() {
 		dtaJSON = JSON.parse(dtaData);
 	}
 
-	_init();
+	init();
 	
 	$("select[id^='select-teacher-']").on("change", function() {
 		var tr = $(this).closest("tr");
@@ -31,7 +31,7 @@ $(document).ready(function() {
 		var classCourseSemesterId = $(tr).attr("id");
 		if(mMergeClassJSON != undefined && mMergeClassJSON != null) {
 			$.each(mMergeClassJSON, function(key, value) {
-				if(key.indexOf(_urlParam("courseSemesterId")) > -1 
+				if(key.indexOf(urlParam("courseSemesterId")) > -1 
 						&& $.inArray(parseInt(classCourseSemesterId) , value) > -1) {
 					for(var i = 0; i < value.length; i++) {
 						if(value[i] != classCourseSemesterId) {
@@ -88,7 +88,7 @@ $(document).ready(function() {
 								&& courseSemesterJSON.classCourseSemesters[i].timetable != null 
 								&& courseSemesterJSON.classCourseSemesters[i].timetable.length > 0) {
 							if($(this).find("td:eq(2) select option:selected").val() != "-1") {
-								var teacherSemester = _getTeacherSemester($(this).find("td:eq(3) select option:selected").val());
+								var teacherSemester = getTeacherSemester($(this).find("td:eq(3) select option:selected").val());
 								for(var x = 0; x < courseSemesterJSON.classCourseSemesters[i].timetable.length; x++) {
 									courseSemesterJSON.classCourseSemesters[i].timetable[x].teacherSemester = teacherSemester;
 									result.push(courseSemesterJSON.classCourseSemesters[i].timetable[x]);
@@ -111,7 +111,7 @@ $(document).ready(function() {
 		}
 	}); 
 	
-	function _getTeacherSemester(teacherSemesterId) {
+	function getTeacherSemester(teacherSemesterId) {
 		if(courseSemesterJSON != undefined && courseSemesterJSON != null) {
 			for(var i = 0; i < courseSemesterJSON.teacherCourseSemesters.length; i++) {
 				if(courseSemesterJSON.teacherCourseSemesters[i].teacherSemester.teacherSemesterId == teacherSemesterId) {
@@ -122,39 +122,39 @@ $(document).ready(function() {
 		return null;
 	}
 	
-	function _init() {
+	function init() {
 		
-		_setSelectedDepartments();
+		setSelectedDepartments();
 		
-		_setListCourses();
+		setListCourses();
 		
-		_setTextBtnCourse();
+		setTextBtnCourse();
 		
-		_setDataTableClasses();
+		setDataTableClasses();
 		
-		_setCellConflict();
+		setCellConflict();
 		
-		_setCellMerge();
+		setCellMerge();
 		
-		_setSelectTeachers();
+		setSelectTeachers();
 		
-		$("#select-semesters a[id='" +_urlParam("semesterId") +"']").addClass("active");
-		$("#select-courses a[id='" +_urlParam("courseSemesterId") +"']").addClass("active");
+		$("#select-semesters a[id='" +urlParam("semesterId") +"']").addClass("active");
+		$("#select-courses a[id='" +urlParam("courseSemesterId") +"']").addClass("active");
 	}
 	
 	
 	
-	function _setSelectedDepartments() {
+	function setSelectedDepartments() {
 		$("#select-departments a").each(function() {
-			$(this).attr("href", "?semesterId=" + _urlParam("semesterId") +"&departmentId=" +$(this).attr("id"));
+			$(this).attr("href", "?semesterId=" + urlParam("semesterId") +"&departmentId=" +$(this).attr("id"));
 		});
 		
-		$("#select-departments a[id='" +_urlParam("departmentId") +"']").addClass("active");
+		$("#select-departments a[id='" +urlParam("departmentId") +"']").addClass("active");
 	}
 	
 	
 	
-	function _setTextBtnCourse() {
+	function setTextBtnCourse() {
 		if(courseSemesterJSON != null) {
 			$("#num-of-classes").text(courseSemesterJSON.classCourseSemesters.length);
 			$("#num-of-teachers").text(courseSemesterJSON.teacherCourseSemesters.length);
@@ -164,27 +164,27 @@ $(document).ready(function() {
 		}
 	}
 	
-	function _setListCourses() {
+	function setListCourses() {
 		$.each($("#select-courses a"), function() {
-			$(this).attr("href", "?semesterId=" +_urlParam("semesterId") +"&departmentId=" +_urlParam("departmentId")
+			$(this).attr("href", "?semesterId=" +urlParam("semesterId") +"&departmentId=" +urlParam("departmentId")
 					+"&courseSemesterId=" +$(this).attr("id"));
 		});
-		$("#select-courses a[id='" +_urlParam("courseSemesterId") +"']").addClass("active");
-		$("#title-course").text($("#select-courses a[id='" +_urlParam("courseSemesterId") +"']").text());
+		$("#select-courses a[id='" +urlParam("courseSemesterId") +"']").addClass("active");
+		$("#title-course").text($("#select-courses a[id='" +urlParam("courseSemesterId") +"']").text());
 	}
 	
-	function _setDataTableClasses() {
+	function setDataTableClasses() {
 		console.log("!23");
 		if(dtaJSON != undefined && dtaJSON != null && dtaJSON.length != 0) {
 			for(var i = 0; i < dtaJSON.length; i++) {
-				$("#table-classes tbody").append(_getTRTableClasses(i));
+				$("#table-classes tbody").append(getTRTableClasses(i));
 			}
 		} else {
 			$("#table-classes tbody").append("<tr><td colspan='4' style='text-align:center'>No Class To Show!</td></tr>");
 		}
 	}
 	
-	function _getTRTableClasses(position) {
+	function getTRTableClasses(position) {
 		text = "<tr id='" +dtaJSON[position].classCourseSemester.classCourseSemesterId +"' data-position='" +position +"'>" +
 				"<td>" 
 				+dtaJSON[position].classCourseSemester.classSemester.classFPT.code +"</td>" +
@@ -198,13 +198,13 @@ $(document).ready(function() {
 		return text;
 	}
 	
-	function _setCellConflict() {
+	function setCellConflict() {
 		$("#table-classes tbody tr").each(function () {
 			var listMergeClasses = [];
 			var classCourseSemesterId = $(this).attr("id");
 			if(mMergeClassJSON != undefined && mMergeClassJSON != null) {
 				$.each(mMergeClassJSON, function(key, value) {
-					if(key.indexOf(_urlParam("courseSemesterId")) > -1 
+					if(key.indexOf(urlParam("courseSemesterId")) > -1 
 							&& $.inArray(parseInt(classCourseSemesterId) , value) > -1) {
 						for(var i = 0; i < value.length; i++) {
 							if(value[i] != classCourseSemesterId) {
@@ -234,13 +234,13 @@ $(document).ready(function() {
 		});
 	}
 	
-	function _setCellMerge() {
+	function setCellMerge() {
 		$("#table-classes tbody tr").each(function () {
 			var listMergeClasses = [];
 			var classCourseSemesterId = $(this).attr("id");
 			if(mMergeClassJSON != undefined && mMergeClassJSON != null) {
 				$.each(mMergeClassJSON, function(key, value) {
-					if(key.indexOf(_urlParam("courseSemesterId")) > -1 
+					if(key.indexOf(urlParam("courseSemesterId")) > -1 
 							&& $.inArray(parseInt(classCourseSemesterId) , value) > -1) {
 						for(var i = 0; i < value.length; i++) {
 							if(value[i] != classCourseSemesterId) {
@@ -258,7 +258,7 @@ $(document).ready(function() {
 		});
 	}
 	
-	function _setCellMergeClass() {
+	function setCellMergeClass() {
 		$("#table-classes tbody tr").each(function () {
 			var classCourseSemesterId = $(this).attr("id");
 			if(dtaJSON != undefined && dtaJSON != null) {
@@ -277,10 +277,10 @@ $(document).ready(function() {
 		});
 	}
 	
-	function _setSelectTeachers() {
+	function setSelectTeachers() {
 		var count = 0;
 		$("#table-classes tbody tr").each(function () {
-			$(this).find("td:eq(3) select").append(_getListTeacherForSelect(count++));
+			$(this).find("td:eq(3) select").append(getListTeacherForSelect(count++));
 		})
 
 		$.each($("#table-classes tbody tr"), function(id, tr) {
@@ -297,22 +297,22 @@ $(document).ready(function() {
 		});
 	}
 
-	function _getListTeacherForSelect(position) {
+	function getListTeacherForSelect(position) {
 		var text = "";
 
 		if(dtaJSON != undefined && dtaJSON != null && dtaJSON.length != 0) {
 			for(var i = 0; i < dtaJSON[position].teacherAvailable.length; i++) {
-				text += _getOptionTeacher(position, i);
+				text += getOptionTeacher(position, i);
 			}
 		}
 		return text;
 	}
 	
-	function _getOptionTeacher(x, y) {
+	function getOptionTeacher(x, y) {
 		return "<option value='" +dtaJSON[x].teacherAvailable[y].teacherSemesterId +"'>" +
 					dtaJSON[x].teacherAvailable[y].teacher.account +"</option>";
 	}
-	function _urlParam(param) {
+	function urlParam(param) {
 		var url = $(location).attr('search').substring(1);
 		var parameters = url.split('&');
 		for (var i = 0; i < parameters.length; i++) {

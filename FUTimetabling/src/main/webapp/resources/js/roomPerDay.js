@@ -9,7 +9,7 @@ $(document).ready(function() {
 	var buildingA = roomsJSON.P;
 	var buildingB = roomsJSON.HB;
 	
-	_init();
+	init();
 
 	$("#table-remain-timetable").dataTable({
 		"lengthChange": false,
@@ -19,25 +19,25 @@ $(document).ready(function() {
 	});
 	
 	$("#btn-remain-timetable").on("click", function() {
-		_showDialog("dialog-remain-timetable");
+		showDialog("dialog-remain-timetable");
 	});
 	
 	$("#btn-cancel-remain-timetable").on("click", function() {
-		_showDialog("dialog-remain-timetable");	
+		showDialog("dialog-remain-timetable");	
 	});
 	
 	$("#table-remain-timetable tbody tr").on("click", function() {
-		_showDialog("dialog-remain-timetable");	
-		_setDataTableRemainRoom($(this).attr("data-position"), $(this).find("td:eq(2)").text());
-		_showDialog("dialog-set-room");
+		showDialog("dialog-remain-timetable");	
+		setDataTableRemainRoom($(this).attr("data-position"), $(this).find("td:eq(2)").text());
+		showDialog("dialog-set-room");
 	});
 	
 	$("#btn-cancel-set-room").on("click", function() {
-		_showDialog("dialog-set-room");
+		showDialog("dialog-set-room");
 	});
 	
 	$("#btn-cancel-submit-room").on("click", function() {
-		_showDialog("dialog-set-room");
+		showDialog("dialog-set-room");
 	});
 	
 	$("#btn-submit-set-room").on("click", function() {
@@ -48,7 +48,7 @@ $(document).ready(function() {
 	$("#table-body").on("click", "td", function() {
 		if($(this).text() != "") {
 			$("#form-delete-room #timetableId").val($(this).attr("data-timetableid"));
-			_showDialog("dialog-delete-room");
+			showDialog("dialog-delete-room");
 		};
 	});
 	
@@ -57,19 +57,19 @@ $(document).ready(function() {
 	});
 	
 	$("#btn-delete-decline").on("click", function() {
-		_showDialog("dialog-delete-room");
+		showDialog("dialog-delete-room");
 	});
 	
-	function _init() {
-		$("#title").append("Rooms of " +_urlParam("date"));
-		$("#datepicker").attr("data-preset", _urlParam("date"));
+	function init() {
+		$("#title").append("Rooms of " +urlParam("date"));
+		$("#datepicker").attr("data-preset", urlParam("date"));
 		
-		_setTable();
-		_setDataForCell();
-		_setDialogRemainTimetable();
+		setTable();
+		setDataForCell();
+		setDialogRemainTimetable();
 	}
 
-	function _setTable() {
+	function setTable() {
 		var count = 0;
 		if (buildingA.length >= buildingB.length) {
 			count = buildingA.length;
@@ -78,11 +78,11 @@ $(document).ready(function() {
 		}
 
 		for (var i = 0; i < count; i++) {
-			$("#table-body").append(_getTRformat(i));
+			$("#table-body").append(getTRformat(i));
 		}
 	}
 	
-	function _getTRformat(position) {
+	function getTRformat(position) {
 		text = "<tr>";
 		if (buildingA[position]) {
 			text += "<th>" + buildingA[position].code + "</th>";
@@ -103,7 +103,7 @@ $(document).ready(function() {
 	}
 
 	
-	function _setDataForCell() { 
+	function setDataForCell() { 
 		if(timetableJSON != null) {
 			for(var i = 0; i < timetableJSON.length; i++) {
 				if(timetableJSON[i].room != null) {
@@ -112,10 +112,10 @@ $(document).ready(function() {
 					var slot = timetableJSON[i].slot - 1;
 					if(roomCode.charAt(0) == 'H') {
 						var position = slot + 6;
-						$(tr).find("td:eq("+position+")").html(_getTextForCell(i));
+						$(tr).find("td:eq("+position+")").html(getTextForCell(i));
 						$(tr).find("td:eq("+position+")").attr("data-timetableId", timetableJSON[i].timeTableId);
 					} else {
-						$(tr).find("td:eq("+slot+")").html(_getTextForCell(i));
+						$(tr).find("td:eq("+slot+")").html(getTextForCell(i));
 						$(tr).find("td:eq("+slot+")").attr("data-timetableId", timetableJSON[i].timeTableId);
 					}
 				}
@@ -123,7 +123,7 @@ $(document).ready(function() {
 		}
 	}
 	
-	function _getTextForCell(position) {
+	function getTextForCell(position) {
 		var text = timetableJSON[position].classCourseSemester.classSemester.classFPT.code +"<br>" +
 					timetableJSON[position].classCourseSemester.courseSemester.course.code +"<br>";
 		if(timetableJSON[position].teacherSemester != null) {
@@ -132,12 +132,12 @@ $(document).ready(function() {
 		return text;
 	}
 	
-	function _setDialogRemainTimetable() {
+	function setDialogRemainTimetable() {
 		var checkEmpty = true;
 		if(timetableJSON != null) {
 			for(var i = 0; i < timetableJSON.length; i++) {
 				if(timetableJSON[i].room == null) {
-					$("#remain-timetable").append(_getTRremainTimetable(i));
+					$("#remain-timetable").append(getTRremainTimetable(i));
 					checkEmpty = false;
 				}
 			}
@@ -152,7 +152,7 @@ $(document).ready(function() {
 		}
 	}
 	
-	function _getTRremainTimetable(position) {
+	function getTRremainTimetable(position) {
 		var classCourseSemester = timetableJSON[position].classCourseSemester;
 		var text = "<tr data-position='"+position+"'>" +
 				"<td>" +classCourseSemester.classSemester.classFPT.code +"</td>" +
@@ -162,7 +162,7 @@ $(document).ready(function() {
 		return text;		
 	}
 	
-	function _setDataTableRemainRoom(position, slot) {
+	function setDataTableRemainRoom(position, slot) {
 		var timetable = timetableJSON[position];
 		$("#table-set-room #timetableId").val(timetable.timeTableId);
 		$("#table-set-room #classCode").val(timetable.classCourseSemester.classSemester.classFPT.code);
@@ -175,7 +175,7 @@ $(document).ready(function() {
 			if($(td).text() == null || $(td).text() == "") {
 				var th = $(this).find("th:eq(0)");
 				if(th.text() != null && th.text() != "") {
-					$("#table-set-room #roomId").append(_getOptionForAvailableRoom($(this).index(), 0));	
+					$("#table-set-room #roomId").append(getOptionForAvailableRoom($(this).index(), 0));	
 				}
 			}
 		});
@@ -186,13 +186,13 @@ $(document).ready(function() {
 			if($(td).text() == null || $(td).text() == "") {
 				var th = $(this).find("th:eq(0)");
 				if(th.text() != null && th.text() != "") {
-					$("#table-set-room #roomId").append(_getOptionForAvailableRoom($(this).index(), 1));	
+					$("#table-set-room #roomId").append(getOptionForAvailableRoom($(this).index(), 1));	
 				}
 			}
 		});	
 	}
 	
-	function _getOptionForAvailableRoom(position, building) {
+	function getOptionForAvailableRoom(position, building) {
 		if(building == 0 && position < buildingA.length) {
 			return "<option value='"+buildingA[position].roomId +"'>" +buildingA[position].code  +"</option>";
 		} else if (building == 1 && position < buildingB.length) { 
@@ -200,7 +200,7 @@ $(document).ready(function() {
 		}
 	}
 	
-	function _urlParam(param) {
+	function urlParam(param) {
 		var url = $(location).attr('search').substring(1);
 		var parameters = url.split('&');
 		for (var i = 0; i < parameters.length; i++) {
@@ -211,7 +211,7 @@ $(document).ready(function() {
 		}
 	}
 	
-	function _showDialog(id) {
+	function showDialog(id) {
 		var dialog = $("#" + id).data('dialog');
 		if (!dialog.element.data('opened')) {
 			dialog.open();

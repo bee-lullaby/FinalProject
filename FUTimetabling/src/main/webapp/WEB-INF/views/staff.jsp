@@ -9,6 +9,8 @@
 <link href="resources/css/metro-icons.css" rel="stylesheet"
 	type="text/css">
 <link href="resources/css/flaticon.css" rel="stylesheet" type="text/css">
+<link href="resources/css/pageStyle.css" rel="stylesheet">
+
 <script src="resources/js/jquery-2.1.3.min.js"></script>
 <script src="resources/js/metro.js"></script>
 <script src="resources/js/staff.js"></script>

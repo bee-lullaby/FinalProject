@@ -1,10 +1,10 @@
 $(document).ready(function() { 
 
-	_init();
+	init();
 
 	$("#table-departments").on("click", "a[id^='delete-department']",function() {
 		$("#dialog-delete-department").attr("data-departmentId", $(this).closest("tr").attr("data-departmentId"));
-		_showDialog("dialog-delete-department");
+		showDialog("dialog-delete-department");
 	});
 
 	$("#btn-delete-accept").on("click", function() {
@@ -13,12 +13,12 @@ $(document).ready(function() {
 	
 	$("#btn-delete-decline").on("click", function() {
 		$("#dialog-delete-department").removeAttr("data-departmentId");
-		_showDialog("dialog-delete-department");
+		showDialog("dialog-delete-department");
 	});
 	
 	$("#btn-add-department").on("click", function() {
-		_clearDialogData($("#dialog-add-department"));
-		_showDialog("dialog-add-department");
+		clearDialogData($("#dialog-add-department"));
+		showDialog("dialog-add-department");
 	});
 	
 	$("#dialog-add-department #btn-add-save").on("click", function() {
@@ -39,21 +39,21 @@ $(document).ready(function() {
 	});
 	
 	$("#dialog-add-department #btn-add-cancel").on("click", function() {
-		_showDialog("dialog-add-department");
-		_clearDialogData($("#dialog-add-department"));
+		showDialog("dialog-add-department");
+		clearDialogData($("#dialog-add-department"));
 		$("#dialog-add-department #code").css("border-color", "");
 		$("#dialog-add-department #name").css("border-color", "");
 	});
 	
 	$("#btn-add-from-file").on("click", function() {
-		_showDialog("dialog-add-file");
+		showDialog("dialog-add-file");
 	});
 	
 	$("#btn-cancel-add-file").on("click", function() {
-		_showDialog("dialog-add-file");
+		showDialog("dialog-add-file");
 	});
 	
-	function _init() {
+	function init() {
 		var table = $('#table-departments').DataTable({
 			"lengthChange": false,
 			"searching": true,
@@ -63,12 +63,12 @@ $(document).ready(function() {
 		
 	}
 	
-	function _clearDialogData(dialog) {
+	function clearDialogData(dialog) {
 		dialog.find("#code").val("");
 		dialog.find("#code").attr("readonly", false);
 		dialog.find("#name").val("");
 	}
-	function _urlParam(param) {
+	function urlParam(param) {
 	    var url = $(location).attr('search').substring(1);
 	    var parameters = url.split('&');
 	    for (var i = 0; i < parameters.length; i++) 
@@ -81,7 +81,7 @@ $(document).ready(function() {
 	    }
 	}
 	
-	function _showDialog(id) {
+	function showDialog(id) {
 		var dialog = $("#" + id).data('dialog');
 		if (!dialog.element.data('opened')) {
 			dialog.open();

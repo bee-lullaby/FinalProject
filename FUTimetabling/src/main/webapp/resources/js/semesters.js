@@ -1,10 +1,10 @@
 $(document).ready(function() { 
 
-	_init();
+	init();
 
 	$("#table-semesters").on("click", "a[id^='delete-semester']",function() {
 		$("#dialog-delete-semester").attr("data-semesterId", $(this).closest("tr").attr("data-semesterId"));
-		_showDialog("dialog-delete-semester");
+		showDialog("dialog-delete-semester");
 	});
 
 	$("#btn-delete-accept").on("click", function() {
@@ -13,12 +13,12 @@ $(document).ready(function() {
 	
 	$("#btn-delete-decline").on("click", function() {
 		$("#dialog-delete-semester").removeAttr("data-semesterId");
-		_showDialog("dialog-delete-semester");
+		showDialog("dialog-delete-semester");
 	});
 	
 	$("#btn-add-semester").on("click", function() {
-		_clearDialogData($("#dialog-add-semester"));
-		_showDialog("dialog-add-semester");
+		clearDialogData($("#dialog-add-semester"));
+		showDialog("dialog-add-semester");
 	});
 	
 	$("#dialog-add-semester #btn-add-save").on("click", function() {
@@ -56,8 +56,8 @@ $(document).ready(function() {
 	});
 	
 	$("#dialog-add-semester #btn-add-cancel").on("click", function() {
-		_showDialog("dialog-add-semester");
-		_clearDialogData($("#dialog-add-semester"));
+		showDialog("dialog-add-semester");
+		clearDialogData($("#dialog-add-semester"));
 		$("#dialog-add-semester #code").css("border-color", "");
 		$("#dialog-add-semester #name").css("border-color", "");
 		$("#dialog-add-semester #startDate").css("border-color", "");
@@ -65,14 +65,14 @@ $(document).ready(function() {
 	});
 	
 	$("#btn-add-from-file").on("click", function() {
-		_showDialog("dialog-add-file");
+		showDialog("dialog-add-file");
 	});
 	
 	$("#btn-cancel-add-file").on("click", function() {
-		_showDialog("dialog-add-file");
+		showDialog("dialog-add-file");
 	});
 	
-	function _init() {
+	function init() {
 		var table = $('#table-semesters').DataTable({
 			"lengthChange": false,
 			"searching": true,
@@ -89,11 +89,11 @@ $(document).ready(function() {
 		});
 	}
 	
-	function _clearDialogData(dialog) {
+	function clearDialogData(dialog) {
 		dialog.find("#code").val("");
 		dialog.find("#name").val("");
 	}
-	function _urlParam(param) {
+	function urlParam(param) {
 	    var url = $(location).attr('search').substring(1);
 	    var parameters = url.split('&');
 	    for (var i = 0; i < parameters.length; i++) 
@@ -106,7 +106,7 @@ $(document).ready(function() {
 	    }
 	}
 	
-	function _showDialog(id) {
+	function showDialog(id) {
 		var dialog = $("#" + id).data('dialog');
 		if (!dialog.element.data('opened')) {
 			dialog.open();

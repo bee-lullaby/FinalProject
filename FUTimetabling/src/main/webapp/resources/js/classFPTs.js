@@ -7,11 +7,11 @@ $(document).ready(function() {
 		"pageLength":30
     });
 	
-	_init();
+	init();
 	
 	$("#table-classes").on("click", "a[id^='delete-class']",function() {
 		$("#dialog-delete-class").attr("data-classId", $(this).closest("tr").attr("data-classId"));
-		_showDialog("dialog-delete-class");
+		showDialog("dialog-delete-class");
 	});
 
 	$("#btn-delete-accept").on("click", function() {
@@ -20,12 +20,12 @@ $(document).ready(function() {
 	
 	$("#btn-delete-decline").on("click", function() {
 		$("#dialog-delete-course").removeAttr("data-courseId");
-		_showDialog("dialog-delete-course");
+		showDialog("dialog-delete-course");
 	});
 	
 	$("#btn-add-class").on("click", function() {
-		_clearDialogData($("#dialog-add-class"));
-		_showDialog("dialog-add-class");
+		clearDialogData($("#dialog-add-class"));
+		showDialog("dialog-add-class");
 	});
 	
 	$("#dialog-add-class #btn-add-save").on("click", function() {
@@ -34,40 +34,40 @@ $(document).ready(function() {
 	});
 	
 	$("#dialog-add-class #btn-add-cancel").on("click", function() {
-		_showDialog("dialog-add-class");
-		_clearDialogData($("#dialog-add-class"));
+		showDialog("dialog-add-class");
+		clearDialogData($("#dialog-add-class"));
 	});
 	
 	$("#btn-add-from-file").on("click", function() {
-		_showDialog("dialog-add-file");
+		showDialog("dialog-add-file");
 	});
 	
 	$("#btn-cancel-add-file").on("click", function() {
-		_showDialog("dialog-add-file");
+		showDialog("dialog-add-file");
 	});
 	
 	$("#table-add-class #select-courses").on("change", function() {
-		_setTextAriaCoursesSelected($(this));
+		setTextAriaCoursesSelected($(this));
 	});
 	
 	$("#table-classes").on("click", "#courses-class", function() {
 		var td = $(this).closest("td");
-		_setDataDialogClassCourse(td);
+		setDataDialogClassCourse(td);
 		$("#dialog-class-course").attr("data-classId", $(td).closest("tr").attr("data-classId")); 
-		_showDialog("dialog-class-course");
+		showDialog("dialog-class-course");
 	});
 	
 	$("#dialog-class-course").on("click", "#btn-cancel", function() {
-		_clearDataDialogClassCourse();
-		_showDialog("dialog-class-course");
+		clearDataDialogClassCourse();
+		showDialog("dialog-class-course");
 		$("#dialog-class-course").removeAttr("data-classId");
 	});
 	
-	function _init() {
-		$("#select-semester").find("a[id='" +_urlParam("semesterId") +"']").closest("li").addClass("active");
+	function init() {
+		$("#select-semester").find("a[id='" +urlParam("semesterId") +"']").closest("li").addClass("active");
 		
 		var input = $("<input>").attr("type", "hidden")
-        						.attr("name", "semesterId").val(_urlParam("semesterId"));
+        						.attr("name", "semesterId").val(urlParam("semesterId"));
 		$('#form-add-file').append($(input));
 		
 		
@@ -76,7 +76,7 @@ $(document).ready(function() {
 		$("#table-class-course #select-course").append($options);
 	}
 	
-	function _clearDialogData(dialog) {
+	function clearDialogData(dialog) {
 		dialog.find("#classId").attr("value", "-1");
 		dialog.find("#classSemesterId").attr("value", "-1");
 		dialog.find("#batch").attr("value", "");
@@ -88,10 +88,10 @@ $(document).ready(function() {
 			$(this).removeAttr("selected");
 		});
 		
-		_setTextAriaCoursesSelected(dialog.find("#select-courses"));
+		setTextAriaCoursesSelected(dialog.find("#select-courses"));
 	}
 	
-	function _setTextAriaCoursesSelected(parents) {
+	function setTextAriaCoursesSelected(parents) {
 		var text = "";
 		console.log(parents);
 		parents.find("option:selected").each(function() {
@@ -100,7 +100,7 @@ $(document).ready(function() {
 		parents.closest("tr").find("#courses-selected").text(text);
 	}
 	
-	function _setDataDialogClassCourse(td) {
+	function setDataDialogClassCourse(td) {
 		var tr = $(td).closest("tr");
 		$("#class-name").text($(tr).find("td:eq(0)").text());
 		
@@ -124,7 +124,7 @@ $(document).ready(function() {
 		}
 	}
 	
-	function _clearDataDialogClassCourse() {
+	function clearDataDialogClassCourse() {
 		$.each($("#dialog-class-course #select-course"), function() {
 			$(this).find("option:first").attr("selected", "selected");
 		});
@@ -136,7 +136,7 @@ $(document).ready(function() {
 		});
 	}
 	
-	function _urlParam(param) {
+	function urlParam(param) {
 	    var url = $(location).attr('search').substring(1);
 	    var parameters = url.split('&');
 	    for (var i = 0; i < parameters.length; i++) 
@@ -149,7 +149,7 @@ $(document).ready(function() {
 	    }
 	}
 	
-	function _showDialog(id) {
+	function showDialog(id) {
 		var dialog = $("#" + id).data('dialog');
 		if (!dialog.element.data('opened')) {
 			dialog.open();
