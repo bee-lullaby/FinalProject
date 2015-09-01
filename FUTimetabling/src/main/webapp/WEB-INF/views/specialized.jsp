@@ -231,14 +231,10 @@ h3 {
 					</tr>
 					<tr>
 						<th>Is Detail Specialized</th>
-						<td style="text-align: left"><label
-							class="input-control radio"> <input type="radio"
-								name="isDetail" value="1"> <span class="check"></span> <span
-								class="caption">Yes</span></label> <label class="input-control radio">
-								<input type="radio" name="isDetail" value="1" checked> <span
-								class="check"></span> <span class="caption">No</span>
-
-						</label></td>
+						<td style="text-align: left">
+							<input type="radio" name="isDetail" value="1" checked> Yes
+							<input type="radio" name="isDetail" value="0"> No
+						</td>
 					</tr>
 				</thead>
 			</table>

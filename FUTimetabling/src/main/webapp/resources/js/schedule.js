@@ -273,17 +273,43 @@ $(document).ready(function(){
 	function setCourseInfoDialog(position) {
 		if($("#set-courses option:selected").val() != -1) {
 			var courseSelectedText = $("#set-courses option:selected").text();
+			var courseSelectedVal = $("#set-courses option:selected").val();
 			$("#course-info-to-set #course-code").text(courseSelectedText);
 			var data = JSONdata[position].dataSchedule[courseSelectedText];
-			console.log(courseSelectedText);
-			console.log(JSONdata[position].dataSchedule[courseSelectedText]);
 			$("#course-info-to-set #remainSlots").text(data.remainSlots);
 			$("#course-info-to-set #classes").text(data.numOfClasses);
 			$("#course-info-to-set #learnCourseInSlot").text(data.learnCourseInSlot);
 			$("#course-info-to-set #totalRooms").text(data.totalRooms);
 			$("#course-info-to-set #classesInSlot").text(data.classesInSlot);
 			$("#course-info-to-set #teachers").text(data.numOfTeachers);
+			
+			$("#course-info-to-set #remainSlots").css("color", "");
+			$("#course-info-to-set #learnCourseInSlot").css("color", "");
+			$("#course-info-to-set #teachers").css("color", "");
+			$("#course-info-to-set #classesInSlot").css("color", "");
+			$("#course-info-to-set #totalRooms").css("color", "");
+			
+			if($("#course-info-to-set #remainSlots").text() == 0) {
+				$("#course-info-to-set #remainSlots").css("color", "red");
+			} 
+			if(courseSelectedVal != -1 && parseInt($("#course-info-to-set #learnCourseInSlot").text())
+				>= parseInt($("#course-info-to-set #teachers").text())) {
+				$("#course-info-to-set #learnCourseInSlot").css("color", "red");
+				$("#course-info-to-set #teachers").css("color", "red");
+			}
+			if(courseSelectedVal != -1 && parseInt($("#course-info-to-set #classesInSlot").text())
+					>= parseInt($("#course-info-to-set #totalRooms").text())) {
+				$("#course-info-to-set #classesInSlot").css("color", "red");
+				$("#course-info-to-set #totalRooms").css("color", "red");
+			}
+			
 		} else {
+			$("#course-info-to-set #remainSlots").css("color", "");
+			$("#course-info-to-set #learnCourseInSlot").css("color", "");
+			$("#course-info-to-set #teachers").css("color", "");
+			$("#course-info-to-set #classesInSlot").css("color", "");
+			$("#course-info-to-set #totalRooms").css("color", "");
+			
 			$("#course-info-to-set #course-code").text("N/A");
 			$("#course-info-to-set #remainSlots").text("N/A");
 			$("#course-info-to-set #classes").text("N/A");

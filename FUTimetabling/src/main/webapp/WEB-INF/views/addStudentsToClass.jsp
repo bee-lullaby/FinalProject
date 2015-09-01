@@ -214,21 +214,24 @@
 						style="width: 100%;">
 						<thead>
 							<tr>
-								<th width="80">ID</th>
-								<th width="120">Student Code</th>
+								<th>No</th>
+								<th>Student Code</th>
 								<th>Student Name</th>
-								<th width="100">Add</th>
+								<th>Add</th>
 							</tr>
 						</thead>
 						<tbody>
+							<c:set var="count" value="0" scope="page" />
 							<c:if test="${!empty freeStudents}">
 								<c:forEach items="${freeStudents}" var="student">
+									<c:set var="count" value="${count + 1}" scope="page"/>
 									<tr>
-										<td>${student.studentId}</td>
+										<td>${count}</td>
 										<td>${student.studentCode}</td>
 										<td>${student.name}</td>
-										<td><a
-											href="<c:url value='/staff/addStudentToClass/add/${student.studentId}' />">Add</a></td>
+										<td style="text-align:center"><a
+											href="<c:url value='/staff/addStudentToClass/add/${student.studentId}' />"><span
+													class="icon flaticon-add156"></span></a></td>
 									</tr>
 								</c:forEach>
 							</c:if>
@@ -249,21 +252,24 @@
 						style="width: 100%;">
 						<thead>
 							<tr>
-								<th width="80">ID</th>
-								<th width="120">Student Code</th>
+								<th>No</th>
+								<th>Student Code</th>
 								<th>Student Name</th>
-								<th width="100">Remove</th>
+								<th>Remove</th>
 							</tr>
 						</thead>
 						<tbody>
+							<c:set var="count" value="0" scope="page" />
 							<c:if test="${!empty busyStudents}">
 								<c:forEach items="${busyStudents}" var="student">
+									<c:set var="count" value="${count + 1}" scope="page"/>
 									<tr>
-										<td>${student.studentId}</td>
+										<td>${count}</td>
 										<td>${student.studentCode}</td>
 										<td>${student.name}</td>
-										<td><a
-											href="<c:url value='/staff/addStudentToClass/remove/${student.studentId}' />">Remove</a></td>
+										<td style="text-align:center"><a
+											href="<c:url value='/staff/addStudentToClass/remove/${student.studentId}' />"><span
+													class="icon flaticon-rubbish12"></span></a></td>
 									</tr>
 								</c:forEach>
 							</c:if>

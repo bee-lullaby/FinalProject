@@ -40,60 +40,6 @@ $(document).ready(
 			setRoomForCourses();
 		});
 		
-//		$("select[id^='select-rooms-']").on("change", function () {
-////			compareWithTimetablesRooms($(this).attr("id"));
-//
-////			if (conflictDateSlots.length > 0) {
-////				var text = "<b>+</b> Timetable of Room " +$(this).find("option:selected").text() +" has conflict with Timetable of "; 
-////				for(var i = 0; i < conflictDateSlots.length; i++) {
-////					text += conflictDateSlots[i] +" ";
-////				}
-////				$("#warning-room-arrangement").html(text);
-////				$("#warning").show();
-////				$(this).find("option:first").attr("selected", "selected");
-////				$(this).attr("data-error", "error");
-////				setOptionSelectedRoomsForAllCourse();
-////			} else if(specialCourses.indexOf(courseCode) > 0) {
-//				var courseCode = $(this).closest("tr").find("td:nth-child(1)").text();
-//				var check = false;
-//				for(var i = 0; i < positionOfSpecialRooms.length; i++) {
-//					if(roomsJSON[i].courses.indexOf(courseCode) > 0) {
-//						check = true;
-//						break;
-//					}
-//				}
-//				
-//				if(!check) {
-//					$(this).css("border-color", "red");
-//					var text = $("#warning-room-arrangement").html() + "<br>" +
-//							   "<b>+</b> " +courseCode +" needs a Special Room!<br>" +
-//							   "&nbsp;&nbsp;Refer to 'SPECIAL ROOMS' for more information.";
-//					$(this).find("option:first").attr("selected", "selected");
-//					$("#warning-room-arrangement").html(text);
-//					$("#warning").show();
-//					$(this).attr("data-error", "error");
-//				} else {
-//					if($(this).attr("data-error") == "error") {
-//						$("#warning-room-arrangement").html("");
-//						$("#warning").hide();
-//						$(this).attr("data-error", "");
-//						if($(this).css("border-color"))
-//							$(this).css("border-color", "");
-//					}
-//				}
-////			} else {
-////				if($(this).attr("data-error") == "error") {
-////					$("#warning-room-arrangement").html("");
-////					$("#warning").hide();
-////					$(this).attr("data-error", "");
-////					if($(this).css("border-color"))
-////						$(this).css("border-color", "");
-////				}
-////			}
-////			
-//			checkCustomRooms();
-//		});
-		
 		$("#btn-submit").on("click", function() {
 			
 			var checkError = false;
@@ -143,7 +89,6 @@ $(document).ready(
 		
 		function init() {
 
-			// Set button.
 			var count = 0;
 			for(var i = 0; i < dataRoomArrangementsJSON.length; i++) {
 				if(dataRoomArrangementsJSON[i].setRoomSuccessful == true) {
@@ -158,8 +103,6 @@ $(document).ready(
 			setspecialCourses();
 			
 			setTextNoteRoomCapacity();
-//			
-//			setOptionSelectClasses();
 			
 			setOptionSelectRooms();
 			
@@ -176,21 +119,6 @@ $(document).ready(
 				$(this).attr("href", "?semesterId=" + urlParam("semesterId") +"&classSemesterId=" +$(this).attr("id"));
 			});
 		}
-
-//		function setOptionSelectClasses() {
-//			var classId =  urlParam("classId");
-//			for (var i = 0; i < classesCoursesJSON.length; i++) {
-//				if(classesCoursesJSON[i].classFPT.classId == classId)
-//					$("#select-classes").append($("<option></option>")
-//						.attr("value", i)
-//						.attr("selected", "selected")
-//						.text(classesCoursesJSON[i].classFPT.code));
-//				else
-//					$("#select-classes").append($("<option></option>")
-//							.attr("value", i)
-//							.text(classesCoursesJSON[i].classFPT.code));
-//			}
-//		}
 
 		function setOptionSelectRooms() {
 			var classCourseSemesters = {};
@@ -347,43 +275,7 @@ $(document).ready(
 			$("#select-rooms").find("option[value='custom']").attr("selected", "selected");
 		}
 	}
-//	
-//	function compareWithTimetablesRooms(id) {
-//		conflictDateSlots = [];
-//		var selectedRoom = $("#" +id +" option:selected").val();
-//		var concflictRooms = [];
-//		var classCourseSemesters = [];
-//		$.each(classesCoursesJSON, function(value, object) {
-//			if(object.classSemesterId == urlParam("classSemesterId")) {
-//				$.merge(classCourseSemesters, object.classCourseSemesters);
-//			}
-//		});
-//		if(roomsJSON[selectedRoom] != null && roomsJSON[selectedRoom].timetables != null && roomsJSON[selectedRoom].timetables.length > 0) {
-//			for(var x = 0; x < classCourseSemesters.length; x++) {
-//				if(classCourseSemesters[x].timetable.length > 0) {
-//					for(var y = 0; y < classCourseSemesters[x].timetable.length; y++) {
-//						for(var z = 0; z < roomsJSON[selectedRoom].timetables.length; z++) {
-//								if(classCourseSemesters[x].timetable[y].date == roomsJSON[selectedRoom].timetables[z].date 
-//										&& classCourseSemesters[x].timetable[y].slot 
-//										== roomsJSON[selectedRoom].timetables[z].slot) {
-//									var roomId = classCourseSemesters[x].timetable[y].room.roomId;
-//									if(concflictRooms.indexOf(roomId) < 0) {
-//										concflictRooms.push(roomId);
-//									}
-//									var classCode = roomsJSON[selectedRoom].timetables[z].classCourseSemester.classSemester.classFPT.code;
-//									if(conflictDateSlots.indexOf(classCode) < 0) {
-//										conflictDateSlots.push(classCode);
-//									}
-//								}
-//							}
-//						}
-//					}
-//			}
-//		}
-//		
-//		return concflictRooms;
-//	}
-	
+
 	function checkRoomsCantSet(classCourseSemester) {
 		var listRoomsCantSet = [];
 		for(var y = 0; y < classCourseSemester.timetable.length; y++) {

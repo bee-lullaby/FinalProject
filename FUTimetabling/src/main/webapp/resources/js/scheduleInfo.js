@@ -1,4 +1,4 @@
-	function stepperonstep(index, step) {
+	function _stepper_on_step(index, step) {
 		if (index == 1) {
 			$("#btn-prev").attr("disabled", true);
 			$("#btn-next").attr("disabled", false);
@@ -20,7 +20,7 @@
 		}
 	}
 
-	function stepperonstepclick(index, step) {
+	function _stepper_on_step_click(index, step) {
 		if (index == 0) {
 			$("#btn-prev").attr("disabled", true);
 			$("#btn-next").attr("disabled", false);

@@ -119,7 +119,7 @@ $(document).ready(function() {
 		$.each(listCourses, function(i, e) {
 			if(e != "") {
 				$('#select-courses option').filter(function() {
-		             return $(this).text() === e.trim()
+		             return $(this).text() == e.trim()
 		        }).prop("selected", true);
 			}
 		});
